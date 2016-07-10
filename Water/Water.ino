@@ -56,9 +56,9 @@ unsigned int pos_time            = 1000;           //
 int num_button                   = 0;              //
 int num_button34                 = 0;              //
 int Rele34_time                  = 0;              //
-int SW1_time                     = 3000;            //
-int SW2_time                     = 1000;            //
-int SW3_time                     = 2000;            //
+int SW1_time                     = 3000;           //
+int SW2_time                     = 1000;           //
+int SW3_time                     = 10000;           //
 bool ButECO                      = false;          //
 bool ButECO_Start                = false;          // Флаг запуска программы по команде кнопки  ButtonECO
 bool ButWC                       = false;          //
@@ -68,6 +68,11 @@ bool ButSW2                      = false;
 bool ButSW3                      = false;
 bool Rele2_Start                 = false;          // Флаг включения реле №2
 bool Rele34_Start                = false;          // Флаг включения реле №3,4
+bool lightOnOff                  = false;
+bool lightmin                    = false;
+bool lightmax                    = false;
+int lighN                        = 0;
+int ligh_speed                   = 20;
 unsigned long timeECO            = 10000;          // 300000 Время включения реле №1 ( 5 минут)
 unsigned long timeWC             = 10000;          // Увеличить до 3 минут
 unsigned long Rele2_time         = 500;            // 2000 Время задержки включения реле№2 (2 секунды)
@@ -189,9 +194,49 @@ void UpdateRele34()                              // Программа выпо�
   	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
 		{
 			digitalWrite(Rele_R4,LOW);
+			lighN = 255;
+			lightmin = true;
+			lightOnOff = true;
 			Rele34_Start = false;
 			Serial.println("Rele_R3,4 Off");
 		}
+	}
+}
+
+void led_lightOnOff()
+{
+	if(lightOnOff == true)
+	{
+	  if(lightmax == true)
+		{
+          analogWrite(Led_light, lighN);
+		//  Serial.println(lighN);
+		  delay(ligh_speed);
+		  lighN++;
+		  if(lighN >=255)
+		  {
+			analogWrite(Led_light, 255);
+			lightOnOff = false;
+			lightmax = false;
+			lightmin = false;
+		  }
+		}
+
+	  if(lightmin == true)
+		{
+          analogWrite(Led_light,lighN);
+		  delay(ligh_speed);
+		//  Serial.println(lighN);
+		  lighN--;
+		  if(lighN <=0)
+		  {
+            analogWrite(Led_light,0);
+			lightOnOff = false;
+			lightmin = false;
+			lightmax = false;
+		  }
+		}
+		
 	}
 }
 
@@ -274,10 +319,10 @@ void test_sensor()
 	{
 		if(ButSW2 == false)
 		{
-			ButSW2 = true;
+			ButSW2                       = true;
 			num_button34                 = 4;              //
             Rele34_time                  = SW2_time;           //
-			Rele34_Start = true;
+			Rele34_Start                 = true;
 			digitalWrite(Rele_R3,HIGH);
 			digitalWrite(Rele_R4,HIGH);
 			Serial.println("SW2 On");
@@ -293,11 +338,14 @@ void test_sensor()
 	{
 		if(ButSW3 == false)
 		{
-			ButSW3 = true;
+			ButSW3                       = true;
 			num_button34                 = 5;              //
             Rele34_time                  = SW3_time;           //
-			Rele34_Start = true;
+			Rele34_Start                 = true;
 			digitalWrite(Rele_R4,HIGH);
+			lighN = 0;
+			lightmax = true;
+			lightOnOff = true;
 			currentMillis34 = millis();
 			Serial.println("SW3");
 		}
@@ -331,9 +379,9 @@ void setup()
 	digitalWrite(SW3,HIGH);                      // Установить высокий уровень на контакте
 
 	pinMode(Led_light, OUTPUT);                  // Светодиод подсветки 
-
+	digitalWrite(Led_light,LOW);                 //  
 	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
-	myservo.write(pos0);              // tell servo to go to position in variable 'pos' 
+	myservo.write(pos0);                         // tell servo to go to position in variable 'pos' 
 	Serial.println("Setup Ok!");
 }
 
@@ -345,6 +393,7 @@ void loop()
 	UpdateWC();
 	UpdateReleECO();
 	UpdateRele34();
+	led_lightOnOff();
 
 	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
 	{

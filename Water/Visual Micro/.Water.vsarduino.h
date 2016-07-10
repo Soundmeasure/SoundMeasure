@@ -88,6 +88,7 @@ void UpdateECO();
 void UpdateWC();
 void UpdateReleECO();
 void UpdateRele34();
+void led_lightOnOff();
 void test_sensor();
 //
 //
