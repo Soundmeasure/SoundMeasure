@@ -84,6 +84,10 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portInputRegister(P)
 #define portModeRegister(P)
 
+void flash_led();
+void UpdateECO();
+void UpdateRele2();
+void test_sensor();
 //
 //
 

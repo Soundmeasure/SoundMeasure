@@ -58,6 +58,25 @@ int pos0  = 0;                                   // variable to store the servo 
 int pos50 = 30;                                  // variable to store the servo position 
 int pos10 = 6;                                   // variable to store the servo position 
 
+bool ButECO = false;
+bool ButECO_Start = false;
+bool ButWC  = false;
+bool ButSW1 = false;
+bool ButSW2 = false;
+bool ButSW3 = false;
+
+bool Rele2_Start = false;
+
+
+unsigned long timeECO            = 10000;          // 300000 Время включения реле №1 ( 5 минут)
+unsigned long timeWC             = 2000;           // Увеличить до 5 минут
+unsigned long Rele2_time         = 500;            // 2000 Время задержки включения реле№2 (2 секунды)
+unsigned long time_flash_led_ECO = 2000;           // 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
+unsigned long time_push_ButECO   = 2000;           // 2000 Время удержания кнопки ButtonECO  (2 секунды)
+unsigned long currentMillisECO   = 0;
+unsigned long currentMillisWC    = 0;
+
+
 class RelayControl                               // Управление реле в многозадачном режиме  
 {
 	int relePin;
@@ -93,7 +112,7 @@ public:
 	   {
 		   releState = HIGH;
 		   previousMillis = currentMillis;  
-		   digitalWrite(relePin,releState);
+		   digitalWrite(relePin,releState); 
 	   }
 	}
 };
@@ -139,6 +158,21 @@ public:
 	}
 };
 
+void flash_led()
+{
+	 unsigned long currentMillis = millis();
+
+	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
+	{
+      // led1.Update();
+	}
+	
+}
+
+
+
+
+
 //class Sweeper                                    // Управление servo в многозадачном режиме  
 //{
 //Servo servo;
@@ -181,14 +215,133 @@ public:
 //
 //Sweeper sweeper1(10);
 
-RelayControl ReleR1(Rele_R1,100,400);
+
+void UpdateECO()
+{
+	unsigned long currentMillis = millis();
+
+	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO ))
+	{
+		digitalWrite(Rele_R1,LOW);
+		digitalWrite(Rele_R2,LOW);
+		ButECO_Start = false;
+		digitalWrite(led_ECO,LOW);
+		Serial.println("ButtonECO Off");
+	}
+}
+
+void UpdateRele2()
+{
+	unsigned long currentMillis = millis();
+	if((Rele2_Start == true) && (currentMillis - currentMillisECO >= Rele2_time))
+	{
+		digitalWrite(Rele_R2,HIGH);
+		Rele2_Start = false;
+		Serial.println("Rele_R2 On");
+	}
+}
+
+void test_sensor()
+{
+	
+	if (digitalRead(ButtonECO) == LOW && ButECO_Start != true )
+	{
+		if(ButECO == false)
+		{
+			ButECO = true;
+			ButECO_Start = true;
+			Rele2_Start = true;
+			Serial.println("ButtonECO On");
+			currentMillisECO = millis();
+			digitalWrite(Rele_R1,HIGH);
+			digitalWrite(led_ECO,HIGH);
+		}
+	}
+	else
+	{
+		ButECO = false;
+	}
+
+	if (digitalRead(ButtonECO) == LOW && ButECO_Start == true )
+	{
+
+	   unsigned long currentMillis = millis();
+
+		if((ButECO_Start == true) && (currentMillis - currentMillisECO >= time_push_ButECO))
+		{
+			digitalWrite(Rele_R1,LOW);
+			digitalWrite(Rele_R2,LOW);
+			ButECO_Start = false;
+			digitalWrite(led_ECO,LOW);
+			Serial.println("ButtonECO Off");
+			while(digitalRead(ButtonECO) == LOW){}
+		}
+	}
+
+	if (digitalRead(ButtonWC) == LOW)
+	{
+		if(ButWC == false)
+		{
+			ButWC = true;
+			Serial.println("ButtonWC");
+		}
+	}
+	else
+	{
+		ButWC = false;
+	}
+
+//------------- проверка контактов датчиков ------------------------	
+	if (digitalRead(SW1) == LOW)
+	{
+		if(ButSW1 == false)
+		{
+			ButSW1 = true;
+			Serial.println("SW1");
+		}
+	}
+	else
+	{
+		ButSW1 = false;
+	}
+		
+	if (digitalRead(SW2) == LOW)
+	{
+		if(ButSW2 == false)
+		{
+			ButSW2 = true;
+			Serial.println("SW2");
+		}
+	}
+	else
+	{
+		ButSW2 = false;
+	}
+	
+	if (digitalRead(SW3) == LOW)
+	{
+		if(ButSW3 == false)
+		{
+			ButSW3 = true;
+			Serial.println("SW3");
+		}
+	}
+	else
+	{
+		ButSW3 = false;
+	}
+}
+
+
+
+RelayControl ReleR1(Rele_R1,1000,400);
 RelayControl ReleR2(Rele_R2,100,400);
 RelayControl ReleR3(Rele_R3,100,400);
 RelayControl ReleR4(Rele_R4,100,400);
 
-Flasher ledECO(led_ECO, 123, 400);
-Flasher ledWC(led_WC, 350, 350);
-Flasher Ledlight(Led_light, 350, 350);
+Flasher led1(led_ECO, 200, 200);
+//Flasher ledWC(led_WC, 350, 350);
+//Flasher Ledlight(Led_light, 350, 350);
 
 void setup() 
 {
@@ -197,28 +350,43 @@ void setup()
 	pinMode(Rele_R2, OUTPUT);                    // Реле R2
 	pinMode(Rele_R3, OUTPUT);                    // Реле R3
 	pinMode(Rele_R4, OUTPUT);                    // Реле R4
-	digitalWrite(Rele_R1,HIGH);
+	//digitalWrite(Rele_R1,HIGH);
 
 
 	pinMode(led_ECO, OUTPUT);                    // Светодиод на кнопке ECO
 	pinMode(led_WC,  OUTPUT);                    // Светодиод на кнопке WC
 	pinMode(ButtonECO,INPUT);                    // Кнопка ECO
 	pinMode(ButtonWC, INPUT);                    // Кнопка WC
+	digitalWrite(ButtonECO,HIGH);
+	digitalWrite(ButtonWC,HIGH);
+ 
+
 
 	pinMode(SW1, INPUT);                         // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
 	pinMode(SW2, INPUT);                         // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
 	pinMode(SW3, INPUT);                         // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
 	pinMode(Led_light, OUTPUT);                  // Светодиод подсветки 
-	digitalWrite(Led_light,HIGH);
+	//digitalWrite(Led_light,HIGH);
 
 	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
-
 	Serial.println("Setup Ok!");
 	//sweeper1.Attach(servo_tank);
 }
 
 void loop() 
 {
+
+	test_sensor();
+	UpdateECO();
+	UpdateRele2();
+//	flash_led();
+
+	unsigned long currentMillis = millis();
+	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
+	{
+       led1.Update();
+	}
+	
 	//myservo.write(pos0);              // tell servo to go to position in variable 'pos' 
 	//Serial.println(pos0);
 	//delay(2000);     
@@ -229,13 +397,13 @@ void loop()
 	//myservo.write(pos10);              // tell servo to go to position in variable 'pos' 
 	//Serial.println(pos10);
 	//delay(2000);     
-	 myservo.write(0);              // tell servo to go to position in variable 'pos' 
-	 delay(1000);
-  for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
-  {                                  // in steps of 1 degree 
-    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-    delay(25);                       // waits 15ms for the servo to reach the position 
-  } 
+	 //myservo.write(0);              // tell servo to go to position in variable 'pos' 
+	 //delay(1000);
+  //for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
+  //{                                  // in steps of 1 degree 
+  //  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+  //  delay(25);                       // waits 15ms for the servo to reach the position 
+  //} 
 
   //for(pos = 180; pos>=0; pos-=1)     // goes from 180 degrees to 0 degrees 
   //{                                
