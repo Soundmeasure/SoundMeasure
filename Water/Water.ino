@@ -45,8 +45,8 @@ c внешними прерываниями ,ButtonWC,SW3
 #define ButtonECO  7                             // Кнопка ECO
 #define ButtonWC  10                             // Кнопка WC
 
-#define SW1       20                             // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
-#define SW2       21                             // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
+#define SW1        2                             // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
+#define SW2        3                             // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
 #define SW3        4                             // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
 #define Led_light  6                             // Светодиод подсветки 
 #define servo_tank 9                             // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
@@ -187,22 +187,25 @@ Flasher Ledlight(Led_light, 350, 350);
 void setup() 
 {
 	Serial.begin(9600);
-	//pinMode(Rele_R1, OUTPUT);                  // Реле R1  
-	//pinMode(Rele_R2, OUTPUT);                  // Реле R2
-	//pinMode(Rele_R3, OUTPUT);                  // Реле R3
-	//pinMode(Rele_R4, OUTPUT);                  // Реле R4
-	//pinMode(Rele_R5, OUTPUT);                  // Реле R5
+	pinMode(Rele_R1, OUTPUT);                    // Реле R1  
+	pinMode(Rele_R2, OUTPUT);                    // Реле R2
+	pinMode(Rele_R3, OUTPUT);                    // Реле R3
+	pinMode(Rele_R4, OUTPUT);                    // Реле R4
+	digitalWrite(Rele_R1,HIGH);
 
-	//pinMode(led_ECO, OUTPUT);                  // Светодиод на кнопке ECO
-	//pinMode(led_WC,  OUTPUT);                  // Светодиод на кнопке WC
+
+	pinMode(led_ECO, OUTPUT);                    // Светодиод на кнопке ECO
+	pinMode(led_WC,  OUTPUT);                    // Светодиод на кнопке WC
 	pinMode(ButtonECO,INPUT);                    // Кнопка ECO
 	pinMode(ButtonWC, INPUT);                    // Кнопка WC
 
 	pinMode(SW1, INPUT);                         // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
 	pinMode(SW2, INPUT);                         // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
 	pinMode(SW3, INPUT);                         // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
-	//pinMode(Led_light, OUTPUT);                // Светодиод подсветки 
+	pinMode(Led_light, OUTPUT);                  // Светодиод подсветки 
+	digitalWrite(Led_light,HIGH);
 
+	Serial.println("Setup Ok!");
 	sweeper1.Attach(servo_tank);
 }
 
