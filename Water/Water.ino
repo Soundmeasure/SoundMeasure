@@ -32,6 +32,7 @@ c внешними прерываниями ,ButtonWC,SW3
 */
 
 #include <Servo.h>
+#include "DHT.h"
 
 
 #define Rele_R1   15                             // Реле R1  
@@ -50,7 +51,15 @@ c внешними прерываниями ,ButtonWC,SW3
 #define SW3        4                             // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
 #define Led_light  6                             // Светодиод подсветки 
 #define servo_tank 9                             // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
-#define DHT11     11                             // Датчик влажности
+#define DHTPIN     11                             // Датчик влажности
+
+// Uncomment whatever type you're using!
+#define DHTTYPE DHT11   // DHT 11
+//#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+
+DHT dht(DHTPIN, DHTTYPE);
+
 
 Servo myservo;                                   // create servo object to control a servo 
                                                  // twelve servo objects can be created on most boards
@@ -62,6 +71,7 @@ int pos10 = 6;                                   // variable to store the servo 
 bool ButECO = false;                             //
 bool ButECO_Start = false;                       // Флаг запуска программы по команде кнопки  ButtonECO
 bool ButWC  = false;
+bool ButWC_Start = false;                        // Флаг запуска программы по команде кнопки  ButtonWC
 bool ButSW1 = false;
 bool ButSW2 = false;
 bool ButSW3 = false;
@@ -70,54 +80,13 @@ bool Rele2_Start = false;                          // Флаг включени�
 
 
 unsigned long timeECO            = 10000;          // 300000 Время включения реле №1 ( 5 минут)
-unsigned long timeWC             = 2000;           // Увеличить до 5 минут
+unsigned long timeWC             = 2000;           // Увеличить до 3 минут
 unsigned long Rele2_time         = 500;            // 2000 Время задержки включения реле№2 (2 секунды)
 unsigned long time_flash_led_ECO = 2000;           // 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
 unsigned long time_push_ButECO   = 2000;           // 2000 Время удержания кнопки ButtonECO  (2 секунды)
 unsigned long currentMillisECO   = 0;
 unsigned long currentMillisWC    = 0;
-
-
-class RelayControl                                  // Управление реле в многозадачном режиме  
-{
-	int relePin;
-	long OnTime;
-	long OffTime;
-
-	int releState;
-	unsigned long previousMillis;
-public:
-	RelayControl(int pin,  long on, long off)
-	{
-		relePin = pin;
-		pinMode(relePin, OUTPUT);
-
-		OnTime = on;
-		OffTime = off;
-
-		releState = LOW;
-		previousMillis = 0;
-	}
-
-	void Update()
-	{
-       unsigned long currentMillis = millis();
-
-	   if((releState == HIGH) && (currentMillis - previousMillis >= OnTime))
-	   {
-		   releState = LOW;
-		   previousMillis = currentMillis;  
-		   digitalWrite(relePin,releState);
-	   }
-	   else if ((releState == LOW) && (currentMillis - previousMillis >= OffTime))
-	   {
-		   releState = HIGH;
-		   previousMillis = currentMillis;  
-		   digitalWrite(relePin,releState); 
-	   }
-	}
-};
-
+unsigned long currentMillis      = 0;
 
 class Flasher                                   // Управление светодиодами в многозадачном режиме  
 {
@@ -159,69 +128,13 @@ public:
 	}
 };
 
-void flash_led()
+
+void UpdateECO()                           // Программа выполнения программы по нажатию кнопки ButtonECO
 {
-	 unsigned long currentMillis = millis();
+//	unsigned long currentMillis1 = millis();
+	currentMillis = millis();
 
-	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
-	{
-      // led1.Update();
-	}
-	
-}
-
-
-
-
-
-//class Sweeper                                    // Управление servo в многозадачном режиме  
-//{
-//Servo servo;
-//int pos;
-//int increment;
-//int updateInterval;
-//unsigned long lastUpdate;
-//
-//public:
-//	Sweeper(int interval)
-//	{
-//		updateInterval = interval;
-//		increment = 1;
-//	}
-//
-//	void Attach(int pin)
-//	{
-//		servo.attach(pin);
-//	}
-//	void Detach()
-//	{
-//       servo.detach();
-//	}
-//  void Update()
-//  {
-//    if((millis() - lastUpdate) > updateInterval)
-//	{
-//      lastUpdate = millis();
-//	  pos += increment;
-//	  servo.write(pos);
-//	  Serial.println(pos);
-//	  if((pos >= 180) || (pos <= 0))
-//	  {
-//       increment = -increment;
-//	  }
-//	}
-//  }
-//};
-//
-//
-//Sweeper sweeper1(10);
-
-
-void UpdateECO()
-{
-	unsigned long currentMillis = millis();
-
-	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO ))
+	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO))
 	{
 		digitalWrite(Rele_R1,LOW);
 		digitalWrite(Rele_R2,LOW);
@@ -231,15 +144,33 @@ void UpdateECO()
 	}
 }
 
-void UpdateRele2()
+void UpdateRele2()                        // Программа выполнения программы по включению реле №2
 {
-	unsigned long currentMillis = millis();
+	//unsigned long currentMillis = millis();
+	currentMillis = millis();
+
 	if((Rele2_Start == true) && (currentMillis - currentMillisECO >= Rele2_time))
 	{
 		digitalWrite(Rele_R2,HIGH);
 		Rele2_Start = false;
 		Serial.println("Rele_R2 On");
 	}
+}
+
+void UpdateWC()
+{
+	//unsigned long currentMillis2 = millis();
+	currentMillis = millis();
+	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO))
+	{
+		digitalWrite(Rele_R1,LOW);
+		digitalWrite(Rele_R2,LOW);
+		ButECO_Start = false;
+		digitalWrite(led_ECO,LOW);
+		Serial.println("ButtonECO Off");
+	}
+
+
 }
 
 void test_sensor()
@@ -265,8 +196,8 @@ void test_sensor()
 	// ---------------- Отключение по удержанию кнопки ButtonECO в течении  2 секунд ---------------------------
 	if (digitalRead(ButtonECO) == LOW && ButECO_Start == true)
 	{
-	   unsigned long currentMillis = millis();
-
+	  // unsigned long currentMillis = millis();
+		currentMillis = millis();
 		if((ButECO_Start == true) && (currentMillis - currentMillisECO >= time_push_ButECO))
 		{
 			digitalWrite(Rele_R1,LOW);
@@ -283,6 +214,7 @@ void test_sensor()
 		if(ButWC == false)
 		{
 			ButWC = true;
+			ButWC_Start = true;
 			Serial.println("ButtonWC");
 		}
 	}
@@ -334,11 +266,6 @@ void test_sensor()
 
 
 
-RelayControl ReleR1(Rele_R1,1000,400);
-RelayControl ReleR2(Rele_R2,100,400);
-RelayControl ReleR3(Rele_R3,100,400);
-RelayControl ReleR4(Rele_R4,100,400);
-
 Flasher led1(led_ECO, 200, 200);
 //Flasher ledWC(led_WC, 350, 350);
 //Flasher Ledlight(Led_light, 350, 350);
@@ -350,43 +277,53 @@ void setup()
 	pinMode(Rele_R2, OUTPUT);                    // Реле R2
 	pinMode(Rele_R3, OUTPUT);                    // Реле R3
 	pinMode(Rele_R4, OUTPUT);                    // Реле R4
-	//digitalWrite(Rele_R1,HIGH);
-
 
 	pinMode(led_ECO, OUTPUT);                    // Светодиод на кнопке ECO
 	pinMode(led_WC,  OUTPUT);                    // Светодиод на кнопке WC
+	digitalWrite(led_WC,HIGH);                   // Включить светодиод на кнопке WC
 	pinMode(ButtonECO,INPUT);                    // Кнопка ECO
 	pinMode(ButtonWC, INPUT);                    // Кнопка WC
-	digitalWrite(ButtonECO,HIGH);
-	digitalWrite(ButtonWC,HIGH);
+	digitalWrite(ButtonECO,HIGH);                // Установить высокий уровень на кнопке
+	digitalWrite(ButtonWC,HIGH);                 // Установить высокий уровень на кнопке
  
-
-
 	pinMode(SW1, INPUT);                         // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
 	pinMode(SW2, INPUT);                         // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
 	pinMode(SW3, INPUT);                         // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
+	digitalWrite(SW1,HIGH);                      // Установить высокий уровень на контакте
+	digitalWrite(SW2,HIGH);                      // Установить высокий уровень на контакте
+	digitalWrite(SW3,HIGH);                      // Установить высокий уровень на контакте
+
+
 	pinMode(Led_light, OUTPUT);                  // Светодиод подсветки 
-	//digitalWrite(Led_light,HIGH);
 
 	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
+	dht.begin();
+
 	Serial.println("Setup Ok!");
 	//sweeper1.Attach(servo_tank);
 }
 
 void loop() 
 {
-
 	test_sensor();
 	UpdateECO();
 	UpdateRele2();
-//	flash_led();
 
-	unsigned long currentMillis = millis();
+	//unsigned long currentMillis = millis();
+	currentMillis = millis();
+
 	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
 	{
        led1.Update();
 	}
 	
+
+	
+	// Reading temperature or humidity takes about 250 milliseconds!
+    // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+	// float h = dht.readHumidity();
+	// float t = dht.readTemperature();     // Read temperature as Celsius (the default)
+
 	//myservo.write(pos0);              // tell servo to go to position in variable 'pos' 
 	//Serial.println(pos0);
 	//delay(2000);     
