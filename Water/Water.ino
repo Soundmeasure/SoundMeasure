@@ -80,7 +80,7 @@ bool Rele2_Start = false;                          // Флаг включени�
 
 
 unsigned long timeECO            = 10000;          // 300000 Время включения реле №1 ( 5 минут)
-unsigned long timeWC             = 2000;           // Увеличить до 3 минут
+unsigned long timeWC             = 10000;          // Увеличить до 3 минут
 unsigned long Rele2_time         = 500;            // 2000 Время задержки включения реле№2 (2 секунды)
 unsigned long time_flash_led_ECO = 2000;           // 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
 unsigned long time_push_ButECO   = 2000;           // 2000 Время удержания кнопки ButtonECO  (2 секунды)
@@ -131,7 +131,6 @@ public:
 
 void UpdateECO()                           // Программа выполнения программы по нажатию кнопки ButtonECO
 {
-//	unsigned long currentMillis1 = millis();
 	currentMillis = millis();
 
 	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO))
@@ -144,9 +143,8 @@ void UpdateECO()                           // Программа выполне�
 	}
 }
 
-void UpdateRele2()                        // Программа выполнения программы по включению реле №2
+void UpdateReleECO()                        // Программа выполнения программы по включению реле №2
 {
-	//unsigned long currentMillis = millis();
 	currentMillis = millis();
 
 	if((Rele2_Start == true) && (currentMillis - currentMillisECO >= Rele2_time))
@@ -157,21 +155,35 @@ void UpdateRele2()                        // Программа выполнен
 	}
 }
 
+
 void UpdateWC()
 {
-	//unsigned long currentMillis2 = millis();
 	currentMillis = millis();
-	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO))
+	if((ButWC_Start == true) && (currentMillis - currentMillisWC >= timeWC))
 	{
 		digitalWrite(Rele_R1,LOW);
 		digitalWrite(Rele_R2,LOW);
-		ButECO_Start = false;
-		digitalWrite(led_ECO,LOW);
-		Serial.println("ButtonECO Off");
+		ButWC_Start = false;
+		digitalWrite(led_WC,HIGH);
+		Serial.println("ButtonWC Off");
 	}
-
-
 }
+
+//void UpdateReleWC()                        // Программа выполнения программы по включению реле №2
+//{
+//	currentMillis = millis();
+//
+//	if((Rele2_Start == true) && (currentMillis - currentMillisWC >= Rele2_time))
+//	{
+//		digitalWrite(Rele_R2,HIGH);
+//		Rele2_Start = false;
+//		Serial.println("Rele_R2 On");
+//	}
+//}
+
+
+
+
 
 void test_sensor()
 {
@@ -196,7 +208,6 @@ void test_sensor()
 	// ---------------- Отключение по удержанию кнопки ButtonECO в течении  2 секунд ---------------------------
 	if (digitalRead(ButtonECO) == LOW && ButECO_Start == true)
 	{
-	  // unsigned long currentMillis = millis();
 		currentMillis = millis();
 		if((ButECO_Start == true) && (currentMillis - currentMillisECO >= time_push_ButECO))
 		{
@@ -209,13 +220,17 @@ void test_sensor()
 		}
 	}
 
+	//--------------------------  Проверка нажатия кнопки ButtonWC -----------------------
 	if (digitalRead(ButtonWC) == LOW)
 	{
 		if(ButWC == false)
 		{
 			ButWC = true;
 			ButWC_Start = true;
+			Rele2_Start = true;
 			Serial.println("ButtonWC");
+			digitalWrite(Rele_R1,HIGH);
+			currentMillisWC = millis();
 		}
 	}
 	else
@@ -267,7 +282,7 @@ void test_sensor()
 
 
 Flasher led1(led_ECO, 200, 200);
-//Flasher ledWC(led_WC, 350, 350);
+Flasher led2(led_WC, 200, 200);
 //Flasher Ledlight(Led_light, 350, 350);
 
 void setup() 
@@ -307,16 +322,24 @@ void loop()
 {
 	test_sensor();
 	UpdateECO();
-	UpdateRele2();
+	UpdateReleECO();
 
-	//unsigned long currentMillis = millis();
+	UpdateWC();
+//	UpdateReleWC();
+
 	currentMillis = millis();
 
 	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
 	{
        led1.Update();
 	}
-	
+
+	currentMillis = millis();
+
+	if(ButWC_Start==true)
+	{
+       led2.Update();
+	}
 
 	
 	// Reading temperature or humidity takes about 250 milliseconds!

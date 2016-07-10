@@ -85,7 +85,7 @@ extern "C" void __cxa_pure_virtual() {;}
 #define portModeRegister(P)
 
 void UpdateECO();
-void UpdateRele2();
+void UpdateReleECO();
 void UpdateWC();
 void test_sensor();
 //
