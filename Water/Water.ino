@@ -32,53 +32,42 @@ c внешними прерываниями ,ButtonWC,SW3
 */
 
 #include <Servo.h>
-#include "DHT.h"
-
 
 #define Rele_R1   15                             // Реле R1  
 #define Rele_R2   16                             // Реле R2
 #define Rele_R3   17                             // Реле R3
 #define Rele_R4   18                             // Реле R4
-
-
 #define led_ECO    8                             // Светодиод на кнопке ECO
 #define led_WC     5                             // Светодиод на кнопке WC
 #define ButtonECO  7                             // Кнопка ECO
 #define ButtonWC  10                             // Кнопка WC
-
 #define SW1        2                             // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
 #define SW2        3                             // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
 #define SW3        4                             // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
 #define Led_light  6                             // Светодиод подсветки 
 #define servo_tank 9                             // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
-#define DHTPIN     11                             // Датчик влажности
 
-// Uncomment whatever type you're using!
-#define DHTTYPE DHT11   // DHT 11
-//#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
-//#define DHTTYPE DHT21   // DHT 21 (AM2301)
-
-DHT dht(DHTPIN, DHTTYPE);
-
-
-Servo myservo;                                   // create servo object to control a servo 
-                                                 // twelve servo objects can be created on most boards
-int pos   = 0;                                   // variable to store the servo position 
-int pos0  = 0;                                   // variable to store the servo position 
-int pos50 = 30;                                  // variable to store the servo position 
-int pos10 = 6;                                   // variable to store the servo position 
-
-bool ButECO = false;                             //
-bool ButECO_Start = false;                       // Флаг запуска программы по команде кнопки  ButtonECO
-bool ButWC  = false;
-bool ButWC_Start = false;                        // Флаг запуска программы по команде кнопки  ButtonWC
-bool ButSW1 = false;
-bool ButSW2 = false;
-bool ButSW3 = false;
-
-bool Rele2_Start = false;                          // Флаг включения реле №2
-
-
+Servo myservo;                                     // create servo object to control a servo 
+                                                   // twelve servo objects can be created on most boards
+int pos                          = 0;              // variable to store the servo position 
+int pos0                         = 0;              // variable to store the servo position 
+int pos50                        = 30;             // variable to store the servo position 
+unsigned int pos_time            = 1000;           // 
+int num_button                   = 0;              //
+int num_button34                 = 0;              //
+int Rele34_time                  = 0;              //
+int SW1_time                     = 3000;            //
+int SW2_time                     = 1000;            //
+int SW3_time                     = 2000;            //
+bool ButECO                      = false;          //
+bool ButECO_Start                = false;          // Флаг запуска программы по команде кнопки  ButtonECO
+bool ButWC                       = false;          //
+bool ButWC_Start                 = false;          // Флаг запуска программы по команде кнопки  ButtonWC
+bool ButSW1                      = false;
+bool ButSW2                      = false;
+bool ButSW3                      = false;
+bool Rele2_Start                 = false;          // Флаг включения реле №2
+bool Rele34_Start                = false;          // Флаг включения реле №3,4
 unsigned long timeECO            = 10000;          // 300000 Время включения реле №1 ( 5 минут)
 unsigned long timeWC             = 10000;          // Увеличить до 3 минут
 unsigned long Rele2_time         = 500;            // 2000 Время задержки включения реле№2 (2 секунды)
@@ -87,6 +76,8 @@ unsigned long time_push_ButECO   = 2000;           // 2000 Время удерж
 unsigned long currentMillisECO   = 0;
 unsigned long currentMillisWC    = 0;
 unsigned long currentMillis      = 0;
+unsigned long currentMillis34    = 0;
+
 
 class Flasher                                   // Управление светодиодами в многозадачном режиме  
 {
@@ -127,12 +118,10 @@ public:
 	   }
 	}
 };
-
-
-void UpdateECO()                           // Программа выполнения программы по нажатию кнопки ButtonECO
+Flasher led1(led_ECO, 200, 200);
+Flasher led2(led_WC, 200, 200);
+void UpdateECO()                                   // Проверка окончания выполнения программы по нажатию кнопки ButtonECO
 {
-	currentMillis = millis();
-
 	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO))
 	{
 		digitalWrite(Rele_R1,LOW);
@@ -142,48 +131,69 @@ void UpdateECO()                           // Программа выполне�
 		Serial.println("ButtonECO Off");
 	}
 }
-
-void UpdateReleECO()                        // Программа выполнения программы по включению реле №2
-{
-	currentMillis = millis();
-
-	if((Rele2_Start == true) && (currentMillis - currentMillisECO >= Rele2_time))
-	{
-		digitalWrite(Rele_R2,HIGH);
-		Rele2_Start = false;
-		Serial.println("Rele_R2 On");
-	}
-}
-
-
 void UpdateWC()
 {
-	currentMillis = millis();
 	if((ButWC_Start == true) && (currentMillis - currentMillisWC >= timeWC))
 	{
 		digitalWrite(Rele_R1,LOW);
 		digitalWrite(Rele_R2,LOW);
 		ButWC_Start = false;
 		digitalWrite(led_WC,HIGH);
-		Serial.println("ButtonWC Off");
+		Serial.println("ButtonWC Off"); 
 	}
 }
-
-//void UpdateReleWC()                        // Программа выполнения программы по включению реле №2
-//{
-//	currentMillis = millis();
-//
-//	if((Rele2_Start == true) && (currentMillis - currentMillisWC >= Rele2_time))
-//	{
-//		digitalWrite(Rele_R2,HIGH);
-//		Rele2_Start = false;
-//		Serial.println("Rele_R2 On");
-//	}
-//}
-
-
-
-
+void UpdateReleECO()                              // Программа выполнения программы по включению реле №2
+{
+	if(num_button ==1)
+	{
+  	  if((Rele2_Start == true) && (currentMillis - currentMillisECO >= Rele2_time))
+		{
+			digitalWrite(Rele_R2,HIGH);
+			Rele2_Start = false;
+			Serial.println("Rele_R2 On");
+		}
+	}
+	else if(num_button ==2)
+	{
+  	  if((Rele2_Start == true) && (currentMillis - currentMillisWC >= Rele2_time))
+		{
+			digitalWrite(Rele_R2,HIGH);
+			Rele2_Start = false;
+			Serial.println("Rele_R2 On");
+		}
+	}
+}
+void UpdateRele34()                              // Программа выполнения программы по включению реле №2
+{
+	if(num_button34 == 3)
+	{
+  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
+		{
+			digitalWrite(Rele_R3,LOW);
+			Rele34_Start = false;
+			Serial.println("Rele_R3 Off");
+		}
+	}
+	else if(num_button34 == 4)
+	{
+  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
+		{
+			digitalWrite(Rele_R3,LOW);
+			digitalWrite(Rele_R4,LOW);
+			Rele34_Start = false;
+			Serial.println("Rele_R3,4 Off");
+		}
+	}
+	else if(num_button34 == 5)
+	{
+  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
+		{
+			digitalWrite(Rele_R4,LOW);
+			Rele34_Start = false;
+			Serial.println("Rele_R3,4 Off");
+		}
+	}
+}
 
 void test_sensor()
 {
@@ -192,9 +202,10 @@ void test_sensor()
 	{
 		if(ButECO == false)
 		{
-			ButECO = true;
+			ButECO       = true;
 			ButECO_Start = true;
-			Rele2_Start = true;
+			num_button   =1;
+			Rele2_Start  = true;
 			Serial.println("ButtonECO On");
 			currentMillisECO = millis();
 			digitalWrite(Rele_R1,HIGH);
@@ -219,14 +230,17 @@ void test_sensor()
 			while(digitalRead(ButtonECO) == LOW){}              // Ожидание отпускания кнопки ButtonECO для предотвращения запуска нового нажатия.
 		}
 	}
-
 	//--------------------------  Проверка нажатия кнопки ButtonWC -----------------------
 	if (digitalRead(ButtonWC) == LOW)
 	{
 		if(ButWC == false)
 		{
-			ButWC = true;
+			myservo.write(pos50);              // tell servo to go to position in variable 'pos' 
+            delay(pos_time);                   // waits 15ms for the servo to reach the position 
+			myservo.write(pos0);               // tell servo to go to position in variable 'pos' 
+			ButWC       = true;
 			ButWC_Start = true;
+			num_button  = 2;
 			Rele2_Start = true;
 			Serial.println("ButtonWC");
 			digitalWrite(Rele_R1,HIGH);
@@ -237,14 +251,18 @@ void test_sensor()
 	{
 		ButWC = false;
 	}
-
 //------------- проверка контактов датчиков ------------------------	
 	if (digitalRead(SW1) == LOW)
 	{
 		if(ButSW1 == false)
 		{
 			ButSW1 = true;
-			Serial.println("SW1");
+			num_button34                 = 3;              //
+            Rele34_time                  = SW1_time;           //
+			Rele34_Start = true;
+			digitalWrite(Rele_R3,HIGH);
+			Serial.println("SW1 On");
+			currentMillis34 = millis();
 		}
 	}
 	else
@@ -257,7 +275,13 @@ void test_sensor()
 		if(ButSW2 == false)
 		{
 			ButSW2 = true;
-			Serial.println("SW2");
+			num_button34                 = 4;              //
+            Rele34_time                  = SW2_time;           //
+			Rele34_Start = true;
+			digitalWrite(Rele_R3,HIGH);
+			digitalWrite(Rele_R4,HIGH);
+			Serial.println("SW2 On");
+			currentMillis34 = millis();
 		}
 	}
 	else
@@ -270,6 +294,11 @@ void test_sensor()
 		if(ButSW3 == false)
 		{
 			ButSW3 = true;
+			num_button34                 = 5;              //
+            Rele34_time                  = SW3_time;           //
+			Rele34_Start = true;
+			digitalWrite(Rele_R4,HIGH);
+			currentMillis34 = millis();
 			Serial.println("SW3");
 		}
 	}
@@ -278,13 +307,6 @@ void test_sensor()
 		ButSW3 = false;
 	}
 }
-
-
-
-Flasher led1(led_ECO, 200, 200);
-Flasher led2(led_WC, 200, 200);
-//Flasher Ledlight(Led_light, 350, 350);
-
 void setup() 
 {
 	Serial.begin(9600);
@@ -308,40 +330,30 @@ void setup()
 	digitalWrite(SW2,HIGH);                      // Установить высокий уровень на контакте
 	digitalWrite(SW3,HIGH);                      // Установить высокий уровень на контакте
 
-
 	pinMode(Led_light, OUTPUT);                  // Светодиод подсветки 
 
 	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
-	dht.begin();
-
+	myservo.write(pos0);              // tell servo to go to position in variable 'pos' 
 	Serial.println("Setup Ok!");
-	//sweeper1.Attach(servo_tank);
 }
 
 void loop() 
 {
 	test_sensor();
-	UpdateECO();
-	UpdateReleECO();
-
-	UpdateWC();
-//	UpdateReleWC();
-
 	currentMillis = millis();
+	UpdateECO();
+	UpdateWC();
+	UpdateReleECO();
+	UpdateRele34();
 
 	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
 	{
        led1.Update();
 	}
-
-	currentMillis = millis();
-
 	if(ButWC_Start==true)
 	{
        led2.Update();
 	}
-
-	
 	// Reading temperature or humidity takes about 250 milliseconds!
     // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
 	// float h = dht.readHumidity();
