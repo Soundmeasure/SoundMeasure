@@ -50,6 +50,7 @@ c внешними прерываниями ,ButtonWC,SW3
 #define SW3        4                             // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
 #define Led_light  6                             // Светодиод подсветки 
 #define servo_tank 9                             // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
+#define DHT11     11                             // Датчик влажности
 
 Servo myservo;                                   // create servo object to control a servo 
                                                  // twelve servo objects can be created on most boards
