@@ -58,14 +58,14 @@ int pos0  = 0;                                   // variable to store the servo 
 int pos50 = 30;                                  // variable to store the servo position 
 int pos10 = 6;                                   // variable to store the servo position 
 
-bool ButECO = false;
-bool ButECO_Start = false;
+bool ButECO = false;                             //
+bool ButECO_Start = false;                       // Флаг запуска программы по команде кнопки  ButtonECO
 bool ButWC  = false;
 bool ButSW1 = false;
 bool ButSW2 = false;
 bool ButSW3 = false;
 
-bool Rele2_Start = false;
+bool Rele2_Start = false;                          // Флаг включения реле №2
 
 
 unsigned long timeECO            = 10000;          // 300000 Время включения реле №1 ( 5 минут)
@@ -77,7 +77,7 @@ unsigned long currentMillisECO   = 0;
 unsigned long currentMillisWC    = 0;
 
 
-class RelayControl                               // Управление реле в многозадачном режиме  
+class RelayControl                                  // Управление реле в многозадачном режиме  
 {
 	int relePin;
 	long OnTime;
@@ -243,7 +243,7 @@ void UpdateRele2()
 
 void test_sensor()
 {
-	
+	// ------------------------  Проверка нажатия кнопки ButtonECO -----------------------
 	if (digitalRead(ButtonECO) == LOW && ButECO_Start != true )
 	{
 		if(ButECO == false)
@@ -261,10 +261,9 @@ void test_sensor()
 	{
 		ButECO = false;
 	}
-
-	if (digitalRead(ButtonECO) == LOW && ButECO_Start == true )
+	// ---------------- Отключение по удержанию кнопки ButtonECO в течении  2 секунд ---------------------------
+	if (digitalRead(ButtonECO) == LOW && ButECO_Start == true)
 	{
-
 	   unsigned long currentMillis = millis();
 
 		if((ButECO_Start == true) && (currentMillis - currentMillisECO >= time_push_ButECO))
@@ -274,7 +273,7 @@ void test_sensor()
 			ButECO_Start = false;
 			digitalWrite(led_ECO,LOW);
 			Serial.println("ButtonECO Off");
-			while(digitalRead(ButtonECO) == LOW){}
+			while(digitalRead(ButtonECO) == LOW){}              // Ожидание отпускания кнопки ButtonECO для предотвращения запуска нового нажатия.
 		}
 	}
 
