@@ -51,8 +51,14 @@ c внешними прерываниями ,ButtonWC,SW3
 #define Led_light  6                             // Светодиод подсветки 
 #define servo_tank 9                             // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
 
+Servo myservo;                                   // create servo object to control a servo 
+                                                 // twelve servo objects can be created on most boards
+int pos   = 0;                                   // variable to store the servo position 
+int pos0  = 0;                                   // variable to store the servo position 
+int pos50 = 30;                                  // variable to store the servo position 
+int pos10 = 6;                                   // variable to store the servo position 
 
-class RelayControl                              // Управление реле в многозадачном режиме  
+class RelayControl                               // Управление реле в многозадачном режиме  
 {
 	int relePin;
 	long OnTime;
@@ -133,47 +139,47 @@ public:
 	}
 };
 
-class Sweeper                                    // Управление servo в многозадачном режиме  
-{
-Servo servo;
-int pos;
-int increment;
-int updateInterval;
-unsigned long lastUpdate;
-
-public:
-	Sweeper(int interval)
-	{
-		updateInterval = interval;
-		increment = 1;
-	}
-
-	void Attach(int pin)
-	{
-		servo.attach(pin);
-	}
-	void Detach()
-	{
-       servo.detach();
-	}
-  void Update()
-  {
-    if((millis() - lastUpdate) > updateInterval)
-	{
-      lastUpdate = millis();
-	  pos += increment;
-	  servo.write(pos);
-	  Serial.println(pos);
-	  if((pos >= 180) || (pos <= 0))
-	  {
-       increment = -increment;
-	  }
-	}
-  }
-};
-
-
-Sweeper sweeper1(15);
+//class Sweeper                                    // Управление servo в многозадачном режиме  
+//{
+//Servo servo;
+//int pos;
+//int increment;
+//int updateInterval;
+//unsigned long lastUpdate;
+//
+//public:
+//	Sweeper(int interval)
+//	{
+//		updateInterval = interval;
+//		increment = 1;
+//	}
+//
+//	void Attach(int pin)
+//	{
+//		servo.attach(pin);
+//	}
+//	void Detach()
+//	{
+//       servo.detach();
+//	}
+//  void Update()
+//  {
+//    if((millis() - lastUpdate) > updateInterval)
+//	{
+//      lastUpdate = millis();
+//	  pos += increment;
+//	  servo.write(pos);
+//	  Serial.println(pos);
+//	  if((pos >= 180) || (pos <= 0))
+//	  {
+//       increment = -increment;
+//	  }
+//	}
+//  }
+//};
+//
+//
+//Sweeper sweeper1(10);
 
 RelayControl ReleR1(Rele_R1,100,400);
 RelayControl ReleR2(Rele_R2,100,400);
@@ -205,12 +211,36 @@ void setup()
 	pinMode(Led_light, OUTPUT);                  // Светодиод подсветки 
 	digitalWrite(Led_light,HIGH);
 
+	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
+
 	Serial.println("Setup Ok!");
-	sweeper1.Attach(servo_tank);
+	//sweeper1.Attach(servo_tank);
 }
 
 void loop() 
 {
-  // put your main code here, to run repeatedly:
+	//myservo.write(pos0);              // tell servo to go to position in variable 'pos' 
+	//Serial.println(pos0);
+	//delay(2000);     
+	//myservo.write(pos50);              // tell servo to go to position in variable 'pos' 
+	//Serial.println(pos50);
+	//delay(2000);     
 
+	//myservo.write(pos10);              // tell servo to go to position in variable 'pos' 
+	//Serial.println(pos10);
+	//delay(2000);     
+	 myservo.write(0);              // tell servo to go to position in variable 'pos' 
+	 delay(1000);
+  for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
+  {                                  // in steps of 1 degree 
+    myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+    delay(25);                       // waits 15ms for the servo to reach the position 
+  } 
+
+  //for(pos = 180; pos>=0; pos-=1)     // goes from 180 degrees to 0 degrees 
+  //{                                
+  //  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
+  //  delay(25);                       // waits 15ms for the servo to reach the position 
+  //} 
+  //	delay(2000);    
 }
