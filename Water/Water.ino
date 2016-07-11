@@ -34,6 +34,7 @@ c внешними прерываниями ,ButtonWC,SW3
 #include <Servo.h>
 #include <SerialInput.h>
 #include <EEPROM.h>
+#include <EEPROM2.h>
 
 #define Rele_R1   15                               // Реле R1  
 #define Rele_R2   16                               // Реле R2
@@ -81,20 +82,21 @@ int ligh_speedECO                        = 200;            // M время ск�
 int ligh_speedWC                         = 200;            // N время скорости перестройки плавностью включения/отключения светодиода WC
 int ligh_speed                           = 20;             // O время скорости перестройки плавностью включения/отключения света 
 //----------------- Параметры по умолчанию -------------------
-const unsigned long c_timeECO            = 300000;         // A 300000 Время включения реле №1 ( 5 минут) от кнопки ECO
-const unsigned long c_timeWC             = 180000;         // B 180000 Время включения реле №1 ( 3 минуты) от кнопки WC
-const unsigned long c_Rele2_time         = 2000;           // C 2000 Время задержки включения реле№2 (2 секунды)
-const unsigned long c_time_flash_led_ECO = 60000;          // D 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
-const unsigned long c_time_push_ButECO   = 2000;           // E 2000 Время удержания кнопки ButtonECO  (2 секунды)
-const unsigned long c_SW1_time           = 30000;          // F Время задержки по по комманде SW1
-const unsigned long c_SW2_time           = 10000;          // G Время задержки по по комманде SW2
-const unsigned long c_SW3_time           = 90000;          // H Время задержки по по комманде SW3
-const int c_pos0                         = 0;              // J Параметры позиции сервопривода 0 градусов
-const int c_pos50                        = 30;             // K Параметры позиции сервопривода 50 градусов
-const unsigned int c_pos_time            = 1000;           // L Время до возврата сервопривода в исходное положение 
-const int c_ligh_speedECO                = 200;            // M время скорости перестройки плавностью включения/отключения светодиода ECO
-const int c_ligh_speedWC                 = 200;            // N время скорости перестройки плавностью включения/отключения светодиода WC
-const int c_ligh_speed                   = 20;             // O время скорости перестройки плавностью включения/отключения света 
+                                                           // Адрес в EEPROM
+const unsigned long c_timeECO            = 300000;         // 10  A 300000 Время включения реле №1 ( 5 минут) от кнопки ECO
+const unsigned long c_timeWC             = 180000;         // 14  B 180000 Время включения реле №1 ( 3 минуты) от кнопки WC
+const unsigned long c_Rele2_time         = 2000;           // 18  C 2000 Время задержки включения реле№2 (2 секунды)
+const unsigned long c_time_flash_led_ECO = 60000;          // 22  D 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
+const unsigned long c_time_push_ButECO   = 2000;           // 26  E 2000 Время удержания кнопки ButtonECO  (2 секунды)
+const unsigned long c_SW1_time           = 30000;          // 30  F Время задержки по по комманде SW1
+const unsigned long c_SW2_time           = 10000;          // 34  G Время задержки по по комманде SW2
+const unsigned long c_SW3_time           = 90000;          // 38  H Время задержки по по комманде SW3
+const int c_pos0                         = 0;              // 42  J Параметры позиции сервопривода 0 градусов
+const int c_pos50                        = 30;             // 46  K Параметры позиции сервопривода 50 градусов
+const unsigned int c_pos_time            = 1000;           // 50  L Время до возврата сервопривода в исходное положение 
+const int c_ligh_speedECO                = 200;            // 54  M время скорости перестройки плавностью включения/отключения светодиода ECO
+const int c_ligh_speedWC                 = 200;            // 58  N время скорости перестройки плавностью включения/отключения светодиода WC
+const int c_ligh_speed                   = 20;             // 62  O время скорости перестройки плавностью включения/отключения света 
 //------------------------------------------------------------
 int lighN                                = 0;              // Переменная для хранения количества ступеней плавной перестройки
 unsigned long currentMillisECO           = 0;              // Переменная для временного хранения текущего времени 
@@ -368,7 +370,7 @@ void test_sensor()
 			currentMillis34 = millis();
 			Serial.println("SW3");
 		}
-	}
+	}  
 	else
 	{
 		ButSW3 = false;
@@ -393,77 +395,94 @@ void serialEvent()
 	}
 	else if (c == 's' && 'S') 
 	{
-		
+		Serial.print("Save default ... ");
+		save_Default();                              // Запись в EEPROM параметров по умолчанию
+		read_Default();
+		Serial.println(" Ok!");
 	}
 	else if (c == 'a' && 'A') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(10, numberIn*1000);
+		EEPROM_read(10, timeECO);
 	} 
 	else if (c == 'b' && 'B') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(14, numberIn*1000);
+		EEPROM_read(14, timeWC);
 	}
 	else if (c == 'c' && 'C')
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(18, numberIn*1000);
+        EEPROM_read(18, Rele2_time);
 	}
 	else if (c == 'd' && 'D')
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(22, numberIn*1000);
+    	EEPROM_read(22, time_flash_led_ECO);
 	}
 	else if (c == 'e' && 'E') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(26, numberIn*1000);
+	    EEPROM_read(26, time_push_ButECO);
 	} 
 	else if (c == 'f' && 'F') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(30, numberIn*1000);
+	    EEPROM_read(30, SW1_time);
 	}
 	else if (c == 'g' && 'G')
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(34, numberIn*1000);
+	    EEPROM_read(34, SW2_time);
 	}
 	else if (c == 'h' && 'H') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(38, numberIn*1000);
+	    EEPROM_read(38, SW3_time);
 	} 
 	else if (c == 'j' && 'J') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(42, numberIn*1000);
+	    EEPROM_read(42, pos0);
 	}
 	else if (c == 'k' && 'K')
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(46, numberIn*1000);
+	    EEPROM_read(46, pos50);
 	}
 	else if (c == 'l' && 'L') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(50, numberIn*1000);
+	    EEPROM_read(50, pos_time);
 	} 
 	else if (c == 'm' && 'M') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(54, numberIn*1000);
+	    EEPROM_read(54, ligh_speedECO);
 	}
 	else if (c == 'n' && 'N')
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(58, numberIn*1000);
+	    EEPROM_read(58, ligh_speedWC);
 	}
 	else if (c == 'o' && 'O') 
 	{
-		int numberIn =  input_serial();
-		Serial.println(numberIn);
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(62, numberIn*1000);
+	    EEPROM_read(62, ligh_speed);
 	} 
 	else 
 	{
@@ -485,6 +504,7 @@ int input_serial()              // Программа ввода парамет�
 		{
 		Serial.println("You didn't entered anything");
 		}
+		Serial.println();
 		return Number;
 }
 
@@ -557,6 +577,41 @@ void print_infoU()
     Serial.println();
 }
 
+void save_Default()
+{
+ 	EEPROM_write(10, c_timeECO);
+ 	EEPROM_write(14, c_timeWC);
+ 	EEPROM_write(18, c_Rele2_time);
+ 	EEPROM_write(22, c_time_flash_led_ECO);
+ 	EEPROM_write(26, c_time_push_ButECO);
+ 	EEPROM_write(30, c_SW1_time);
+ 	EEPROM_write(34, c_SW2_time);
+ 	EEPROM_write(38, c_SW3_time);
+ 	EEPROM_write(42, c_pos0);
+ 	EEPROM_write(46, c_pos50);
+ 	EEPROM_write(50, c_pos_time);
+ 	EEPROM_write(54, c_ligh_speedECO);
+ 	EEPROM_write(58, c_ligh_speedWC);
+ 	EEPROM_write(62, c_ligh_speed);
+}
+
+void read_Default()
+{
+	EEPROM_read(10, timeECO);
+	EEPROM_read(14, timeWC);
+	EEPROM_read(18, Rele2_time);
+	EEPROM_read(22, time_flash_led_ECO);
+	EEPROM_read(26, time_push_ButECO);
+	EEPROM_read(30, SW1_time);
+	EEPROM_read(34, SW2_time);
+	EEPROM_read(38, SW3_time);
+	EEPROM_read(42, pos0);
+	EEPROM_read(46, pos50);
+	EEPROM_read(50, pos_time);
+	EEPROM_read(54, ligh_speedECO);
+	EEPROM_read(58, ligh_speedWC);
+	EEPROM_read(62, ligh_speed);
+}
 void clear_eeprom()
  {
  for(int i=0;i<512;i++)
@@ -565,26 +620,9 @@ void clear_eeprom()
 
 void ini_eeprom()
  {
- EEPROM.write(0,3);
- //for(int i=1;i<4;i++)
- //  {
- //   EEPROM.write(i*15+0,0);
- //   EEPROM.write(i*15+1,0);
- //   EEPROM.write(i*15+2,0);
- //   EEPROM.write(i*15+3,0);
- //   EEPROM.write(i*15+4,0);
- //   EEPROM.write(i*15+5,1);
- //   EEPROM.write(i*15+6,1);
- //   EEPROM.write(i*15+7,16);
- //   EEPROM.write(i*15+8,1);
- //   EEPROM.write(i*15+9,0);
- //   EEPROM.write(i*15+10,0);
- //   EEPROM.write(i*15+11,0);
- //   EEPROM.write(i*15+12,0);
- //   EEPROM.write(i*15+13,0);
- //   EEPROM.write(i*15+14,0);
- //  }
+	 EEPROM.write(0,3);
  } 
+	
 
 void setup() 
 {
@@ -619,9 +657,8 @@ void setup()
 		 clear_eeprom();
 		 ini_eeprom();
      }
-
-	//print_info();                                // Вывод параметров в СОМ порт
-	Serial.println("Setup Ok!");                 // Успешное завершение начальной настройки.
+ 	Serial.println("Setup Ok!");                 // Успешное завершение начальной настройки.
+	Serial.println();                 // Успешное завершение начальной настройки.
 }
 
 void loop() 
