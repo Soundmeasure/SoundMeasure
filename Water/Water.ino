@@ -70,7 +70,7 @@ bool lightmax                            = false;          // Флаг упра�
 unsigned long timeECO                    = 10000;          // A 300000 Время включения реле №1 ( 5 минут) от кнопки ECO
 unsigned long timeWC                     = 10000;          // B 180000 Время включения реле №1 ( 3 минуты) от кнопки WC
 unsigned long Rele2_time                 = 500;            // C 2000 Время задержки включения реле№2 (2 секунды)
-unsigned long time_flash_led_ECO         = 2000;           // D 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
+unsigned long time_flash_led_ECO         = 2000;           // P 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
 unsigned long time_push_ButECO           = 2000;           // E 2000 Время удержания кнопки ButtonECO  (2 секунды)
 unsigned long SW1_time                   = 3000;           // F Время задержки по по комманде SW1
 unsigned long SW2_time                   = 1000;           // G Время задержки по по комманде SW2
@@ -86,7 +86,7 @@ int ligh_speed                           = 20;             // O время ск�
 const unsigned long c_timeECO            = 300000;         // 10  A 300000 Время включения реле №1 ( 5 минут) от кнопки ECO
 const unsigned long c_timeWC             = 180000;         // 14  B 180000 Время включения реле №1 ( 3 минуты) от кнопки WC
 const unsigned long c_Rele2_time         = 2000;           // 18  C 2000 Время задержки включения реле№2 (2 секунды)
-const unsigned long c_time_flash_led_ECO = 60000;          // 22  D 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
+const unsigned long c_time_flash_led_ECO = 60000;          // 22  P 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
 const unsigned long c_time_push_ButECO   = 2000;           // 26  E 2000 Время удержания кнопки ButtonECO  (2 секунды)
 const unsigned long c_SW1_time           = 30000;          // 30  F Время задержки по по комманде SW1
 const unsigned long c_SW2_time           = 10000;          // 34  G Время задержки по по комманде SW2
@@ -393,12 +393,13 @@ void serialEvent()
 	{
 		print_infoU();                                // Вывод параметров в СОМ порт
 	}
-	else if (c == 's' && 'S') 
+	else if (c == 'd' && 'D') 
 	{
 		Serial.print("Save default ... ");
 		save_Default();                              // Запись в EEPROM параметров по умолчанию
 		read_Default();
 		Serial.println(" Ok!");
+		Serial.println();
 	}
 	else if (c == 'a' && 'A') 
 	{
@@ -418,7 +419,7 @@ void serialEvent()
 		EEPROM_write(18, numberIn*1000);
         EEPROM_read(18, Rele2_time);
 	}
-	else if (c == 'd' && 'D')
+	else if (c == 'p' && 'P')
 	{
 		unsigned long numberIn =  input_serial();
 		EEPROM_write(22, numberIn*1000);
@@ -451,13 +452,13 @@ void serialEvent()
 	else if (c == 'j' && 'J') 
 	{
 		unsigned long numberIn =  input_serial();
-		EEPROM_write(42, numberIn*1000);
+		EEPROM_write(42, numberIn);
 	    EEPROM_read(42, pos0);
 	}
 	else if (c == 'k' && 'K')
 	{
 		unsigned long numberIn =  input_serial();
-		EEPROM_write(46, numberIn*1000);
+		EEPROM_write(46, numberIn);
 	    EEPROM_read(46, pos50);
 	}
 	else if (c == 'l' && 'L') 
@@ -469,19 +470,19 @@ void serialEvent()
 	else if (c == 'm' && 'M') 
 	{
 		unsigned long numberIn =  input_serial();
-		EEPROM_write(54, numberIn*1000);
+		EEPROM_write(54, numberIn);
 	    EEPROM_read(54, ligh_speedECO);
 	}
 	else if (c == 'n' && 'N')
 	{
 		unsigned long numberIn =  input_serial();
-		EEPROM_write(58, numberIn*1000);
+		EEPROM_write(58, numberIn);
 	    EEPROM_read(58, ligh_speedWC);
 	}
 	else if (c == 'o' && 'O') 
 	{
 		unsigned long numberIn =  input_serial();
-		EEPROM_write(62, numberIn*1000);
+		EEPROM_write(62, numberIn);
 	    EEPROM_read(62, ligh_speed);
 	} 
 	else 
@@ -504,7 +505,8 @@ int input_serial()              // Программа ввода парамет�
 		{
 		Serial.println("You didn't entered anything");
 		}
-		Serial.println();
+		Serial.println();  
+		Serial.println("->");      
 		return Number;
 }
 
@@ -516,7 +518,7 @@ void print_info()
 	Serial.println(timeWC/1000);
 	Serial.print("C  Rele2_time sec. - ");
 	Serial.println(Rele2_time/1000);
-	Serial.print("D  time_flash_led_ECO sec. - ");
+	Serial.print("P  time_flash_led_ECO sec. - ");
 	Serial.println(time_flash_led_ECO/1000);
 	Serial.print("E  time_push_ButECO   sec. - ");
 	Serial.println(time_push_ButECO/1000);
@@ -538,8 +540,8 @@ void print_info()
 	Serial.println(ligh_speedWC);
 	Serial.print("O  ligh_speed    - ");
 	Serial.println(ligh_speed );
-
-    Serial.println();
+	Serial.println();  
+	Serial.println("->");
 }
 
 void print_infoU()
@@ -551,7 +553,7 @@ void print_infoU()
 	Serial.println(c_timeWC/1000);
 	Serial.print("C  Rele2_time sec. - ");
 	Serial.println(c_Rele2_time/1000);
-	Serial.print("D  time_flash_led_ECO sec. - ");
+	Serial.print("P  time_flash_led_ECO sec. - ");
 	Serial.println(c_time_flash_led_ECO/1000);
 	Serial.print("E  time_push_ButECO   sec. - ");
 	Serial.println(c_time_push_ButECO/1000);
@@ -573,8 +575,8 @@ void print_infoU()
 	Serial.println(c_ligh_speedWC);
 	Serial.print("O  ligh_speed    - ");
 	Serial.println(c_ligh_speed );
-
-    Serial.println();
+	Serial.println();  
+	Serial.println("->");
 }
 
 void save_Default()
@@ -657,8 +659,16 @@ void setup()
 		 clear_eeprom();
 		 ini_eeprom();
      }
+
  	Serial.println("Setup Ok!");                 // Успешное завершение начальной настройки.
-	Serial.println();                 // Успешное завершение начальной настройки.
+	Serial.println();  
+	Serial.println("Enter the character");                  
+	Serial.println("I  - Parameter information");                 
+	Serial.println("U  - Default information");                 
+	Serial.println("D  - Save default");                  
+	Serial.println("A...O - Change information");  
+	Serial.println();  
+	Serial.println("->");
 }
 
 void loop() 
