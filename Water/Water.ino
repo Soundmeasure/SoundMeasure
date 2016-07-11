@@ -63,6 +63,7 @@ bool ButSW1                              = false;          // Флаг запу�
 bool ButSW2                              = false;          // Флаг запуска программы по команде SW2
 bool ButSW3                              = false;          // Флаг запуска программы по команде SW3
 bool Rele2_Start                         = false;          // Флаг включения реле №2
+bool Rele1_Stop                          = false;          // Флаг выключения реле №1
 bool Rele34_Start                        = false;          // Флаг включения реле №3,4
 bool lightOnOff                          = false;          // Флаг управления плавным включением/отключением света
 bool lightmin                            = false;          // Флаг управления плавным отключением света
@@ -103,7 +104,7 @@ unsigned long currentMillisECO           = 0;              // Переменна
 unsigned long currentMillisWC            = 0;              // Переменная для временного хранения текущего времени 
 unsigned long currentMillis              = 0;              // Переменная для временного хранения текущего времени 
 unsigned long currentMillis34            = 0;              // Переменная для временного хранения текущего времени 
-
+unsigned long currentMillisRele1         = 0;              // Переменная для временного хранения текущего времени 
 int incomingByte = 0;                                      // переменная для хранения полученного байта
 long int Number;
 char c;
@@ -153,7 +154,9 @@ void UpdateECO()                                   // Проверка окон�
 {
 	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO))
 	{
-		digitalWrite(Rele_R1,LOW);
+		//digitalWrite(Rele_R1,LOW);
+		Rele1_Stop = true;
+		currentMillisRele1 = millis();
 		digitalWrite(Rele_R2,LOW);
 		ButECO_Start = false;
 		digitalWrite(led_ECO,LOW);
@@ -260,6 +263,17 @@ void led_lightOnOff()                         // Программа плавно
 		}
 		
 	}
+}
+
+void rele1_Off()
+{
+	if(Rele1_Stop == true && (currentMillis - currentMillisRele1 >= Rele2_time))
+	{
+		digitalWrite(Rele_R1,LOW);
+		Rele1_Stop = false;
+		Serial.println("ReleN1 Off");
+	}
+
 }
 
 void test_sensor()
@@ -713,7 +727,7 @@ void loop()
 	UpdateReleECO();                             // Проверить окончание отключения реле № 1,2
 	UpdateRele34();                              // Проверить окончание отключения реле № 3,4
 	led_lightOnOff();                            // Выполнить плавное включение/отключение светодиода подсветки
-
+	rele1_Off();                                 // Отключить Реле№1 с задержкой
 	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO)) // Мигание светодиода ECO
 	{
        led1.Update();

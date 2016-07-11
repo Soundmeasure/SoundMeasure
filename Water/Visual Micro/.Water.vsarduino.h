@@ -89,6 +89,7 @@ void UpdateWC();
 void UpdateReleECO();
 void UpdateRele34();
 void led_lightOnOff();
+void rele1_Off();
 void test_sensor();
 void serialEvent();
 int input_serial();
