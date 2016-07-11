@@ -99,6 +99,7 @@ void save_Default();
 void read_param_EEPROM();
 void clear_eeprom();
 void ini_eeprom();
+void meassure_dht();
 //
 //
 

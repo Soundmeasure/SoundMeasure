@@ -36,6 +36,9 @@ c внешними прерываниями ,ButtonWC,SW3
 #include <EEPROM.h>
 #include <EEPROM2.h>
 
+#include "DHT.h"
+
+#define DHTPIN    11                               // what digital pin we're connected to
 #define Rele_R1   15                               // Реле R1  
 #define Rele_R2   16                               // Реле R2
 #define Rele_R3   17                               // Реле R3
@@ -49,6 +52,12 @@ c внешними прерываниями ,ButtonWC,SW3
 #define SW3        4                               // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
 #define Led_light  6                               // Светодиод подсветки 
 #define servo_tank 9                               // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
+
+// Uncomment whatever type you're using!
+#define DHTTYPE DHT11   // DHT 11
+//#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+DHT dht(DHTPIN, DHTTYPE);
 
 Servo myservo;                                     // create servo object to control a servo 
                                                    // twelve servo objects can be created on most boards
@@ -82,6 +91,10 @@ unsigned int pos_time                    = 2000;           // L Время до 
 int ligh_speedECO                        = 200;            // M время скорости перестройки плавностью включения/отключения светодиода ECO
 int ligh_speedWC                         = 200;            // N время скорости перестройки плавностью включения/отключения светодиода WC
 int ligh_speed                           = 20;             // O время скорости перестройки плавностью включения/отключения света 
+int humidity_threshold                   = 30;             // T Порог влажности
+int humidity_serial                      = 0;              // R Разрешение передачи информации о влажности в СОМ порт "0" - запретить, "1" - разрешить.
+int humidity_On                          = 0;              // V Разрешение использования информации о влажности  "0" - запретить, "1" - разрешить.
+unsigned long humidity_time              = 60000;          // W Интервал измерения влажности
 //----------------- Параметры по умолчанию -------------------
                                                            // Адрес в EEPROM
 const unsigned long c_timeECO            = 300000;         // 10  A 300000 Время включения реле №1 ( 5 минут) от кнопки ECO
@@ -98,6 +111,11 @@ const unsigned int c_pos_time            = 1000;           // 50  L Время �
 const int c_ligh_speedECO                = 200;            // 54  M время скорости перестройки плавностью включения/отключения светодиода ECO
 const int c_ligh_speedWC                 = 200;            // 58  N время скорости перестройки плавностью включения/отключения светодиода WC
 const int c_ligh_speed                   = 20;             // 62  O время скорости перестройки плавностью включения/отключения света 
+const int c_humidity_threshold           = 30;             // 66  T Порог влажности
+const int c_humidity_serial              = 0;              // 70  R Разрешение передачи информации о влажности в СОМ порт "0" - запретить, "1" - разрешить.
+const int c_humidity_On                  = 0;              // 74  V Разрешение использования информации о влажности  "0" - запретить, "1" - разрешить.
+const unsigned long c_humidity_time      = 60000;          // 78  W Интервал измерения влажности
+
 //------------------------------------------------------------
 int lighN                                = 0;              // Переменная для хранения количества ступеней плавной перестройки
 unsigned long currentMillisECO           = 0;              // Переменная для временного хранения текущего времени 
@@ -105,6 +123,7 @@ unsigned long currentMillisWC            = 0;              // Переменна
 unsigned long currentMillis              = 0;              // Переменная для временного хранения текущего времени 
 unsigned long currentMillis34            = 0;              // Переменная для временного хранения текущего времени 
 unsigned long currentMillisRele1         = 0;              // Переменная для временного хранения текущего времени 
+unsigned long currentMillisDHT           = 0;              // Переменная для временного хранения текущего времени 
 int incomingByte = 0;                                      // переменная для хранения полученного байта
 long int Number;
 char c;
@@ -265,7 +284,7 @@ void led_lightOnOff()                         // Программа плавно
 	}
 }
 
-void rele1_Off()
+void rele1_Off()                      // Программа задержки отключения реле №1
 {
 	if(Rele1_Stop == true && (currentMillis - currentMillisRele1 >= Rele2_time))
 	{
@@ -531,6 +550,30 @@ void serialEvent()
 		EEPROM_write(62, numberIn);
 	    EEPROM_read(62, ligh_speed);
 	} 
+		else if (c == 't' && 'T') 
+	{
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(66, numberIn);
+	    EEPROM_read(66, humidity_threshold);
+	}
+	else if (c == 'r' && 'R')
+	{
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(70, numberIn);
+	    EEPROM_read(70, humidity_serial);
+	}
+	else if (c == 'v' && 'V') 
+	{
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(74, numberIn);
+	    EEPROM_read(74, humidity_On);
+	} 
+	else if (c == 'w' && 'W') 
+	{
+		unsigned long numberIn =  input_serial();
+		EEPROM_write(78, numberIn);
+	    EEPROM_read(78, humidity_time);
+	} 
 	else 
 	{
 	Serial.println(F("Invalid entry"));
@@ -588,6 +631,14 @@ void print_info()
 	Serial.println(ligh_speedWC);
 	Serial.print("O  ligh_speed    - ");
 	Serial.println(ligh_speed );
+	Serial.print("T  humidity_threshold - ");
+	Serial.println(humidity_threshold);
+	Serial.print("R  humidity_serial    - ");
+	Serial.println(humidity_serial);
+	Serial.print("V  humidity_On    - ");
+	Serial.println(humidity_On );
+	Serial.print("W  humidity_time  - ");
+	Serial.println(humidity_time );
 	Serial.println();  
 	Serial.println("->");
 }
@@ -623,6 +674,14 @@ void print_infoU()
 	Serial.println(c_ligh_speedWC);
 	Serial.print("O  ligh_speed    - ");
 	Serial.println(c_ligh_speed );
+	Serial.print("T  humidity_threshold - ");
+	Serial.println(c_humidity_threshold);
+	Serial.print("R  humidity_serial    - ");
+	Serial.println(c_humidity_serial);
+	Serial.print("V  humidity_On    - ");
+	Serial.println(c_humidity_On );
+	Serial.print("W  humidity_time  - ");
+	Serial.println(c_humidity_time );
 	Serial.println();  
 	Serial.println("->");
 }
@@ -643,6 +702,10 @@ void save_Default()
  	EEPROM_write(54, c_ligh_speedECO);
  	EEPROM_write(58, c_ligh_speedWC);
  	EEPROM_write(62, c_ligh_speed);
+	EEPROM_write(66, c_humidity_threshold);
+	EEPROM_write(70, c_humidity_serial);
+	EEPROM_write(74, c_humidity_On );
+	EEPROM_write(78, c_humidity_time );
 }
 
 void read_param_EEPROM()
@@ -661,6 +724,10 @@ void read_param_EEPROM()
 	EEPROM_read(54, ligh_speedECO);
 	EEPROM_read(58, ligh_speedWC);
 	EEPROM_read(62, ligh_speed);
+	EEPROM_read(66, humidity_threshold);
+	EEPROM_read(70, humidity_serial);
+	EEPROM_read(74, humidity_On );
+	EEPROM_read(78, humidity_time );
 }
 void clear_eeprom()
  {
@@ -672,6 +739,26 @@ void ini_eeprom()
 	 EEPROM.write(0,3);
 	 save_Default();
  } 
+
+void meassure_dht()
+{
+ if(currentMillis - currentMillisDHT >= humidity_time)
+ {
+  currentMillisDHT = millis();                    // Записать текущее время
+  float h = dht.readHumidity();
+  // Read temperature as Celsius (the default)
+  float t = dht.readTemperature();
+  if(humidity_serial == 1)
+  {
+	  Serial.print("Humidity: ");
+	  Serial.print(h);
+	  Serial.println(" %\t");
+	  Serial.print("Temperature: ");
+	  Serial.print(t);
+	  Serial.println(" *C ");
+  }
+ }
+}
 	
 void setup() 
 {
@@ -701,7 +788,9 @@ void setup()
 	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
 	myservo.write(pos0);                         // tell servo to go to position in variable 'pos' 
 	 // инициализация настроек из EEPROM 
-  if(EEPROM.read(0)==255)
+    dht.begin();
+	
+	if(EEPROM.read(0)==255)
      {
 		 clear_eeprom();
 		 ini_eeprom();
@@ -736,4 +825,6 @@ void loop()
 	{
        led2.Update();
 	}
+    meassure_dht();
+
 }
