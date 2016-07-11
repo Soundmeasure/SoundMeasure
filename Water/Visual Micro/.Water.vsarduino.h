@@ -95,7 +95,7 @@ int input_serial();
 void print_info();
 void print_infoU();
 void save_Default();
-void read_Default();
+void read_param_EEPROM();
 void clear_eeprom();
 void ini_eeprom();
 //

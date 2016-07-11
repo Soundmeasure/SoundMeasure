@@ -104,8 +104,9 @@ unsigned long currentMillisWC            = 0;              // Переменна
 unsigned long currentMillis              = 0;              // Переменная для временного хранения текущего времени 
 unsigned long currentMillis34            = 0;              // Переменная для временного хранения текущего времени 
 
-int incomingByte = 0;                              // переменная для хранения полученного байта
+int incomingByte = 0;                                      // переменная для хранения полученного байта
 long int Number;
+char c;
 
 class Flasher                                      // Управление светодиодами в многозадачном режиме  
 {
@@ -195,7 +196,7 @@ void UpdateRele34()                              // Программа выпо�
 {
 	if(num_button34 == 3)                        // Проверить подачу команды от SW1     
 	{
-  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
+  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time) && SW1_time != 0)
 		{
 			digitalWrite(Rele_R3,LOW);
 			Rele34_Start = false;
@@ -204,7 +205,7 @@ void UpdateRele34()                              // Программа выпо�
 	}
 	else if(num_button34 == 4)                   // Проверить подачу команды от SW2  
 	{
-  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
+  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time) && SW2_time != 0)
 		{
 			digitalWrite(Rele_R3,LOW);
 			digitalWrite(Rele_R4,LOW);
@@ -214,7 +215,7 @@ void UpdateRele34()                              // Программа выпо�
 	}
 	else if(num_button34 == 5)                   // Проверить подачу команды от SW3
 	{
-  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
+  	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time) && SW3_time != 0)
 		{
 			digitalWrite(Rele_R4,LOW);
 			lighN = 255;
@@ -362,6 +363,17 @@ void test_sensor()
 	{
 		ButSW2 = false;
 	}
+
+	if (digitalRead(SW2) == HIGH && SW2_time == 0 && Rele34_Start == true && num_button34 == 4)                        // проверка контактов датчика SW1
+	{
+		digitalWrite(Rele_R3,LOW);
+		digitalWrite(Rele_R4,LOW);
+		Rele34_Start = false;
+		Serial.println("Rele_R3,4 Off");
+	}
+
+
+
 	
 	if (digitalRead(SW3) == LOW)                        // проверка контактов датчика SW3
 	{
@@ -383,11 +395,23 @@ void test_sensor()
 	{
 		ButSW3 = false;
 	}
+
+	if (digitalRead(SW3) == HIGH && SW3_time == 0 && Rele34_Start == true && num_button34 == 5)                        // проверка контактов датчика SW1
+	{
+			digitalWrite(Rele_R4,LOW);
+			lighN = 255;
+			lightmin = true;
+			lightOnOff = true;
+			Rele34_Start = false;
+			Serial.println("Rele_R3,4 Off");
+	}
+
+
 }
 
 void serialEvent()
 {
-  char c = tolower(Serial.read());
+   c = tolower(Serial.read());
    do {
     delay(10);
   } while (Serial.read() >= 0);
@@ -405,7 +429,7 @@ void serialEvent()
 	{
 		Serial.print("Save default ... ");
 		save_Default();                              // Запись в EEPROM параметров по умолчанию
-		read_Default();
+		read_param_EEPROM();
 		Serial.println(" Ok!");
 		Serial.println();
 	}
@@ -502,6 +526,8 @@ void serialEvent()
 int input_serial()              // Программа ввода параметров с СОМ порта
 {
 		Serial.print("Enter number: ");
+		Serial.print(c);
+		Serial.print(" => ");
 		Number = SerialInput.InputNumber();
 
 		if (SerialInput.NumberEntered) 
@@ -605,7 +631,7 @@ void save_Default()
  	EEPROM_write(62, c_ligh_speed);
 }
 
-void read_Default()
+void read_param_EEPROM()
 {
 	EEPROM_read(10, timeECO);
 	EEPROM_read(14, timeWC);
@@ -630,7 +656,7 @@ void clear_eeprom()
 void ini_eeprom()
  {
 	 EEPROM.write(0,3);
-	 read_Default();
+	 save_Default();
  } 
 	
 void setup() 
@@ -664,8 +690,9 @@ void setup()
   if(EEPROM.read(0)==255)
      {
 		 clear_eeprom();
+		 ini_eeprom();
 	 }
-    ini_eeprom();
+	read_param_EEPROM();
  	Serial.println("Setup Ok!");                 // Успешное завершение начальной настройки.
 	Serial.println();  
 	Serial.println("Enter the character");                  
