@@ -335,6 +335,14 @@ void test_sensor()
 	{
 		ButSW1 = false;
 	}
+
+	if (digitalRead(SW1) == HIGH && SW1_time == 0 && Rele34_Start == true && num_button34 == 3)                        // проверка контактов датчика SW1
+	{
+		digitalWrite(Rele_R3,LOW);
+		Rele34_Start = false;
+		Serial.println("Rele_R3 Off");
+	}
+
 		
 	if (digitalRead(SW2) == LOW)                        // проверка контактов датчика SW2
 	{
@@ -506,7 +514,7 @@ int input_serial()              // Программа ввода парамет�
 		Serial.println("You didn't entered anything");
 		}
 		Serial.println();  
-		Serial.println("->");      
+		Serial.println("->");       
 		return Number;
 }
 
@@ -619,13 +627,12 @@ void clear_eeprom()
  for(int i=0;i<512;i++)
    EEPROM.write(i,0);
  } 
-
 void ini_eeprom()
  {
 	 EEPROM.write(0,3);
+	 read_Default();
  } 
 	
-
 void setup() 
 {
 	Serial.begin(9600);
@@ -657,9 +664,8 @@ void setup()
   if(EEPROM.read(0)==255)
      {
 		 clear_eeprom();
-		 ini_eeprom();
-     }
-
+	 }
+    ini_eeprom();
  	Serial.println("Setup Ok!");                 // Успешное завершение начальной настройки.
 	Serial.println();  
 	Serial.println("Enter the character");                  
