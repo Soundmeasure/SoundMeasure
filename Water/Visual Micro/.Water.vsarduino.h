@@ -90,6 +90,12 @@ void UpdateReleECO();
 void UpdateRele34();
 void led_lightOnOff();
 void test_sensor();
+void serialEvent();
+int input_serial();
+void print_info();
+void print_infoU();
+void clear_eeprom();
+void ini_eeprom();
 //
 //
 

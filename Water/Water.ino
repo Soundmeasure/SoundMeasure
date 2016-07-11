@@ -32,59 +32,80 @@ c внешними прерываниями ,ButtonWC,SW3
 */
 
 #include <Servo.h>
+#include <SerialInput.h>
+#include <EEPROM.h>
 
-#define Rele_R1   15                             // Реле R1  
-#define Rele_R2   16                             // Реле R2
-#define Rele_R3   17                             // Реле R3
-#define Rele_R4   18                             // Реле R4
-#define led_ECO    8                             // Светодиод на кнопке ECO
-#define led_WC     5                             // Светодиод на кнопке WC
-#define ButtonECO  7                             // Кнопка ECO
-#define ButtonWC  10                             // Кнопка WC
-#define SW1        2                             // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
-#define SW2        3                             // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
-#define SW3        4                             // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
-#define Led_light  6                             // Светодиод подсветки 
-#define servo_tank 9                             // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
+#define Rele_R1   15                               // Реле R1  
+#define Rele_R2   16                               // Реле R2
+#define Rele_R3   17                               // Реле R3
+#define Rele_R4   18                               // Реле R4
+#define led_ECO    8                               // Светодиод на кнопке ECO
+#define led_WC     5                               // Светодиод на кнопке WC
+#define ButtonECO  7                               // Кнопка ECO
+#define ButtonWC  10                               // Кнопка WC
+#define SW1        2                               // SW1 HIGH вкл R3 на 30сек. Сигнал от датчика влажности вкл вентиляцию
+#define SW2        3                               // pin SW2 HIGH вкл R3 и R4 на 10 сек. Сигнал от датчика движения вкл освещение и вентиляцию
+#define SW3        4                               // pin SW3 HIGH вкл R4 на 90сек + вкл плавно(1сек) Led на 60сек если SW3 LOW выкл плавно(1сек) Led. Сигнал от датчика движения вкл освещение и подсветку (аналог) LED 
+#define Led_light  6                               // Светодиод подсветки 
+#define servo_tank 9                               // Сервопривод.   ШИМ: 3, 5, 6, 9, 10, и 11. Любой из выводов обеспечивает ШИМ с разрешением 8 бит при помощи функции analogWrite()
 
 Servo myservo;                                     // create servo object to control a servo 
                                                    // twelve servo objects can be created on most boards
-int pos                          = 0;              // variable to store the servo position 
-int pos0                         = 0;              // variable to store the servo position 
-int pos50                        = 30;             // variable to store the servo position 
-unsigned int pos_time            = 1000;           // 
-int num_button                   = 0;              //
-int num_button34                 = 0;              //
-int Rele34_time                  = 0;              //
-int SW1_time                     = 3000;           //
-int SW2_time                     = 1000;           //
-int SW3_time                     = 10000;           //
-bool ButECO                      = false;          //
-bool ButECO_Start                = false;          // Флаг запуска программы по команде кнопки  ButtonECO
-bool ButWC                       = false;          //
-bool ButWC_Start                 = false;          // Флаг запуска программы по команде кнопки  ButtonWC
-bool ButSW1                      = false;
-bool ButSW2                      = false;
-bool ButSW3                      = false;
-bool Rele2_Start                 = false;          // Флаг включения реле №2
-bool Rele34_Start                = false;          // Флаг включения реле №3,4
-bool lightOnOff                  = false;
-bool lightmin                    = false;
-bool lightmax                    = false;
-int lighN                        = 0;
-int ligh_speed                   = 20;
-unsigned long timeECO            = 10000;          // 300000 Время включения реле №1 ( 5 минут)
-unsigned long timeWC             = 10000;          // Увеличить до 3 минут
-unsigned long Rele2_time         = 500;            // 2000 Время задержки включения реле№2 (2 секунды)
-unsigned long time_flash_led_ECO = 2000;           // 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
-unsigned long time_push_ButECO   = 2000;           // 2000 Время удержания кнопки ButtonECO  (2 секунды)
-unsigned long currentMillisECO   = 0;
-unsigned long currentMillisWC    = 0;
-unsigned long currentMillis      = 0;
-unsigned long currentMillis34    = 0;
+int num_button                           = 0;              //
+int num_button34                         = 0;              //
+int Rele34_time                          = 0;              //
+bool ButECO                              = false;          //
+bool ButECO_Start                        = false;          // Флаг запуска программы по команде кнопки  ButtonECO
+bool ButWC                               = false;          //
+bool ButWC_Start                         = false;          // Флаг запуска программы по команде кнопки  ButtonWC
+bool ButSW1                              = false;          // Флаг запуска программы по команде SW1
+bool ButSW2                              = false;          // Флаг запуска программы по команде SW2
+bool ButSW3                              = false;          // Флаг запуска программы по команде SW3
+bool Rele2_Start                         = false;          // Флаг включения реле №2
+bool Rele34_Start                        = false;          // Флаг включения реле №3,4
+bool lightOnOff                          = false;          // Флаг управления плавным включением/отключением света
+bool lightmin                            = false;          // Флаг управления плавным отключением света
+bool lightmax                            = false;          // Флаг управления плавным включением света
+unsigned long timeECO                    = 10000;          // A 300000 Время включения реле №1 ( 5 минут) от кнопки ECO
+unsigned long timeWC                     = 10000;          // B 180000 Время включения реле №1 ( 3 минуты) от кнопки WC
+unsigned long Rele2_time                 = 500;            // C 2000 Время задержки включения реле№2 (2 секунды)
+unsigned long time_flash_led_ECO         = 2000;           // D 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
+unsigned long time_push_ButECO           = 2000;           // E 2000 Время удержания кнопки ButtonECO  (2 секунды)
+unsigned long SW1_time                   = 3000;           // F Время задержки по по комманде SW1
+unsigned long SW2_time                   = 1000;           // G Время задержки по по комманде SW2
+unsigned long SW3_time                   = 10000;          // H Время задержки по по комманде SW3
+int pos0                                 = 0;              // J Параметры позиции сервопривода 0 градусов
+int pos50                                = 30;             // K Параметры позиции сервопривода 50 градусов
+unsigned int pos_time                    = 2000;           // L Время до возврата сервопривода в исходное положение 
+int ligh_speedECO                        = 200;            // M время скорости перестройки плавностью включения/отключения светодиода ECO
+int ligh_speedWC                         = 200;            // N время скорости перестройки плавностью включения/отключения светодиода WC
+int ligh_speed                           = 20;             // O время скорости перестройки плавностью включения/отключения света 
+//----------------- Параметры по умолчанию -------------------
+const unsigned long c_timeECO            = 300000;         // A 300000 Время включения реле №1 ( 5 минут) от кнопки ECO
+const unsigned long c_timeWC             = 180000;         // B 180000 Время включения реле №1 ( 3 минуты) от кнопки WC
+const unsigned long c_Rele2_time         = 2000;           // C 2000 Время задержки включения реле№2 (2 секунды)
+const unsigned long c_time_flash_led_ECO = 60000;          // D 60000 Время до окончания периода, включить мигание светодиода (60 секунд)
+const unsigned long c_time_push_ButECO   = 2000;           // E 2000 Время удержания кнопки ButtonECO  (2 секунды)
+const unsigned long c_SW1_time           = 30000;          // F Время задержки по по комманде SW1
+const unsigned long c_SW2_time           = 10000;          // G Время задержки по по комманде SW2
+const unsigned long c_SW3_time           = 90000;          // H Время задержки по по комманде SW3
+const int c_pos0                         = 0;              // J Параметры позиции сервопривода 0 градусов
+const int c_pos50                        = 30;             // K Параметры позиции сервопривода 50 градусов
+const unsigned int c_pos_time            = 1000;           // L Время до возврата сервопривода в исходное положение 
+const int c_ligh_speedECO                = 200;            // M время скорости перестройки плавностью включения/отключения светодиода ECO
+const int c_ligh_speedWC                 = 200;            // N время скорости перестройки плавностью включения/отключения светодиода WC
+const int c_ligh_speed                   = 20;             // O время скорости перестройки плавностью включения/отключения света 
+//------------------------------------------------------------
+int lighN                                = 0;              // Переменная для хранения количества ступеней плавной перестройки
+unsigned long currentMillisECO           = 0;              // Переменная для временного хранения текущего времени 
+unsigned long currentMillisWC            = 0;              // Переменная для временного хранения текущего времени 
+unsigned long currentMillis              = 0;              // Переменная для временного хранения текущего времени 
+unsigned long currentMillis34            = 0;              // Переменная для временного хранения текущего времени 
 
+int incomingByte = 0;                              // переменная для хранения полученного байта
+long int Number;
 
-class Flasher                                   // Управление светодиодами в многозадачном режиме  
+class Flasher                                      // Управление светодиодами в многозадачном режиме  
 {
 	int ledPin;
 	long OnTime;
@@ -123,8 +144,8 @@ public:
 	   }
 	}
 };
-Flasher led1(led_ECO, 200, 200);
-Flasher led2(led_WC, 200, 200);
+Flasher led1(led_ECO, ligh_speedECO, ligh_speedECO);    
+Flasher led2(led_WC, ligh_speedECO, ligh_speedECO);
 void UpdateECO()                                   // Проверка окончания выполнения программы по нажатию кнопки ButtonECO
 {
 	if((ButECO_Start == true) && (currentMillis - currentMillisECO >= timeECO))
@@ -136,7 +157,7 @@ void UpdateECO()                                   // Проверка окон�
 		Serial.println("ButtonECO Off");
 	}
 }
-void UpdateWC()
+void UpdateWC()                                  // Проверка окончания выполнения программы по нажатию кнопки ButtonWC
 {
 	if((ButWC_Start == true) && (currentMillis - currentMillisWC >= timeWC))
 	{
@@ -168,9 +189,9 @@ void UpdateReleECO()                              // Программа выпо
 		}
 	}
 }
-void UpdateRele34()                              // Программа выполнения программы по включению реле №2
+void UpdateRele34()                              // Программа выполнения программы по включению реле №3,4
 {
-	if(num_button34 == 3)
+	if(num_button34 == 3)                        // Проверить подачу команды от SW1     
 	{
   	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
 		{
@@ -179,7 +200,7 @@ void UpdateRele34()                              // Программа выпо�
 			Serial.println("Rele_R3 Off");
 		}
 	}
-	else if(num_button34 == 4)
+	else if(num_button34 == 4)                   // Проверить подачу команды от SW2  
 	{
   	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
 		{
@@ -189,7 +210,7 @@ void UpdateRele34()                              // Программа выпо�
 			Serial.println("Rele_R3,4 Off");
 		}
 	}
-	else if(num_button34 == 5)
+	else if(num_button34 == 5)                   // Проверить подачу команды от SW3
 	{
   	  if((Rele34_Start == true) && (currentMillis - currentMillis34 >= Rele34_time))
 		{
@@ -203,14 +224,13 @@ void UpdateRele34()                              // Программа выпо�
 	}
 }
 
-void led_lightOnOff()
+void led_lightOnOff()                         // Программа плавного включения/выключения светодиода
 {
 	if(lightOnOff == true)
 	{
-	  if(lightmax == true)
+	  if(lightmax == true)                    // Программа плавного включения светодиода
 		{
           analogWrite(Led_light, lighN);
-		//  Serial.println(lighN);
 		  delay(ligh_speed);
 		  lighN++;
 		  if(lighN >=255)
@@ -222,11 +242,10 @@ void led_lightOnOff()
 		  }
 		}
 
-	  if(lightmin == true)
+	  if(lightmin == true)                     // Программа плавного выключения светодиода
 		{
           analogWrite(Led_light,lighN);
 		  delay(ligh_speed);
-		//  Serial.println(lighN);
 		  lighN--;
 		  if(lighN <=0)
 		  {
@@ -296,14 +315,14 @@ void test_sensor()
 	{
 		ButWC = false;
 	}
-//------------- проверка контактов датчиков ------------------------	
-	if (digitalRead(SW1) == LOW)
+ //------------- проверка контактов датчиков ------------------------	
+	if (digitalRead(SW1) == LOW)                        // проверка контактов датчика SW1
 	{
 		if(ButSW1 == false)
 		{
 			ButSW1 = true;
-			num_button34                 = 3;              //
-            Rele34_time                  = SW1_time;           //
+			num_button34                 = 3;            
+            Rele34_time                  = SW1_time;     
 			Rele34_Start = true;
 			digitalWrite(Rele_R3,HIGH);
 			Serial.println("SW1 On");
@@ -315,13 +334,13 @@ void test_sensor()
 		ButSW1 = false;
 	}
 		
-	if (digitalRead(SW2) == LOW)
+	if (digitalRead(SW2) == LOW)                        // проверка контактов датчика SW2
 	{
 		if(ButSW2 == false)
 		{
 			ButSW2                       = true;
-			num_button34                 = 4;              //
-            Rele34_time                  = SW2_time;           //
+			num_button34                 = 4;           
+            Rele34_time                  = SW2_time;    
 			Rele34_Start                 = true;
 			digitalWrite(Rele_R3,HIGH);
 			digitalWrite(Rele_R4,HIGH);
@@ -334,13 +353,13 @@ void test_sensor()
 		ButSW2 = false;
 	}
 	
-	if (digitalRead(SW3) == LOW)
+	if (digitalRead(SW3) == LOW)                        // проверка контактов датчика SW3
 	{
 		if(ButSW3 == false)
 		{
 			ButSW3                       = true;
-			num_button34                 = 5;              //
-            Rele34_time                  = SW3_time;           //
+			num_button34                 = 5;              
+            Rele34_time                  = SW3_time;      
 			Rele34_Start                 = true;
 			digitalWrite(Rele_R4,HIGH);
 			lighN = 0;
@@ -355,6 +374,218 @@ void test_sensor()
 		ButSW3 = false;
 	}
 }
+
+void serialEvent()
+{
+  char c = tolower(Serial.read());
+   do {
+    delay(10);
+  } while (Serial.read() >= 0);
+
+
+	if (c == 'i' && 'I') 
+	{
+		print_info();                                // Вывод параметров в СОМ порт
+	}
+	else if (c == 'u' && 'U') 
+	{
+		print_infoU();                                // Вывод параметров в СОМ порт
+	}
+	else if (c == 's' && 'S') 
+	{
+		
+	}
+	else if (c == 'a' && 'A') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	} 
+	else if (c == 'b' && 'B') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'c' && 'C')
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'd' && 'D')
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'e' && 'E') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	} 
+	else if (c == 'f' && 'F') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'g' && 'G')
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'h' && 'H') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	} 
+	else if (c == 'j' && 'J') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'k' && 'K')
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'l' && 'L') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	} 
+	else if (c == 'm' && 'M') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'n' && 'N')
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	}
+	else if (c == 'o' && 'O') 
+	{
+		int numberIn =  input_serial();
+		Serial.println(numberIn);
+	} 
+	else 
+	{
+	Serial.println(F("Invalid entry"));
+	}
+}
+
+int input_serial()              // Программа ввода параметров с СОМ порта
+{
+		Serial.print("Enter number: ");
+		Number = SerialInput.InputNumber();
+
+		if (SerialInput.NumberEntered) 
+		{
+		Serial.print("You entered: ");
+		Serial.println(Number, DEC);
+		}
+		else 
+		{
+		Serial.println("You didn't entered anything");
+		}
+		return Number;
+}
+
+void print_info()
+{
+	Serial.print("A  timeECO   sec.  - ");
+	Serial.println(timeECO/1000);
+	Serial.print("B  timeWC    sec.  - ");
+	Serial.println(timeWC/1000);
+	Serial.print("C  Rele2_time sec. - ");
+	Serial.println(Rele2_time/1000);
+	Serial.print("D  time_flash_led_ECO sec. - ");
+	Serial.println(time_flash_led_ECO/1000);
+	Serial.print("E  time_push_ButECO   sec. - ");
+	Serial.println(time_push_ButECO/1000);
+	Serial.print("F  SW1_time sec. - ");
+	Serial.println(SW1_time/1000);
+	Serial.print("G  SW2_time sec. - ");
+	Serial.println(SW2_time/1000);
+	Serial.print("H  SW3_time sec. - ");
+	Serial.println(SW3_time/1000);
+	Serial.print("J  pos0  grad.   - ");
+	Serial.println(pos0);
+	Serial.print("K  pos50  grad.  - ");
+	Serial.println(pos50);
+	Serial.print("L  pos_time sec. - ");
+	Serial.println(pos_time/1000);
+	Serial.print("M  ligh_speedECO - ");
+	Serial.println(ligh_speedECO);
+	Serial.print("N  ligh_speedWC  - ");
+	Serial.println(ligh_speedWC);
+	Serial.print("O  ligh_speed    - ");
+	Serial.println(ligh_speed );
+
+    Serial.println();
+}
+
+void print_infoU()
+{
+	Serial.println("*** Default settings ***");
+	Serial.print("A  timeECO   sec.  - ");
+	Serial.println(c_timeECO/1000);
+	Serial.print("B  timeWC    sec.  - ");
+	Serial.println(c_timeWC/1000);
+	Serial.print("C  Rele2_time sec. - ");
+	Serial.println(c_Rele2_time/1000);
+	Serial.print("D  time_flash_led_ECO sec. - ");
+	Serial.println(c_time_flash_led_ECO/1000);
+	Serial.print("E  time_push_ButECO   sec. - ");
+	Serial.println(c_time_push_ButECO/1000);
+	Serial.print("F  SW1_time sec. - ");
+	Serial.println(c_SW1_time/1000);
+	Serial.print("G  SW2_time sec. - ");
+	Serial.println(c_SW2_time/1000);
+	Serial.print("H  SW3_time sec. - ");
+	Serial.println(c_SW3_time/1000);
+	Serial.print("J  pos0  grad.   - ");
+	Serial.println(c_pos0);
+	Serial.print("K  pos50  grad.  - ");
+	Serial.println(c_pos50);
+	Serial.print("L  pos_time sec. - ");
+	Serial.println(c_pos_time/1000);
+	Serial.print("M  ligh_speedECO - ");
+	Serial.println(c_ligh_speedECO);
+	Serial.print("N  ligh_speedWC  - ");
+	Serial.println(c_ligh_speedWC);
+	Serial.print("O  ligh_speed    - ");
+	Serial.println(c_ligh_speed );
+
+    Serial.println();
+}
+
+void clear_eeprom()
+ {
+ for(int i=0;i<512;i++)
+   EEPROM.write(i,0);
+ } 
+
+void ini_eeprom()
+ {
+ EEPROM.write(0,3);
+ //for(int i=1;i<4;i++)
+ //  {
+ //   EEPROM.write(i*15+0,0);
+ //   EEPROM.write(i*15+1,0);
+ //   EEPROM.write(i*15+2,0);
+ //   EEPROM.write(i*15+3,0);
+ //   EEPROM.write(i*15+4,0);
+ //   EEPROM.write(i*15+5,1);
+ //   EEPROM.write(i*15+6,1);
+ //   EEPROM.write(i*15+7,16);
+ //   EEPROM.write(i*15+8,1);
+ //   EEPROM.write(i*15+9,0);
+ //   EEPROM.write(i*15+10,0);
+ //   EEPROM.write(i*15+11,0);
+ //   EEPROM.write(i*15+12,0);
+ //   EEPROM.write(i*15+13,0);
+ //   EEPROM.write(i*15+14,0);
+ //  }
+ } 
+
 void setup() 
 {
 	Serial.begin(9600);
@@ -379,57 +610,36 @@ void setup()
 	digitalWrite(SW3,HIGH);                      // Установить высокий уровень на контакте
 
 	pinMode(Led_light, OUTPUT);                  // Светодиод подсветки 
-	digitalWrite(Led_light,LOW);                 //  
+	digitalWrite(Led_light,LOW);                 // Светодиод подсветки отключить 
 	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
 	myservo.write(pos0);                         // tell servo to go to position in variable 'pos' 
-	Serial.println("Setup Ok!");
+	 // инициализация настроек из EEPROM 
+  if(EEPROM.read(0)==255)
+     {
+		 clear_eeprom();
+		 ini_eeprom();
+     }
+
+	//print_info();                                // Вывод параметров в СОМ порт
+	Serial.println("Setup Ok!");                 // Успешное завершение начальной настройки.
 }
 
 void loop() 
 {
-	test_sensor();
-	currentMillis = millis();
-	UpdateECO();
-	UpdateWC();
-	UpdateReleECO();
-	UpdateRele34();
-	led_lightOnOff();
+	test_sensor();                               // Проверить нажатие кнопок
+	currentMillis = millis();                    // Записать текущее время
+	UpdateECO();                                 // Проверить окончание выполнения по кнопке ECO
+	UpdateWC();                                  // Проверить окончание выполнения по кнопке WC
+	UpdateReleECO();                             // Проверить окончание отключения реле № 1,2
+	UpdateRele34();                              // Проверить окончание отключения реле № 3,4
+	led_lightOnOff();                            // Выполнить плавное включение/отключение светодиода подсветки
 
-	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO))
+	if(ButECO_Start==true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO)) // Мигание светодиода ECO
 	{
        led1.Update();
 	}
-	if(ButWC_Start==true)
+	if(ButWC_Start==true)                        // Мигание светодиода SW
 	{
        led2.Update();
 	}
-	// Reading temperature or humidity takes about 250 milliseconds!
-    // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-	// float h = dht.readHumidity();
-	// float t = dht.readTemperature();     // Read temperature as Celsius (the default)
-
-	//myservo.write(pos0);              // tell servo to go to position in variable 'pos' 
-	//Serial.println(pos0);
-	//delay(2000);     
-	//myservo.write(pos50);              // tell servo to go to position in variable 'pos' 
-	//Serial.println(pos50);
-	//delay(2000);     
-
-	//myservo.write(pos10);              // tell servo to go to position in variable 'pos' 
-	//Serial.println(pos10);
-	//delay(2000);     
-	 //myservo.write(0);              // tell servo to go to position in variable 'pos' 
-	 //delay(1000);
-  //for(pos = 0; pos <= 180; pos += 1) // goes from 0 degrees to 180 degrees 
-  //{                                  // in steps of 1 degree 
-  //  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-  //  delay(25);                       // waits 15ms for the servo to reach the position 
-  //} 
-
-  //for(pos = 180; pos>=0; pos-=1)     // goes from 180 degrees to 0 degrees 
-  //{                                
-  //  myservo.write(pos);              // tell servo to go to position in variable 'pos' 
-  //  delay(25);                       // waits 15ms for the servo to reach the position 
-  //} 
-  //	delay(2000);    
 }

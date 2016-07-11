@@ -26,14 +26,14 @@ long int CSerialInput::InputNumber() {
   do {
     while (!Serial.available());
     c = Serial.read();
-    if (EchoOn) Serial.print(c, BYTE);
+    if (EchoOn) Serial.print(c);
     if ( (c>='0') && (c<='9') ) {
       n = n*10 + c - '0';
       NumberEntered = true;
     }
     if ((c=='-') && (!NumberEntered)) bMinus = true;
   } while (c != 13);
-  if (EchoOn) Serial.print(10, BYTE);
+//  if (EchoOn) Serial.print(10);
   if (bMinus) n = 0 - n;
   if (!NumberEntered) n = DefaultNumber;
   return n;
