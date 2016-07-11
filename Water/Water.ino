@@ -1,13 +1,9 @@
-﻿
-
-/*
+﻿/*
 
 скетч для Nano 3.0 Atmega328  или ATmega32U4  
-c использованием millis 
-c внешними прерываниями ,ButtonWC,SW3
+c использованием millis, ButtonWC,SW3
 с программной защитой от дребезга контакта .
 время мин и сек условны 
-вот примерный алгоритм для скетча .      
 
  // все пункты должны быть в одном скетче
 
@@ -71,6 +67,7 @@ bool ButWC_Start                         = false;          // Флаг запу�
 bool ButSW1                              = false;          // Флаг запуска программы по команде SW1
 bool ButSW2                              = false;          // Флаг запуска программы по команде SW2
 bool ButSW3                              = false;          // Флаг запуска программы по команде SW3
+bool ButHum                              = false;          // Флаг запуска программы по команде датчика влажности
 bool Rele2_Start                         = false;          // Флаг включения реле №2
 bool Rele1_Stop                          = false;          // Флаг выключения реле №1
 bool Rele34_Start                        = false;          // Флаг включения реле №3,4
@@ -370,7 +367,7 @@ void test_sensor()
 		ButSW1 = false;
 	}
 
-	if (digitalRead(SW1) == HIGH && SW1_time == 0 && Rele34_Start == true && num_button34 == 3)                        // проверка контактов датчика SW1
+	if (digitalRead(SW1) == HIGH && SW1_time == 0 && Rele34_Start == true && num_button34 == 3)   // Отключение задержки времени на отключение релеТ3 от контактов датчика SW1
 	{
 		digitalWrite(Rele_R3,LOW);
 		Rele34_Start = false;
@@ -571,12 +568,14 @@ void serialEvent()
 	else if (c == 'w' && 'W') 
 	{
 		unsigned long numberIn =  input_serial();
-		EEPROM_write(78, numberIn);
+		EEPROM_write(78, numberIn*1000);
 	    EEPROM_read(78, humidity_time);
 	} 
 	else 
 	{
-	Serial.println(F("Invalid entry"));
+		Serial.println(F("Invalid entry"));
+		Serial.println();  
+		Serial.println("->");   
 	}
 }
 
@@ -638,7 +637,7 @@ void print_info()
 	Serial.print("V  humidity_On    - ");
 	Serial.println(humidity_On );
 	Serial.print("W  humidity_time  - ");
-	Serial.println(humidity_time );
+	Serial.println(humidity_time/1000 );
 	Serial.println();  
 	Serial.println("->");
 }
@@ -681,7 +680,7 @@ void print_infoU()
 	Serial.print("V  humidity_On    - ");
 	Serial.println(c_humidity_On );
 	Serial.print("W  humidity_time  - ");
-	Serial.println(c_humidity_time );
+	Serial.println(c_humidity_time/1000 );
 	Serial.println();  
 	Serial.println("->");
 }
@@ -746,8 +745,30 @@ void meassure_dht()
  {
   currentMillisDHT = millis();                    // Записать текущее время
   float h = dht.readHumidity();
+  h=31.2;
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
+  if(h>humidity_threshold)               // При превышении влажности включить реле№3
+  { 
+	  	if(ButHum  == false)
+		{
+			ButHum  = true;
+			digitalWrite(Rele_R3,HIGH);
+			Serial.println("ReleN3 On");
+			currentMillis34 = millis();
+		}
+
+  }
+  else
+  {
+	if(ButHum  == true)    // При понижении влажности отключить реле№3, если оно было включено
+		{
+			digitalWrite(Rele_R3,LOW);
+			Serial.println("ReleN3 Off");
+	    }
+	ButHum = false;
+  }
+
   if(humidity_serial == 1)
   {
 	  Serial.print("Humidity: ");
@@ -787,7 +808,7 @@ void setup()
 	digitalWrite(Led_light,LOW);                 // Светодиод подсветки отключить 
 	myservo.attach(servo_tank);                  // attaches the servo on pin 9 to the servo object 
 	myservo.write(pos0);                         // tell servo to go to position in variable 'pos' 
-	 // инициализация настроек из EEPROM 
+	 // инициализация настроек из EEPROM  
     dht.begin();
 	
 	if(EEPROM.read(0)==255)
@@ -802,7 +823,7 @@ void setup()
 	Serial.println("I  - Parameter information");                 
 	Serial.println("U  - Default information");                 
 	Serial.println("D  - Save default");                  
-	Serial.println("A...O - Change information");  
+	Serial.println("A...W - Change information");  
 	Serial.println();  
 	Serial.println("->");
 }
@@ -825,6 +846,8 @@ void loop()
 	{
        led2.Update();
 	}
-    meassure_dht();
-
+	if(humidity_On != 0)
+	{
+       meassure_dht();
+	}
 }
