@@ -819,11 +819,11 @@ void setup()
 	read_param_EEPROM();
  	Serial.println("Setup Ok!");                 // Успешное завершение начальной настройки.
 	Serial.println();  
-	Serial.println("Enter the character");                  
-	Serial.println("I  - Parameter information");                 
-	Serial.println("U  - Default information");                 
-	Serial.println("D  - Save default");                  
-	Serial.println("A...W - Change information");  
+	Serial.println("    Enter the character");                  
+	Serial.println(" I     - Parameter information");                 
+	Serial.println(" U     - Default information");                 
+	Serial.println(" D     - Save default");                  
+	Serial.println(" A...W - Change parameter");  
 	Serial.println();  
 	Serial.println("->");
 }
