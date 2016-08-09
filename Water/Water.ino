@@ -1,4 +1,4 @@
-﻿/*
+/*
   скетч для Nano 3.0 Atmega328  или ATmega32U4
   c использованием millis, ButtonWC,SW3
   с программной защитой от дребезга контакта .
@@ -69,6 +69,7 @@ bool ButSW3                              = false;          // Флаг запу�
 bool ButHum                              = false;          // Флаг запуска программы по команде датчика влажности
 bool Rele2_Start                         = false;          // Флаг включения реле №2
 bool Rele1_Stop                          = false;          // Флаг выключения реле №1
+bool Rele2_Stop                          = false;          // Флаг выключения реле №2
 bool Rele34_Start                        = false;          // Флаг включения реле №3,4
 bool lightOnOff                          = false;          // Флаг управления плавным включением/отключением света
 bool lightmin                            = false;          // Флаг управления плавным отключением света
@@ -288,8 +289,18 @@ void rele1_Off()                      // Программа задержки о�
     Rele1_Stop = false;
     Serial.println("ReleN1 Off");
   }
-
 }
+
+void rele2_Off()                      // Программа задержки отключения реле №2
+{
+  if (Rele2_Stop == true && (currentMillis - currentMillisRele1 >= Rele2_time))
+  {
+    digitalWrite(Rele_R2, LOW);
+    Rele2_Stop = false;
+    Serial.println("ReleN2 Off");
+  }
+}
+
 
 void test_sensor()
 {
@@ -319,7 +330,9 @@ void test_sensor()
     if ((ButECO_Start == true) && (currentMillis - currentMillisECO >= time_push_ButECO))
     {
       digitalWrite(Rele_R1, LOW);
-      digitalWrite(Rele_R2, LOW);
+	   Rele1_Stop = true;
+     // digitalWrite(Rele_R2, LOW);      // Переделать. Вставить задержку 2 сек.
+	  Rele2_Stop = true;                 // Вставить задержку 2 сек. отключения реле №2
       ButECO_Start = false;
       digitalWrite(led_ECO, LOW);
       Serial.println("ButtonECO Off");
@@ -833,6 +846,7 @@ void loop()
   UpdateRele34();                              // Проверить окончание отключения реле № 3,4
   led_lightOnOff();                            // Выполнить плавное включение/отключение светодиода подсветки
   rele1_Off();                                 // Отключить Реле№1 с задержкой
+  rele2_Off();                                 // Отключить Реле№2 с задержкой
   if (ButECO_Start == true && (currentMillis - (currentMillisECO) >= timeECO - time_flash_led_ECO)) // Мигание светодиода ECO
   {
     led1.Update();
