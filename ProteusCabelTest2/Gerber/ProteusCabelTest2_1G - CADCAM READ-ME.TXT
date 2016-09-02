@@ -4,7 +4,7 @@ LABCENTER PROTEUS TOOL INFORMATION FILE
 In case of difficulty, please e-mail support@labcenter.co.uk
 
 Tool set up for Proteus layout 'ProteusCabelTest2_1G.pdsprj'.
-CADCAM generated at 10:15:14 on 2 сент€бр€ 2016 г..
+CADCAM generated at 11:40:23 on 2 сент€бр€ 2016 г..
 
 File List
 ---------
