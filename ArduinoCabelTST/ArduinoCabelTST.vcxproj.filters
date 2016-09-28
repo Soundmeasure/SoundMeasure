@@ -16,7 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ArduinoCabelTST.ino" />
-    <None Include="serialStuff.ino" />
     <None Include="setTimeDate.ino" />
     <None Include="utils.ino" />
   </ItemGroup>
