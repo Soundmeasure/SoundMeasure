@@ -12,7 +12,7 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega2560__
 #define F_CPU 16000000L
-#define ARDUINO 1610
+#define ARDUINO 1611
 #define ARDUINO_AVR_MEGA2560
 #define ARDUINO_ARCH_AVR
 #define __cplusplus
@@ -124,20 +124,11 @@ void test_cabel_N1();
 void test_cabel_N2();
 void test_cabel_N3();
 void test_cabel_N4();
-void test_panel_N1();
-void test_mtg_disp();
-void test_mtg_instr();
-void test_mtt();
-void test_headset();
 void table_cont1();
 void test_cabel_N1_run();
 void test_cabel_N2_run();
 void test_cabel_N3_run();
 void test_cabel_N4_run();
-void test_panel_N1run();
-void test_mtg_disp_run();
-void test_mtg_instr_run();
-void test_mtt_run();
 void test_all_pin();
 void kommut_off();
 void disp_clear();
