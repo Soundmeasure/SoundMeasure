@@ -120,37 +120,37 @@ char  txt_menu1_1[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N1";         
 char  txt_menu1_2[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N2";                                    // Тест кабель N 2
 char  txt_menu1_3[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N3";                                    // Тест кабель N 3
 char  txt_menu1_4[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N4";                                    // Тест кабель N 4
-char  txt_menu2_1[]            = "\x89""a""\xA2""e""\xA0\xAC"" ""\x98""ap""\xA2\x9D\xA4""yp";              // Панель гарнитур                                                //
-char  txt_menu2_2[]            = "MT""\x81"" ""\x99\x9D""c""\xA3""e""\xA4\xA7""epa";                       // МТГ диспетчера
-char  txt_menu2_3[]            = "MT""\x81"" ""\x9D\xA2""c""\xA4""py""\x9F\xA4""opa";                      // МТГ инструктора
-char  txt_menu2_4[]            = "Tec""\xA4"" MTT";                                                        // Тест МТТ                                 //
+char  txt_menu2_1[]            = "MENU 2.1";                                                               //   
+char  txt_menu2_2[]            = "MENU 2.2";                                                               //  
+char  txt_menu2_3[]            = "MENU 2.3";                                                               //  
+char  txt_menu2_4[]            = "MENU 2.4";                                                               //   
 char  txt_menu3_1[]            = "Ta""\x96\xA0\x9D\xA6""a coe""\x99"".";                                   // Таблица соед.
 char  txt_menu3_2[]            = "*******";//"Pe""\x99""a""\x9F\xA4"". ""\xA4""a""\x96\xA0\x9D\xA6";       // Редакт. таблиц
 char  txt_menu3_3[]            = "\x85""a""\x98""py""\x9C"".\xA4""a""\x96\xA0\x9D\xA6";//"\x85""a""\x98""py""\x9C"". y""\xA1""o""\xA0\xA7"".";                     // Загруз. умолч.
 char  txt_menu3_4[]            = "Bpe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";                             // Время простоя
-char  txt_menu4_1[]            = "C\x9D\xA2yco\x9D\x99""a";                                                // Синусоида
-char  txt_menu4_2[]            = "\x89\x9D\xA0oo\x96pa\x9C\xA2\xAB\x9E";                                   // Пилообразный
-char  txt_menu4_3[]            = "Tpey\x98o\xA0\xAC\xA2\xAB\x9E";                                          // Треугольный
-char  txt_menu4_4[]            = "\x89p\xAF\xA1oy\x98o\xA0\xAC\xA2\xAB\x9E";                               // Прямоугольный
-char  txt_menu5_1[]            = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                          // Осциллограф
-char  txt_menu5_2[]            = "Tec""\xA4"" ""\x98""ap""\xA2\x9D\xA4""yp";                               // Тест гарнитур
+char  txt_menu4_1[]            = "MENU 4.1";                                                               //  
+char  txt_menu4_2[]            = "MENU 4.2";                                                               //  
+char  txt_menu4_3[]            = "MENU 4.3";                                                               //  
+char  txt_menu4_4[]            = "MENU 4.4";                                                               //  
+char  txt_menu5_1[]            = "MENU 5.1";                                                               //  
+char  txt_menu5_2[]            = "MENU 5.2";                                                               //  
 char  txt_menu5_3[]            = "*******";                                                                //
 char  txt_menu5_4[]            = "Tec""\xA4"" pa""\x9C\xAA""e""\xA1""o""\x97";                             // Тест разъемов 
 
-const char  txt_head_instr[]        PROGMEM  = "\x86\xA2""c""\xA4""py""\x9F\xA4""op";                                    // Инструктор
-const char  txt_head_disp[]         PROGMEM  = "\x82\x9D""c""\xA3""e""\xA4\xA7""ep";                                     // Диспетчер
+const char  txt_head_instr[]        PROGMEM  = " ";                                                        //  
+const char  txt_head_disp[]         PROGMEM  = " ";                                                        //  
 const char  txt_info1[]             PROGMEM  = "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                    // Тест кабелей
-const char  txt_info2[]             PROGMEM  = "Tec\xA4 \x96\xA0o\x9F""a \x98""ap\xA2\x9D\xA4yp";                        // Тест блока гарнитур
+const char  txt_info2[]             PROGMEM  = " ";                                                                      // 
 const char  txt_info3[]             PROGMEM  = "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы
-const char  txt_info4[]             PROGMEM  = "\x81""e\xA2""epa\xA4op c\x9D\x98\xA2""a\xA0o\x97";                       // Генератор сигналов
-const char  txt_info5[]             PROGMEM  = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                          // Осциллограф
-const char  txt_MTT[]               PROGMEM  = "\x81""ap""\xA2\x9D\xA4""ypa MTT";                                        // Гарнитура МТТ
+const char  txt_info4[]             PROGMEM  = " ";                                                                      //  
+const char  txt_info5[]             PROGMEM  = " ";                                                                      //  
+const char  txt_MTT[]               PROGMEM  = " ";                                                                      //  
 const char  txt_botton_otmena[]     PROGMEM  = "O""\xA4\xA1""e""\xA2""a";                                                // "Отмена"
 const char  txt_botton_vvod[]       PROGMEM  = "B\x97o\x99 ";                                                            // Ввод
 const char  txt_botton_ret[]        PROGMEM  = "B""\xAB""x";                                                             // "Вых"
 const char  txt_system_clear3[]     PROGMEM  = " ";                                                                      //
-const char  txt9[]                  PROGMEM  = "\x85\x97""y""\x9F"" ""\x97"" ""\x98""ap""\xA2\x9D\xA4""ype";             // Звук в гарнитуре
-const char  txt10[]                 PROGMEM  = "\x85\x97""y""\x9F"" OTK""\x88";                                           // Звук ОТКЛ
+const char  txt9[]                  PROGMEM  = " ";                                                                      //  
+const char  txt10[]                 PROGMEM  = " ";                                                                      // 
 const char  txt_time_wait[]         PROGMEM  = "\xA1\x9D\xA2"".""\x97""pe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";       //  мин. время простоя
 const char  txt_info29[]            PROGMEM  = "Stop->PUSH Disp";
 const char  txt_info30[]            PROGMEM  = " ";
@@ -169,50 +169,50 @@ const char  txt__connect3[]         PROGMEM  = "O""\x96\xA2""apy""\x9B""e""\xA2"
 const char  txt__connect4[]         PROGMEM  = "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";    // Обнаружен кабель N4
 const char  txt__test_end[]         PROGMEM  = "TECT ""\x85""A""KOH""\x8D""EH";                                          // ТЕСТ ЗАКОНЧЕН
 const char  txt__panel[]            PROGMEM  = "Tec""\xA4"" c""\x97""e""\xA4""o""\x99\x9D""o""\x99""o""\x97";            // Тест светодиодов
-const char  txt__panel0[]           PROGMEM  = "                     ";                                                  //
-const char  txt__disp[]             PROGMEM  = "Tec""\xA4"" MT""\x81"" ""\x99\x9D""c""\xA3""e""\xA4\xA7""epa";           // Тест МТГ диспетчера
-const char  txt__instr[]            PROGMEM  = "Tec""\xA4"" MT""\x81"" ""\x9D\xA2""c""\xA4""py""\x9F\xA4""opa";          // Тест МТГ инструктора
-const char  txt__MTT[]              PROGMEM  = "Tec""\xA4"" MTT";                                                        // Тест МТТ
-const char  txt__disp_connect[]     PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"". ""\xA3""o""\x99\x9F\xA0"".";// Кабель дисп. подкл.
-const char  txt__disp_disconnect[]  PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"". o""\xA4\x9F\xA0"".";        // Кабель дисп.откл.
-const char  txt__instr_connect[]    PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.""\xA3""o""\x99\x9F\xA0"".";// Кабель инстр.подкл.
-const char  txt__instr_disconnect[] PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.o""\xA4\x9F\xA0"".";       // Кабель инстр.откл.
-const char  txt__mtt_disconnect[]   PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""MTT o""\xA4\x9F\xA0"".";                                                                       //
-const char  txt__cont1_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N1 - O""\x9F";                                            // Конт. N1 - Ок
-const char  txt__cont2_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N2 - O""\x9F";                                            // Конт. N2 - Ок
-const char  txt__cont3_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N3 - O""\x9F";                                            // Конт. N3 - Ок
-const char  txt__cont4_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N4 - O""\x9F";                                            // Конт. N4 - Ок
-const char  txt__cont5_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N5 - O""\x9F";                                            // Конт. N5 - Ок
-const char  txt__cont6_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N6 - O""\x9F";                                            // Конт. N6 - Ок
-const char  txt__cont7_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N7 - O""\x9F";                                            // Конт. N7 - Ок
-const char  txt__cont8_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N8 - O""\x9F";                                            // Конт. N8 - Ок
-const char  txt__cont9_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N9 - O""\x9F";                                            // Конт. N9 - Ок
-const char  txt__clear2[]           PROGMEM  = " ";                                                                       //
-const char  txt__cont1_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N1 - He""\xA4""!";                                        // Конт. N1 - Нет!
-const char  txt__cont2_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N2 - He""\xA4""!";                                        // Конт. N2 - Нет!
-const char  txt__cont3_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N3 - He""\xA4""!";                                        // Конт. N3 - Нет!
-const char  txt__cont4_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N4 - He""\xA4""!";                                        // Конт. N4 - Нет!
-const char  txt__cont5_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N5 - He""\xA4""!";                                        // Конт. N5 - Нет!
-const char  txt__cont6_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N6 - He""\xA4""!";                                        // Конт. N6 - Нет!
-const char  txt__cont7_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N7 - He""\xA4""!";                                        // Конт. N7 - Нет!
-const char  txt__cont8_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N8 - He""\xA4""!";                                        // Конт. N8 - Нет!
-const char  txt__cont9_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N9 - He""\xA4""!";                                        // Конт. N9 - Нет!
+const char  txt__panel0[]           PROGMEM  = " ";                                                                      //
+const char  txt__disp[]             PROGMEM  = " ";                                                                      //  
+const char  txt__instr[]            PROGMEM  = " ";                                                                      //  
+const char  txt__MTT[]              PROGMEM  = " ";                                                                      //  
+const char  txt__disp_connect[]     PROGMEM  = " ";                                                                      //  
+const char  txt__disp_disconnect[]  PROGMEM  = " ";                                                                      //  
+const char  txt__instr_connect[]    PROGMEM  = " ";                                                                      //  
+const char  txt__instr_disconnect[] PROGMEM  = " ";                                                                      //  
+const char  txt__mtt_disconnect[]   PROGMEM  = " ";                                                                      //
+const char  txt__cont1_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N1 - O""\x9F";                                           // Конт. N1 - Ок
+const char  txt__cont2_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N2 - O""\x9F";                                           // Конт. N2 - Ок
+const char  txt__cont3_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N3 - O""\x9F";                                           // Конт. N3 - Ок
+const char  txt__cont4_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N4 - O""\x9F";                                           // Конт. N4 - Ок
+const char  txt__cont5_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N5 - O""\x9F";                                           // Конт. N5 - Ок
+const char  txt__cont6_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N6 - O""\x9F";                                           // Конт. N6 - Ок
+const char  txt__cont7_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N7 - O""\x9F";                                           // Конт. N7 - Ок
+const char  txt__cont8_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N8 - O""\x9F";                                           // Конт. N8 - Ок
+const char  txt__cont9_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N9 - O""\x9F";                                           // Конт. N9 - Ок
+const char  txt__clear2[]           PROGMEM  = " ";                                                                      //
+const char  txt__cont1_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N1 - He""\xA4""!";                                       // Конт. N1 - Нет!
+const char  txt__cont2_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N2 - He""\xA4""!";                                       // Конт. N2 - Нет!
+const char  txt__cont3_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N3 - He""\xA4""!";                                       // Конт. N3 - Нет!
+const char  txt__cont4_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N4 - He""\xA4""!";                                       // Конт. N4 - Нет!
+const char  txt__cont5_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N5 - He""\xA4""!";                                       // Конт. N5 - Нет!
+const char  txt__cont6_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N6 - He""\xA4""!";                                       // Конт. N6 - Нет!
+const char  txt__cont7_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N7 - He""\xA4""!";                                       // Конт. N7 - Нет!
+const char  txt__cont8_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N8 - He""\xA4""!";                                       // Конт. N8 - Нет!
+const char  txt__cont9_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N9 - He""\xA4""!";                                       // Конт. N9 - Нет!
 
 char buffer[40];
 const char* const table_message[] PROGMEM =
 {
-  txt_head_instr,          // 0 "\x86\xA2""c""\xA4""py""\x9F\xA4""op";                                    // Инструктор                                                                  //
-  txt_head_disp,           // 1 "\x82\x9D""c""\xA3""e""\xA4\xA7""ep";                                     // Диспетчер                                                                      //
-  txt_info1,               // 2 "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                    // Тест кабелей
-  txt_info2,               // 3 "Tec\xA4 \x96\xA0o\x9F""a \x98""ap\xA2\x9D\xA4yp";                        // Тест блока гарнитур
-  txt_info3,               // 4 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы
-  txt_info4,               // 5 "\x81""e\xA2""epa\xA4op c\x9D\x98\xA2""a\xA0o\x97";                       // Генератор сигналов
-  txt_info5,               // 6 "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                          // Осциллограф
-  txt_MTT,                 // 7 "\x81""ap""\xA2\x9D\xA4""ypa MTT";                                        // Гарнитура МТТ                                                                  //
-  txt_botton_otmena,       // 8 " ";                                                                      //
-  txt_botton_vvod,         // 9 " ";                                                                      //
-  txt_botton_ret,          // 10 ""B""\xAB""x" ";                                                         //  Вых
-  txt_system_clear3,       // 11 " ";                                                                     //
+  txt_head_instr,          // 0 "                                                                     
+  txt_head_disp,           // 1 "                                                                    
+  txt_info1,               // 2 "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                     // Тест кабелей
+  txt_info2,               // 3 " 
+  txt_info3,               // 4 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                            // Настройка системы
+  txt_info4,               // 5 " 
+  txt_info5,               // 6 " 
+  txt_MTT,                 // 7 "                                                               
+  txt_botton_otmena,       // 8 " ";                                                                      
+  txt_botton_vvod,         // 9 " ";                                                                      
+  txt_botton_ret,          // 10 ""B""\xAB""x" ";                                                          //  Вых
+  txt_system_clear3,       // 11 " ";                                                                     
   txt9,                    // 12 "B\x97o\x99";                                                             // Ввод
   txt10,                   // 13 "O""\xA4\xA1""e""\xA2""a";                                                // "Отмена"
   txt_time_wait,           // 14 "\xA1\x9D\xA2"".""\x97""pe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";       //  мин. время простоя
@@ -233,14 +233,14 @@ const char* const table_message[] PROGMEM =
   txt__connect4,           // 29 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";    // Обнаружен кабель N4
   txt__test_end,           // 30 "TECT ""\x85""A""KOH""\x8D""EH";                                          // ТЕСТ ЗАКОНЧЕН
   txt__panel,              // 31 "Tec""\xA4"" c""\x97""e""\xA4""o""\x99\x9D""o""\x99""o""\x97";            // Тест светодиодов
-  txt__panel0,             // 32 "                          ";                                             //
-  txt__disp,               // 33 "Tec""\xA4"" MT""\x81"" ""\x99\x9D""c""\xA3""e""\xA4\xA7""epa";           // Тест МТГ диспетчера
-  txt__instr,              // 34 "Tec""\xA4"" MT""\x81"" ""\x9D\xA2""c""\xA4""py""\x9F\xA4""opa";          // Тест МТГ инструктора
-  txt__MTT,                // 35 "Tec""\xA4"" MTT";                                                        // Тест МТТ
-  txt__disp_connect,       // 36 "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"". ""\xA3""o""\x99\x9F\xA0"".";// Кабель дисп. подкл.
-  txt__disp_disconnect,    // 37 "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"".o""\xA4\x9F\xA0"".";       // Кабель дисп.откл.
-  txt__instr_connect,      // 38 "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.""\xA3""o""\x99\x9F\xA0"".";// Кабель инстр.подкл.
-  txt__instr_disconnect,   // 39 "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.o""\xA4\x9F\xA0"".";      // Кабель инстр.откл.
+  txt__panel0,             // 32 "  
+  txt__disp,               // 33 " 
+  txt__instr,              // 34 " 
+  txt__MTT,                // 35 " 
+  txt__disp_connect,       // 36 " 
+  txt__disp_disconnect,    // 37 " 
+  txt__instr_connect,      // 38 " 
+  txt__instr_disconnect,   // 39 " 
   txt__mtt_disconnect,     // 40 " ";                                                                       //
   txt__cont1_connect,      // 41 "Ko""\xA2\xA4"". N1 - O""\x9F";                                            // Конт. N1 - Ок
   txt__cont2_connect,      // 42 "Ko""\xA2\xA4"". N2 - O""\x9F";                                            // Конт. N2 - Ок
@@ -971,7 +971,7 @@ void control_command()
         test_cabel_N4();             // Программа проверки кабеля №4
         break;
       case 5:
-        test_panel_N1();             // Программа проверки панели гарнитур
+//       test_panel_N1();             // Программа проверки панели гарнитур
         break;
       case 6:
         save_default_pc();           // Записать таблицу проверки № по умолчанию
@@ -1288,7 +1288,7 @@ void swichMenu()                                             // Тексты меню в ст
       }
       if (pressed_button == but4 && m2 == 2)
       {
-		test_mtt();
+//	test_mtt();
         myGLCD.clrScr();
         myButtons.drawButtons();
         print_up();
@@ -1406,7 +1406,7 @@ void swichMenu()                                             // Тексты меню в ст
       if (pressed_button == but2 && m2 == 5)
       {
         myGLCD.clrScr();
-        test_headset();
+//       test_headset();
         myGLCD.clrScr();                                     // Очистить экран
         delay (500);
         myButtons.drawButtons();
