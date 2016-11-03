@@ -32,11 +32,11 @@ VisualMicro
 #include <UTouch.h>
 #include <UTFT_Buttons.h>
 
-#define LedGreen 12                                       // what digital pin we're connected to
-#define LedRed   13                                       // 
-#define Rale1     8                                        // 
-#define Rale2     9                                        // 
-#define Rale3    10                                       // 
+#define LedGreen 12                                      // 
+#define LedRed   13                                      // 
+#define Rale1     8                                      // 
+#define Rale2     9                                      // 
+#define Rale3    10                                      // 
 
 MCP23017 mcp_Out1;                                       // Назначение портов расширения MCP23017  4 A - Out, B - Out
 MCP23017 mcp_Out2;                                       // Назначение портов расширения MCP23017  6 A - Out, B - Out
@@ -54,7 +54,7 @@ byte hi;                                                // Старший байт для прео
 byte low;                                               // Младший байт для преобразования числа
 
 //********************* Настройка монитора ***********************************
-UTFT        myGLCD(ITDB32S,38,39,40,41);              // Дисплей 3.2"
+UTFT        myGLCD(ITDB32S,38,39,40,41);                // Дисплей 3.2"
 UTouch        myTouch(6, 5, 4, 3, 2);                   // Standard Arduino Mega/Due shield            : 6,5,4,3,2
 UTFT_Buttons  myButtons(&myGLCD, &myTouch);             // Finally we set up UTFT_Buttons :)
 
@@ -1896,11 +1896,27 @@ void mem_byte_trans_savePC()                                      //  Получить т
 
 int search_cabel(int sc)
 {
-  pinMode(46, OUTPUT);                                                        // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  digitalWrite(46, LOW);                                                      // Установить контрольный уровень на коммутаторе
-  pinMode(47, INPUT);                                                         // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  digitalWrite(47, HIGH);                                                     // Установить высокий уровень на выводе 47
+  pinMode(46, OUTPUT);                            // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  digitalWrite(46, LOW);                          // Установить контрольный уровень на коммутаторе
+  pinMode(47, INPUT);                             // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  digitalWrite(47, HIGH);                         // Установить высокий уровень на выводе 47
   int n_connect = 0;
+
+for(int i = 0; i < 48; i++)
+{
+	set_komm_mcp('A', i, 'O');
+	for(int x = 0; x < 48; x++)
+	{
+		 set_komm_mcp('B', x, 'O');
+
+
+
+	}
+}
+
+
+
+/*
 
   switch (sc)
   {
@@ -1945,6 +1961,7 @@ int search_cabel(int sc)
       }
       break;
   }
+  */
   if (n_connect == 0) Serial.println("Connector is not detected");
   return n_connect;
 }
@@ -3453,7 +3470,6 @@ void info_table4()
 	myGLCD.print(buffer, 168, 210);                                    //txt_test_end Завершить
 	myGLCD.setBackColor( 0, 0, 0);
 }
-
 
 void set_adr_EEPROM()
 {
