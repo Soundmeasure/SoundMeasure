@@ -1,25 +1,28 @@
 /*
-ArduinoCabelTST.ino
+ArduinoNanoCabelTest.ino
 Visual Studio 2010
 VisualMicro
 
 Программа тестирования исправности кабелей.
-Версия:               - 2.0
+Версия:               - 1.0
 Организация:          - ООО "Децима"
 Автор:                - Мосейчук А.В.
-Дата начала работ:    - 27.09.2016г.
-Дата окончания работ: - 2016г.
+Дата начала работ:    - 15.04.2016г.
+Дата окончания работ: - 15.04.2016г.
 
 Реализовано:
  - Расширение MCP23017
+ - подключен звуковой генератор
  - подключены часы, память, 
 
 */
 
-#define VT100_MODE  1
 
+#include "Globals.h"                             // Глобальные настройки
+#include <SPI.h>
 #include <Wire.h>
 #include <RTClib.h>
+#include <MsTimer2.h>
 #include <modbus.h>
 #include <modbusDevice.h>
 #include <modbusRegBank.h>
@@ -31,12 +34,18 @@ VisualMicro
 #include <UTFT.h>
 #include <UTouch.h>
 #include <UTFT_Buttons.h>
+#include <Arduino.h>
+#include <SdFat.h>
+#include <SdFatUtil.h>
 
-#define LedGreen 12                                      // 
-#define LedRed   13                                      // 
-#define Rale1     8                                      // 
-#define Rale2     9                                      // 
-#define Rale3    10                                      // 
+#define led_Green 12                                     // Светодиод на передней панели зеленый
+#define led_Red   13                                     // Светодиод на передней панели красный
+
+#define Chanal_A   A8                                    // Выход канала А блока коммутаторов
+#define Chanal_B   A9                                    // Выход канала B блока коммутаторов
+#define Rele1       8                                    // Управление реле 1
+#define Rele2       9                                    // Управление реле 2
+#define Rele3      10                                    // Управление реле 3
 
 MCP23017 mcp_Out1;                                       // Назначение портов расширения MCP23017  4 A - Out, B - Out
 MCP23017 mcp_Out2;                                       // Назначение портов расширения MCP23017  6 A - Out, B - Out
@@ -47,6 +56,9 @@ MCP23017 mcp_Out2;                                       // Назначение портов ра
 modbusDevice regBank;
 modbusSlave slave;
 
+//+++++++++++++++++++++++ Настройка электронного резистора +++++++++++++++++++++++++++++++++++++
+byte resistance          = 0x00;                        // Сопротивление 0x00..0xFF - 0Ом..100кОм
+
 //+++++++++++++++++++++++++++++ Внешняя память +++++++++++++++++++++++++++++++++++++++
 int deviceaddress        = 80;                          // Адрес микросхемы памяти
 unsigned int eeaddress   =  0;                          // Адрес ячейки памяти
@@ -54,7 +66,7 @@ byte hi;                                                // Старший байт для прео
 byte low;                                               // Младший байт для преобразования числа
 
 //********************* Настройка монитора ***********************************
-UTFT        myGLCD(ITDB32S,38,39,40,41);                // Дисплей 3.2"
+UTFT        myGLCD(ITDB32S,38,39,40,41);              // Дисплей 3.2"
 UTouch        myTouch(6, 5, 4, 3, 2);                   // Standard Arduino Mega/Due shield            : 6,5,4,3,2
 UTFT_Buttons  myButtons(&myGLCD, &myTouch);             // Finally we set up UTFT_Buttons :)
 
@@ -101,10 +113,6 @@ int ret               = 0;                                        // Признак пре
 //-------------------------------------------------------------------------------------------------
 
 
-// Insure no timer events are missed.
-volatile bool timerError = false;
-volatile bool timerFlag = false;
-//------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------------------------------
 //Назначение переменных для хранения № опций меню (клавиш)
@@ -120,37 +128,37 @@ char  txt_menu1_1[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N1";         
 char  txt_menu1_2[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N2";                                    // Тест кабель N 2
 char  txt_menu1_3[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N3";                                    // Тест кабель N 3
 char  txt_menu1_4[]            = "Tec\xA4 ""\x9F""a\x96""e\xA0\xAF N4";                                    // Тест кабель N 4
-char  txt_menu2_1[]            = "MENU 2.1";                                                               //   
-char  txt_menu2_2[]            = "MENU 2.2";                                                               //  
-char  txt_menu2_3[]            = "MENU 2.3";                                                               //  
-char  txt_menu2_4[]            = "MENU 2.4";                                                               //   
+char  txt_menu2_1[]            = "\x89""a""\xA2""e""\xA0\xAC"" ""\x98""ap""\xA2\x9D\xA4""yp";              // Панель гарнитур                                                //
+char  txt_menu2_2[]            = "MT""\x81"" ""\x99\x9D""c""\xA3""e""\xA4\xA7""epa";                       // МТГ диспетчера
+char  txt_menu2_3[]            = "MT""\x81"" ""\x9D\xA2""c""\xA4""py""\x9F\xA4""opa";                      // МТГ инструктора
+char  txt_menu2_4[]            = "Tec""\xA4"" MTT";                                                        // Тест МТТ                                 //
 char  txt_menu3_1[]            = "Ta""\x96\xA0\x9D\xA6""a coe""\x99"".";                                   // Таблица соед.
 char  txt_menu3_2[]            = "*******";//"Pe""\x99""a""\x9F\xA4"". ""\xA4""a""\x96\xA0\x9D\xA6";       // Редакт. таблиц
 char  txt_menu3_3[]            = "\x85""a""\x98""py""\x9C"".\xA4""a""\x96\xA0\x9D\xA6";//"\x85""a""\x98""py""\x9C"". y""\xA1""o""\xA0\xA7"".";                     // Загруз. умолч.
 char  txt_menu3_4[]            = "Bpe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";                             // Время простоя
-char  txt_menu4_1[]            = "MENU 4.1";                                                               //  
-char  txt_menu4_2[]            = "MENU 4.2";                                                               //  
-char  txt_menu4_3[]            = "MENU 4.3";                                                               //  
-char  txt_menu4_4[]            = "MENU 4.4";                                                               //  
-char  txt_menu5_1[]            = "MENU 5.1";                                                               //  
-char  txt_menu5_2[]            = "MENU 5.2";                                                               //  
+char  txt_menu4_1[]            = "C\x9D\xA2yco\x9D\x99""a";                                                // Синусоида
+char  txt_menu4_2[]            = "\x89\x9D\xA0oo\x96pa\x9C\xA2\xAB\x9E";                                   // Пилообразный
+char  txt_menu4_3[]            = "Tpey\x98o\xA0\xAC\xA2\xAB\x9E";                                          // Треугольный
+char  txt_menu4_4[]            = "\x89p\xAF\xA1oy\x98o\xA0\xAC\xA2\xAB\x9E";                               // Прямоугольный
+char  txt_menu5_1[]            = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                          // Осциллограф
+char  txt_menu5_2[]            = "Tec""\xA4"" ""\x98""ap""\xA2\x9D\xA4""yp";                               // Тест гарнитур
 char  txt_menu5_3[]            = "*******";                                                                //
 char  txt_menu5_4[]            = "Tec""\xA4"" pa""\x9C\xAA""e""\xA1""o""\x97";                             // Тест разъемов 
 
-const char  txt_head_instr[]        PROGMEM  = " ";                                                        //  
-const char  txt_head_disp[]         PROGMEM  = " ";                                                        //  
+const char  txt_head_instr[]        PROGMEM  = "\x86\xA2""c""\xA4""py""\x9F\xA4""op";                                    // Инструктор
+const char  txt_head_disp[]         PROGMEM  = "\x82\x9D""c""\xA3""e""\xA4\xA7""ep";                                     // Диспетчер
 const char  txt_info1[]             PROGMEM  = "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                    // Тест кабелей
-const char  txt_info2[]             PROGMEM  = " ";                                                                      // 
+const char  txt_info2[]             PROGMEM  = "Tec\xA4 \x96\xA0o\x9F""a \x98""ap\xA2\x9D\xA4yp";                        // Тест блока гарнитур
 const char  txt_info3[]             PROGMEM  = "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы
-const char  txt_info4[]             PROGMEM  = " ";                                                                      //  
-const char  txt_info5[]             PROGMEM  = " ";                                                                      //  
-const char  txt_MTT[]               PROGMEM  = " ";                                                                      //  
+const char  txt_info4[]             PROGMEM  = "\x81""e\xA2""epa\xA4op c\x9D\x98\xA2""a\xA0o\x97";                       // Генератор сигналов
+const char  txt_info5[]             PROGMEM  = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                          // Осциллограф
+const char  txt_MTT[]               PROGMEM  = "\x81""ap""\xA2\x9D\xA4""ypa MTT";                                        // Гарнитура МТТ
 const char  txt_botton_otmena[]     PROGMEM  = "O""\xA4\xA1""e""\xA2""a";                                                // "Отмена"
 const char  txt_botton_vvod[]       PROGMEM  = "B\x97o\x99 ";                                                            // Ввод
 const char  txt_botton_ret[]        PROGMEM  = "B""\xAB""x";                                                             // "Вых"
 const char  txt_system_clear3[]     PROGMEM  = " ";                                                                      //
-const char  txt9[]                  PROGMEM  = " ";                                                                      //  
-const char  txt10[]                 PROGMEM  = " ";                                                                      // 
+const char  txt9[]                  PROGMEM  = "\x85\x97""y""\x9F"" ""\x97"" ""\x98""ap""\xA2\x9D\xA4""ype";             // Звук в гарнитуре
+const char  txt10[]                 PROGMEM  = "\x85\x97""y""\x9F"" OTK""\x88";                                           // Звук ОТКЛ
 const char  txt_time_wait[]         PROGMEM  = "\xA1\x9D\xA2"".""\x97""pe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";       //  мин. время простоя
 const char  txt_info29[]            PROGMEM  = "Stop->PUSH Disp";
 const char  txt_info30[]            PROGMEM  = " ";
@@ -169,50 +177,50 @@ const char  txt__connect3[]         PROGMEM  = "O""\x96\xA2""apy""\x9B""e""\xA2"
 const char  txt__connect4[]         PROGMEM  = "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";    // Обнаружен кабель N4
 const char  txt__test_end[]         PROGMEM  = "TECT ""\x85""A""KOH""\x8D""EH";                                          // ТЕСТ ЗАКОНЧЕН
 const char  txt__panel[]            PROGMEM  = "Tec""\xA4"" c""\x97""e""\xA4""o""\x99\x9D""o""\x99""o""\x97";            // Тест светодиодов
-const char  txt__panel0[]           PROGMEM  = " ";                                                                      //
-const char  txt__disp[]             PROGMEM  = " ";                                                                      //  
-const char  txt__instr[]            PROGMEM  = " ";                                                                      //  
-const char  txt__MTT[]              PROGMEM  = " ";                                                                      //  
-const char  txt__disp_connect[]     PROGMEM  = " ";                                                                      //  
-const char  txt__disp_disconnect[]  PROGMEM  = " ";                                                                      //  
-const char  txt__instr_connect[]    PROGMEM  = " ";                                                                      //  
-const char  txt__instr_disconnect[] PROGMEM  = " ";                                                                      //  
-const char  txt__mtt_disconnect[]   PROGMEM  = " ";                                                                      //
-const char  txt__cont1_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N1 - O""\x9F";                                           // Конт. N1 - Ок
-const char  txt__cont2_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N2 - O""\x9F";                                           // Конт. N2 - Ок
-const char  txt__cont3_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N3 - O""\x9F";                                           // Конт. N3 - Ок
-const char  txt__cont4_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N4 - O""\x9F";                                           // Конт. N4 - Ок
-const char  txt__cont5_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N5 - O""\x9F";                                           // Конт. N5 - Ок
-const char  txt__cont6_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N6 - O""\x9F";                                           // Конт. N6 - Ок
-const char  txt__cont7_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N7 - O""\x9F";                                           // Конт. N7 - Ок
-const char  txt__cont8_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N8 - O""\x9F";                                           // Конт. N8 - Ок
-const char  txt__cont9_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N9 - O""\x9F";                                           // Конт. N9 - Ок
-const char  txt__clear2[]           PROGMEM  = " ";                                                                      //
-const char  txt__cont1_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N1 - He""\xA4""!";                                       // Конт. N1 - Нет!
-const char  txt__cont2_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N2 - He""\xA4""!";                                       // Конт. N2 - Нет!
-const char  txt__cont3_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N3 - He""\xA4""!";                                       // Конт. N3 - Нет!
-const char  txt__cont4_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N4 - He""\xA4""!";                                       // Конт. N4 - Нет!
-const char  txt__cont5_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N5 - He""\xA4""!";                                       // Конт. N5 - Нет!
-const char  txt__cont6_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N6 - He""\xA4""!";                                       // Конт. N6 - Нет!
-const char  txt__cont7_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N7 - He""\xA4""!";                                       // Конт. N7 - Нет!
-const char  txt__cont8_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N8 - He""\xA4""!";                                       // Конт. N8 - Нет!
-const char  txt__cont9_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N9 - He""\xA4""!";                                       // Конт. N9 - Нет!
+const char  txt__panel0[]           PROGMEM  = "                     ";                                                  //
+const char  txt__disp[]             PROGMEM  = "Tec""\xA4"" MT""\x81"" ""\x99\x9D""c""\xA3""e""\xA4\xA7""epa";           // Тест МТГ диспетчера
+const char  txt__instr[]            PROGMEM  = "Tec""\xA4"" MT""\x81"" ""\x9D\xA2""c""\xA4""py""\x9F\xA4""opa";          // Тест МТГ инструктора
+const char  txt__MTT[]              PROGMEM  = "Tec""\xA4"" MTT";                                                        // Тест МТТ
+const char  txt__disp_connect[]     PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"". ""\xA3""o""\x99\x9F\xA0"".";// Кабель дисп. подкл.
+const char  txt__disp_disconnect[]  PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"". o""\xA4\x9F\xA0"".";        // Кабель дисп.откл.
+const char  txt__instr_connect[]    PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.""\xA3""o""\x99\x9F\xA0"".";// Кабель инстр.подкл.
+const char  txt__instr_disconnect[] PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.o""\xA4\x9F\xA0"".";       // Кабель инстр.откл.
+const char  txt__mtt_disconnect[]   PROGMEM  = "Ka""\x96""e""\xA0\xAC"" ""MTT o""\xA4\x9F\xA0"".";                                                                       //
+const char  txt__cont1_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N1 - O""\x9F";                                            // Конт. N1 - Ок
+const char  txt__cont2_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N2 - O""\x9F";                                            // Конт. N2 - Ок
+const char  txt__cont3_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N3 - O""\x9F";                                            // Конт. N3 - Ок
+const char  txt__cont4_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N4 - O""\x9F";                                            // Конт. N4 - Ок
+const char  txt__cont5_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N5 - O""\x9F";                                            // Конт. N5 - Ок
+const char  txt__cont6_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N6 - O""\x9F";                                            // Конт. N6 - Ок
+const char  txt__cont7_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N7 - O""\x9F";                                            // Конт. N7 - Ок
+const char  txt__cont8_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N8 - O""\x9F";                                            // Конт. N8 - Ок
+const char  txt__cont9_connect[]    PROGMEM  = "Ko""\xA2\xA4"". N9 - O""\x9F";                                            // Конт. N9 - Ок
+const char  txt__clear2[]           PROGMEM  = " ";                                                                       //
+const char  txt__cont1_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N1 - He""\xA4""!";                                        // Конт. N1 - Нет!
+const char  txt__cont2_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N2 - He""\xA4""!";                                        // Конт. N2 - Нет!
+const char  txt__cont3_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N3 - He""\xA4""!";                                        // Конт. N3 - Нет!
+const char  txt__cont4_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N4 - He""\xA4""!";                                        // Конт. N4 - Нет!
+const char  txt__cont5_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N5 - He""\xA4""!";                                        // Конт. N5 - Нет!
+const char  txt__cont6_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N6 - He""\xA4""!";                                        // Конт. N6 - Нет!
+const char  txt__cont7_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N7 - He""\xA4""!";                                        // Конт. N7 - Нет!
+const char  txt__cont8_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N8 - He""\xA4""!";                                        // Конт. N8 - Нет!
+const char  txt__cont9_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N9 - He""\xA4""!";                                        // Конт. N9 - Нет!
 
 char buffer[40];
 const char* const table_message[] PROGMEM =
 {
-  txt_head_instr,          // 0 "                                                                     
-  txt_head_disp,           // 1 "                                                                    
-  txt_info1,               // 2 "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                     // Тест кабелей
-  txt_info2,               // 3 " 
-  txt_info3,               // 4 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                            // Настройка системы
-  txt_info4,               // 5 " 
-  txt_info5,               // 6 " 
-  txt_MTT,                 // 7 "                                                               
-  txt_botton_otmena,       // 8 " ";                                                                      
-  txt_botton_vvod,         // 9 " ";                                                                      
-  txt_botton_ret,          // 10 ""B""\xAB""x" ";                                                          //  Вых
-  txt_system_clear3,       // 11 " ";                                                                     
+  txt_head_instr,          // 0 "\x86\xA2""c""\xA4""py""\x9F\xA4""op";                                    // Инструктор                                                                  //
+  txt_head_disp,           // 1 "\x82\x9D""c""\xA3""e""\xA4\xA7""ep";                                     // Диспетчер                                                                      //
+  txt_info1,               // 2 "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                    // Тест кабелей
+  txt_info2,               // 3 "Tec\xA4 \x96\xA0o\x9F""a \x98""ap\xA2\x9D\xA4yp";                        // Тест блока гарнитур
+  txt_info3,               // 4 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы
+  txt_info4,               // 5 "\x81""e\xA2""epa\xA4op c\x9D\x98\xA2""a\xA0o\x97";                       // Генератор сигналов
+  txt_info5,               // 6 "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                          // Осциллограф
+  txt_MTT,                 // 7 "\x81""ap""\xA2\x9D\xA4""ypa MTT";                                        // Гарнитура МТТ                                                                  //
+  txt_botton_otmena,       // 8 " ";                                                                      //
+  txt_botton_vvod,         // 9 " ";                                                                      //
+  txt_botton_ret,          // 10 ""B""\xAB""x" ";                                                         //  Вых
+  txt_system_clear3,       // 11 " ";                                                                     //
   txt9,                    // 12 "B\x97o\x99";                                                             // Ввод
   txt10,                   // 13 "O""\xA4\xA1""e""\xA2""a";                                                // "Отмена"
   txt_time_wait,           // 14 "\xA1\x9D\xA2"".""\x97""pe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";       //  мин. время простоя
@@ -233,14 +241,14 @@ const char* const table_message[] PROGMEM =
   txt__connect4,           // 29 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";    // Обнаружен кабель N4
   txt__test_end,           // 30 "TECT ""\x85""A""KOH""\x8D""EH";                                          // ТЕСТ ЗАКОНЧЕН
   txt__panel,              // 31 "Tec""\xA4"" c""\x97""e""\xA4""o""\x99\x9D""o""\x99""o""\x97";            // Тест светодиодов
-  txt__panel0,             // 32 "  
-  txt__disp,               // 33 " 
-  txt__instr,              // 34 " 
-  txt__MTT,                // 35 " 
-  txt__disp_connect,       // 36 " 
-  txt__disp_disconnect,    // 37 " 
-  txt__instr_connect,      // 38 " 
-  txt__instr_disconnect,   // 39 " 
+  txt__panel0,             // 32 "                          ";                                             //
+  txt__disp,               // 33 "Tec""\xA4"" MT""\x81"" ""\x99\x9D""c""\xA3""e""\xA4\xA7""epa";           // Тест МТГ диспетчера
+  txt__instr,              // 34 "Tec""\xA4"" MT""\x81"" ""\x9D\xA2""c""\xA4""py""\x9F\xA4""opa";          // Тест МТГ инструктора
+  txt__MTT,                // 35 "Tec""\xA4"" MTT";                                                        // Тест МТТ
+  txt__disp_connect,       // 36 "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"". ""\xA3""o""\x99\x9F\xA0"".";// Кабель дисп. подкл.
+  txt__disp_disconnect,    // 37 "Ka""\x96""e""\xA0\xAC"" ""\x99\x9D""c""\xA3"".o""\xA4\x9F\xA0"".";       // Кабель дисп.откл.
+  txt__instr_connect,      // 38 "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.""\xA3""o""\x99\x9F\xA0"".";// Кабель инстр.подкл.
+  txt__instr_disconnect,   // 39 "Ka""\x96""e""\xA0\xAC"" ""\x9D\xA2""c""\xA4""p.o""\xA4\x9F\xA0"".";      // Кабель инстр.откл.
   txt__mtt_disconnect,     // 40 " ";                                                                       //
   txt__cont1_connect,      // 41 "Ko""\xA2\xA4"". N1 - O""\x9F";                                            // Конт. N1 - Ок
   txt__cont2_connect,      // 42 "Ko""\xA2\xA4"". N2 - O""\x9F";                                            // Конт. N2 - Ок
@@ -315,6 +323,8 @@ unsigned int adr_memN2_3 = 0;                       // Начальный адрес памяти та
 unsigned int adr_memN2_4 = 0;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №4А, №4В
 
 //==========================================================================================================================
+
+
 
 void serial_print_date()                           // Печать даты и времени
 {
@@ -971,7 +981,6 @@ void control_command()
         test_cabel_N4();             // Программа проверки кабеля №4
         break;
       case 5:
-//       test_panel_N1();             // Программа проверки панели гарнитур
         break;
       case 6:
         save_default_pc();           // Записать таблицу проверки № по умолчанию
@@ -986,10 +995,10 @@ void control_command()
 
         break;
       case 10:
-  
+ 
         break;
       case 11:
-  
+ 
         break;
       case 12:
         mem_byte_trans_readPC();     // Чтение таблиц из EEPROM для передачи в ПК
@@ -1265,7 +1274,8 @@ void swichMenu()                                             // Тексты меню в ст
 
       if (pressed_button == but1 && m2 == 2)
       {
-  
+        //Тест панели гарнитур 1
+
         myGLCD.clrScr();
         myButtons.drawButtons();
         print_up();
@@ -1273,6 +1283,7 @@ void swichMenu()                                             // Тексты меню в ст
 
       if (pressed_button == but2 && m2 == 2)
       {
+        //Тест панели гарнитур 2
  
         myGLCD.clrScr();
         myButtons.drawButtons();
@@ -1288,7 +1299,7 @@ void swichMenu()                                             // Тексты меню в ст
       }
       if (pressed_button == but4 && m2 == 2)
       {
-//	test_mtt();
+
         myGLCD.clrScr();
         myButtons.drawButtons();
         print_up();
@@ -1356,7 +1367,7 @@ void swichMenu()                                             // Тексты меню в ст
         myGLCD.clrScr();   // Очистить экран
         //	myGLCD.print(txt_pass_ok, RIGHT, 208);
         delay (500);
- 
+
         myButtons.drawButtons();
         print_up();
         //
@@ -1369,7 +1380,7 @@ void swichMenu()                                             // Тексты меню в ст
         myGLCD.clrScr();
         //	myGLCD.print(txt_pass_ok, RIGHT, 208);
         delay (500);
- 
+
         myButtons.drawButtons();
         print_up();
       }
@@ -1380,7 +1391,7 @@ void swichMenu()                                             // Тексты меню в ст
         myGLCD.clrScr();
         //	myGLCD.print(txt_pass_ok, RIGHT, 208);
         delay (500);
-   
+
         myButtons.drawButtons();
         print_up();
       }
@@ -1389,7 +1400,7 @@ void swichMenu()                                             // Тексты меню в ст
         myGLCD.clrScr();
         //	myGLCD.print(txt_pass_ok, RIGHT, 208);
         delay (500);
-  
+
         myButtons.drawButtons();
         print_up();
       }
@@ -1398,7 +1409,7 @@ void swichMenu()                                             // Тексты меню в ст
       if (pressed_button == but1 && m2 == 5)                 // Сброс данных
       {
         myGLCD.clrScr();
- 
+
         myGLCD.clrScr();
         myButtons.drawButtons();
         print_up();
@@ -1406,7 +1417,7 @@ void swichMenu()                                             // Тексты меню в ст
       if (pressed_button == but2 && m2 == 5)
       {
         myGLCD.clrScr();
-//       test_headset();
+
         myGLCD.clrScr();                                     // Очистить экран
         delay (500);
         myButtons.drawButtons();
@@ -1416,7 +1427,9 @@ void swichMenu()                                             // Тексты меню в ст
       if (pressed_button == but3 && m2 == 5)                 // Ввод 
       {
         myGLCD.clrScr();                                     // Очистить экран
-         myButtons.drawButtons();
+
+        myGLCD.clrScr();                                     // Очистить экран
+        myButtons.drawButtons();
         print_up();
       }
 
@@ -1896,34 +1909,18 @@ void mem_byte_trans_savePC()                                      //  Получить т
 
 int search_cabel(int sc)
 {
-  pinMode(46, OUTPUT);                            // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  digitalWrite(46, LOW);                          // Установить контрольный уровень на коммутаторе
-  pinMode(47, INPUT);                             // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  digitalWrite(47, HIGH);                         // Установить высокий уровень на выводе 47
+  pinMode(Chanal_A, OUTPUT);                                                        // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  digitalWrite(Chanal_A, LOW);                                                      // Установить контрольный уровень на коммутаторе
+  pinMode(Chanal_B, INPUT);                                                         // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  digitalWrite(Chanal_B, HIGH);                                                     // Установить высокий уровень на выводе Chanal_B
   int n_connect = 0;
-
-for(int i = 0; i < 48; i++)
-{
-	set_komm_mcp('A', i, 'O');
-	for(int x = 0; x < 48; x++)
-	{
-		 set_komm_mcp('B', x, 'O');
-
-
-
-	}
-}
-
-
-
-/*
 
   switch (sc)
   {
     case 1:
       set_komm_mcp('A', 1, 'O');
       set_komm_mcp('B', 1, 'O');
-      if (digitalRead(47) == LOW )
+      if (digitalRead(Chanal_B) == LOW )
       {
         n_connect = 2;
         strcpy_P(buffer, (char*)pgm_read_word(&(table_message[27])));
@@ -1933,7 +1930,7 @@ for(int i = 0; i < 48; i++)
     case 39:
       set_komm_mcp('A', 39, 'O');
       set_komm_mcp('B', 19, 'O');
-      if (digitalRead(47) == LOW )
+      if (digitalRead(Chanal_B) == LOW )
       {
         n_connect = 3;
         strcpy_P(buffer, (char*)pgm_read_word(&(table_message[28])));
@@ -1943,7 +1940,7 @@ for(int i = 0; i < 48; i++)
     case 40:
       set_komm_mcp('A', 40, 'O');
       set_komm_mcp('B', 40, 'O');
-      if (digitalRead(47) == LOW )
+      if (digitalRead(Chanal_B) == LOW )
       {
         n_connect = 1;
         strcpy_P(buffer, (char*)pgm_read_word(&(table_message[26])));
@@ -1953,7 +1950,7 @@ for(int i = 0; i < 48; i++)
     case 41:
       set_komm_mcp('A', 41, 'O');
       set_komm_mcp('B', 41, 'O');
-      if (digitalRead(47) == LOW )
+      if (digitalRead(Chanal_B) == LOW )
       {
         n_connect = 4;
         strcpy_P(buffer, (char*)pgm_read_word(&(table_message[29])));
@@ -1961,7 +1958,6 @@ for(int i = 0; i < 48; i++)
       }
       break;
   }
-  */
   if (n_connect == 0) Serial.println("Connector is not detected");
   return n_connect;
 }
@@ -2202,56 +2198,13 @@ void test_cabel_N4()
   }
 }
 
-void table_cont1()
-{
-  myGLCD.clrScr();
-//  myGLCD.print(txt_menu2_1, CENTER, 1);                            // "Тест панели"
-  myGLCD.setColor(255, 255, 255);                                    // Белая окантовка
-  myGLCD.drawRoundRect (5, 200, 155, 239);
-  myGLCD.drawRoundRect (160, 200, 315, 239);
-  myGLCD.setColor(0, 0, 255);
-  myGLCD.fillRoundRect (6, 201, 154, 238);
-  myGLCD.fillRoundRect (161, 201, 314, 238);
-  myGLCD.setColor(255, 255, 255);
-  myGLCD.setBackColor( 0, 0, 255);
-  strcpy_P(buffer, (char*)pgm_read_word(&(table_message[21])));
-  myGLCD.print(buffer, 10, 210);                                    //txt_test_repeat  Повторить
-  strcpy_P(buffer, (char*)pgm_read_word(&(table_message[20])));
-  myGLCD.print(buffer, 168, 210);                                   //txt_test_end Завершить
-  myGLCD.setBackColor( 0, 0, 0);                                    //
-
-//  table_cont_run();                                                 // 
-  while (true)                                                      // Ожидание очередных комманд
-  {
-    if (myTouch.dataAvailable())
-    {
-      myTouch.read();
-      x = myTouch.getX();
-      y = myTouch.getY();
-
-      if (((y >= 200) && (y <= 239)) && ((x >= 5) && (x <= 155)))   //нажата кнопка "Повторить проверку"
-      {
-        waitForIt(5, 200, 155, 239);
-        myGLCD.setFont(BigFont);
-      //  table_cont_run();                                    // Выполнить программу проверки
-      }
-      if (((y >= 200) && (y <= 239)) && ((x >= 160) && (x <= 315))) //нажата кнопка "Завершить  проверку"
-      {
-        waitForIt(160, 200, 315, 239);
-        myGLCD.setFont(BigFont);
-        break;                                                // Выход из программы
-      }
-    }
-  }
-}
-
 void test_cabel_N1_run()
 {
 
   byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_1);        // Получить количество выводов проверяемого разъема
-  pinMode(46, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  pinMode(47, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  digitalWrite(47, HIGH);                                                      // Установить высокий уровень на выводе 47
+  pinMode(Chanal_A, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  pinMode(Chanal_B, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  digitalWrite(Chanal_B, HIGH);                                                      // Установить высокий уровень на выводе Chanal_B
   myGLCD.print("                    ", 1, 40);                                 // Очистить строчку результатов проверки
   byte canal_N     = 0;                                                        // Переменная хранения № канала в памяти
   unsigned int x_A = 1;                                                        // Переменная установления канала А
@@ -2270,8 +2223,8 @@ void test_cabel_N1_run()
   myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
   if (search_cabel(40) == 1)                                                   // Проверить корректность подключения кабеля №1
   {
-    digitalWrite(46, LOW);                                                     // Установить контрольный уровень на коммутаторах U13,U17,U23
-    delay(10);                                                                 // Время на переключение вывода 46
+    digitalWrite(Chanal_A, LOW);                                                     // Установить контрольный уровень на коммутаторах U13,U17,U23
+    delay(10);                                                                 // Время на переключение вывода Chanal_A
     for (x_A = 1; x_A < _size_block + 1; x_A++)                                // Последовательное чтение контактов разьемов.
     {
       canal_N = i2c_eeprom_read_byte(deviceaddress, adr_memN1_1 + x_A);        // Получить № канала из EEPROM
@@ -2306,13 +2259,13 @@ void test_cabel_N1_run()
           else myGLCD.print("<X>", 66, 40);
 		  myGLCD.print("  ",130, 40);
           myGLCD.printNumI(canal_N, 130, 40);
-          if (digitalRead(47) == LOW && ware_on == 1)
+          if (digitalRead(Chanal_B) == LOW && ware_on == 1)
           {
             myGLCD.print(" - Pass", 170, 40);
           }
           else
           {
-            if (digitalRead(47) != LOW && ware_on == 0)                  // Должен быть соединен
+            if (digitalRead(Chanal_B) != LOW && ware_on == 0)                  // Должен быть соединен
             {
               myGLCD.print(" - Pass", 170, 40);
             }
@@ -2381,7 +2334,7 @@ void test_cabel_N1_run()
         //++++++++++++++++++++++++ Проверка остальных проводов на замыкание ---------------------------
         if (x_A != x_B)                                                      //Проверяемые провода не не должны быть соеденены
         {
-          if (digitalRead(47) == LOW)                                      // Все таки замкнуты
+          if (digitalRead(Chanal_B) == LOW)                                      // Все таки замкнуты
           {
             // Проверим дополнительную 3 таблицу, возможно должны иметь соединение
             int canal_N_err = i2c_eeprom_read_byte(deviceaddress, adr_memN1_1 + x_A + (_size_block * 2)); // Получить из таблицы номер входа коммутатора.
@@ -2443,9 +2396,9 @@ void test_cabel_N1_run()
 void test_cabel_N2_run()
 {
   byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_2);        // Получить количество выводов проверяемого разъема
-  pinMode(46, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  pinMode(47, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  digitalWrite(47, HIGH);                                                      // Установить высокий уровень на выводе 47
+  pinMode(Chanal_A, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  pinMode(Chanal_B, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  digitalWrite(Chanal_B, HIGH);                                                      // Установить высокий уровень на выводе Chanal_B
   myGLCD.print("                    ", 1, 40);                                 // Очистить строчку результатов проверки
   byte canal_N     = 0;                                                        // Переменная хранения № канала в памяти
   unsigned int x_A = 1;                                                        // Переменная установления канала А
@@ -2464,8 +2417,8 @@ void test_cabel_N2_run()
   myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
   if (search_cabel(1) == 2)                                                    // Проверить корректность подключения кабеля №1
   {
-    digitalWrite(46, LOW);                                                   // Установить контрольный уровень на коммутаторах U13,U17,U23
-    delay(10);                                                               // Время на переключение вывода 46
+    digitalWrite(Chanal_A, LOW);                                                   // Установить контрольный уровень на коммутаторах U13,U17,U23
+    delay(10);                                                               // Время на переключение вывода Chanal_A
     // Начало проверки
     for (x_A = 1; x_A < _size_block + 1; x_A++)                              // Последовательное чтение контактов разьемов.
     {
@@ -2500,13 +2453,13 @@ void test_cabel_N2_run()
           else myGLCD.print("<X>", 66, 40);
 		  myGLCD.print("  ",130, 40);
           myGLCD.printNumI(canal_N, 130, 40);
-          if (digitalRead(47) == LOW && ware_on == 1)
+          if (digitalRead(Chanal_B) == LOW && ware_on == 1)
           {
             myGLCD.print(" - Pass", 170, 40);
           }
           else
           {
-            if (digitalRead(47) != LOW && ware_on == 0)                  // Должен быть соединен
+            if (digitalRead(Chanal_B) != LOW && ware_on == 0)                  // Должен быть соединен
             {
               myGLCD.print(" - Pass", 170, 40);
             }
@@ -2575,7 +2528,7 @@ void test_cabel_N2_run()
         //++++++++++++++++++++++++ Проверка остальных проводов на замыкание ---------------------------
         if (x_A != x_B)                                                      //Проверяемые провода не не должны быть соеденены
         {
-          if (digitalRead(47) == LOW)                                      // Все таки замкнуты
+          if (digitalRead(Chanal_B) == LOW)                                      // Все таки замкнуты
           {
             // Проверим дополнительную 3 таблицу, возможно должны иметь соединение
             int canal_N_err = i2c_eeprom_read_byte(deviceaddress, adr_memN1_2 + x_A + (_size_block * 2)); // Получить из таблицы номер входа коммутатора.
@@ -2638,9 +2591,9 @@ void test_cabel_N2_run()
 void test_cabel_N3_run()
 {
   byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3);        // Получить количество выводов проверяемого разъема
-  pinMode(46, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  pinMode(47, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  digitalWrite(47, HIGH);                                                      // Установить высокий уровень на выводе 47
+  pinMode(Chanal_A, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  pinMode(Chanal_B, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  digitalWrite(Chanal_B, HIGH);                                                      // Установить высокий уровень на выводе Chanal_B
   myGLCD.print("                    ", 1, 40);                                 // Очистить строчку результатов проверки
   byte canal_N     = 0;                                                        // Переменная хранения № канала в памяти
   unsigned int x_A = 1;                                                        // Переменная установления канала А
@@ -2659,8 +2612,8 @@ void test_cabel_N3_run()
   myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
   if (search_cabel(39) == 3)                                                   // Проверить корректность подключения кабеля №1
   {
-    digitalWrite(46, LOW);                                                   // Установить контрольный уровень на коммутаторах U13,U17,U23
-    delay(10);                                                               // Время на переключение вывода 46
+    digitalWrite(Chanal_A, LOW);                                                   // Установить контрольный уровень на коммутаторах U13,U17,U23
+    delay(10);                                                               // Время на переключение вывода Chanal_A
     for (x_A = 1; x_A < _size_block + 1; x_A++)                              // Последовательное чтение контактов разьемов.
     {
       canal_N = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3 + x_A);    // Получить № канала из EEPROM
@@ -2696,13 +2649,13 @@ void test_cabel_N3_run()
           else myGLCD.print("<X>", 66, 40);
 		  myGLCD.print("  ",130, 40);
           myGLCD.printNumI(canal_N, 130, 40);
-          if (digitalRead(47) == LOW && ware_on == 1)
+          if (digitalRead(Chanal_B) == LOW && ware_on == 1)
           {
             myGLCD.print(" - Pass", 170, 40);
           }
           else
           {
-            if (digitalRead(47) != LOW && ware_on == 0)                  // Должен быть соединен
+            if (digitalRead(Chanal_B) != LOW && ware_on == 0)                  // Должен быть соединен
             {
               myGLCD.print(" - Pass", 170, 40);
             }
@@ -2770,7 +2723,7 @@ void test_cabel_N3_run()
         //++++++++++++++++++++++++ Проверка остальных проводов на замыкание ---------------------------
         if (x_A != x_B)                                                      //Проверяемые провода не не должны быть соеденены
         {
-          if (digitalRead(47) == LOW)                                      // Все таки замкнуты
+          if (digitalRead(Chanal_B) == LOW)                                      // Все таки замкнуты
           {
             // Проверим дополнительную 3 таблицу, возможно должны иметь соединение
             int canal_N_err = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3 + x_A + (_size_block * 2)); // Получить из таблицы номер входа коммутатора.
@@ -2832,9 +2785,9 @@ void test_cabel_N3_run()
 void test_cabel_N4_run()
 {
   byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_4);        // Получить количество выводов проверяемого разъема
-  pinMode(46, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  pinMode(47, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  digitalWrite(47, HIGH);                                                      // Установить высокий уровень на выводе 47
+  pinMode(Chanal_A, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  pinMode(Chanal_B, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  digitalWrite(Chanal_B, HIGH);                                                      // Установить высокий уровень на выводе Chanal_B
   myGLCD.print("                    ", 1, 40);                                 // Очистить строчку результатов проверки
   byte canal_N     = 0;                                                        // Переменная хранения № канала в памяти
   unsigned int x_A = 1;                                                        // Переменная установления канала А
@@ -2853,8 +2806,8 @@ void test_cabel_N4_run()
   myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
   if (search_cabel(41) == 4)                                                   // Проверить корректность подключения кабеля №1
   {
-    digitalWrite(46, LOW);                                                   // Установить контрольный уровень на коммутаторах U13,U17,U23
-    delay(10);                                                               // Время на переключение вывода 46
+    digitalWrite(Chanal_A, LOW);                                                   // Установить контрольный уровень на коммутаторах U13,U17,U23
+    delay(10);                                                               // Время на переключение вывода Chanal_A
     for (x_A = 1; x_A < _size_block + 1; x_A++)                              // Последовательное чтение контактов разьемов.
     {
       canal_N = i2c_eeprom_read_byte(deviceaddress, adr_memN1_4 + x_A);    // Получить № канала из EEPROM
@@ -2889,13 +2842,13 @@ void test_cabel_N4_run()
           else myGLCD.print("<X>", 66, 40);
 		  myGLCD.print("  ",130, 40);
           myGLCD.printNumI(canal_N, 130, 40);
-          if (digitalRead(47) == LOW && ware_on == 1)
+          if (digitalRead(Chanal_B) == LOW && ware_on == 1)
           {
             myGLCD.print(" - Pass", 170, 40);
           }
           else
           {
-            if (digitalRead(47) != LOW && ware_on == 0)                  // Должен быть соединен
+            if (digitalRead(Chanal_B) != LOW && ware_on == 0)                  // Должен быть соединен
             {
               myGLCD.print(" - Pass", 170, 40);
             }
@@ -2964,7 +2917,7 @@ void test_cabel_N4_run()
         //++++++++++++++++++++++++ Проверка остальных проводов на замыкание ---------------------------
         if (x_A != x_B)                                                      //Проверяемые провода не не должны быть соеденены
         {
-          if (digitalRead(47) == LOW)                                      // Все таки замкнуты
+          if (digitalRead(Chanal_B) == LOW)                                      // Все таки замкнуты
           {
             // Проверим дополнительную 3 таблицу, возможно должны иметь соединение
             int canal_N_err = i2c_eeprom_read_byte(deviceaddress, adr_memN1_4 + x_A + (_size_block * 2)); // Получить из таблицы номер входа коммутатора.
@@ -3034,10 +2987,10 @@ void test_all_pin()
   strcpy_P(buffer, (char*)pgm_read_word(&(table_message[19])));
   myGLCD.print(buffer, CENTER, 200);                                          // txt_test_all_exit2
   byte canal_N = 0;
-  pinMode(A8, INPUT);                                                         // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  pinMode(A9, INPUT);                                                         // Установить на вход  выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  digitalWrite(A8, HIGH);                                                     // Установить высокий уровень на выводе 47
-  digitalWrite(A9, HIGH);                                                     // Установить высокий уровень на выводе 46
+  pinMode(Chanal_B, INPUT);                                                         // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  pinMode(Chanal_A, INPUT);                                                         // Установить на вход  выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  digitalWrite(Chanal_B, HIGH);                                                     // Установить высокий уровень на выводе Chanal_B
+  digitalWrite(Chanal_A, HIGH);                                                     // Установить высокий уровень на выводе Chanal_A
   int i_step = 1;
 
   while (true)
@@ -3057,20 +3010,34 @@ void test_all_pin()
     set_komm_mcp('A', i_step, 'O');                                         // Переключить коммутатор разъемов серии "А" на вход
     set_komm_mcp('B', i_step, 'O');                                         // Переключить коммутатор разъемов серии "В" на вход
     delay(10);
-    if (digitalRead(A8) == LOW)
+    if (digitalRead(Chanal_B) == LOW)
     {
-		myGLCD.print("A", CENTER, 80);
-		myGLCD.print("  ", CENTER, 105);
-		myGLCD.printNumI(i_step, CENTER, 105);
+      myGLCD.print("A", CENTER, 80);
+      myGLCD.print("  ", CENTER, 105);
+      if (i_step == 39 || i_step == 40 ||  i_step == 41)
+      {
+        myGLCD.print("1", CENTER, 105);
+      }
+      else
+      {
+        myGLCD.printNumI(i_step, CENTER, 105);
+      }
     }
-    else if (digitalRead(A9) == LOW)
+    else if (digitalRead(Chanal_A) == LOW)
     {
       myGLCD.print("B", CENTER, 80);
       myGLCD.print("  ", CENTER, 105);
-      myGLCD.printNumI(i_step, CENTER, 105);
+      if (i_step == 39 || i_step == 40 ||  i_step == 41)
+      {
+        myGLCD.print("1", CENTER, 105);
+      }
+      else
+      {
+        myGLCD.printNumI(i_step, CENTER, 105);
+      }
     }
     i_step++;
-    if (i_step == 49) i_step = 1;
+    if (i_step == 42) i_step = 1;
   }
 }
 void kommut_off()
@@ -3471,6 +3438,10 @@ void info_table4()
 	myGLCD.setBackColor( 0, 0, 0);
 }
 
+
+
+//==============================================================================
+
 void set_adr_EEPROM()
 {
   adr_memN1_1 = 100;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №1А, №1В
@@ -3484,10 +3455,25 @@ void set_adr_EEPROM()
   //adr_memN2_4 = adr_memN1_1+sizeof(connektN1_default)+1;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №4А, №4В
   //
 }
-
+void setup_pin()
+{
+	pinMode(led_Red, OUTPUT);                             //
+	pinMode(led_Green, OUTPUT);                           //
+	digitalWrite(led_Red, HIGH);                          //
+	digitalWrite(led_Green, LOW);                         //
+	pinMode(Chanal_A, INPUT);                                   // Выход коммутаторов блока А
+	pinMode(Chanal_B, INPUT);                                   // Выход коммутаторов блока В
+	pinMode(Rele1 , OUTPUT);                             //
+	pinMode(Rele2 , OUTPUT);                             //
+	pinMode(Rele2 , OUTPUT);                             //
+	digitalWrite(Rele1 , LOW);                         //
+	digitalWrite(Rele2 , LOW);                         //
+	digitalWrite(Rele3 , LOW);                         //
+}
 void setup_mcp()
 {
   // Настройка расширителя портов
+
   mcp_Out1.begin(1);                               //  Адрес (4) второго  расширителя портов
   mcp_Out1.pinMode(0, OUTPUT);                     //  1A1
   mcp_Out1.pinMode(1, OUTPUT);                     //  1B1
@@ -3523,14 +3509,16 @@ void setup_mcp()
   mcp_Out2.pinMode(11, OUTPUT);                    //  2E4   U16
   mcp_Out2.pinMode(12, OUTPUT);                    //  2E5   U20
   mcp_Out2.pinMode(13, OUTPUT);                    //  2E6   U24
-  mcp_Out2.pinMode(14, OUTPUT);                    //  2E7   Свободен
+  mcp_Out2.pinMode(14, OUTPUT);                    //  2E7   Реле №1, №2
   mcp_Out2.pinMode(15, OUTPUT);                    //  2E8   Свободен
   for (int i = 0; i < 16; i++)
   {
     mcp_Out1.digitalWrite(i, HIGH);
     mcp_Out2.digitalWrite(i, HIGH);
   }
+  //mcp_Out2.digitalWrite(14, LOW);                 // Отключить реле
 }
+
 void setup_regModbus()
 {
   regBank.setId(1);    // Slave ID 1
@@ -3636,52 +3624,51 @@ void setup_regModbus()
 
 void setup()
 {
-	pinMode(LedGreen, OUTPUT);
-	pinMode(LedRed, OUTPUT);
-	pinMode(Rale1, OUTPUT);
-	pinMode(Rale2, OUTPUT);
-	pinMode(Rale3, OUTPUT);
-	digitalWrite(LedGreen, HIGH);                             //
-	digitalWrite(LedRed, LOW);                              //
+  myGLCD.InitLCD();
+  myGLCD.clrScr();
+  myGLCD.setFont(BigFont);
+  myTouch.InitTouch();
+  delay(1000);
+  //myTouch.setPrecision(PREC_MEDIUM);
+  myTouch.setPrecision(PREC_HI);
+  //myTouch.setPrecision(PREC_EXTREME);
+  myButtons.setTextFont(BigFont);
+  myButtons.setSymbolFont(Dingbats1_XL);
+  Serial.begin(9600);                                    // Подключение к USB ПК
+  Serial1.begin(115200);                                 // Подключение к
+  slave.setSerial(3, 57600);                             // Подключение к протоколу MODBUS компьютера Serial3
+  Serial2.begin(115200);                                 // Подключение к
+  setup_pin();
+  Wire.begin();
+  if (!RTC.begin())                                      // Настройка часов
+  {
+    Serial.println("RTC failed");
+    while (1);
+  };
+  //DateTime set_time = DateTime(16, 3, 15, 10, 19, 0);  // Занести данные о времени в строку "set_time" год, месяц, число, время...
+  //RTC.adjust(set_time);                                // Записать дату
+  Serial.println(" ");
+  Serial.println(" ***** Start system  *****");
+  Serial.println(" ");
+  //set_time();
+  serial_print_date();
+  setup_mcp();                                          // Настроить порты расширения
+  //mcp_Out2.digitalWrite(15, LOW);                     // Выключить реле подключения "земли" от блока проверки//
+  //mcp_Out2.digitalWrite(14, LOW);                     // Отключить реле питания +12в. от блока проверки
+  MsTimer2::set(300, flash_time);                       // 300ms период таймера прерывани
+  setup_regModbus();
 
-	digitalWrite(Rale1, LOW);                              //
-	digitalWrite(Rale2, LOW);                              //
-	digitalWrite(Rale3, LOW);  
-	myGLCD.InitLCD();
-	myGLCD.clrScr();
-	myGLCD.setFont(BigFont);
-	myTouch.InitTouch();
-	delay(1000);
-	//myTouch.setPrecision(PREC_MEDIUM);
-	myTouch.setPrecision(PREC_HI);
-	//myTouch.setPrecision(PREC_EXTREME);
-	myButtons.setTextFont(BigFont);
-	myButtons.setSymbolFont(Dingbats1_XL);
-	Serial.begin(9600);                                    // Подключение к USB ПК
-	Serial1.begin(115200);                                 // Подключение к
-	slave.setSerial(3, 57600);                             // Подключение к протоколу MODBUS компьютера Serial3
-	Serial2.begin(115200);                                 // Подключение к
-	Wire.begin();
-	if (!RTC.begin())                                      // Настройка часов
-	{
-	Serial.println("RTC failed");
-	while (1);
-	};
-	//DateTime set_time = DateTime(16, 3, 15, 10, 19, 0);  // Занести данные о времени в строку "set_time" год, месяц, число, время...
-	//RTC.adjust(set_time);                                // Записать дату
-	Serial.println(" ");
-	Serial.println(" ***** Start system  *****");
-	Serial.println(" ");
-	//set_time();
-	serial_print_date();
-	setup_mcp();                                          // Настроить порты расширения
-
-	setup_regModbus();
-	set_adr_EEPROM();
-	Serial.println(" ");                                   //
-	Serial.println("System initialization OK!.");          // Информация о завершении настройки
+  Serial.print(F("FreeRam: "));
+  Serial.println(FreeRam());
+  wait_time_Old =  millis();
+  digitalWrite(led_Green, HIGH);                          //
+  digitalWrite(led_Red, LOW);                           //
+  set_adr_EEPROM();
+  Serial.println(" ");                                   //
+  Serial.println("System initialization OK!.");          // Информация о завершении настройки
 
 }
+
 void loop()
 {
   draw_Glav_Menu();

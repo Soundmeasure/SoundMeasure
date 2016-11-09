@@ -124,7 +124,6 @@ void test_cabel_N1();
 void test_cabel_N2();
 void test_cabel_N3();
 void test_cabel_N4();
-void table_cont1();
 void test_cabel_N1_run();
 void test_cabel_N2_run();
 void test_cabel_N3_run();
@@ -139,6 +138,7 @@ void info_table2();
 void info_table3();
 void info_table4();
 void set_adr_EEPROM();
+void setup_pin();
 void setup_mcp();
 void setup_regModbus();
 //
@@ -156,6 +156,7 @@ byte calcDOW(byte d, byte m, int y);
 void waitForTouchRelease();
 
 #include <ArduinoCabelTST.ino>
+#include <Globals.h>
 #include <setTimeDate.ino>
 #include <utils.ino>
 #endif
