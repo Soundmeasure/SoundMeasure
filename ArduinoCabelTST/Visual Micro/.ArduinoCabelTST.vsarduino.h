@@ -130,7 +130,6 @@ void test_cabel_N3_run();
 void test_cabel_N4_run();
 void test_all_pin();
 void kommut_off();
-void disp_clear();
 void table_cont();
 void table_run(int tab_n);
 void info_table1();
