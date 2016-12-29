@@ -48,6 +48,7 @@ VisualMicro
 MCP23017 mcp_Out1;                                       // Назначение портов расширения MCP23017  4 A - Out, B - Out
 MCP23017 mcp_Out2;                                       // Назначение портов расширения MCP23017  6 A - Out, B - Out
 
+//#define pgm_read_word()
 
 //+++++++++++++++++++ MODBUS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -205,6 +206,7 @@ const char  txt__cont8_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N8 - He""\xA4""!
 const char  txt__cont9_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N9 - He""\xA4""!";                                        // Конт. N9 - Нет!
 
 char buffer[40];
+
 const char* const table_message[] PROGMEM =
 {
   txt_head_instr,          // 0 "=========";                                                              // ================  
@@ -640,7 +642,7 @@ void AnalogClock()
   {
     if (oldsec != second)
     {
-      if ((second == 0) and (minute == 0) and (hour == 0))
+      if ((second == 0) && (minute == 0) && (hour == 0))
       {
         clearDate();
         printDate();
@@ -867,7 +869,7 @@ void drawButtons1() // Отображение цифровой клавиатуры
   myGLCD.fillRoundRect (10, 130, 120, 180);
   myGLCD.setColor(255, 255, 255);
   myGLCD.drawRoundRect (10, 130, 120, 180);
-  strcpy_P(buffer, (char*)pgm_read_word(&(table_message[8])));
+  strcpy_P(buffer,(char*)pgm_read_word(&(table_message[8])));
   myGLCD.print(buffer, 20, 147);                                   // "Отмена"
 
 
@@ -1911,7 +1913,7 @@ int search_cabel(int sc)
   pinMode(Chanal_B, INPUT);                                                         // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
   digitalWrite(Chanal_B, HIGH);                                                     // Установить высокий уровень на выводе Chanal_B
   int n_connect = 0;
-
+  Serial.println(sc);
   switch (sc)
   {
     case 1:
@@ -1925,11 +1927,10 @@ int search_cabel(int sc)
       }
       break;
     case 39:
-
       set_komm_mcp('A', 39, 'O');
       set_komm_mcp('B', 39, 'O');
-	  //set_komm_mcp('A', 39, 'O');
-	  //set_komm_mcp('B', 19, 'O');
+	  Serial.println(sc);
+	  Serial.println(digitalRead(Chanal_B));
       if (digitalRead(Chanal_B) == LOW )
       {
         n_connect = 3;
@@ -1958,7 +1959,7 @@ int search_cabel(int sc)
       }
       break;
   }
-  if (n_connect == 0) Serial.println("Connector is not detected");
+  if (n_connect == 0) Serial.println(F("Connector is not detected"));
   return n_connect;
 }
 
@@ -3462,7 +3463,7 @@ void setup_mcp()
 {
   // Настройка расширителя портов
 
-  mcp_Out1.begin(1);                               //  Адрес (4) второго  расширителя портов
+  mcp_Out1.begin(1);                               //  Адрес (1) U6 первого  расширителя портов
   mcp_Out1.pinMode(0, OUTPUT);                     //  1A1
   mcp_Out1.pinMode(1, OUTPUT);                     //  1B1
   mcp_Out1.pinMode(2, OUTPUT);                     //  1C1
@@ -3472,16 +3473,16 @@ void setup_mcp()
   mcp_Out1.pinMode(6, OUTPUT);                     //  1C2
   mcp_Out1.pinMode(7, OUTPUT);                     //  1D2
 
-  mcp_Out1.pinMode(8, OUTPUT);                     //  1E1   U13
-  mcp_Out1.pinMode(9, OUTPUT);                     //  1E2   U17
-  mcp_Out1.pinMode(10, OUTPUT);                    //  1E3   U23
-  mcp_Out1.pinMode(11, OUTPUT);                    //  1E4   U14
-  mcp_Out1.pinMode(12, OUTPUT);                    //  1E5   U19
-  mcp_Out1.pinMode(13, OUTPUT);                    //  1E6   U21
+  mcp_Out1.pinMode(8, OUTPUT);                     //  1E1   U13  порты А in/out
+  mcp_Out1.pinMode(9, OUTPUT);                     //  1E2   U17  порты А in/out
+  mcp_Out1.pinMode(10, OUTPUT);                    //  1E3   U23  порты А in/out
+  mcp_Out1.pinMode(11, OUTPUT);                    //  1E4   U14  порты А GND
+  mcp_Out1.pinMode(12, OUTPUT);                    //  1E5   U19  порты А GND
+  mcp_Out1.pinMode(13, OUTPUT);                    //  1E6   U21  порты А GND
   mcp_Out1.pinMode(14, OUTPUT);                    //  1E7   Свободен
   mcp_Out1.pinMode(15, OUTPUT);                    //  1E8   Свободен
 
-  mcp_Out2.begin(2);                               //
+  mcp_Out2.begin(2);                               //  Адрес (2) U9 второго  расширителя портов
   mcp_Out2.pinMode(0, OUTPUT);                     //  2A1
   mcp_Out2.pinMode(1, OUTPUT);                     //  2B1
   mcp_Out2.pinMode(2, OUTPUT);                     //  2C1
@@ -3491,12 +3492,12 @@ void setup_mcp()
   mcp_Out2.pinMode(6, OUTPUT);                     //  2C2
   mcp_Out2.pinMode(7, OUTPUT);                     //  2D2
 
-  mcp_Out2.pinMode(8, OUTPUT);                     //  2E1   U15
-  mcp_Out2.pinMode(9, OUTPUT);                     //  2E2   U18
-  mcp_Out2.pinMode(10, OUTPUT);                    //  2E3   U22
-  mcp_Out2.pinMode(11, OUTPUT);                    //  2E4   U16
-  mcp_Out2.pinMode(12, OUTPUT);                    //  2E5   U20
-  mcp_Out2.pinMode(13, OUTPUT);                    //  2E6   U24
+  mcp_Out2.pinMode(8, OUTPUT);                     //  2E1   U15  порты B in/out
+  mcp_Out2.pinMode(9, OUTPUT);                     //  2E2   U18  порты B in/out
+  mcp_Out2.pinMode(10, OUTPUT);                    //  2E3   U22  порты B in/out
+  mcp_Out2.pinMode(11, OUTPUT);                    //  2E4   U16  порты B GND
+  mcp_Out2.pinMode(12, OUTPUT);                    //  2E5   U20  порты B GND
+  mcp_Out2.pinMode(13, OUTPUT);                    //  2E6   U24  порты B GND
   mcp_Out2.pinMode(14, OUTPUT);                    //  2E7   Реле №1, №2
   mcp_Out2.pinMode(15, OUTPUT);                    //  2E8   Свободен
   for (int i = 0; i < 16; i++)
@@ -3630,13 +3631,13 @@ void setup()
   Wire.begin();
   if (!RTC.begin())                                      // Настройка часов
   {
-    Serial.println("RTC failed");
+    Serial.println(F("RTC failed"));
     while (1);
   };
   //DateTime set_time = DateTime(16, 3, 15, 10, 19, 0);  // Занести данные о времени в строку "set_time" год, месяц, число, время...
   //RTC.adjust(set_time);                                // Записать дату
   Serial.println(" ");
-  Serial.println(" ***** Start system  *****");
+  Serial.println(F(" ***** Start system  *****"));
   Serial.println(" ");
   //set_time();
   serial_print_date();
@@ -3653,7 +3654,7 @@ void setup()
   digitalWrite(led_Red, LOW);                           //
   set_adr_EEPROM();
   Serial.println(" ");                                   //
-  Serial.println("System initialization OK!.");          // Информация о завершении настройки
+  Serial.println(F("System initialization OK!."));          // Информация о завершении настройки
 
 }
 
