@@ -20,9 +20,6 @@
     <None Include="utils.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Globals.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="__vm\.ArduinoCabelTST.vsarduino.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>

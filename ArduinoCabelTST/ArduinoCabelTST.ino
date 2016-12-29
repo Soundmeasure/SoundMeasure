@@ -1925,8 +1925,11 @@ int search_cabel(int sc)
       }
       break;
     case 39:
+
       set_komm_mcp('A', 39, 'O');
-      set_komm_mcp('B', 19, 'O');
+      set_komm_mcp('B', 39, 'O');
+	  //set_komm_mcp('A', 39, 'O');
+	  //set_komm_mcp('B', 19, 'O');
       if (digitalRead(Chanal_B) == LOW )
       {
         n_connect = 3;
@@ -2588,9 +2591,9 @@ void test_cabel_N2_run()
 void test_cabel_N3_run()
 {
   byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3);        // Получить количество выводов проверяемого разъема
-  pinMode(Chanal_A, OUTPUT);                                                         // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
-  pinMode(Chanal_B, INPUT);                                                          // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-  digitalWrite(Chanal_B, HIGH);                                                      // Установить высокий уровень на выводе Chanal_B
+  pinMode(Chanal_A, OUTPUT);                                                   // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+  pinMode(Chanal_B, INPUT);                                                    // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
+  digitalWrite(Chanal_B, HIGH);                                                // Установить высокий уровень на выводе Chanal_B
   myGLCD.print("                    ", 1, 40);                                 // Очистить строчку результатов проверки
   byte canal_N     = 0;                                                        // Переменная хранения № канала в памяти
   unsigned int x_A = 1;                                                        // Переменная установления канала А
@@ -2601,7 +2604,7 @@ void test_cabel_N3_run()
   int ware_on      = 0;                                                        // Проверка должно ли быть сединение
   for (int p = 0; p < 6; p++)                                                  // Очистить поле ошибок на дисплее
   {
-    myGLCD.print("                    ", x_p, y_p);                          // Очистить 6 строк
+    myGLCD.print("                    ", x_p, y_p);                           // Очистить 6 строк
     y_p += 19;
   }
   y_p = 82;                                                                    // Восстановить начало вывода ошибок по У
@@ -2609,16 +2612,16 @@ void test_cabel_N3_run()
   myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
   if (search_cabel(39) == 3)                                                   // Проверить корректность подключения кабеля №1
   {
-    digitalWrite(Chanal_A, LOW);                                                   // Установить контрольный уровень на коммутаторах U13,U17,U23
-    delay(10);                                                               // Время на переключение вывода Chanal_A
-    for (x_A = 1; x_A < _size_block + 1; x_A++)                              // Последовательное чтение контактов разьемов.
+    digitalWrite(Chanal_A, LOW);                                               // Установить контрольный уровень на коммутаторах U13,U17,U23
+    delay(10);                                                                 // Время на переключение вывода Chanal_A
+    for (x_A = 1; x_A < _size_block + 1; x_A++)                                // Последовательное чтение контактов разьемов.
     {
-      canal_N = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3 + x_A);    // Получить № канала из EEPROM
+      canal_N = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3 + x_A);        // Получить № канала из EEPROM
       ware_on = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3 + x_A + (_size_block * 4)); // Получить из таблицы признак соединения.
 
-      if (canal_N == 1)                                                    // 40 канал для проверки номера проверяемого разъема
+      if (canal_N == 1)                                                        // 40 канал для проверки номера проверяемого разъема
       {
-        set_komm_mcp('A', 39, 'O');                                      // Установить вход коммутатора на контрольный 40 выход
+        set_komm_mcp('A', 39, 'O');                                             // Установить вход коммутатора на контрольный 40 выход
       }
       else
       {
@@ -2630,7 +2633,7 @@ void test_cabel_N3_run()
       {
         canal_N = i2c_eeprom_read_byte(deviceaddress, adr_memN1_3 + x_B + _size_block); // Получить из таблицы номер входа коммутатора.
 
-        if (canal_N == 1)                                                // 40 канал для проверки номера проверяемого разъема
+        if (canal_N == 1)                                                // 39 канал для проверки номера проверяемого разъема
         {
           set_komm_mcp('B', 39, 'O');                                  // Установить контрольный вход коммутатора
         }
@@ -3009,7 +3012,7 @@ void test_all_pin()
     delay(10);
     if (digitalRead(Chanal_B) == LOW)
     {
-      myGLCD.print("A", CENTER, 80);
+      myGLCD.print("B", CENTER, 80);
       myGLCD.print("  ", CENTER, 105);
       if (i_step == 39 || i_step == 40 ||  i_step == 41)
       {
@@ -3022,7 +3025,7 @@ void test_all_pin()
     }
     else if (digitalRead(Chanal_A) == LOW)
     {
-      myGLCD.print("B", CENTER, 80);
+      myGLCD.print("A", CENTER, 80);
       myGLCD.print("  ", CENTER, 105);
       if (i_step == 39 || i_step == 40 ||  i_step == 41)
       {
