@@ -1,0 +1,3 @@
+﻿Compiling 'ArduinoCabelTST' for 'Arduino/Genuino Mega w/ ATmega2560 (Mega 2560)'
+Binary sketch size: 92 922 bytes (used 37% of a 253 952 byte maximum) (1,60 secs)
+Minimum Memory Usage: 2764 bytes (34% of a 8192 byte maximum)
