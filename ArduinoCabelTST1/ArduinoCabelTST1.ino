@@ -18,7 +18,6 @@ VisualMicro
  - подключены часы, память, 
 
 
-
 */
 
 #include <SPI.h>
