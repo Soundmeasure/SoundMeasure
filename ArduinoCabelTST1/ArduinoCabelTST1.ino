@@ -3932,9 +3932,9 @@ void search_contacts()
 			myGLCD.print("-", x_p + 29,40);
 		}
 		
-		for(int i = 0;i<4;i++)                                                // Проверить на парралельное включение контактов
+		for(int i = 0;i < 4; i++)                                                // Проверить на парралельное включение контактов
 		{																	  // Последовательно проверить все вывода разьема "В"
-																			  // Проверяем все выхода разьема "В"
+			/*																  // Проверяем все выхода разьема "В"
 			for (x_B = 1; x_B < _size_block + 1; x_B++)                       // Последовательное чтение контактов разьемов "В" .
 			{
 				set_komm_mcp('B', x_B, 'O');                                      // Установить текущий вход коммутатора
@@ -3943,18 +3943,21 @@ void search_contacts()
 				if (digitalRead(Chanal_B) == LOW)                            // вывод на экран при соединение проводов 
 				{
 					i2c_eeprom_write_byte(deviceaddress, adr_block + x_A + (_size_block*i), x_B);             // Записать номер контакта в таблицу с учетом варианта кабеля
-					/*
-					if (x_A < 10)
-					{
-						myGLCD.printNumI(x_A, x_p + 13, y_p);            // Перечисление  контактов
-						myGLCD.print("-", x_p + 29, y_p);
-					}
-					else
-					{
-						myGLCD.printNumI(x_A, x_p, y_p);                 // Перечисление   контактов
-						myGLCD.print("-", x_p + 29, y_p);
-					}
-					*/
+					Serial.print(adr_block + x_A + (_size_block*i)); Serial.print("\t"); Serial.print( x_A ); Serial.print("\t"); Serial.println(x_B);
+
+					//
+					//if (x_A < 10)
+					//{
+					//	myGLCD.printNumI(x_A, x_p + 13, y_p);            // Перечисление  контактов
+					//	myGLCD.print("-", x_p + 29, y_p);
+					//}
+					//else
+					//{
+					//	myGLCD.printNumI(x_A, x_p, y_p);                 // Перечисление   контактов
+					//	myGLCD.print("-", x_p + 29, y_p);
+					//}
+					//
+		
 					if (x_B < 10)
 					{
 						myGLCD.printNumI(x_B, (x_p+(40*i)) + 32 + 26, 40);       // Перечисление   контактов
@@ -3969,50 +3972,52 @@ void search_contacts()
 				{
 					
 					i2c_eeprom_write_byte(deviceaddress, adr_block + x_A + (_size_block*i), 0);             // Записать номер контакта в таблицу с учетом варианта кабеля
-					
-					/*if (x_A < 10)
-					{
-						myGLCD.printNumI(x_A, x_p + 13, y_p);            // Перечисление   контактов
-						myGLCD.print("-", x_p + 29, y_p);
-					}
-					else
-					{
-						myGLCD.printNumI(x_A, x_p, y_p);                 // Перечисление   контактов
-						myGLCD.print("-", x_p + 29, y_p);
-					}
-					if (x_B < 10)
-					{
-						myGLCD.print("X", x_p + 32 + 26, y_p);   // Перечисление   контактов
-					}
-					else
-					{
-						myGLCD.print("X", x_p + 32 + 26, y_p);   // Перечисление   контактов
-					}
-					*/
+					Serial.print(adr_block + x_A + (_size_block*i)); Serial.print("\t"); Serial.print(x_A); Serial.print("\t"); Serial.println(0);
+					//if (x_A < 10)
+					//{
+					//	myGLCD.printNumI(x_A, x_p + 13, y_p);            // Перечисление   контактов
+					//	myGLCD.print("-", x_p + 29, y_p);
+					//}
+					//else
+					//{
+					//	myGLCD.printNumI(x_A, x_p, y_p);                 // Перечисление   контактов
+					//	myGLCD.print("-", x_p + 29, y_p);
+					//}
+					//if (x_B < 10)
+					//{
+					//	myGLCD.print("X", x_p + 32 + 26, y_p);   // Перечисление   контактов
+					//}
+					//else
+					//{
+					//	myGLCD.print("X", x_p + 32 + 26, y_p);   // Перечисление   контактов
+					//}
+					//
 				}
-				/*
-				y_p += 19;
-				Serial.print(x_p);
-				Serial.print(" - ");
-				Serial.println(y_p);
-				if (x_p > 320)
-				{
-					myGLCD.setColor(0, 0, 0);
-					myGLCD.fillRoundRect(1, 1, 319, 209);
-					myGLCD.setColor(255, 255, 255);
-					x_p = 1;
-					y_p = 1;
-				}
+				
+				//y_p += 19;
+				//Serial.print(x_p);
+				//Serial.print(" - ");
+				//Serial.println(y_p);
+				//if (x_p > 320)
+				//{
+				//	myGLCD.setColor(0, 0, 0);
+				//	myGLCD.fillRoundRect(1, 1, 319, 209);
+				//	myGLCD.setColor(255, 255, 255);
+				//	x_p = 1;
+				//	y_p = 1;
+				//}
 
-				if (y_p > 209)                                          // Вывод на экран таблицы ошибок
-				{
-					myGLCD.drawLine(x_p + 75, 1, x_p + 75, 209);
-					x_p += 80;
-					y_p = 1;
-				}
-				*/
+				//if (y_p > 209)                                          // Вывод на экран таблицы ошибок
+				//{
+				//	myGLCD.drawLine(x_p + 75, 1, x_p + 75, 209);
+				//	x_p += 80;
+				//	y_p = 1;
+				//}
+				
 			}
+			*/
 		}
+		
 	}
 
 	myGLCD.setColor(0, 255, 0);
