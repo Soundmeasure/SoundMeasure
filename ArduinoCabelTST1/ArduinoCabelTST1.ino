@@ -140,25 +140,25 @@ char  txt_menu2_1[]            = "Tec""\xA4"" ""\x80""BC";                      
 char  txt_menu2_2[]            = "=========";                                                              // ================      
 char  txt_menu2_3[]            = "=========";                                                              // ================      
 char  txt_menu2_4[]            = "=========";                                                              // ================  
-char  txt_menu3_1[]            = "Ta""\x96\xA0\x9D\xA6""a coe""\x99"".";                                   // Таблица соед.
-char  txt_menu3_2[]            = "*******";//"Pe""\x99""a""\x9F\xA4"". ""\xA4""a""\x96\xA0\x9D\xA6";       // Редакт. таблиц
-char  txt_menu3_3[]            = "\x85""a""\x98""py""\x9C"".\xA4""a""\x96\xA0\x9D\xA6";//"\x85""a""\x98""py""\x9C"". y""\xA1""o""\xA0\xA7"".";                     // Загруз. умолч.
-char  txt_menu3_4[]            = "Bpe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";                             // Время простоя
-char  txt_menu4_1[]            = "=========";                                                              // ================      
-char  txt_menu4_2[]            = "=========";                                                              // ================      
-char  txt_menu4_3[]            = "=========";                                                              // ================  
-char  txt_menu4_4[]            = "=========";                                                              // ================  
+char  txt_menu3_1[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAC"" N1";                   // Копия кабель N 1
+char  txt_menu3_2[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAC"" N2";                   // Копия кабель N 2
+char  txt_menu3_3[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAC"" N3";                   // Копия кабель N 3 
+char  txt_menu3_4[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";                   // Копия кабель N 4
+char  txt_menu4_1[]            = "Ta""\x96\xA0\x9D\xA6""a coe""\x99"".";                                   // Таблица соед.
+char  txt_menu4_2[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAF";                        // Копия кабеля
+char  txt_menu4_3[]            = "\x85""a""\x98""py""\x9C"".\xA4""a""\x96\xA0\x9D\xA6";//"\x85""a""\x98""py""\x9C"". y""\xA1""o""\xA0\xA7"".";                     // Загруз. умолч.
+char  txt_menu4_4[]            = "Tec""\xA4"" pa""\x9C\xAA""e""\xA1""o""\x97";                             // Тест разъемов 
 char  txt_menu5_1[]            = "=========";                                                              // ================  
 char  txt_menu5_2[]            = "=========";                                                              // ================  
-char  txt_menu5_3[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAF";                        // Копия кабеля
-char  txt_menu5_4[]            = "Tec""\xA4"" pa""\x9C\xAA""e""\xA1""o""\x97";                             // Тест разъемов 
+char  txt_menu5_3[]            = "=========";                                                              // ================  
+char  txt_menu5_4[]            = "Bpe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";                             // Время простоя
 
 const char  txt_head_instr[]        PROGMEM  = "=========";                                                              // ================  
 const char  txt_head_disp[]         PROGMEM  = "=========";                                                              // ================  
 const char  txt_info1[]             PROGMEM  = "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                    // Тест кабелей
 const char  txt_info2[]             PROGMEM  = "=========";                                                              // ================  
-const char  txt_info3[]             PROGMEM  = "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы
-const char  txt_info4[]             PROGMEM  = "=========";                                                              // ================  
+const char  txt_info3[]             PROGMEM  = "Tec""\xA4"" o""\x96""y""\xA7"". ""\xA4""a""\x96\xA0\x9D\xA6""ax ";       // Тест по обуч. таблицах 
+const char  txt_info4[]             PROGMEM  = "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы 
 const char  txt_info5[]             PROGMEM  = "=========";                                                              // ================  
 const char  txt_MTT[]               PROGMEM  = "=========";                                                              // ================  
 const char  txt_botton_otmena[]     PROGMEM  = "O""\xA4\xA1""e""\xA2""a";                                                // "Отмена"
@@ -222,8 +222,8 @@ const char* const table_message[] PROGMEM =
   txt_head_disp,           // 1 "=========";                                                              // ================  
   txt_info1,               // 2 "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                    // Тест кабелей
   txt_info2,               // 3 "=========";                                                              // ================  
-  txt_info3,               // 4 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы
-  txt_info4,               // 5 "=========";                                                              // ================  
+  txt_info3,               // 4 "Tec""\xA4"" ""\xA3""o o""\x96""y""\xA7"". ""\xA4""a""\x96\xA0\x9D\xA6""ax "; // Тест по обуч. таблицах 
+  txt_info4,               // 5 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы   
   txt_info5,               // 6 "=========";                                                              // ================  
   txt_MTT,                 // 7 "=========";                                                              // ================  
   txt_botton_otmena,       // 8 " ";                                                                      //
@@ -1328,7 +1328,7 @@ void swichMenu()                                             // Тексты меню в ст
 	  //*****************  Меню №3  **************
 	  if (pressed_button == but1 && m2 == 3)                 // Первый пункт меню 3
 	  {
-		 table_cont();
+	
 		 myGLCD.clrScr();                                    // Очистить экран
 		 myButtons.drawButtons();
 		 print_up();
@@ -1347,8 +1347,6 @@ void swichMenu()                                             // Тексты меню в ст
 	  if (pressed_button == but3 && m2 == 3)                 // Третий пункт меню 3
 	  {
 		myGLCD.clrScr();
-		save_tab_def();
-		myGLCD.clrScr();
 		myButtons.drawButtons();
 		print_up();
 	  }
@@ -1356,24 +1354,6 @@ void swichMenu()                                             // Тексты меню в ст
 	  //------------------------------------------------------------------
 	  if (pressed_button == but4 && m2 == 3)                 // Четвертый пункт меню 3
 	  {
-		myGLCD.clrScr();
-		myGLCD.setFont(BigFont);
-		myGLCD.setBackColor(0, 0, 255);
-		myGLCD.clrScr();
-		drawButtons1();                                      // Нарисовать цифровую клавиатуру
-		myGLCD.printNumI(time_minute, LEFT, 208);
-		strcpy_P(buffer, (char*)pgm_read_word(&(table_message[14])));
-		myGLCD.print(buffer, 35, 208);                       // txt_time_wait
-		klav123();                                           // Считать информацию с клавиатуры
-		if (ret == 1)                                        // Если "Возврат" - закончить
-		{
-		  goto bailout41;                                    // Перейти на окончание выполнения пункта меню
-		}
-		else                                                 // Иначе выполнить пункт меню
-		{
-		  time_minute = atol(stLast);
-		}
-	   bailout41:                                            // Восстановить пункты меню
 		myGLCD.clrScr();
 		myButtons.drawButtons();
 		print_up();
@@ -1383,46 +1363,36 @@ void swichMenu()                                             // Тексты меню в ст
 
 	  if (pressed_button == but1 && m2 == 4) //
 	  {
-
-		myGLCD.clrScr();   // Очистить экран
-		//	myGLCD.print(txt_pass_ok, RIGHT, 208);
-		delay (500);
-
-		myButtons.drawButtons();
-		print_up();
-		//
-
+		  table_cont();
+		  myGLCD.clrScr();                                    // Очистить экран
+		  myButtons.drawButtons();
+		  print_up();
 	  }
 
 	  if (pressed_button == but2 && m2 == 4)
 	  {
-
-		myGLCD.clrScr();
-		//	myGLCD.print(txt_pass_ok, RIGHT, 208);
-		delay (500);
-
-		myButtons.drawButtons();
-		print_up();
+		  myGLCD.clrScr();                                     // Очистить экран
+		  copy_cable();
+		  myGLCD.clrScr();                                     // Очистить экран
+		  myButtons.drawButtons();
+		  print_up();;
 	  }
 
 	  if (pressed_button == but3 && m2 == 4) //
 	  {
-
-		myGLCD.clrScr();
-		//	myGLCD.print(txt_pass_ok, RIGHT, 208);
-		delay (500);
-
-		myButtons.drawButtons();
-		print_up();
+		  myGLCD.clrScr();
+		  save_tab_def();
+		  myGLCD.clrScr();
+		  myButtons.drawButtons();
+		  print_up();
 	  }
 	  if (pressed_button == but4 && m2 == 4) //
 	  {
-		myGLCD.clrScr();
-		//	myGLCD.print(txt_pass_ok, RIGHT, 208);
-		delay (500);
-
-		myButtons.drawButtons();
-		print_up();
+		  // Тест входов всех разъемов
+		  test_all_pin();
+		  myGLCD.clrScr();
+		  myButtons.drawButtons();
+		  print_up();
 	  }
 	  //*****************  Меню №5  **************
 
@@ -1446,20 +1416,34 @@ void swichMenu()                                             // Тексты меню в ст
 
 	  if (pressed_button == but3 && m2 == 5)                 // Ввод 
 	  {
-		myGLCD.clrScr();                                     // Очистить экран
-		copy_cable();
-		myGLCD.clrScr();                                     // Очистить экран
-		myButtons.drawButtons();
-		print_up();
+		  myGLCD.clrScr();
+		  myButtons.drawButtons();
+		  print_up();
 	  }
 
 	  if (pressed_button == but4 && m2 == 5) //
 	  {
-		// Тест входов всех разъемов
-		test_all_pin();
-		myGLCD.clrScr();
-		myButtons.drawButtons();
-		print_up();
+		  myGLCD.clrScr();
+		  myGLCD.setFont(BigFont);
+		  myGLCD.setBackColor(0, 0, 255);
+		  myGLCD.clrScr();
+		  drawButtons1();                                      // Нарисовать цифровую клавиатуру
+		  myGLCD.printNumI(time_minute, LEFT, 208);
+		  strcpy_P(buffer, (char*)pgm_read_word(&(table_message[14])));
+		  myGLCD.print(buffer, 35, 208);                       // txt_time_wait
+		  klav123();                                           // Считать информацию с клавиатуры
+		  if (ret == 1)                                        // Если "Возврат" - закончить
+		  {
+			  goto bailout41;                                    // Перейти на окончание выполнения пункта меню
+		  }
+		  else                                                 // Иначе выполнить пункт меню
+		  {
+			  time_minute = atol(stLast);
+		  }
+	  bailout41:                                            // Восстановить пункты меню
+		  myGLCD.clrScr();
+		  myButtons.drawButtons();
+		  print_up();
 	  }
 
 	  if (pressed_button == -1)
@@ -3986,7 +3970,7 @@ void search_contacts()
 			delay(300);
 		}
 	}
-
+	 
 	myGLCD.setColor(0, 255, 0);
 
 	myGLCD.print("Ha""\x9B\xA1\x9D\xA4""e ""\xA2""a ""\x99\x9D""c""\xA3\xA0""e""\x9E", CENTER, 208);  // Нажмите на дисплей
@@ -4001,11 +3985,6 @@ void search_contacts()
 			if (((y >= 1) && (y <= 239)) && ((x >= 1) && (x <= 319)))         //нажат экран
 			{
 				waitForIt(1, 1, 319, 239);
-				//myGLCD.setColor(0, 0, 0);
-				//myGLCD.fillRoundRect(1, 60, 319, 239);
-				//myGLCD.setColor(255, 255, 255);
-				//x_p = 1;                                                        //  
-				//y_p = 63;
 				break;
 			}
 		}
