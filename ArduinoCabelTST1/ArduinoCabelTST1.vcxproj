@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C5F80730-F44F-4478-BDAE-6634EFC2CA88}</ProjectGuid>
+    <ProjectGuid>{6295F849-9848-43C9-82C8-C8F235411DBE}</ProjectGuid>
     <RootNamespace>
     </RootNamespace>
     <ProjectName>ArduinoCabelTST1</ProjectName>
