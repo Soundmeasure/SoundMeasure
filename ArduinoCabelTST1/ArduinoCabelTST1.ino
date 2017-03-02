@@ -8,14 +8,7 @@ VisualMicro
 Организация:          - ООО "Децима"
 Автор:                - Мосейчук А.В.
 Дата начала работ:    - 01.09.2016г.
-Дата окончания работ: - 12.01.2017г.
-
-Реализовано:
- - Расширение MCP23017
- 
- - подключены часы, память, 
-
-
+Дата окончания работ: - 01.03.2017г.
  
 */
 
@@ -49,8 +42,6 @@ VisualMicro
 
 MCP23017 mcp_Out1;                                       // Назначение портов расширения MCP23017  4 A - Out, B - Out
 MCP23017 mcp_Out2;                                       // Назначение портов расширения MCP23017  6 A - Out, B - Out
-
-//#define pgm_read_word()
 
 //+++++++++++++++++++ MODBUS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -119,8 +110,6 @@ int stCurrentLen1     = 0;                                        // Переменная 
 char stLast[20]       = "";                                       // Данные в введенной строке строке.
 int ret               = 0;                                        // Признак прерывания операции
 //-------------------------------------------------------------------------------------------------
-
-
 
 //-------------------------------------------------------------------------------------------------------
 //Назначение переменных для хранения № опций меню (клавиш)
@@ -283,9 +272,6 @@ const char* const table_message[] PROGMEM =
 
 };
 
-
-
-
 byte   temp_buffer[40] ;                                                                                                // Буфер хранения временной информации
 
 const byte connektN1_default[]    PROGMEM  = { 20,
@@ -325,11 +311,6 @@ const byte connekBVS_default[]    PROGMEM = { 24,
 1, 1, 1, 1, 1, 1, 1, 1, 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1                    // 1- соединение есть, 0- соединения нет
 }; // 24 x 2 ячеек
 
-
-
-
-
-
 //++++++++++++++++++ Вариант № 1 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Определение адреса производится в программе  set_adr_EEPROM()
 unsigned int adr_memN1_1 = 0;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №1А, №1В
@@ -346,8 +327,6 @@ unsigned int adr_memN2_3 = 0;                       // Начальный адрес памяти та
 unsigned int adr_memN2_4 = 0;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №4А, №4В
 
 //==========================================================================================================================
-
-
 
 void serial_print_date()                           // Печать даты и времени
 {
@@ -1440,13 +1419,13 @@ void swichMenu()                                             // Тексты меню в ст
 		  klav123();                                           // Считать информацию с клавиатуры
 		  if (ret == 1)                                        // Если "Возврат" - закончить
 		  {
-			  goto bailout41;                                    // Перейти на окончание выполнения пункта меню
+			  goto bailout41;                                  // Перейти на окончание выполнения пункта меню
 		  }
 		  else                                                 // Иначе выполнить пункт меню
 		  {
 			  time_minute = atol(stLast);
 		  }
-	  bailout41:                                            // Восстановить пункты меню
+	  bailout41:                                               // Восстановить пункты меню
 		  myGLCD.clrScr();
 		  myButtons.drawButtons();
 		  print_up();
@@ -2449,7 +2428,7 @@ void test_cabel_N1_run()
 	  }
 	}
 	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[30])));
-	if (count_error == 0) myGLCD.print(buffer, CENTER, 120);                  // txt__test_end
+	if (count_error == 0) myGLCD.print(buffer, CENTER, 120);               // txt__test_end
   }
   else
   {
@@ -4253,8 +4232,6 @@ void test_cabel_soft_run(int cable_soft_run)
 	if (count_error == 0) myGLCD.print(buffer, CENTER, 120);                  // txt__test_end
 }
 
-
-
 //==============================================================================
 
 void set_adr_EEPROM()
@@ -4477,11 +4454,11 @@ void setup()
   Serial.print(F("FreeRam: "));
   Serial.println(FreeRam());
   wait_time_Old =  millis();
-  digitalWrite(led_Green, HIGH);                          //
-  digitalWrite(led_Red, LOW);                           //
+  digitalWrite(led_Green, HIGH);                          
+  digitalWrite(led_Red, LOW);                           
   set_adr_EEPROM();
-  Serial.println(" ");                                   //
-  Serial.println(F("System initialization OK!."));          // Информация о завершении настройки
+  Serial.println(" ");                                   
+  Serial.println(F("System initialization OK!."));        // Информация о завершении настройки
 
 }
 
