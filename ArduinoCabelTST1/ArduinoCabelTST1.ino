@@ -135,7 +135,7 @@ char  txt_menu3_3[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xA
 char  txt_menu3_4[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";                   // Копия кабель N 4
 char  txt_menu4_1[]            = "Ta""\x96\xA0\x9D\xA6""a coe""\x99"".";                                   // Таблица соед.
 char  txt_menu4_2[]            = "Ko""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAF";                        // Копия кабеля
-char  txt_menu4_3[]            = "\x85""a""\x98""py""\x9C"".\xA4""a""\x96\xA0\x9D\xA6";//"\x85""a""\x98""py""\x9C"". y""\xA1""o""\xA0\xA7"".";                     // Загруз. умолч.
+char  txt_menu4_3[]            = "\x85""a""\x98""py""\x9C"".\xA4""a""\x96\xA0\x9D\xA6";                    // Загруз. умолч.
 char  txt_menu4_4[]            = "Tec""\xA4"" pa""\x9C\xAA""e""\xA1""o""\x97";                             // Тест разъемов 
 char  txt_menu5_1[]            = "=========";                                                              // ================  
 char  txt_menu5_2[]            = "=========";                                                              // ================  
@@ -202,7 +202,7 @@ const char  txt__cont6_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N6 - He""\xA4""!
 const char  txt__cont7_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N7 - He""\xA4""!";                                        // Конт. N7 - Нет!
 const char  txt__cont8_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N8 - He""\xA4""!";                                        // Конт. N8 - Нет!
 const char  txt__cont9_disconnect[] PROGMEM  = "Ko""\xA2\xA4"". N9 - He""\xA4""!";                                        // Конт. N9 - Нет!
-const char  txt__test_cabel_soft[]  PROGMEM  = "Tec""\xA4"" ""\x9F""o""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAF""N";  // Тест копия кабеля N
+const char  txt__test_cabel_soft[]  PROGMEM  = "Tec""\xA4"" ""\x9F""o""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAF""N";   // Тест копия кабеля N
 
 char buffer[40];
 
@@ -269,10 +269,9 @@ const char* const table_message[] PROGMEM =
   txt__cont8_disconnect,   // 58 "Ko""\xA2\xA4"". N8 - He""\xA4""!";                                        // Конт. N8 - Нет!
   txt__cont9_disconnect,   // 59 "Ko""\xA2\xA4"". N9 - He""\xA4""!";                                        // Конт. N9 - Нет!
   txt__test_cabel_soft     // 60 "Tec""\xA4"" ""\x9F""o""\xA3\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAF"" N";  // Тест копия кабеля N
-
 };
 
-byte   temp_buffer[40] ;                                                                                                // Буфер хранения временной информации
+byte   temp_buffer[40] ;                                                                                    // Буфер хранения временной информации
 
 const byte connektN1_default[]    PROGMEM  = { 20,
 											   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,                                             // Разъем А
@@ -4231,8 +4230,6 @@ void test_cabel_soft_run(int cable_soft_run)
 	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[30])));
 	if (count_error == 0) myGLCD.print(buffer, CENTER, 120);                  // txt__test_end
 }
-
-//==============================================================================
 
 void set_adr_EEPROM()
 {
