@@ -208,46 +208,46 @@ char buffer[40];
 
 const char* const table_message[] PROGMEM =
 {
-  txt_head_instr,          // 0 "=========";                                                              // ================  
-  txt_head_disp,           // 1 "=========";                                                              // ================  
-  txt_info1,               // 2 "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                    // Тест кабелей
-  txt_info2,               // 3 "=========";                                                              // ================  
+  txt_head_instr,          // 0 "=========";                                                                // ================  
+  txt_head_disp,           // 1 "=========";                                                                // ================  
+  txt_info1,               // 2 "Tec\xA4 ""\x9F""a\x96""e\xA0""e\x9E";                                      // Тест кабелей
+  txt_info2,               // 3 "=========";                                                                // ================  
   txt_info3,               // 4 "Tec""\xA4"" ""\xA3""o o""\x96""y""\xA7"". ""\xA4""a""\x96\xA0\x9D\xA6""ax "; // Тест по обуч. таблицах 
-  txt_info4,               // 5 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                           // Настройка системы   
-  txt_info5,               // 6 "=========";                                                              // ================  
-  txt_MTT,                 // 7 "=========";                                                              // ================  
-  txt_botton_otmena,       // 8 " ";                                                                      //
-  txt_botton_vvod,         // 9 " ";                                                                      //
-  txt_botton_ret,          // 10 ""B""\xAB""x" ";                                                         //  Вых
-  txt_system_clear3,       // 11 " ";                                                                     //
-  txt9,                    // 12 "B\x97o\x99";                                                             // Ввод
-  txt10,                   // 13 "O""\xA4\xA1""e""\xA2""a";                                                // "Отмена"
-  txt_time_wait,           // 14 "\xA1\x9D\xA2"".""\x97""pe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";       //  мин. время простоя
+  txt_info4,               // 5 "Hac\xA4po\x9E\x9F""a c\x9D""c\xA4""e\xA1\xAB";                             // Настройка системы   
+  txt_info5,               // 6 "=========";                                                                // ================  
+  txt_MTT,                 // 7 "=========";                                                                // ================  
+  txt_botton_otmena,       // 8 " ";                                                                        //
+  txt_botton_vvod,         // 9 " ";                                                                        //
+  txt_botton_ret,          // 10 ""B""\xAB""x" ";                                                           //  Вых
+  txt_system_clear3,       // 11 " ";                                                                       //
+  txt9,                    // 12 "B\x97o\x99";                                                              // Ввод
+  txt10,                   // 13 "O""\xA4\xA1""e""\xA2""a";                                                 // "Отмена"
+  txt_time_wait,           // 14 "\xA1\x9D\xA2"".""\x97""pe""\xA1\xAF"" ""\xA3""poc""\xA4""o""\xAF";        //  мин. время простоя
   txt_info29,              // 15 "Stop->PUSH Disp";
   txt_info30,              // 16 " ";
-  txt_test_all,            // 17 "Tec""\xA4"" ""\x97""cex pa""\x9C\xAA""e""\xA1""o""\x97";                 // Тест всех разъемов
-  txt_test_all_exit1,      // 18 "\x82\xA0\xAF"" ""\x97\xAB""xo""\x99""a";                                 // Для выхода
+  txt_test_all,            // 17 "Tec""\xA4"" ""\x97""cex pa""\x9C\xAA""e""\xA1""o""\x97";                  // Тест всех разъемов
+  txt_test_all_exit1,      // 18 "\x82\xA0\xAF"" ""\x97\xAB""xo""\x99""a";                                  // Для выхода
   txt_test_all_exit2,      // 19 "\xA3""p""\x9D\x9F""oc""\xA2\x9D""c""\xAC"" ""\x9F"" ""\xAD\x9F""pa""\xA2""y";  // прикоснись к экрану
-  txt_test_end,            // 20 "\x85""a""\x97""ep""\xA8\x9D\xA4\xAC";                                    // Завершить
-  txt_test_repeat,         // 21 "\x89""o""\x97\xA4""op""\x9D\xA4\xAC";                                    // Повторить
-  txt_error_connect1,      // 22 "O""\x8E\x86\x80""KA";                                                    // Ошибка
+  txt_test_end,            // 20 "\x85""a""\x97""ep""\xA8\x9D\xA4\xAC";                                     // Завершить
+  txt_test_repeat,         // 21 "\x89""o""\x97\xA4""op""\x9D\xA4\xAC";                                     // Повторить
+  txt_error_connect1,      // 22 "O""\x8E\x86\x80""KA";                                                     // Ошибка
   txt_error_connect2,      // 23 "\xA3""o""\x99\x9F\xA0\xAE\xA7""e""\xA2\x9D\xAF"" ""\x9F""a""\x96""e""\xA0\xAF"; //подключения кабеля
-  txt_error_connect3,      // 24 "O""\xA8\x9D\x96""o""\x9F"" ""\xA2""e""\xA4";                             // Ошибок нет
-  txt_error_connect4,      // 25 "O""\xA8\x9D\x96""o""\x9F"" -         ";                                  // Ошибок  -
-  txt__connect1,           // 26 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N1";    // Обнаружен кабель N1
-  txt__connect2,           // 27 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N2";    // Обнаружен кабель N2
-  txt__connect3,           // 28 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N3";    // Обнаружен кабель N3
-  txt__connect4,           // 29 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";    // Обнаружен кабель N4
-  txt__test_end,           // 30 "TECT ""\x85""A""KOH""\x8D""EH";                                          // ТЕСТ ЗАКОНЧЕН
-  txt__panel,              // 31 "=========";                                                              // ================  
-  txt__panel0,             // 32 "                          ";                                             //
-  txt__disp,               // 33 "=========";                                                              // ================  
-  txt__instr,              // 34 "=========";                                                              // ================  
-  txt__MTT,                // 35 "=========";                                                              // ================  
-  txt__disp_connect,       // 36 "=========";                                                              // ================  
-  txt__disp_disconnect,    // 37 "=========";                                                              // ================  
-  txt__instr_connect,      // 38 "=========";                                                              // ================  
-  txt__instr_disconnect,   // 39 "=========";                                                              // ================  
+  txt_error_connect3,      // 24 "O""\xA8\x9D\x96""o""\x9F"" ""\xA2""e""\xA4";                              // Ошибок нет
+  txt_error_connect4,      // 25 "O""\xA8\x9D\x96""o""\x9F"" -         ";                                   // Ошибок  -
+  txt__connect1,           // 26 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N1";     // Обнаружен кабель N1
+  txt__connect2,           // 27 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N2";     // Обнаружен кабель N2
+  txt__connect3,           // 28 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N3";     // Обнаружен кабель N3
+  txt__connect4,           // 29 "O""\x96\xA2""apy""\x9B""e""\xA2"" ""\x9F""a""\x96""e""\xA0\xAC"" N4";     // Обнаружен кабель N4
+  txt__test_end,           // 30 "TECT ""\x85""A""KOH""\x8D""EH";                                           // ТЕСТ ЗАКОНЧЕН
+  txt__panel,              // 31 "=========";                                                               // ================  
+  txt__panel0,             // 32 "                          ";                                              //
+  txt__disp,               // 33 "=========";                                                               // ================  
+  txt__instr,              // 34 "=========";                                                               // ================  
+  txt__MTT,                // 35 "=========";                                                               // ================  
+  txt__disp_connect,       // 36 "=========";                                                               // ================  
+  txt__disp_disconnect,    // 37 "=========";                                                               // ================  
+  txt__instr_connect,      // 38 "=========";                                                               // ================  
+  txt__instr_disconnect,   // 39 "=========";                                                               // ================  
   txt__mtt_disconnect,     // 40 " ";                                                                       //
   txt__cont1_connect,      // 41 "Ko""\xA2\xA4"". N1 - O""\x9F";                                            // Конт. N1 - Ок
   txt__cont2_connect,      // 42 "Ko""\xA2\xA4"". N2 - O""\x9F";                                            // Конт. N2 - Ок
