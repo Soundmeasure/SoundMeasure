@@ -75,6 +75,7 @@ extern uint8_t SmallSymbolFont[];
 boolean connect_gnd1 = false;
 boolean connect_gnd2 = false;
 byte N_block = 1;
+boolean view_tab_run = false;
 
 //+++++++++++++++++++++++++++ Настройка часов +++++++++++++++++++++++++++++++
 uint8_t second = 0;                                    //Initialization time
@@ -319,6 +320,7 @@ unsigned int adr_memN1_4 = 0;                       // Начальный адрес памяти та
 
 //++++++++++++++++++ Вариант № 2 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 unsigned int adr_memN1_5 = 0;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №1А, №1В
+													
 // ++++++++++++++++++++++++++++++ Таблица для обучаемых вариантов кабеля ++++++++++++++++++++++++++++++++++++++++++++++++++
 unsigned int adr_memN2_1 = 0;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №1А, №2В
 unsigned int adr_memN2_2 = 0;                       // Начальный адрес памяти таблицы соответствия контактов разъемов №2А, №2В
@@ -3412,40 +3414,40 @@ void kommut_off()
   mcp_Out2.digitalWrite(13, HIGH);                                // Сброс выбора EN микросхемы аналового коммутатора  2E6  U24
 }
 
-void table_cont()
+void view_tab()
 {
 	myGLCD.clrScr();
-	myGLCD.print("Ta""\x96\xA0\x9D\xA6""a coe""\x99\x9D\xA2""e""\xA2\x9D\x9E", CENTER, 1);         
-	myGLCD.setColor(255, 255, 255);                                    // Белая окантовка
-	myGLCD.drawRoundRect (5, 200, 155, 239);                           // Белая окантовка кнопки Повторить
-	myGLCD.drawRoundRect (160, 200, 315, 239);                         // Белая окантовка кнопки Завершить
-	myGLCD.setColor(0, 0, 255);
-	myGLCD.fillRoundRect (6, 201, 154, 238);
-	myGLCD.fillRoundRect (161, 201, 314, 238);
-	myGLCD.setColor(255, 255, 255);
-	myGLCD.setBackColor( 0, 0, 255);
+	myGLCD.print("Ta""\x96\xA0\x9D\xA6""a coe""\x99\x9D\xA2""e""\xA2\x9D\x9E", CENTER, 1);
+	myGLCD.setColor(255, 255, 255);                                    // Установить белый цвет текста
+	myGLCD.drawRoundRect(160, 200, 315, 239);                         // Белая окантовка кнопки Завершить
+	myGLCD.setColor(0, 0, 255);                                        // Установить синий цвет текста
+	myGLCD.fillRoundRect(6, 201, 154, 238);                           // Закрасить фон синим
+	myGLCD.fillRoundRect(161, 201, 314, 238);                         // Закрасить фон синим
+	myGLCD.setColor(255, 255, 255);                                    // Установить белый цвет текста
+	myGLCD.drawRoundRect(5, 200, 155, 239);                            // Белая окантовка кнопки Повторить
+	myGLCD.setBackColor(0, 0, 255);                                   // Установить синий цвет фона
 	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[21])));
-	myGLCD.print(buffer, 10, 210);                                    //txt_test_repeat  Повторить
+	myGLCD.print(buffer, 10, 210);                                     //txt_test_repeat  Повторить
 	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[20])));
-	myGLCD.print(buffer, 168, 210);                                   //txt_test_end Завершить
-	myGLCD.setBackColor( 0, 0, 0);                                    //
+	myGLCD.print(buffer, 168, 210);                                    //txt_test_end Завершить
+	myGLCD.setBackColor(0, 0, 0);                                     // Черный фон
 
 	myGLCD.print("N1", 27, 32);
-	myGLCD.print("N2", 105,32);
-	myGLCD.print("N3", 183,32);
-	myGLCD.print("N4", 261,32);
+	myGLCD.print("N2", 105, 32);
+	myGLCD.print("N3", 183, 32);
+	myGLCD.print("N4", 261, 32);
 	myGLCD.print("\x80""BC", 20, 72);
 
-	myGLCD.setColor(255, 255, 255);                                  // Белая окантовка
-	myGLCD.drawRoundRect (5, 25, 78,  55);
-	myGLCD.drawRoundRect (83, 25, 156, 55);
-	myGLCD.drawRoundRect (161,25, 234, 55);
-	myGLCD.drawRoundRect (239,25, 312, 55);
-	myGLCD.drawRoundRect(5, 65, 78, 95);
+	myGLCD.setColor(255, 255, 255);                                   // Установить белый цвет текста
+	myGLCD.drawRoundRect(5, 25, 78, 55);                            // Белая окантовка
+	myGLCD.drawRoundRect(83, 25, 156, 55);                           // Белая окантовка
+	myGLCD.drawRoundRect(161, 25, 234, 55);                           // Белая окантовка
+	myGLCD.drawRoundRect(239, 25, 312, 55);                           // Белая окантовка
+	myGLCD.drawRoundRect(5, 65, 78, 95);                              // Белая окантовка
 
 	myGLCD.setColor(255, 0, 0);
-	myGLCD.print("Ta""\x96\xA0\x9D\xA6\xAB"" o""\x96""y""\xA7""e""\xA2\x9D\xAF", CENTER, 100);                                   //txt_test_end Завершить
-	
+	myGLCD.print("Ta""\x96\xA0\x9D\xA6\xAB"" o""\x96""y""\xA7""e""\xA2\x9D\xAF", CENTER, 100);   // 
+
 	myGLCD.setColor(255, 255, 255);
 	myGLCD.drawRoundRect(5, 125, 78, 155);
 	myGLCD.drawRoundRect(83, 125, 156, 155);
@@ -3456,7 +3458,53 @@ void table_cont()
 	myGLCD.print("N2", 105, 132);
 	myGLCD.print("N3", 183, 132);
 	myGLCD.print("N4", 261, 132);
+}
 
+void table_cont()
+{
+	//myGLCD.clrScr();
+	//myGLCD.print("Ta""\x96\xA0\x9D\xA6""a coe""\x99\x9D\xA2""e""\xA2\x9D\x9E", CENTER, 1);         
+	//myGLCD.setColor(255, 255, 255);                                    // Установить белый цвет текста
+	//myGLCD.drawRoundRect (160, 200, 315, 239);                         // Белая окантовка кнопки Завершить
+	//myGLCD.setColor(0, 0, 255);                                        // Установить синий цвет текста
+	//myGLCD.fillRoundRect (6, 201, 154, 238);                           // Закрасить фон синим
+	//myGLCD.fillRoundRect (161, 201, 314, 238);                         // Закрасить фон синим
+	//myGLCD.setColor(255, 255, 255);                                    // Установить белый цвет текста
+	//myGLCD.drawRoundRect(5, 200, 155, 239);                            // Белая окантовка кнопки Повторить
+	//myGLCD.setBackColor( 0, 0, 255);                                   // Установить синий цвет фона
+	//strcpy_P(buffer, (char*)pgm_read_word(&(table_message[21])));
+	//myGLCD.print(buffer, 10, 210);                                     //txt_test_repeat  Повторить
+	//strcpy_P(buffer, (char*)pgm_read_word(&(table_message[20])));
+	//myGLCD.print(buffer, 168, 210);                                    //txt_test_end Завершить
+	//myGLCD.setBackColor( 0, 0, 0);                                     // Черный фон
+
+	//myGLCD.print("N1", 27, 32);
+	//myGLCD.print("N2", 105,32);
+	//myGLCD.print("N3", 183,32);
+	//myGLCD.print("N4", 261,32);
+	//myGLCD.print("\x80""BC", 20, 72);
+
+	//myGLCD.setColor(255, 255, 255);                                   // Установить белый цвет текста
+	//myGLCD.drawRoundRect (5, 25, 78,  55);                            // Белая окантовка
+	//myGLCD.drawRoundRect (83, 25, 156, 55);                           // Белая окантовка
+	//myGLCD.drawRoundRect (161,25, 234, 55);                           // Белая окантовка
+	//myGLCD.drawRoundRect (239,25, 312, 55);                           // Белая окантовка
+	//myGLCD.drawRoundRect(5, 65, 78, 95);                              // Белая окантовка
+
+	//myGLCD.setColor(255, 0, 0);
+	//myGLCD.print("Ta""\x96\xA0\x9D\xA6\xAB"" o""\x96""y""\xA7""e""\xA2\x9D\xAF", CENTER, 100);   // 
+	//
+	//myGLCD.setColor(255, 255, 255);
+	//myGLCD.drawRoundRect(5, 125, 78, 155);
+	//myGLCD.drawRoundRect(83, 125, 156, 155);
+	//myGLCD.drawRoundRect(161, 125, 234, 155);
+	//myGLCD.drawRoundRect(239, 125, 312, 155);
+
+	//myGLCD.print("N1", 27, 132);
+	//myGLCD.print("N2", 105, 132);
+	//myGLCD.print("N3", 183, 132);
+	//myGLCD.print("N4", 261, 132);
+	view_tab();
 	int tab_n     = 0;
 	int x_p       = 1;                                                        // Определить начало вывода по Х
 	int y_p       = 70;                                                       // Определить начало вывода по У
@@ -3473,14 +3521,15 @@ void table_cont()
 		
 		if (!info_run)
 		{
-			if (((x >= 5) && (x <= 78)) && ((y >= 25) && (y <= 55)))         //нажата кнопка 1
+			// ***************************  Вызов фиксированной таблицы **************************************
+			if (((x >= 5) && (x <= 78)) && ((y >= 25) && (y <= 55)))          //нажата кнопка 1
 			{
 				waitForIt(5, 25, 78, 55);
 				info_run = true;
 				tab_n = adr_memN1_1;
 				info_table(tab_n);
 			}
-			if (((x >= 83) && (x <= 156)) && ((y >= 25) && (y <= 55)))         //нажата кнопка 2
+			else if (((x >= 83) && (x <= 156)) && ((y >= 25) && (y <= 55)))         //нажата кнопка 2
 			{
 				waitForIt(83, 25, 156, 55);
 				info_run = true;
@@ -3488,29 +3537,29 @@ void table_cont()
 				info_table(tab_n);
 			}
 
-			if (((x >= 161) && (x <= 234)) && ((y >= 25) && (y <= 55)))         //нажата кнопка 3
+			else if (((x >= 161) && (x <= 234)) && ((y >= 25) && (y <= 55)))         //нажата кнопка 3
 			{
 				waitForIt(161, 25, 234, 55);
 				info_run = true;
 				tab_n = adr_memN1_3;
 				info_table(tab_n);
 			}
-			if (((x >= 239) && (x <= 312)) && ((y >= 25) && (y <= 55)))         //нажата кнопка 4
+			else if (((x >= 239) && (x <= 312)) && ((y >= 25) && (y <= 55)))         //нажата кнопка 4
 			{
 				waitForIt(239, 25, 312, 55);
 				info_run = true;
 				tab_n = adr_memN1_4;
 				info_table(tab_n);
 			}
-			// Настраиваемая таблица
-			if (((x >= 5) && (x <= 78)) && ((y >= 125) && (y <= 155)))         //нажата кнопка 1
+			// ***************************  Вызов настраиваемой таблицы (таблица обучения) **************************************
+			else if (((x >= 5) && (x <= 78)) && ((y >= 125) && (y <= 155)))           //нажата кнопка 1
 			{
 				waitForIt(5, 125, 78, 155);
 				info_run = true;
 				tab_n = adr_memN2_1;
 				info_table(tab_n);
 			}
-			if (((x >= 83) && (x <= 156)) && ((y >= 125) && (y <= 155)))         //нажата кнопка 2
+			else if (((x >= 83) && (x <= 156)) && ((y >= 125) && (y <= 155)))         //нажата кнопка 2
 			{
 				waitForIt(83, 125, 156, 155);
 				info_run = true;
@@ -3518,21 +3567,21 @@ void table_cont()
 				info_table(tab_n);
 			}
 
-			if (((x >= 161) && (x <= 234)) && ((y >= 125) && (y <= 155)))         //нажата кнопка 3
+			else if (((x >= 161) && (x <= 234)) && ((y >= 125) && (y <= 155)))         //нажата кнопка 3
 			{
 				waitForIt(161, 125, 234, 155);
 				info_run = true;
 				tab_n = adr_memN2_3;
 				info_table(tab_n);
 			}
-			if (((x >= 239) && (x <= 312)) && ((y >= 125) && (y <= 155)))         //нажата кнопка 4
+			else if (((x >= 239) && (x <= 312)) && ((y >= 125) && (y <= 155)))         //нажата кнопка 4
 			{
 				waitForIt(239, 125, 312, 155);
 				info_run = true;
 				tab_n = adr_memN2_4;
 				info_table(tab_n);
 			}
-			if (((x >= 5) && (x <= 78)) && ((y >= 65) && (y <= 95)))         //нажата кнопка 
+			else if (((x >= 5) && (x <= 78)) && ((y >= 65) && (y <= 95)))             //нажата кнопка БВС
 			{
 				waitForIt(5, 65, 78, 95);
 				info_run = true;
@@ -3540,17 +3589,23 @@ void table_cont()
 				info_table(tab_n);
 			}
 		}
-
-		if (((y >= 200) && (y <= 239)) && ((x >= 5) && (x <= 155)))         //нажата кнопка "Повторить проверку"
+		else if (((y >= 200) && (y <= 239)) && ((x >= 5) && (x <= 155)))            //нажата кнопка "Повторить проверку"
 		{
 			waitForIt(5, 200, 155, 239);
-			info_table(tab_n);
-
+			if (view_tab_run == false)                                                  // Проверить окончание вывода таблицы
+			{
+				info_table(tab_n);
+			}
 		}
-		if (((y >= 200) && (y <= 239)) && ((x >= 160) && (x <= 315)))       //нажата кнопка "Завершить  проверку"
+		else if (((y >= 200) && (y <= 239)) && ((x >= 160) && (x <= 315)))          //нажата кнопка "Завершить  проверку"
 		{
 		  waitForIt(160, 200, 315, 239);
-		  break;                                                           // Выход из программы
+		  break;                                                                    // Выход из программы
+		}
+
+		else if (((x >= 1) && (x <= 319)) && ((y >= 1) && (y <= 199)))              //нажат экран (продолжить вывод)
+		{
+			waitForIt(1, 1, 319, 199);
 		}
 	  }
 	}
@@ -3563,7 +3618,10 @@ void info_table(int adr_mem)
 	int x_p = 0;                                                                    // Определить начало вывода ошибок по Х
 	int y_p = 20;                                                                   // Определить начало вывода ошибок по У
 	myGLCD.setColor(0, 0, 0);
-	myGLCD.fillRoundRect(1, 20, 319, 199);
+	myGLCD.fillRoundRect(0, 20, 319, 199);
+
+	myGLCD.setColor(0, 0, 255);                                 // Установить синий цвет текста
+	myGLCD.fillRoundRect(6, 201, 154, 238);                     // Закрасить фон синим
 	myGLCD.setColor(255, 255, 255);
 	Serial.println(_size_block);
 
@@ -3575,47 +3633,47 @@ void info_table(int adr_mem)
 		canal_N = i2c_eeprom_read_byte(deviceaddress, _adr_mem + i);                // Получить № канала из EEPROM
 		if (canal_N < 10)
 		{
-			myGLCD.printNumI(canal_N, x_p + 13, y_p);                               // Вывод на экран № контактов
+			myGLCD.printNumI(canal_N, x_p + 13, y_p);                               // Вывод на экран номара контактов меньше 10
 			myGLCD.print("-", x_p + 29, y_p);
 		}
 		else
 		{
-			myGLCD.printNumI(canal_N, x_p, y_p);                                    // Вывод на экран № контактов
+			myGLCD.printNumI(canal_N, x_p, y_p);                                    // Вывод на экран номера контактов больше 9
 			myGLCD.print("-", x_p + 29, y_p);
 		}
 		Serial.print(_adr_mem + i); Serial.print("\t"); Serial.print(canal_N); Serial.print("\t");
-		canal_N = i2c_eeprom_read_byte(deviceaddress, _adr_mem + i + _size_block);  // Получить из таблицы номер входа коммутатора.
+		canal_N = i2c_eeprom_read_byte(deviceaddress, _adr_mem + i + _size_block);           // Получить из таблицы номер входа коммутатора.
 		Serial.println(canal_N);
 		if (canal_N < 10)
 		{
 			if (canal_N == 0)
 			{
-				myGLCD.print("X", x_p + 58, y_p);                                   // Вывод на экран № контактов
+				myGLCD.print("X", x_p + 58, y_p);                                   // Вывод на экран "Х" (не подключен)
 			}
 			else
 			{
-				myGLCD.printNumI(canal_N, x_p + 58, y_p);                          // Вывод на экран № контактов
+				myGLCD.printNumI(canal_N, x_p + 58, y_p);                           // Вывод на экран № контактов
 			}
 		}
 		else
 		{
 			if (canal_N == 0)
 			{
-				myGLCD.print("X", x_p + 58, y_p);                                     // Вывод на экран № контактов
+				myGLCD.print("X", x_p + 58, y_p);                                     // Вывод на экран  "Х" (не подключен)
 			}
 			else
 			{
-				myGLCD.printNumI(canal_N, x_p + 42, y_p);                              // Вывод на экран № контактов
+				myGLCD.printNumI(canal_N, x_p + 42, y_p);                             // Вывод на экран № контактов
 			}
 		}
 
-		canal_N = i2c_eeprom_read_byte(deviceaddress, _adr_mem + i + _size_block*2);  // Получить из таблицы номер входа коммутатора.
+		canal_N = i2c_eeprom_read_byte(deviceaddress, _adr_mem + i + _size_block*2);    // Получить из таблицы (второй блок данных)номер входа коммутатора.
 
 		if (canal_N < 10)
 		{
 			if ((canal_N == 0) || (canal_N == 255))
 			{
-				myGLCD.print("X", x_p + 58+40, y_p);                                  // Вывод на экран № контактов
+				myGLCD.print("X", x_p + 58+40, y_p);                                  // Вывод на экран  "Х" (не подключен)
 			}
 			else
 			{
@@ -3626,7 +3684,7 @@ void info_table(int adr_mem)
 		{
 			if ((canal_N == 0) || (canal_N == 255))
 			{
-				myGLCD.print("X", x_p + 58+40, y_p);                                // Вывод на экран № контактов
+				myGLCD.print("X", x_p + 58+40, y_p);                                //  Вывод на экран  "Х" (не подключен)
 			}
 			else
 			{
@@ -3634,13 +3692,13 @@ void info_table(int adr_mem)
 			}
 		}
 
-		canal_N = i2c_eeprom_read_byte(deviceaddress, _adr_mem + i + _size_block * 3);  // Получить из таблицы номер входа коммутатора.
+		canal_N = i2c_eeprom_read_byte(deviceaddress, _adr_mem + i + _size_block * 3);  // Получить из таблицы (третий блок данных) номер входа коммутатора.
 
 		if (canal_N < 10)
 		{
 			if ((canal_N == 0) || (canal_N == 255))
 			{
-				myGLCD.print("X", x_p + 58 + 40+40, y_p);                              // Вывод на экран № контактов
+				myGLCD.print("X", x_p + 58 + 40+40, y_p);                              //  Вывод на экран  "Х" (не подключен)
 			}
 			else
 			{
@@ -3650,53 +3708,65 @@ void info_table(int adr_mem)
 		else
 		{
 			if ((canal_N == 0) || (canal_N == 255))
-			{
-				myGLCD.print("X", x_p + 58 + 40+40, y_p);                              // Вывод на экран № контактов
+			{ 
+				myGLCD.print("X", x_p + 58 + 40+40, y_p);                                //  Вывод на экран  "Х" (не подключен)
 			}
 			else
 			{
-				myGLCD.printNumI(canal_N, x_p + 42 + 40+40, y_p);                 // Вывод на экран № контактов
+				myGLCD.printNumI(canal_N, x_p + 42 + 40+40, y_p);                        // Вывод на экран № контактов
 			}
 		}
 
 
-		y_p += 18;
+		y_p += 18;                                                                      // Перейти на следующую строку
 	
-		if ((y_p > 190))                                                                   //  
+		if ((y_p > 190))                                                                //  Если страница заполнена - перейти в начало
 		{
 			myGLCD.drawLine(161, 20, 161, 199);
 			myGLCD.drawLine(159, 20, 159, 199);
-			x_p += 162;
-			y_p = 20;
-			if (x_p > 240)
+			x_p += 162;                                                                 //  Вторая колонка
+			y_p = 20;                                                                   //  Если страница заполнена - перейти в начало
+			if (x_p > 240)                                                              // Если таблица сформирована полностью.
 			{
-				while (!myTouch.dataAvailable()){}  // Ожидание очередных комманд
-					if (myTouch.dataAvailable())
+				while (!myTouch.dataAvailable()){}                                      // Ожидание очередных комманд
+			
+				if (myTouch.dataAvailable())                                            
+				{
+					myTouch.read();
+					x = myTouch.getX();
+					y = myTouch.getY();
+					if (((x >= 1) && (x <= 319)) && ((y >= 1) && (y <= 199)))          //нажат экран (продолжить вывод)
 					{
-						myTouch.read();
-						x = myTouch.getX();
-						y = myTouch.getY();
-						if (((x >= 1) && (x <= 239)) && ((y >= 1) && (y <= 199)))           //нажата кнопка 2
+						waitForIt(1, 1, 319, 199);
+						while (myTouch.dataAvailable()) {}                             // Ожидание прекращения нажатия на экран (защита от дребезга)
+						if (i < _size_block)                                           // Определить последнюю страницу вывода таблицы  
 						{
-							waitForIt(1, 1, 239, 199);
+							x_p = 0;                                                   // Перейти на следующий экран    
+							myGLCD.setColor(0, 0, 0);
+							myGLCD.fillRoundRect(0, 20, 319, 199);                     // Очистить экран
+							myGLCD.setColor(255, 255, 255);
+							//view_tab_run = true;
 						}
-
-						if (((y >= 200) && (y <= 239)) && ((x >= 160) && (x <= 315)))       //нажата кнопка "Завершить  проверку"
-						{
-							waitForIt(160, 200, 315, 239);
-							break;                                                         // Выход из программы просмотра
-						}
-
 					}
-				while (myTouch.dataAvailable()) {}                                         // Ожидание прекращения нажатия на экран
+					else if (((x >= 160) && (x <= 315)) && ((y >= 200) && (y <= 239)))  //нажата кнопка "Завершить  проверку"
+					{
+						waitForIt(160, 200, 315, 239);
+						view_tab();
+					//	view_tab_run = false;
+						break;                                                         // Выход из программы просмотра
+					}
 
-				x_p = 0;
-				myGLCD.setColor(0, 0, 0);
-				myGLCD.fillRoundRect(0, 20, 319, 199);
-				myGLCD.setColor(255, 255, 255);
+				}
+				while (myTouch.dataAvailable()) {}                                     // Ожидание прекращения нажатия на экран (защита от дребезга)
 			}
 		}
 	}
+
+	myGLCD.setColor(255, 255, 255);                             // Установить белый цвет текста
+	myGLCD.setBackColor(0, 0, 255);                               // Установить синий цвет фона
+	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[21])));
+	myGLCD.print(buffer, 10, 210);                                     //txt_test_repeat  Повторить
+	myGLCD.setBackColor(0, 0, 0);
 }
 
 void view_menu_search()
