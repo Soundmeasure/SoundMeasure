@@ -4220,11 +4220,11 @@ void test_cabel_soft_run(int cable_soft_run)
 
 		delay(100);
 
-			for (x_B = 1; x_B < _size_block + 1; x_B++)                          // Последовательное чтение контактов разьемов "В" .
+			for (x_B = 1; x_B < _size_block + 1; x_B++)                      // Последовательное чтение контактов разьемов "В" .
 			{
-				set_komm_mcp('B', x_B, 'O');                       // Установить текущий вход коммутатора
+				set_komm_mcp('B', x_B, 'O');                                 // Установить текущий вход коммутатора
 
-				if (digitalRead(Chanal_B) == LOW)                  // Должен быть соединен
+				if (digitalRead(Chanal_B) == LOW)                            // Должен быть соединен
 				{
 					if (x_B != canal_N)
 					{
