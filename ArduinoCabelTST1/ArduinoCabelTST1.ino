@@ -3293,17 +3293,17 @@ void test_GND()
 
 			if (x_B < 10)
 			{
-				myGLCD.printNumI(x_B, x_p + 13, y_p);                // Перечисление ошибочных контактов
+				myGLCD.printNumI(x_B, x_p + 13, y_p);                     // Перечисление ошибочных контактов
 				myGLCD.print("->", x_p + 29, y_p);
 			}
 			else
 			{
-				myGLCD.printNumI(x_B, x_p, y_p);                 // Перечисление ошибочных контактов
+				myGLCD.printNumI(x_B, x_p, y_p);                          // Перечисление ошибочных контактов
 				myGLCD.print("->", x_p + 29, y_p);
 			}
 			if (canal_N < 10)
 			{
-				myGLCD.print("GND", x_p + 32 + 26, y_p);   // Перечисление ошибочных контактов
+				myGLCD.print("GND", x_p + 32 + 26, y_p);                  // Перечисление ошибочных контактов
 			}
 			else
 			{
@@ -3311,7 +3311,7 @@ void test_GND()
 			}
 
 			y_p += 19;
-			if (y_p > 190)                                          // Вывод на экран таблицы ошибок
+			if (y_p > 190)                                                // Вывод на экран таблицы ошибок
 			{
 				myGLCD.drawLine(x_p + 75, 85, x_p + 75, 190);
 				x_p += 80;
