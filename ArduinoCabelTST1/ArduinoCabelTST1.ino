@@ -3226,15 +3226,15 @@ void test_GND()
 			x = myTouch.getX();
 			y = myTouch.getY();
 
-			if (((y >= 1) && (y <= 150)) && ((x >= 10) && (x <= 319))) //Возврат
+			if (((y >= 1) && (y <= 150)) && ((x >= 10) && (x <= 319)))           //Возврат
 			{
 				myGLCD.setFont(BigFont);
 				break;
 			}
 		}
 
-		set_komm_mcp('A', 25, 'O');                                         // Переключить коммутатор разъемов серии "А" на вход
-		set_komm_mcp('B', 25, 'O');                                         // Переключить коммутатор разъемов серии "В" на вход
+		set_komm_mcp('A', 25, 'O');                                             // Переключить коммутатор разъемов серии "А" на вход
+		set_komm_mcp('B', 25, 'O');                                             // Переключить коммутатор разъемов серии "В" на вход
 		delay(10);
 
 		if (digitalRead(Chanal_B) == LOW)
@@ -3272,7 +3272,7 @@ void test_GND()
 	myGLCD.clrScr();
 
 	myGLCD.print("\x89""po""\x97""ep""\x9F""a ""\x9C""a""\xA1\xAB\x9F""a""\xA2\x9D\xAF"" ", CENTER, 3);
-	myGLCD.print("\xA2""a ""\x9C""e""\xA1\xA0\xAE"", o""\x96\xA9\x9D\x9E", CENTER,20);             // на землю, общий
+	myGLCD.print("\xA2""a ""\x9C""e""\xA1\xA0\xAE"", o""\x96\xA9\x9D\x9E", CENTER,20);                       // на землю, общий
 
 	for (x_B = 1; x_B <24 + 1; x_B++)                          // Последовательное чтение контактов разьемов "В" .
 	{
