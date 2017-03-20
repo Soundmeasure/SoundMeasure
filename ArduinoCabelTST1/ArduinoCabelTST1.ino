@@ -3274,9 +3274,9 @@ void test_GND()
 	myGLCD.print("\x89""po""\x97""ep""\x9F""a ""\x9C""a""\xA1\xAB\x9F""a""\xA2\x9D\xAF"" ", CENTER, 3);
 	myGLCD.print("\xA2""a ""\x9C""e""\xA1\xA0\xAE"", o""\x96\xA9\x9D\x9E", CENTER,20);                       // на землю, общий
 
-	for (x_B = 1; x_B <24 + 1; x_B++)                          // Последовательное чтение контактов разьемов "В" .
+	for (x_B = 1; x_B <24 + 1; x_B++)                                                // Последовательное чтение контактов разьемов "В" .
 	{
-		set_komm_mcp('B', x_B, 'O');                                   // Установить текущий вход коммутатора
+		set_komm_mcp('B', x_B, 'O');                                                 // Установить текущий вход коммутатора "B"
 
 		myGLCD.print("  ", 130, 40);
 		myGLCD.printNumI(x_B, 130, 40);
@@ -3287,8 +3287,8 @@ void test_GND()
 		else
 		{
 			count_error++;
-			strcpy_P(buffer, (char*)pgm_read_word(&(table_message[25])));
-			myGLCD.print(buffer, 50, 65);                                 // txt_error_connect4
+			strcpy_P(buffer, (char*)pgm_read_word(&(table_message[25]))); //  Ошибок  -
+			myGLCD.print(buffer, 50, 65);                                 //  Ошибок  -
 			myGLCD.printNumI(count_error, 190, 65);
 
 			if (x_B < 10)
@@ -3962,7 +3962,7 @@ void search_contacts(byte N_block)
 		}
 		y_p += 19;
 	
-		if (y_p > 185)                                          // Вывод на экран таблицы ошибок
+		if (y_p > 185)                                            // Вывод на экран таблицы ошибок
 		{
 			myGLCD.setColor(0, 0, 0);
 			myGLCD.fillRoundRect(1, 40, 319, 209);
@@ -3975,25 +3975,28 @@ void search_contacts(byte N_block)
 			delay(300);
 		}
 	}
-	 
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRoundRect(1, 40, 319, 209);
 	myGLCD.setColor(0, 255, 0);
-
+	myGLCD.print("\x85""ABEP""\x8E""EHO", CENTER, 110);                                               // ЗАВЕРШЕНО
 	myGLCD.print("Ha""\x9B\xA1\x9D\xA4""e ""\xA2""a ""\x99\x9D""c""\xA3\xA0""e""\x9E", CENTER, 208);  // Нажмите на дисплей
 	myGLCD.print("\x99\xA0\xAF"" ""\x9C""a""\x97""ep""\xA8""e""\xA2\x9D\xAF", CENTER, 222);           // для завершения
 	myGLCD.setColor(255, 255, 255);
-	do {
-		if (myTouch.dataAvailable())
-		{
-			myTouch.read();
-			x = myTouch.getX();
-			y = myTouch.getY();
-			if (((y >= 1) && (y <= 239)) && ((x >= 1) && (x <= 319)))         //нажат экран
-			{
-				waitForIt(1, 1, 319, 239);
-				break;
-			}
-		}
-	} while (true);
+	delay(2000);
+
+	//do {
+	//	if (myTouch.dataAvailable())
+	//	{
+	//		myTouch.read();
+	//		x = myTouch.getX();
+	//		y = myTouch.getY();
+	//		if (((y >= 1) && (y <= 239)) && ((x >= 1) && (x <= 319)))         //нажат экран
+	//		{
+	//			waitForIt(1, 1, 319, 239);
+	//			break;
+	//		}
+	//	}
+	//} while (true);
 }
 
 void test_cabel_soft(int cable_soft)
