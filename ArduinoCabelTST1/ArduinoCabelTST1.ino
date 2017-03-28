@@ -4032,11 +4032,11 @@ void test_cabel_soft(int cable_soft)
 			x = myTouch.getX();
 			y = myTouch.getY();
 
-			if (((y >= 200) && (y <= 239)) && ((x >= 5) && (x <= 155)))   //нажата кнопка "Повторить проверку"
+			if (((y >= 200) && (y <= 239)) && ((x >= 5) && (x <= 155)))        //нажата кнопка "Повторить проверку"
 			{
 				waitForIt(5, 200, 155, 239);
 				myGLCD.setFont(BigFont);
-				test_cabel_soft_run(_cable_soft);                                          // Выполнить проверку
+				test_cabel_soft_run(_cable_soft);                              // Выполнить проверку
 			}
 			if (((y >= 200) && (y <= 239)) && ((x >= 160) && (x <= 315))) //нажата кнопка "Завершить  проверку"
 			{
