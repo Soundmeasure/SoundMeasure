@@ -2267,7 +2267,7 @@ void test_cabel_N1_run()
   myGLCD.setColor(0, 0, 0);
   myGLCD.fillRoundRect(1, 82, 319, 199);
   myGLCD.setColor(255, 255, 255);
-														  
+  myGLCD.drawLine(10, 60, 310, 60);
   strcpy_P(buffer, (char*)pgm_read_word(&(table_message[24])));
   myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
   if (search_cabel(40) == 1)                                                   // Проверить корректность подключения кабеля №1
@@ -3026,9 +3026,10 @@ void test_cabel_N4_run()
 void test_BVS_run()
 {
 	byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_5);        // Получить количество выводов проверяемого разъема
-	pinMode(Chanal_A, OUTPUT);                                                   // Установить на выход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+	pinMode(Chanal_A, INPUT);                                                   // Установить на вход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
 	pinMode(Chanal_B, INPUT);                                                    // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
-	digitalWrite(Chanal_B, HIGH);                                                // Установить высокий уровень на выводе Chanal_B
+	digitalWrite(Chanal_A, HIGH);                                                // Подключить подтягивающий резистор на выводе Chanal_B
+	digitalWrite(Chanal_B, HIGH);                                                // Подключить подтягивающий резистор на выводе Chanal_B
 	myGLCD.print("                    ", 1, 40);                                 // Очистить строчку результатов проверки
 	byte canal_N = 0;                                                            // Переменная хранения № канала в памяти
 	unsigned int x_A = 1;                                                        // Переменная установления канала А
@@ -3043,102 +3044,15 @@ void test_BVS_run()
 	myGLCD.setColor(255, 255, 255);                                              // Установить белый цвет
 	y_p = 82;                                                                    // Восстановить начало вывода ошибок по У
 
-	// здесь проверить на замыкание
+	myGLCD.drawLine(10, 60, 310, 60);
 
-
-	//myGLCD.setColor(0, 0, 0);
-	//myGLCD.fillRoundRect(1, 82, 319, 199);
-	//myGLCD.setColor(255, 255, 255);
-
-	myGLCD.print("Tec""\xA4"" ""\x9C""a""\xA1\xAB\x9F"". ""\xA2""a ""\x9C""e""\xA1\xA0\xAE", CENTER, 20);    //Тест замык. на землю
-	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[24])));                // txt_error_connect3 "Ошибок нет"
-	myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
-																				 // Проверить на отсутствие замыканий на землю  
-	digitalWrite(Chanal_A, HIGH);                                                // Установить высокий уровень на коммутаторах U13,U17,U23
-	delay(10);                                                                   // Время на переключение вывода Chanal_A
-
-																				 //++++++++++++++++++++++++++++++++++++++ Проверка замыкания на землю +++++++++++++++++++++++++++++++++++++++++++++++++++
-	for (x_A = 1; x_A < 49; x_A++)                                               // Последовательное чтение контактов разьемов.
-	{
-		set_komm_mcp('A', x_A, 'O');                                             // Установить текущий вход коммутатора
-		set_komm_mcp('B', x_A, 'O');                                             // Установить текущий вход коммутатора
-		if (x_A < 10)
-		{
-			myGLCD.printNumI(x_A, 30 + 12, 40);
-		}
-		else
-		{
-			myGLCD.printNumI(x_A, 30, 40);
-		}
-		myGLCD.print("<->", 66, 40);
-		myGLCD.print("  ", 130, 40);
-		//myGLCD.printNumI(canal_N, 130, 40);
-		if (digitalRead(Chanal_A) == HIGH)                                       // Последовательно проверить все вывода разьема "A"
-		{
-			myGLCD.print(" - Pass ", 170, 40);
-		}
-		else
-		{
-			myGLCD.print(" - Error", 170, 40);
-			count_error++;
-			strcpy_P(buffer, (char*)pgm_read_word(&(table_message[25])));
-			myGLCD.print(buffer, 50, 65);                                       // txt_error_connect4
-			myGLCD.printNumI(count_error, 190, 65);
-
-			if (x_A < 10)
-			{
-				myGLCD.printNumI(x_A, x_p + 13, y_p);                          // Перечисление ошибочных контактов
-				myGLCD.print(" - A", x_p + 29, y_p);
-			}
-			else
-			{
-				myGLCD.printNumI(x_A, x_p, y_p);                               // Перечисление ошибочных контактов
-				myGLCD.print(" - A", x_p + 29, y_p);
-			}
-			y_p += 19;
-			if (y_p > 190)                                                     // Вывод на экран таблицы ошибок
-			{
-				myGLCD.drawLine(x_p + 75, 85, x_p + 75, 190);
-				x_p += 80;
-				y_p = 82;
-			}
-		}
-
-		if (digitalRead(Chanal_B) == HIGH)                                     // Последовательно проверить все вывода разьема "В"
-		{
-			myGLCD.print("B - Pass ", 170, 40);
-		}
-		else
-		{
-			myGLCD.print(" - Error", 170, 40);
-			count_error++;
-			strcpy_P(buffer, (char*)pgm_read_word(&(table_message[25])));
-			myGLCD.print(buffer, 50, 65);                                     // txt_error_connect4
-			myGLCD.printNumI(count_error, 190, 65);
-			if (x_A < 10)
-			{
-				myGLCD.printNumI(x_A, x_p + 13, y_p);                         // Перечисление ошибочных контактов
-				myGLCD.print(" - B", x_p + 29, y_p);
-			}
-			else
-			{
-				myGLCD.printNumI(x_A, x_p, y_p);                              // Перечисление ошибочных контактов
-				myGLCD.print(" - B", x_p + 29, y_p);
-			}
-			y_p += 19;
-			if (y_p > 190)                                                    // Вывод на экран таблицы ошибок
-			{
-				myGLCD.drawLine(x_p + 75, 85, x_p + 75, 190);
-				x_p += 80;
-				y_p = 82;
-			}
-		}
-	}
+	//strcpy_P(buffer, (char*)pgm_read_word(&(table_message[24])));                // "Ошибок нет"
+	//myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
 
 
 	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[24])));                // "Ошибок нет"
 	myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
-	
+	pinMode(Chanal_A, OUTPUT);                                                   // Установить на вход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
 	digitalWrite(Chanal_A, LOW);                                                 // Установить контрольный уровень на коммутаторах U13,U17,U23
 	delay(10);                                                                   // Время на переключение вывода Chanal_A
 	for (x_A = 1; x_A < _size_block + 1; x_A++)                                  // Последовательное чтение контактов разьемов.
@@ -3294,7 +3208,7 @@ void test_GND()
 	int i_step = 1;
 
 	byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_5);        // Получить количество выводов проверяемого разъема
-								 
+
 	myGLCD.print("                    ", 1, 40);                                 // Очистить строчку результатов проверки
 	unsigned int x_A = 1;                                                        // Переменная установления канала А
 	unsigned int x_B = 1;                                                        // Переменная установления канала В
@@ -3365,45 +3279,78 @@ void test_GND()
 
 	myGLCD.print("\x89""po""\x97""ep""\x9F""a ""\x9C""a""\xA1\xAB\x9F""a""\xA2\x9D\xAF"" ", CENTER, 3);
 	myGLCD.print("\xA2""a ""\x9C""e""\xA1\xA0\xAE"", o""\x96\xA9\x9D\x9E", CENTER,20);                       // на землю, общий
+	myGLCD.drawLine(10, 60, 310, 60);
 
-	for (x_B = 1; x_B <24 + 1; x_B++)                                                // Последовательное чтение контактов разьемов "В" .
+	//++++++++++++++++++++++++++++++++++++++ Проверка замыкания на землю +++++++++++++++++++++++++++++++++++++++++++++++++++
+	for (x_A = 1; x_A < 49; x_A++)                                               // Последовательное чтение контактов разьемов.
 	{
-		set_komm_mcp('B', x_B, 'O');                                                 // Установить текущий вход коммутатора "B"
-
-		myGLCD.print("  ", 130, 40);
-		myGLCD.printNumI(x_B, 130, 40);
-		if (digitalRead(Chanal_B) != LOW)
+		set_komm_mcp('A', x_A, 'O');                                             // Установить текущий вход коммутатора
+		set_komm_mcp('B', x_A, 'O');                                             // Установить текущий вход коммутатора
+		if (x_A < 10)
 		{
-			myGLCD.print(" - Pass", 170, 40);
+			myGLCD.printNumI(x_A, 30 + 12, 40);
 		}
 		else
 		{
+			myGLCD.printNumI(x_A, 30, 40);
+		}
+		myGLCD.print("<->", 66, 40);
+		myGLCD.print("  ", 130, 40);
+		//myGLCD.printNumI(canal_N, 130, 40);
+		if (digitalRead(Chanal_A) == HIGH)                                       // Последовательно проверить все вывода разьема "A"
+		{
+			myGLCD.print(" - Pass ", 170, 40);
+		}
+		else
+		{
+			myGLCD.print(" - Error", 170, 40);
 			count_error++;
-			strcpy_P(buffer, (char*)pgm_read_word(&(table_message[25]))); //  Ошибок  -
-			myGLCD.print(buffer, 50, 65);                                 //  Ошибок  -
+			strcpy_P(buffer, (char*)pgm_read_word(&(table_message[25])));
+			myGLCD.print(buffer, 50, 65);                                       // txt_error_connect4
 			myGLCD.printNumI(count_error, 190, 65);
 
-			if (x_B < 10)
+			if (x_A < 10)
 			{
-				myGLCD.printNumI(x_B, x_p + 13, y_p);                     // Перечисление ошибочных контактов
-				myGLCD.print("->", x_p + 29, y_p);
+				myGLCD.printNumI(x_A, x_p + 13, y_p);                          // Перечисление ошибочных контактов
+				myGLCD.print(" - A", x_p + 29, y_p);
 			}
 			else
 			{
-				myGLCD.printNumI(x_B, x_p, y_p);                          // Перечисление ошибочных контактов
-				myGLCD.print("->", x_p + 29, y_p);
+				myGLCD.printNumI(x_A, x_p, y_p);                               // Перечисление ошибочных контактов
+				myGLCD.print(" - A", x_p + 29, y_p);
 			}
-			if (canal_N < 10)
-			{
-				myGLCD.print("GND", x_p + 32 + 26, y_p);                  // Перечисление ошибочных контактов
-			}
-			else
-			{
-				myGLCD.print("GND", x_p + 32 + 10, y_p);   // Перечисление ошибочных контактов
-			}
-
 			y_p += 19;
-			if (y_p > 190)                                                // Вывод на экран таблицы ошибок
+			if (y_p > 190)                                                     // Вывод на экран таблицы ошибок
+			{
+				myGLCD.drawLine(x_p + 75, 85, x_p + 75, 190);
+				x_p += 80;
+				y_p = 82;
+			}
+		}
+
+		if (digitalRead(Chanal_B) == HIGH)                                     // Последовательно проверить все вывода разьема "В"
+		{
+			myGLCD.print(" - Pass ", 170, 40);
+		}
+		else
+		{
+			myGLCD.print(" - Error", 170, 40);
+			count_error++;
+			strcpy_P(buffer, (char*)pgm_read_word(&(table_message[25])));
+			myGLCD.print(buffer, 50, 65);                                     // txt_error_connect4
+			myGLCD.printNumI(count_error, 190, 65);
+			if (x_A < 10)
+			{
+				myGLCD.printNumI(x_A, x_p + 13, y_p);                         // Перечисление ошибочных контактов
+				myGLCD.print(" - B", x_p + 29, y_p);
+			}
+			else
+			{
+				myGLCD.printNumI(x_A, x_p, y_p);                              // Перечисление ошибочных контактов
+				myGLCD.print(" - B", x_p + 29, y_p);
+			}
+			y_p += 19;
+			if (y_p > 190)                                                    // Вывод на экран таблицы ошибок
 			{
 				myGLCD.drawLine(x_p + 75, 85, x_p + 75, 190);
 				x_p += 80;
