@@ -3046,10 +3046,6 @@ void test_BVS_run()
 
 	myGLCD.drawLine(10, 60, 310, 60);
 
-	//strcpy_P(buffer, (char*)pgm_read_word(&(table_message[24])));                // "Ошибок нет"
-	//myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
-
-
 	strcpy_P(buffer, (char*)pgm_read_word(&(table_message[24])));                // "Ошибок нет"
 	myGLCD.print(buffer, 50, 65);                                                // txt_error_connect3 "Ошибок нет"
 	pinMode(Chanal_A, OUTPUT);                                                   // Установить на вход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
