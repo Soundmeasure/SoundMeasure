@@ -3026,7 +3026,7 @@ void test_cabel_N4_run()
 void test_BVS_run()
 {
 	byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_5);        // Получить количество выводов проверяемого разъема
-	pinMode(Chanal_A, INPUT);                                                   // Установить на вход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
+	pinMode(Chanal_A, INPUT);                                                    // Установить на вход выход коммутаторов U13,U17,U23 (разъемы серии В на задней панели)
 	pinMode(Chanal_B, INPUT);                                                    // Установить на вход  выход коммутаторов U15,U18,U22 (разъемы серии А на передней панели)
 	digitalWrite(Chanal_A, HIGH);                                                // Подключить подтягивающий резистор на выводе Chanal_B
 	digitalWrite(Chanal_B, HIGH);                                                // Подключить подтягивающий резистор на выводе Chanal_B
