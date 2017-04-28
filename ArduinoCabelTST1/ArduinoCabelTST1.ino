@@ -2441,7 +2441,7 @@ void test_cabel_N1_run()
 	myGLCD.setColor(255, 255, 255);                                       // Восстановить белый шрифт
 	delay(2000);
   }
-}
+} 
 void test_cabel_N2_run()
 {
   byte  _size_block = i2c_eeprom_read_byte(deviceaddress, adr_memN1_2);        // Получить количество выводов проверяемого разъема
