@@ -82,33 +82,40 @@ void setup(void) {
   tft.fillScreen(ILI9341_BLACK);
   
   // make the color selection boxes
+  tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(3);
 
   for (x=0; x<5; x++)
   {
-  //  tft.setColor(0, 0, 255);
     tft.fillRect(5+((x*BOXSIZE)+(5*x)), 5, BOXSIZE, BOXSIZE, ILI9341_BLUE);
     tft.drawRect(5+((x*BOXSIZE)+(5*x)), 5, BOXSIZE, BOXSIZE, ILI9341_WHITE);
-   // Serial.println(5+((x*BOXSIZE)+(5*x)));
-	tft.fillRect(5 + ((x*BOXSIZE) + (5 * x)), 280, BOXSIZE, BOXSIZE, ILI9341_BLUE);
-	tft.drawRect(5 + ((x*BOXSIZE) + (5 * x)), 280, BOXSIZE, BOXSIZE, ILI9341_WHITE);
+	tft.setCursor((5 + ((x*BOXSIZE) + (5 * x)))+12, 5+10);
+	tft.println(x+1);
+  }
+  currentcolor = ILI9341_RED;
 
-    
-  //  tft.setColor(255, 255, 255);
-    //tft.drawRoundRect (10+(x*60), 10, 60+(x*60), 60);
-   // tft.printNumI(x+1, 27+(x*60), 27);
+  for (x = 0; x<5; x++)
+  {
+
+	  tft.fillRect(5 + ((x*BOXSIZE) + (5 * x)), 280, BOXSIZE, BOXSIZE, ILI9341_BLUE);
+	  tft.drawRect(5 + ((x*BOXSIZE) + (5 * x)), 280, BOXSIZE, BOXSIZE, ILI9341_WHITE);
+	  tft.setCursor((5 + ((x*BOXSIZE) + (5 * x))) + 12, 280+10);
+	  if (x == 4)
+	  {
+		  tft.println(0);
+	  }
+	  else
+	  {
+		  tft.println(x + 6);
+	  }
   }
 
-  
-//  tft.fillRect(0, 0, BOXSIZE, BOXSIZE, ILI9341_RED);
-//  tft.fillRect(BOXSIZE, 0, BOXSIZE, BOXSIZE, ILI9341_YELLOW);
-//  tft.fillRect(BOXSIZE*2, 0, BOXSIZE, BOXSIZE, ILI9341_GREEN);
-//  tft.fillRect(BOXSIZE*3, 0, BOXSIZE, BOXSIZE, ILI9341_CYAN);
-//  tft.fillRect(BOXSIZE*4, 0, BOXSIZE, BOXSIZE, ILI9341_BLUE);
-//  tft.fillRect(BOXSIZE*5, 0, BOXSIZE, BOXSIZE, ILI9341_MAGENTA);
-// 
-//  // select the current color 'red'
-//  tft.drawRect(0, 0, BOXSIZE, BOXSIZE, ILI9341_WHITE);
-  currentcolor = ILI9341_RED;
+
+
+
+
+  tft.setCursor(0, 0);
+ 
+
   
   myTouch.InitTouch();
   myTouch.setPrecision(PREC_MEDIUM);
@@ -116,12 +123,10 @@ void setup(void) {
 
 void waitForIt(int x1, int y1, int x2, int y2)
 {
-//  myGLCD.setColor(255, 0, 0);
   tft.drawRect(x1, y1, x2, y2,ILI9341_RED);
   while (myTouch.dataAvailable())
-    myTouch.read();
-//  myGLCD.setColor(255, 255, 255);
-tft.drawRect(x1, y1, x2, y2, ILI9341_WHITE);
+  myTouch.read();
+ tft.drawRect(x1, y1, x2, y2, ILI9341_WHITE);
 }
 
 
