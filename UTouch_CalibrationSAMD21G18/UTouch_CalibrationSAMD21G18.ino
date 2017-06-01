@@ -1,35 +1,38 @@
-// UTouch_Calibration (C)2012 Henning Karlsen
-// web: http://www.henningkarlsen.com/electronics
-//
-// This program can be used to calibrate the touchscreen
-// of the display modules.
-// This program requires the UTFT library and a touch
-// screen module that is compatible with UTFT.
-//
-// It is assumed that the display module is connected to an
-// appropriate shield or that you know how to change the pin 
-// numbers in the setup.
-//
-// Instructions will be given on the display.
-//
 
-#include <UTFT.h>
+
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <SPI.h>
+#include <Wire.h>      // this is needed even tho we aren't using it
+#include <Adafruit_ILI9341.h>
 #include <UTouch.h>
+
+
+#define TFT_RST  8
+#define TFT_DC 9
+#define TFT_CS 10
+#define TFT_MOSI MOSI
+#define TFT_MISO MISO
+#define TFT_CLK  SCK
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
+
+
+
 
 // Define the orientation of the touch screen. Further 
 // information can be found in the instructions.
 #define TOUCH_ORIENTATION  PORTRAIT
 
 // Declare which fonts we will be using
-extern uint8_t SmallFont[];
+//extern uint8_t SmallFont[];
 
-// Uncomment the next two lines for the Arduino 2009/UNO
-//UTFT        myGLCD(ITDB24D,19,18,17,16);   // Remember to change the model parameter to suit your display module!
-//UTouch      myTouch(15,10,14,9,8);
 
-// Uncomment the next two lines for the Arduino Mega
-UTFT        myGLCD(ITDB32S,38,39,40,41);   // Remember to change the model parameter to suit your display module!
 UTouch      myTouch(6,5,4,3,2);
+
+
+#define Serial SERIAL_PORT_USBVIRTUAL
+
+
+
 
 // ************************************
 // DO NOT EDIT ANYTHING BELOW THIS LINE
@@ -44,9 +47,12 @@ char buf[13];
 
 void setup()
 {
-  myGLCD.InitLCD();
-  myGLCD.clrScr();
-  myGLCD.setFont(SmallFont);
+
+	Serial.begin(9600);
+	while (!Serial);
+	Serial.println(F("Touch Paint!"));
+
+	tft.begin();
 
   myTouch.InitTouch(TOUCH_ORIENTATION);
   myTouch.setPrecision(PREC_LOW);
