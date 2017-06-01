@@ -18,7 +18,6 @@
 #include <SPI.h>
 #include <Wire.h>      // this is needed even tho we aren't using it
 #include <Adafruit_ILI9341.h>
-//#include <Adafruit_STMPE610.h>
 #include <UTouch.h>
 
 // This is calibration data for the raw touch data to the screen coordinates
@@ -89,8 +88,9 @@ void setup(void) {
   //  tft.setColor(0, 0, 255);
     tft.fillRect(5+((x*BOXSIZE)+(5*x)), 5, BOXSIZE, BOXSIZE, ILI9341_BLUE);
     tft.drawRect(5+((x*BOXSIZE)+(5*x)), 5, BOXSIZE, BOXSIZE, ILI9341_WHITE);
-    Serial.println(5+((x*BOXSIZE)+(5*x)));
-  
+   // Serial.println(5+((x*BOXSIZE)+(5*x)));
+	tft.fillRect(5 + ((x*BOXSIZE) + (5 * x)), 280, BOXSIZE, BOXSIZE, ILI9341_BLUE);
+	tft.drawRect(5 + ((x*BOXSIZE) + (5 * x)), 280, BOXSIZE, BOXSIZE, ILI9341_WHITE);
 
     
   //  tft.setColor(255, 255, 255);
@@ -165,6 +165,34 @@ void loop()
         }
       }
 
+	  if ((y >= 280) && (y <= 319))  // Upper row
+	  {
+		  if ((x >= 5) && (x <= 45))  // Button: 1
+		  {
+			  waitForIt(5, 280, 40, 40);
+			  Serial.println('6');
+		  }
+		  if ((x >= 50) && (x <= 90))  // Button: 2
+		  {
+			  waitForIt(50, 280, 40, 40);
+			  Serial.println('7');
+		  }
+		  if ((x >= 95) && (x <= 135))  // Button: 3
+		  {
+			  waitForIt(95, 280, 40, 40);
+			  Serial.println('8');
+		  }
+		  if ((x >= 140) && (x <= 180))  // Button: 4
+		  {
+			  waitForIt(140, 280, 40, 40);
+			  Serial.println('9');
+		  }
+		  if ((x >= 185) && (x <= 235))  // Button: 5
+		  {
+			  waitForIt(185, 280, 40, 40);
+			  Serial.println('0');
+		  }
+	  }
 
 
 

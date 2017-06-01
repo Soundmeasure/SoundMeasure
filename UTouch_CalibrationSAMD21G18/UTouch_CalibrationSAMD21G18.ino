@@ -49,23 +49,35 @@ void setup()
 {
 
 	Serial.begin(9600);
-	while (!Serial);
+	delay(3000);
+//	while (!Serial);
 	Serial.println(F("Touch Paint!"));
 
 	tft.begin();
 
   myTouch.InitTouch(TOUCH_ORIENTATION);
   myTouch.setPrecision(PREC_LOW);
-  dispx=myGLCD.getDisplayXSize();
-  dispy=myGLCD.getDisplayYSize();
+  dispx = 240;
+  dispy = 320;
+  tft.fillScreen(ILI9341_BLACK);
+
+ /* dispx=myGLCD.getDisplayXSize();
+  dispy=myGLCD.getDisplayYSize();*/
   text_y_center=(dispy/2)-6;
+ // drawCrossHair(120, 160);
 }
 
 void drawCrossHair(int x, int y)
 {
-  myGLCD.drawRect(x-10, y-10, x+10, y+10);
-  myGLCD.drawLine(x-5, y, x+5, y);
-  myGLCD.drawLine(x, y-5, x, y+5);
+	tft.drawRect(x-10, y-10, 20, 20, ILI9341_WHITE);
+	tft.drawLine(x-5, y, x+5, y, ILI9341_WHITE);
+	tft.drawLine(x, y-5, x, y+5, ILI9341_WHITE);
+}
+void drawCrossHair1(int x, int y)
+{
+	tft.drawRect(x - 10, y - 10, 20, 20, ILI9341_RED);
+	tft.drawLine(x - 5, y, x + 5, y, ILI9341_RED);
+	tft.drawLine(x, y - 5, x, y + 5, ILI9341_RED);
 }
 
 void readCoordinates()
@@ -78,10 +90,16 @@ void readCoordinates()
   
   while (OK == false)
   {
-    myGLCD.setColor(255, 255, 255);
-    myGLCD.print("*  PRESS  *", CENTER, text_y_center);
+	//tft.fillScreen(ILI9341_BLACK);
+
+	tft.setCursor(120, 160);
+	tft.fillRect(100, 150, 20, 100, ILI9341_BLACK);
+	tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
+    tft.print("*  PRESS  *");
     while (myTouch.dataAvailable() == false) {}
-    myGLCD.print("*  HOLD!  *", CENTER, text_y_center);
+	tft.setCursor(120, 160);
+	tft.fillRect(100,150, 20,100, ILI9341_BLACK);
+	tft.print("*  HOLD!  *");
     while ((myTouch.dataAvailable() == true) && (cnt<iter))
     {
       myTouch.read();
@@ -111,13 +129,15 @@ void readCoordinates()
 
 void calibrate(int x, int y, int i)
 {
-  myGLCD.setColor(255, 255, 255);
-  drawCrossHair(x,y);
-  myGLCD.setBackColor(255, 0, 0);
+
+  drawCrossHair1(x,y);
   readCoordinates();
-  myGLCD.setColor(255, 255, 255);
-  myGLCD.print("* RELEASE *", CENTER, text_y_center);
-  myGLCD.setColor(80, 80, 80);
+
+  tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
+  tft.setCursor(90, 100);
+  tft.print("* RELEASE *");
+ // myGLCD.setColor(80, 80, 80);
+  
   drawCrossHair(x,y);
   rx[i]=cx;
   ry[i]=cy;
@@ -159,84 +179,34 @@ void toHex(uint32_t num)
 
 void startup()
 {
-  myGLCD.setColor(255, 0, 0);
-  myGLCD.fillRect(0, 0, dispx-1, 13);
-  myGLCD.setColor(255, 255, 255);
-  myGLCD.setBackColor(255, 0, 0);
-  myGLCD.drawLine(0, 14, dispx-1, 14);
-  myGLCD.print("UTouch Calibration", CENTER, 1);
-  myGLCD.setBackColor(0, 0, 0);
 
-  if (dispx==220)
-  {  
-    myGLCD.print("Use a stylus or something", LEFT, 30);
-    myGLCD.print("similar to touch as close", LEFT, 42);
-    myGLCD.print("to the center of the", LEFT, 54);
-    myGLCD.print("highlighted crosshair as", LEFT, 66);
-    myGLCD.print("possible. Keep as still as", LEFT, 78);
-    myGLCD.print("possible and keep holding", LEFT, 90);
-    myGLCD.print("until the highlight is", LEFT, 102);
-    myGLCD.print("removed. Repeat for all", LEFT, 114);
-    myGLCD.print("crosshairs in sequence.", LEFT, 126);
-    myGLCD.print("Touch screen to continue", CENTER, 162);
-  }
-  else
-  {
-    myGLCD.print("INSTRUCTIONS", CENTER, 30);
-    myGLCD.print("Use a stylus or something similar to", LEFT, 50);
-    myGLCD.print("touch as close to the center of the", LEFT, 62);
-    myGLCD.print("highlighted crosshair as possible. Keep", LEFT, 74);
-    myGLCD.print("as still as possible and keep holding", LEFT, 86);
-    myGLCD.print("until the highlight is removed. Repeat", LEFT, 98);
-    myGLCD.print("for all crosshairs in sequence.", LEFT, 110);
+  tft.fillRect(0, 0, dispx-1, 13, ILI9341_YELLOW);
 
-    myGLCD.print("Further instructions will be displayed", LEFT, 134);
-    myGLCD.print("when the calibration is complete.", LEFT, 146);
-
-    myGLCD.print("Do NOT use your finger as a calibration", LEFT, 170);
-    myGLCD.print("stylus or the result WILL BE imprecise.", LEFT, 182);
-
-    myGLCD.print("Touch screen to continue", CENTER, 226);
-  }
+ tft.drawLine(0, 14, dispx-1, 14, ILI9341_GREEN);
+ tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
+ tft.setCursor(40, 80);
+  tft.print("UTouch Calibration");
+ tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(1);
+ tft.setCursor(10, 100);
+ 
+ tft.print("Touch screen to continue");
 
   waitForTouch();
-  myGLCD.clrScr();
+  tft.fillScreen(ILI9341_BLACK);
 }
 
 void done()
 {
-  myGLCD.clrScr();
-  myGLCD.setColor(255, 0, 0);
-  myGLCD.fillRect(0, 0, dispx-1, 13);
-  myGLCD.setColor(255, 255, 255);
-  myGLCD.setBackColor(255, 0, 0);
-  myGLCD.drawLine(0, 14, dispx-1, 14);
-  myGLCD.print("UTouch Calibration", CENTER, 1);
-  myGLCD.setBackColor(0, 0, 0);
-  
-  if (dispx==220)
-  {  
-    myGLCD.print("To use the new calibration", LEFT, 30);
-    myGLCD.print("settings you must edit the", LEFT, 42);
-    myGLCD.setColor(160, 160, 255);
-    myGLCD.print("UTouchCD.h", LEFT, 54);
-    myGLCD.setColor(255, 255, 255);
-    myGLCD.print("file and change", 88, 54);
-    myGLCD.print("the following values. The", LEFT, 66);
-    myGLCD.print("values are located right", LEFT, 78);
-    myGLCD.print("below the opening comment.", LEFT, 90);
-    myGLCD.print("CAL_X", LEFT, 110);
-    myGLCD.print("CAL_Y", LEFT, 122);
-    myGLCD.print("CAL_S", LEFT, 134);
-    toHex(calx);
-    myGLCD.print(buf, 75, 110);
-    toHex(caly);
-    myGLCD.print(buf, 75, 122);
-    toHex(cals);
-    myGLCD.print(buf, 75, 134);
-  }
-  else
-  {  
+  //myGLCD.clrScr();
+  //myGLCD.setColor(255, 0, 0);
+  //myGLCD.fillRect(0, 0, dispx-1, 13);
+  //myGLCD.setColor(255, 255, 255);
+  //myGLCD.setBackColor(255, 0, 0);
+  //myGLCD.drawLine(0, 14, dispx-1, 14);
+  //myGLCD.print("UTouch Calibration", CENTER, 1);
+  //myGLCD.setBackColor(0, 0, 0);
+  /*
+ 
     myGLCD.print("CALIBRATION COMPLETE", CENTER, 30);
     myGLCD.print("To use the new calibration", LEFT, 50);
     myGLCD.print("settings you must edit the", LEFT, 62);
@@ -248,25 +218,34 @@ void done()
     myGLCD.print("The values are located right", LEFT, 98);
     myGLCD.print("below the opening comment in", LEFT, 110);
     myGLCD.print("the file.", LEFT, 122);
-    myGLCD.print("CAL_X", LEFT, 150);
-    myGLCD.print("CAL_Y", LEFT, 162);
-    myGLCD.print("CAL_S", LEFT, 174);
+	*/
+	tft.setTextColor(ILI9341_WHITE);  tft.setTextSize(2);
+	tft.setCursor(10, 180);
+    tft.print("CAL_X");
+	tft.setCursor(10, 200);
+    tft.print("CAL_Y");
+	tft.setCursor(10, 220);
+    tft.print("CAL_S");
+	
 
+	tft.setCursor(75, 180);
     toHex(calx);
-    myGLCD.print(buf, 75, 150);
+    tft.print(buf);
+	tft.setCursor(75, 200);
     toHex(caly);
-    myGLCD.print(buf, 75, 162);
+    tft.print(buf); 
+	tft.setCursor(75, 220);
     toHex(cals);
-    myGLCD.print(buf, 75, 174);
-  }
-  
+    tft.print(buf);
+
 }
 
 void loop()
 {
+	
   startup();
   
-  myGLCD.setColor(80, 80, 80);
+ // myGLCD.setColor(80, 80, 80);
   drawCrossHair(dispx-11, 10);
   drawCrossHair(dispx/2, 10);
   drawCrossHair(10, 10);
@@ -275,11 +254,11 @@ void loop()
   drawCrossHair(dispx-11, dispy-11);
   drawCrossHair(dispx/2, dispy-11);
   drawCrossHair(10, dispy-11);
-  myGLCD.setColor(255, 255, 255);
+ /* myGLCD.setColor(255, 255, 255);
   myGLCD.setBackColor(255, 0, 0);
   myGLCD.print("***********", CENTER, text_y_center-12);
   myGLCD.print("***********", CENTER, text_y_center+12);
-
+*/
   calibrate(10, 10, 0);
   calibrate(10, dispy/2, 1);
   calibrate(10, dispy-11, 2);
@@ -352,5 +331,6 @@ void loop()
     cals = cals + (1L<<31);
 
   done();
+  
   while(true) {}
 }
