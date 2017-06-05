@@ -26,7 +26,7 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_R
 //extern uint8_t SmallFont[];
 
 
-UTouch      myTouch(6,5,4,3,2);
+UTouch      myTouch(7,6,5,4,3);
 
 
 #define Serial SERIAL_PORT_USBVIRTUAL
