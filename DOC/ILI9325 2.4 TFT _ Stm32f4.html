@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/ -->
+<html lang="en"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width">
+<title>ILI9325 2.4 TFT | Stm32f4</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="stylesheet" type="text/css" media="all" href="./ILI9325 2.4 TFT _ Stm32f4_files/style.css">
+<link rel="pingback" href="https://stm32f4.wordpress.com/xmlrpc.php">
+<!--[if lt IE 9]>
+<script src="https://s0.wp.com/wp-content/themes/pub/twentyeleven/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+<meta name="google-site-verification" content="vM3cdv2BvuU5Zl70jnCtJsPrz2SZHANNz9jsh5jMBPw">
+<link rel="dns-prefetch" href="https://s2.wp.com/">
+<link rel="dns-prefetch" href="https://s0.wp.com/">
+<link rel="dns-prefetch" href="https://s1.wp.com/">
+<link rel="alternate" type="application/rss+xml" title="Stm32f4 » Feed" href="https://stm32f4.wordpress.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="Stm32f4 » Comments Feed" href="https://stm32f4.wordpress.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Stm32f4 » ILI9325 2.4 TFT Comments Feed" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/feed/">
+	<script defer="" src="./ILI9325 2.4 TFT _ Stm32f4_files/beacon.js"></script><script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+			<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/s1.wp.com\/wp-includes\/js\/wp-emoji-release.min.js?m=1488818651h&ver=4.7.5"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./ILI9325 2.4 TFT _ Stm32f4_files/wp-emoji-release.min.js" type="text/javascript" defer=""></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="all-css-0-1" href="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource" type="text/css" media="all">
+<script type="text/javascript" src="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource(1)"></script>
+<link rel="stylesheet" id="all-css-0-2" href="./ILI9325 2.4 TFT _ Stm32f4_files/style(1).css" type="text/css" media="all">
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='highlander-comments-ie7-css'  href='https://s1.wp.com/wp-content/mu-plugins/highlander-comments/style-ie7.css?m=1351637563h&#038;ver=20110606' type='text/css' media='all' />
+<![endif]-->
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://stm32f4.wordpress.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://s1.wp.com/wp-includes/wlwmanifest.xml"> 
+<meta name="generator" content="WordPress.com">
+<link rel="canonical" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/">
+<link rel="shortlink" href="http://wp.me/P2OwJu-25">
+<link rel="alternate" type="application/json+oembed" href="https://public-api.wordpress.com/oembed/1.0/?format=json&amp;url=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F&amp;for=wpcom-auto-discovery"><link rel="alternate" type="application/xml+oembed" href="https://public-api.wordpress.com/oembed/1.0/?format=xml&amp;url=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F&amp;for=wpcom-auto-discovery">
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article">
+<meta property="og:title" content="ILI9325 2.4 TFT">
+<meta property="og:url" content="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/">
+<meta property="og:description" content="—ooO Work in progress…Check regularly for updates Ooo— Here is a nice little LCD TFT module. The LCD comes with  a flat ribbon cable and the associated PCB. I did solder it on the…">
+<meta property="article:published_time" content="2012-11-26T21:34:41+00:00">
+<meta property="article:modified_time" content="2012-12-10T22:56:57+00:00">
+<meta property="og:site_name" content="Stm32f4">
+<meta property="og:image" content="https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:site" content="@wordpressdotcom">
+<meta name="twitter:text:title" content="ILI9325 2.4 TFT">
+<meta name="twitter:image" content="https://stm32f4.files.wordpress.com/2012/11/under_construction_banner.jpg?w=240">
+<meta name="twitter:card" content="summary">
+<meta property="fb:app_id" content="249643311490">
+<meta property="article:publisher" content="https://www.facebook.com/WordPresscom">
+<link rel="shortcut icon" type="image/x-icon" href="https://s2.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48">
+<link rel="icon" type="image/x-icon" href="https://s2.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48">
+<link rel="apple-touch-icon-precomposed" href="https://s0.wp.com/i/webclip.png">
+<link rel="openid.server" href="https://stm32f4.wordpress.com/?openidserver=1">
+<link rel="openid.delegate" href="https://stm32f4.wordpress.com/">
+<link rel="search" type="application/opensearchdescription+xml" href="https://stm32f4.wordpress.com/osd.xml" title="Stm32f4">
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com">
+<meta name="application-name" content="Stm32f4"><meta name="msapplication-window" content="width=device-width;height=device-height"><meta name="msapplication-tooltip" content="Playing with Discovery and other low cost boards"><meta name="msapplication-task" content="name=Subscribe;action-uri=https://stm32f4.wordpress.com/feed/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=https://s2.wp.com/i/favicon.ico"><meta name="title" content="ILI9325 2.4 TFT | Stm32f4 on WordPress.com">
+<meta name="description" content="---ooO Work in progress...Check regularly for updates Ooo--- Here is a nice little LCD TFT module. The LCD comes with  a flat ribbon cable and the associated PCB. I did solder it on the board. Beware if you are experienced electronics you should better buy a module fitted on a PCB. Usually will also get…">
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+<style type="text/css"></style><script type="text/javascript" async="" src="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource(2)"></script><link rel="stylesheet" type="text/css" id="gravatar-card-css" href="./ILI9325 2.4 TFT _ Stm32f4_files/hovercard.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="./ILI9325 2.4 TFT _ Stm32f4_files/services.css"><script type="text/javascript" async="" src="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource(3)"></script><script type="text/javascript" async="" src="./ILI9325 2.4 TFT _ Stm32f4_files/link"></script><script type="text/javascript" async="" src="./ILI9325 2.4 TFT _ Stm32f4_files/track.php"></script></head>
+
+<body class="page-template-default page page-id-129 page-child parent-pageid-122 custom-background mp6 customizer-styles-applied single-author singular two-column right-sidebar highlander-enabled highlander-light">
+<div id="page" class="hfeed">
+	<header id="branding" role="banner">
+			<hgroup>
+				<h1 id="site-title"><span><a href="https://stm32f4.wordpress.com/" rel="home">Stm32f4</a></span></h1>
+				<h2 id="site-description">Playing with Discovery and other low cost boards</h2>
+			</hgroup>
+
+						<a href="https://stm32f4.wordpress.com/">
+									<img src="./ILI9325 2.4 TFT _ Stm32f4_files/cropped-banner2.jpg" width="1000" height="289" alt="">
+							</a>
+			
+								<form method="get" id="searchform" action="https://stm32f4.wordpress.com/">
+		<label for="s" class="assistive-text">Search</label>
+		<input type="text" class="field" name="s" id="s" placeholder="Search">
+		<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search">
+	</form>
+			
+			<nav id="access" role="navigation">
+				<h3 class="assistive-text">Main menu</h3>
+								<div class="skip-link"><a class="assistive-text" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#content">Skip to primary content</a></div>
+												<div class="menu"><ul>
+<li><a href="https://stm32f4.wordpress.com/">Home</a></li><li class="page_item page-item-23 page_item_has_children"><a href="https://stm32f4.wordpress.com/development-chain/">Development chain</a>
+<ul class="children">
+	<li class="page_item page-item-27"><a href="https://stm32f4.wordpress.com/development-chain/setting-up-coocox/">Setting up Coocox</a></li>
+</ul>
+</li>
+<li class="page_item page-item-122 page_item_has_children current_page_ancestor current_page_parent"><a href="https://stm32f4.wordpress.com/lcd-modules/">LCD modules</a>
+<ul class="children">
+	<li class="page_item page-item-129 current_page_item"><a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/">ILI9325 2.4 TFT</a></li>
+	<li class="page_item page-item-90"><a href="https://stm32f4.wordpress.com/lcd-modules/nokia-5110-lcd-board/">Nokia 5110 LCD</a></li>
+</ul>
+</li>
+<li class="page_item page-item-125 page_item_has_children"><a href="https://stm32f4.wordpress.com/stm32f4-boards/">STM32F4 Boards</a>
+<ul class="children">
+	<li class="page_item page-item-11"><a href="https://stm32f4.wordpress.com/stm32f4-boards/core-407i-board/">Core 407i Board</a></li>
+</ul>
+</li>
+<li class="page_item page-item-70"><a href="https://stm32f4.wordpress.com/tools/">Tools</a></li>
+<li class="page_item page-item-2"><a href="https://stm32f4.wordpress.com/about/">About</a></li>
+</ul></div>
+			</nav><!-- #access -->
+	</header><!-- #branding -->
+
+
+	<div id="main">
+
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					
+<article id="post-129" class="post-129 page type-page status-publish hentry">
+	<header class="entry-header">
+		<h1 class="entry-title">ILI9325 2.4 TFT</h1>
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p style="text-align:center;"><img data-attachment-id="138" data-permalink="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/under_construction_banner/" data-orig-file="https://stm32f4.files.wordpress.com/2012/11/under_construction_banner.jpg?w=584" data-orig-size="481,30" data-comments-opened="0" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="under_construction_banner" data-image-description="" data-medium-file="https://stm32f4.files.wordpress.com/2012/11/under_construction_banner.jpg?w=584?w=300" data-large-file="https://stm32f4.files.wordpress.com/2012/11/under_construction_banner.jpg?w=584?w=481" class="size-full wp-image-138 aligncenter" title="under_construction_banner" alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/under_construction_banner.jpg" srcset="https://stm32f4.files.wordpress.com/2012/11/under_construction_banner.jpg 481w, https://stm32f4.files.wordpress.com/2012/11/under_construction_banner.jpg?w=150 150w, https://stm32f4.files.wordpress.com/2012/11/under_construction_banner.jpg?w=300 300w" sizes="(max-width: 481px) 100vw, 481px">—ooO Work in progress…Check regularly for updates Ooo—</p>
+<p>Here is a nice little LCD TFT module. The LCD comes with &nbsp;a flat ribbon cable and the associated PCB. I did solder it on the board. Beware if you are experienced electronics you should better buy a module fitted on a PCB. Usually will also get some additional features:</p>
+<ul>
+<li>Touch panel IC with SPI interface</li>
+<li>&nbsp;Jumpers to set 8 or 16 bits mode</li>
+<li>SD card holder</li>
+<li>Serial flash foot print</li>
+</ul>
+<p><a href="https://stm32f4.files.wordpress.com/2012/11/tft-2-8.jpg"><img title="TFT 2.8" alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/tft-2-8.jpg" width="584" height="579"></a></p>
+<h1>Module Characteristics</h1>
+<ul>
+<li>240 x 320 pixels</li>
+<li>8,16 or 18 bits color depth</li>
+<li>Touch panel</li>
+<li>8/16 bits interface setting</li>
+<li>Backlight controlled by PWM</li>
+</ul>
+<h1>Board</h1>
+<p>For this sample, I have used a STM32F4 discovery board.</p>
+<p><span style="text-decoration:underline;">FSMC</span><br>
+To make it a more fun I’ve used the FSMC (Flexible Static Memory Controller).STM32F controller family has a bus module that allow to drive external “memory” or “LCD”. Instead of managing control pin states and setting/reading IO pin the FSMC allows to access peripheral just by writing / reading memory location. By doing that, you let the controller manage control signals and can benefit of higher speeds. As the peripheral is now “memory” mapped, you can also use DMA transfer to lighten CPU load while painting the screen.</p>
+<p>All FSMC pins are not free on the STM32F4 Discovery Board so I will only use 8 bits bus. According ILI9325 documentation, DB8 to DB15 will be used in 8 bits mode. It means that FSMC must be configured to be 16 bits wide. Only the higher bits will be used.</p>
+<div style="background:#f8f8f8;overflow:auto;width:auto;font-family:verdana;font-size:10pt;color:black;background-color:#fffff0;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+<pre style="margin:0;background:#fffff0;color:#00c000;">/**
+ ********************************************************************************
+ *
+ * Pin configuration
+ *
+ *        D7 : LCD Pin D15 -&gt; PD10 [FSMC D15] (1.42)
+ *        D6 : LCD Pin D14 -&gt; PD9  [FSMC D14] (1.41)
+ *        D5 : LCD Pin D13 -&gt; PD8  [FSMC D13] (1.40)
+ *        D4 : LCD Pin D12 -&gt; PE15 [FSMC D12] (1.33)
+ *        D3 : LCD Pin D11 -&gt; PE14 [FSMC D11] (1.32)
+ *        D2 : LCD Pin D10 -&gt; PE13 [FSMC D10] (1.31)
+ *        D1 : LCD Pin D9  -&gt; PE12 [FSMC D09] (1.30)
+ *        D0 : LCD Pin D8  -&gt; PE11 [FSMC D08] (1.29)
+ *
+ *        RS :             -&gt; PD11 [FSMS A16] (1.43)
+ *       ~RW :             -&gt; PD5  [FSMS NWE] (2.29) (USB OTG Over Current LED)
+ *       ~RD :             -&gt; PD4  [FSMS NOE] (2.32)
+ *       ~CS :             -&gt; PD7  [FSMS NE1] (2.27)
+ *       ~RST:             -&gt; PE10 (1.28)
+ *       LED Backlight :   -&gt; PE9  (1.27)
+ */</pre>
+</div>
+<p>The initialization code for pin configuration is</p>
+<div style="background:#f8f8f8;overflow:auto;width:auto;font-family:verdana;font-size:10pt;color:black;background-color:#fffff0;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+<pre style="margin:0;background-color:#fffff0;"><span style="color:#b00040;">void</span> <span style="color:#0000ff;">LCD_CtrlLinesConfig</span>() {
+	GPIO_InitTypeDef GPIO_InitStructure;
+
+	<span style="color:#00c000;font-style:italic;">/* Enable GPIO D and E clocks */</span>
+	RCC_AHB1PeriphClockCmd(
+			RCC_AHB1Periph_GPIOB <span style="color:#666666;">|</span> RCC_AHB1Periph_GPIOD <span style="color:#666666;">|</span> RCC_AHB1Periph_GPIOE,
+			ENABLE);
+
+	<span style="color:#00c000;font-style:italic;">// Create GPIO D Init structure for used pins</span>
+	GPIO_InitStructure.GPIO_Pin <span style="color:#666666;">=</span> GPIO_Pin_4 <span style="color:#666666;">|</span> GPIO_Pin_5 <span style="color:#666666;">|</span> GPIO_Pin_7
+			<span style="color:#666666;">|</span> GPIO_Pin_8 <span style="color:#666666;">|</span> GPIO_Pin_9 <span style="color:#666666;">|</span> GPIO_Pin_10 <span style="color:#666666;">|</span> GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Mode <span style="color:#666666;">=</span> GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_Speed <span style="color:#666666;">=</span> GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType <span style="color:#666666;">=</span> GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd <span style="color:#666666;">=</span> GPIO_PuPd_UP;
+
+	<span style="color:#00c000;font-style:italic;">/* Initialize pins */</span>
+	GPIO_Init(GPIOD, <span style="color:#666666;">&amp;</span>GPIO_InitStructure);
+
+	<span style="color:#00c000;font-style:italic;">/* Configure GPIO D pins as FSMC alternate functions */</span>
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource4, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// NOE -&gt; RD</span>
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource5, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// NWE -&gt; WR</span>
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource7, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// NE1 -&gt; CS</span>
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource8, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D13 -&gt; D5</span>
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource9, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D14 -&gt; D6</span>
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource10, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D15 -&gt; D7</span>
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource11, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// A16 -&gt; RS</span>
+
+	<span style="color:#00c000;font-style:italic;">/* Create GPIO E Init structure for used pin */</span>
+	GPIO_InitStructure.GPIO_Pin <span style="color:#666666;">=</span> GPIO_Pin_11 <span style="color:#666666;">|</span> GPIO_Pin_12 <span style="color:#666666;">|</span> GPIO_Pin_13
+			<span style="color:#666666;">|</span> GPIO_Pin_14 <span style="color:#666666;">|</span> GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Mode <span style="color:#666666;">=</span> GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_Speed <span style="color:#666666;">=</span> GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType <span style="color:#666666;">=</span> GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd <span style="color:#666666;">=</span> GPIO_PuPd_UP;
+
+	<span style="color:#00c000;font-style:italic;">/* Initialize GPIOE pins */</span>
+	GPIO_Init(GPIOE, <span style="color:#666666;">&amp;</span>GPIO_InitStructure);
+
+	<span style="color:#00c000;font-style:italic;">/* Configure GPIO E pins as FSMC alternate functions */</span>
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource11, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D8  -&gt; D0</span>
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource12, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D9  -&gt; D1</span>
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource13, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D10 -&gt; D2</span>
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource14, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D11 -&gt; D3</span>
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource15, GPIO_AF_FSMC); <span style="color:#00c000;font-style:italic;">// D12 -&gt; D4</span>
+
+	<span style="color:#00c000;font-style:italic;">/* Configure Reset Pin */</span>
+	GPIO_InitStructure.GPIO_Pin <span style="color:#666666;">=</span> GPIO_Pin_10;
+	GPIO_InitStructure.GPIO_Mode <span style="color:#666666;">=</span> GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_Speed <span style="color:#666666;">=</span> GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType <span style="color:#666666;">=</span> GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd <span style="color:#666666;">=</span> GPIO_PuPd_UP;
+
+	<span style="color:#00c000;font-style:italic;">/* Initialize GPIOE pins */</span>
+	GPIO_Init(GPIOE, <span style="color:#666666;">&amp;</span>GPIO_InitStructure);
+
+	<span style="color:#008000;font-weight:bold;">return</span>;
+}</pre>
+</div>
+<p>The pin are configured with high level pullup. For control line it ensure more robustness to parasitic signal.</p>
+<p>The FSMC bus is configured as follows</p>
+<div style="background:#f8f8f8;overflow:auto;width:auto;font-family:verdana;font-size:10pt;color:black;background-color:#fffff0;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+<pre style="margin:0;background-color:#fffff0;"><span style="color:#b00040;">void</span> <span style="color:#0000ff;">LCD_FSMCConfig</span>() {
+	FSMC_NORSRAMInitTypeDef FSMC_NORSRAMInitStructure;
+	FSMC_NORSRAMTimingInitTypeDef FSMC_NORSRAMTimingInitStructureRead;
+	FSMC_NORSRAMTimingInitTypeDef FSMC_NORSRAMTimingInitStructureWrite;
+
+	<span style="color:#00c000;font-style:italic;">/* Enable FSMC Clock */</span>
+	RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC, ENABLE);
+
+	<span style="color:#00c000;font-style:italic;">/* Define Read timing parameters */</span>
+	FSMC_NORSRAMTimingInitStructureRead.FSMC_AddressSetupTime <span style="color:#666666;">=</span> <span style="color:#666666;">1</span>;
+	FSMC_NORSRAMTimingInitStructureRead.FSMC_AddressHoldTime <span style="color:#666666;">=</span> <span style="color:#666666;">0</span>;
+	FSMC_NORSRAMTimingInitStructureRead.FSMC_DataSetupTime <span style="color:#666666;">=</span> <span style="color:#666666;">15</span>;
+	FSMC_NORSRAMTimingInitStructureRead.FSMC_BusTurnAroundDuration <span style="color:#666666;">=</span> <span style="color:#666666;">0</span>;
+	FSMC_NORSRAMTimingInitStructureRead.FSMC_CLKDivision <span style="color:#666666;">=</span> <span style="color:#666666;">1</span>;
+	FSMC_NORSRAMTimingInitStructureRead.FSMC_DataLatency <span style="color:#666666;">=</span> <span style="color:#666666;">0</span>;
+	FSMC_NORSRAMTimingInitStructureRead.FSMC_AccessMode <span style="color:#666666;">=</span> FSMC_AccessMode_A;
+
+	<span style="color:#00c000;font-style:italic;">/* Define Write Timing parameters */</span>
+	FSMC_NORSRAMTimingInitStructureWrite.FSMC_AddressSetupTime <span style="color:#666666;">=</span> <span style="color:#666666;">2</span>;
+	FSMC_NORSRAMTimingInitStructureWrite.FSMC_AddressHoldTime <span style="color:#666666;">=</span> <span style="color:#666666;">0</span>;
+	FSMC_NORSRAMTimingInitStructureWrite.FSMC_DataSetupTime <span style="color:#666666;">=</span> <span style="color:#666666;">5</span>;
+	FSMC_NORSRAMTimingInitStructureWrite.FSMC_BusTurnAroundDuration <span style="color:#666666;">=</span> <span style="color:#666666;">0</span>;
+	FSMC_NORSRAMTimingInitStructureWrite.FSMC_CLKDivision <span style="color:#666666;">=</span> <span style="color:#666666;">1</span>;
+	FSMC_NORSRAMTimingInitStructureWrite.FSMC_DataLatency <span style="color:#666666;">=</span> <span style="color:#666666;">0</span>;
+	FSMC_NORSRAMTimingInitStructureWrite.FSMC_AccessMode <span style="color:#666666;">=</span> FSMC_AccessMode_A;
+
+	<span style="color:#00c000;font-style:italic;">/* Define protocol type */</span>
+	FSMC_NORSRAMInitStructure.FSMC_Bank <span style="color:#666666;">=</span> FSMC_Bank1_NORSRAM1; <span style="color:#00c000;font-style:italic;">//Bank1</span>
+	FSMC_NORSRAMInitStructure.FSMC_DataAddressMux <span style="color:#666666;">=</span> FSMC_DataAddressMux_Disable; <span style="color:#00c000;font-style:italic;">//No mux</span>
+	FSMC_NORSRAMInitStructure.FSMC_MemoryType <span style="color:#666666;">=</span> FSMC_MemoryType_SRAM; <span style="color:#00c000;font-style:italic;">//SRAM type</span>
+	FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth <span style="color:#666666;">=</span> FSMC_MemoryDataWidth_16b; <span style="color:#00c000;font-style:italic;">//16 bits wide</span>
+	FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode <span style="color:#666666;">=</span>
+			FSMC_BurstAccessMode_Disable; <span style="color:#00c000;font-style:italic;">//No Burst</span>
+	FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait <span style="color:#666666;">=</span>
+			FSMC_AsynchronousWait_Disable; <span style="color:#00c000;font-style:italic;">// No wait</span>
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity <span style="color:#666666;">=</span>
+			FSMC_WaitSignalPolarity_Low; <span style="color:#00c000;font-style:italic;">//Don'tcare</span>
+	FSMC_NORSRAMInitStructure.FSMC_WrapMode <span style="color:#666666;">=</span> FSMC_WrapMode_Disable; <span style="color:#00c000;font-style:italic;">//No wrap mode</span>
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive <span style="color:#666666;">=</span>
+			FSMC_WaitSignalActive_BeforeWaitState; <span style="color:#00c000;font-style:italic;">//Don't care</span>
+	FSMC_NORSRAMInitStructure.FSMC_WriteOperation <span style="color:#666666;">=</span> FSMC_WriteOperation_Enable;
+	FSMC_NORSRAMInitStructure.FSMC_WaitSignal <span style="color:#666666;">=</span> FSMC_WaitSignal_Disable; <span style="color:#00c000;font-style:italic;">//Don't care</span>
+	FSMC_NORSRAMInitStructure.FSMC_ExtendedMode <span style="color:#666666;">=</span> FSMC_ExtendedMode_Enable; <span style="color:#00c000;font-style:italic;">//Allow distinct Read/Write parameters</span>
+	FSMC_NORSRAMInitStructure.FSMC_WriteBurst <span style="color:#666666;">=</span> FSMC_WriteBurst_Disable; <span style="color:#00c000;font-style:italic;">//Don't care</span>
+
+	<span style="color:#00c000;font-style:italic;">// Set read timing structure</span>
+	FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct <span style="color:#666666;">=</span>
+			<span style="color:#666666;">&amp;</span>FSMC_NORSRAMTimingInitStructureRead;
+
+	<span style="color:#00c000;font-style:italic;">// Set write timing structure</span>
+	FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct <span style="color:#666666;">=</span>
+			<span style="color:#666666;">&amp;</span>FSMC_NORSRAMTimingInitStructureWrite;
+
+	<span style="color:#00c000;font-style:italic;">// Initialize FSMC for read and write</span>
+	FSMC_NORSRAMInit(<span style="color:#666666;">&amp;</span>FSMC_NORSRAMInitStructure);
+
+	<span style="color:#00c000;font-style:italic;">// Enable FSMC</span>
+	FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM1, ENABLE);
+
+	<span style="color:#008000;font-weight:bold;">return</span>;
+}</pre>
+</div>
+<p>The FSMC bus has different timings for read and write (write is faster than read).</p>
+<p>Here is the timing capture with OpenBench Sniffer</p>
+<p><img data-attachment-id="164" data-permalink="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/timing-fsmc/" data-orig-file="https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png?w=584&amp;h=547" data-orig-size="613,575" data-comments-opened="0" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="Timing FSMC" data-image-description="" data-medium-file="https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png?w=584&amp;h=547?w=300" data-large-file="https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png?w=584&amp;h=547?w=584" class="alignnone size-full wp-image-164" alt="Timing FSMC" src="./ILI9325 2.4 TFT _ Stm32f4_files/timing-fsmc.png" width="584" height="547" srcset="https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png?w=584&amp;h=547 584w, https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png?w=150&amp;h=141 150w, https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png?w=300&amp;h=281 300w, https://stm32f4.files.wordpress.com/2012/12/timing-fsmc.png 613w" sizes="(max-width: 584px) 100vw, 584px"></p>
+<p><span style="text-decoration:underline;">Touch panel SPI</span></p>
+<p>The touch panel is controlled through SPI interface. Nothing to say, the code is straightforward. The main concern about touch panel is Calibration and “Jitter” management. With this board, I’ve little issue. Without touching the screen, X value stays at 0 while the Y value has little jitter (oscillating from 0 to 1). The touch panel seems quite linear. However I use a calibration algorithm (5 points) to get accurate&nbsp;positioning. To enhance accuracy, SPI interface is set to a quite low value (256 Khz).</p>
+<p><span style="text-decoration:underline;">Touch panel IRQ</span></p>
+<p>The PENIRQ pin of the touch controller is tight to PD6 port which triggers a interrupt when a high to low transition occurs. The XPT2046 touch controller chip requires less than 21K resistance for the touch panel in order to trigger a low pulse. The IRQ is triggered only if the controller is in “power save” mode which is the case. Everything works well. Cursor tracking shows no lag.</p>
+<p><span style="text-decoration:underline;">LED backlight</span></p>
+<p>The module brightness is impressive. The value is controlled by PWM. Timer1 channel 1 is used for PWM (PE9 pin). The PWM frequency is set to 1Khz. There are 100 steps for brightness. Surprisingly, the PWM sample from ST lack the final call to TIM_CtrlPWMOutputs function to make it start.</p>
+<div style="background:#f8f8f8;overflow:auto;width:auto;font-family:verdana;font-size:10pt;color:black;background-color:#FFFFF0;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+<pre style="margin:0;background-color:#FFFFF0;"><span style="color:#B00040;">void</span> <span style="color:#0000FF;">LCD_SetBackLight</span>(<span style="color:#B00040;">unsigned</span> <span style="color:#B00040;">short</span> level) {
+	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
+	TIM_OCInitTypeDef TIM_OCInitStructure;
+	GPIO_InitTypeDef GPIO_InitStructure;
+	<span style="color:#B00040;">uint16_t</span> CCR1_Val <span style="color:#666666;">=</span> level;
+	<span style="color:#B00040;">uint16_t</span> PrescalerValue;
+
+	<span style="color:#00C000;font-style:italic;">// Start Timer 1 clock</span>
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+
+	<span style="color:#00C000;font-style:italic;">//Enable port E clock</span>
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
+
+	<span style="color:#00C000;font-style:italic;">// Configure PE9 as output for PWM</span>
+	GPIO_InitStructure.GPIO_Pin <span style="color:#666666;">=</span> GPIO_Pin_9;
+	GPIO_InitStructure.GPIO_Mode <span style="color:#666666;">=</span> GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_Speed <span style="color:#666666;">=</span> GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_OType <span style="color:#666666;">=</span> GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd <span style="color:#666666;">=</span> GPIO_PuPd_UP;
+	GPIO_Init(GPIOE, <span style="color:#666666;">&amp;</span>GPIO_InitStructure);
+
+	<span style="color:#00C000;font-style:italic;">// Connect PE9 to Timer 1 channel 1</span>
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource9, GPIO_AF_TIM1);
+
+	<span style="color:#00C000;font-style:italic;">/* Compute the prescaler value</span>
+<span style="color:#00C000;font-style:italic;">	 * Timer 1,8,9,10 and 11 are connected to APB2 which runs at SystemCoreClock</span>
+<span style="color:#00C000;font-style:italic;">	 * Other timers are connected to APB1 and runs at SystemCoreClock/2</span>
+<span style="color:#00C000;font-style:italic;">	 Prescaler = (TIM1CLK / TIM1 counter clock) - 1</span>
+<span style="color:#00C000;font-style:italic;">	 Prescaler = ((SystemCoreClock) /Frequency) - 1</span>
+<span style="color:#00C000;font-style:italic;">	 */</span>
+	PrescalerValue <span style="color:#666666;">=</span> (<span style="color:#B00040;">uint16_t</span>)((SystemCoreClock) <span style="color:#666666;">/</span> <span style="color:#666666;">100000</span>) <span style="color:#666666;">-</span> <span style="color:#666666;">1</span>;
+
+	<span style="color:#00C000;font-style:italic;">/* Time base configuration */</span>
+	TIM_TimeBaseStructure.TIM_Period <span style="color:#666666;">=</span> <span style="color:#666666;">100</span>;
+	TIM_TimeBaseStructure.TIM_Prescaler <span style="color:#666666;">=</span> PrescalerValue;
+	TIM_TimeBaseStructure.TIM_ClockDivision <span style="color:#666666;">=</span> <span style="color:#666666;">0</span>;
+	TIM_TimeBaseStructure.TIM_CounterMode <span style="color:#666666;">=</span> TIM_CounterMode_Up;
+	TIM_TimeBaseInit(TIM1, <span style="color:#666666;">&amp;</span>TIM_TimeBaseStructure);
+
+	<span style="color:#00C000;font-style:italic;">/* PWM1 Mode configuration: Channel1 */</span>
+	TIM_OCInitStructure.TIM_OCMode <span style="color:#666666;">=</span> TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState <span style="color:#666666;">=</span> TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse <span style="color:#666666;">=</span> CCR1_Val;
+	TIM_OCInitStructure.TIM_OCPolarity <span style="color:#666666;">=</span> TIM_OCPolarity_High;
+	TIM_OC1Init(TIM1, <span style="color:#666666;">&amp;</span>TIM_OCInitStructure);
+	TIM_OC1PreloadConfig(TIM1, TIM_OCPreload_Enable);
+	TIM_ARRPreloadConfig(TIM1, ENABLE);
+
+	<span style="color:#00C000;font-style:italic;">/* TIM1 enable counter */</span>
+	TIM_Cmd(TIM1, ENABLE);
+	TIM_CtrlPWMOutputs(TIM1, ENABLE);
+}
+</pre>
+</div>
+<p>&nbsp;</p>
+<p><span style="text-decoration:underline;">Reset control</span></p>
+<p>It seems that the module doesn’t have a reset circuit. A controller IO is use to manage the reset state of the module. Nothing special here.</p>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow" data-shared="sharing-twitter-129" class="share-twitter sd-button share-icon" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/?share=twitter&amp;nb=1" target="_blank" title="Click to share on Twitter"><span>Twitter</span></a></li><li class="share-facebook"><a rel="nofollow" data-shared="sharing-facebook-129" class="share-facebook sd-button share-icon" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/?share=facebook&amp;nb=1" target="_blank" title="Share on Facebook"><span>Facebook</span></a></li><li class="share-end"></li></ul></div></div></div><div class="sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-loaded" id="like-post-wrapper-41594900-129-5937bceb94180" data-src="//widgets.wp.com/likes/#blog_id=41594900&amp;post_id=129&amp;origin=stm32f4.wordpress.com&amp;obj_id=41594900-129-5937bceb94180" data-name="like-post-frame-41594900-129-5937bceb94180"><h3 class="sd-title">Like this:</h3><div class="likes-widget-placeholder post-likes-widget-placeholder" style="height: 55px; display: none;"><span class="button"><span>Like</span></span> <span class="loading">Loading...</span></div><iframe class="post-likes-widget jetpack-likes-widget" name="like-post-frame-41594900-129-5937bceb94180" height="55px" width="100%" frameborder="0" src="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource.html"></iframe><span class="sd-text-color"></span><a class="sd-link-color"></a></div></div>			</div><!-- .entry-content -->
+	<footer class="entry-meta">
+			</footer><!-- .entry-meta -->
+</article><!-- #post-129 -->
+
+						<div id="comments">
+	
+	
+			<h2 id="comments-title">
+			5 thoughts on “<span>ILI9325 2.4 TFT</span>”		</h2>
+
+		
+		<ol class="commentlist">
+				<li class="comment even thread-even depth-1 highlander-comment" id="li-comment-72">
+		<article id="comment-72" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/7ee6786d70cf0ec7611e5275e42e8233" class="avatar avatar-68 grav-hashed grav-hijack" height="68" width="68" id="grav-7ee6786d70cf0ec7611e5275e42e8233-0"><span class="fn">David dawe</span> on <a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-72"><time datetime="2013-04-12T18:32:48+00:00">April 12, 2013 at 6:32 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>hello<br>
+did you get your ili9320 to work i am having trouble on my stm32f4 discovery</p>
+</div>
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/?replytocom=72#respond" onclick="return addComment.moveForm( &quot;comment-72&quot;, &quot;72&quot;, &quot;respond&quot;, &quot;129&quot; )" aria-label="Reply to David dawe">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-goofie31 bypostauthor odd alt depth-2 highlander-comment" id="li-comment-77">
+		<article id="comment-77" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/59b0423721dce43b6cadc5f62a663ccb" class="avatar avatar-39 grav-hashed grav-hijack" height="39" width="39" id="grav-59b0423721dce43b6cadc5f62a663ccb-0"><span class="fn"><a href="https://stm32f4.wordpress.com/" rel="external nofollow" class="url">Goofie 31</a></span> on <a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-77"><time datetime="2013-04-18T23:05:22+00:00">April 18, 2013 at 11:05 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>Hi David,</p>
+<p>Sorry, I didn’t connect it yet to any board. Waiting for more time…</p>
+<p>Regards</p>
+</div>
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/?replytocom=77#respond" onclick="return addComment.moveForm( &quot;comment-77&quot;, &quot;77&quot;, &quot;respond&quot;, &quot;129&quot; )" aria-label="Reply to Goofie 31">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1 highlander-comment" id="li-comment-78">
+		<article id="comment-78" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/452a475464fc139c1229668db0c59457" class="avatar avatar-68 grav-hashed grav-hijack" height="68" width="68" id="grav-452a475464fc139c1229668db0c59457-0"><span class="fn">BO</span> on <a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-78"><time datetime="2013-04-19T06:34:13+00:00">April 19, 2013 at 6:34 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>Hi, Do you have the link where you buy from for the lcd panel? and can you upload the schematic of the pinouts of lcd?</p>
+</div>
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/?replytocom=78#respond" onclick="return addComment.moveForm( &quot;comment-78&quot;, &quot;78&quot;, &quot;respond&quot;, &quot;129&quot; )" aria-label="Reply to BO">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	<ul class="children">
+	<li class="comment byuser comment-author-goofie31 bypostauthor odd alt depth-2 highlander-comment" id="li-comment-80">
+		<article id="comment-80" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/59b0423721dce43b6cadc5f62a663ccb" class="avatar avatar-39 grav-hashed grav-hijack" height="39" width="39" id="grav-59b0423721dce43b6cadc5f62a663ccb-1"><span class="fn"><a href="https://stm32f4.wordpress.com/" rel="external nofollow" class="url">Goofie 31</a></span> on <a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-80"><time datetime="2013-04-19T23:08:26+00:00">April 19, 2013 at 11:08 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>Hi BO,</p>
+<p>LCD can be found there : <a href="http://www.ebay.com/itm/2-4-inch-TFT-LCD-module-320x240-ILI9325-touchpad-PCB-adapter-arduino-AVR-STM32-/120992686604?pt=US_Cell_Phone_Replacement_Parts_Tools&amp;hash=item1c2bb9e20c" target="_blank" rel="nofollow">eBay store</a></p>
+<p>Documentation <a href="http://coldtears.lin3.siteonlinetest.com/files/2.4.zip" title="link" target="_blank" rel="nofollow">link</a></p>
+<p>Please note that you have to solder the LCD ribbon to the PCB adapter which is not obvious if you don’t already have some skills in soldering small parts…</p>
+</div>
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/?replytocom=80#respond" onclick="return addComment.moveForm( &quot;comment-80&quot;, &quot;80&quot;, &quot;respond&quot;, &quot;129&quot; )" aria-label="Reply to Goofie 31">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1 highlander-comment" id="li-comment-89">
+		<article id="comment-89" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/9a2a960436f1caf4ace04c7d514dee4c" class="avatar avatar-68 grav-hashed grav-hijack" height="68" width="68" id="grav-9a2a960436f1caf4ace04c7d514dee4c-0"><span class="fn">Ernst</span> on <a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-89"><time datetime="2013-04-28T17:30:51+00:00">April 28, 2013 at 5:30 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>Hello!<br>
+Could you download the hex-file?</p>
+</div>
+
+			<div class="reply">
+				<a rel="nofollow" class="comment-reply-link" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/?replytocom=89#respond" onclick="return addComment.moveForm( &quot;comment-89&quot;, &quot;89&quot;, &quot;respond&quot;, &quot;129&quot; )" aria-label="Reply to Ernst">Reply <span>↓</span></a>			</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+		</ol>
+
+		
+		
+	
+		<div id="respond" class="comment-respond js">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#respond" style="display:none;">Cancel reply</a></small></h3>			<form action="https://stm32f4.wordpress.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+				<input type="hidden" id="highlander_comment_nonce" name="highlander_comment_nonce" value="bf7835847f"><input type="hidden" name="_wp_http_referer" value="/lcd-modules/ili9325-2-4-tft/">
+<input type="hidden" name="hc_post_as" id="hc_post_as" value="guest">
+
+<div class="comment-form-field comment-textarea">
+	
+	<div id="comment-form-comment"><textarea tabindex="-1" style="position: absolute; top: -999px; left: 0px; right: auto; bottom: auto; border: 0px; padding: 0px; box-sizing: content-box; word-wrap: break-word; overflow: hidden; transition: none; height: 0px !important; min-height: 0px !important; font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif; font-size: 14px; font-weight: 300; font-style: normal; letter-spacing: 0px; text-transform: none; text-decoration: none solid rgba(0, 0, 0, 0.701961); word-spacing: 0px; text-indent: 0px; line-height: 22.75px; width: 614px;" class="autosizejs "></textarea><textarea id="comment" name="comment" title="Enter your comment here..." placeholder="Enter your comment here..." style="height: 42px; overflow: hidden; word-wrap: break-word; resize: none;"></textarea></div>
+</div>
+
+<div id="comment-form-identity" style="display: none;">
+
+	<div id="comment-form-nascar">
+		<p>Fill in your details below or click an icon to log in:</p>
+		<ul>
+			<li class="selected" style="display:none;">
+				<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-form-guest" id="postas-guest" title="Guest">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-form-load-service:WordPress.com" id="postas-wordpress" title="WordPress.com">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-form-load-service:Twitter" id="postas-twitter" title="Twitter">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#comment-form-load-service:Facebook" id="postas-facebook" title="Facebook">
+					<span></span>
+				</a>
+			</li>
+			<li>
+			<iframe id="googleplus-sign-in" name="googleplus-sign-in" src="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource(7).html" width="24" height="24" scrolling="no" allowtransparency="true" seamless="seamless" frameborder="0"></iframe>
+			</li>
+		</ul>
+	</div>
+
+	<div id="comment-form-guest" class="comment-form-service selected">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+<a href="https://gravatar.com/site/signup/" target="_blank">				<img src="./ILI9325 2.4 TFT _ Stm32f4_files/ad516503a11cd5ca435acc9bb6523536" alt="Gravatar" width="25" class="no-grav">
+</a>			</div>
+
+				<div class="comment-form-fields">
+				<div class="comment-form-field comment-form-email">
+					<label for="email">Email <span class="required">(required)</span> <span class="nopublish">(Address never made public)</span></label>
+					<div class="comment-form-input"><input id="email" name="email" type="email" value=""></div>
+				</div>
+				<div class="comment-form-field comment-form-author">
+					<label for="author">Name <span class="required">(required)</span></label>
+					<div class="comment-form-input"><input id="author" name="author" type="text" value=""></div>
+				</div>
+				<div class="comment-form-field comment-form-url">
+					<label for="url">Website</label>
+					<div class="comment-form-input"><input id="url" name="url" type="url" value=""></div>
+				</div>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-wordpress" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="./ILI9325 2.4 TFT _ Stm32f4_files/ad516503a11cd5ca435acc9bb6523536" alt="WordPress.com Logo" width="25" class="no-grav">
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="wp_avatar" id="wordpress-avatar" class="comment-meta-wordpress" value="">
+				<input type="hidden" name="wp_user_id" id="wordpress-user_id" class="comment-meta-wordpress" value="">
+				<input type="hidden" name="wp_access_token" id="wordpress-access_token" class="comment-meta-wordpress" value="">
+				<p class="comment-form-posting-as pa-wordpress"><strong></strong> You are commenting using your <span class="skimlinks-unlinked">WordPress.com</span> account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( &#39;wordpress&#39; );">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-twitter" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="./ILI9325 2.4 TFT _ Stm32f4_files/ad516503a11cd5ca435acc9bb6523536" alt="Twitter picture" width="25" class="no-grav">
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="twitter_avatar" id="twitter-avatar" class="comment-meta-twitter" value="">
+				<input type="hidden" name="twitter_user_id" id="twitter-user_id" class="comment-meta-twitter" value="">
+				<input type="hidden" name="twitter_access_token" id="twitter-access_token" class="comment-meta-twitter" value="">
+				<p class="comment-form-posting-as pa-twitter"><strong></strong> You are commenting using your Twitter account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( &#39;twitter&#39; );">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-facebook" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="./ILI9325 2.4 TFT _ Stm32f4_files/ad516503a11cd5ca435acc9bb6523536" alt="Facebook photo" width="25" class="no-grav">
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="fb_avatar" id="facebook-avatar" class="comment-meta-facebook" value="">
+				<input type="hidden" name="fb_user_id" id="facebook-user_id" class="comment-meta-facebook" value="">
+				<input type="hidden" name="fb_access_token" id="facebook-access_token" class="comment-meta-facebook" value="">
+				<p class="comment-form-posting-as pa-facebook"><strong></strong> You are commenting using your Facebook account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( &#39;facebook&#39; );">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-googleplus" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="./ILI9325 2.4 TFT _ Stm32f4_files/ad516503a11cd5ca435acc9bb6523536" alt="Google+ photo" width="25" class="no-grav">
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="googleplus_avatar" id="googleplus-avatar" class="comment-meta-googleplus" value="">
+				<input type="hidden" name="googleplus_user_id" id="googleplus-user_id" class="comment-meta-googleplus" value="">
+				<input type="hidden" name="googleplus_access_token" id="googleplus-access_token" class="comment-meta-googleplus" value="">
+				<p class="comment-form-posting-as pa-googleplus"><strong></strong> You are commenting using your Google+ account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( &#39;googleplus&#39; );">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+
+	<div id="comment-form-load-service" class="comment-form-service">
+		<div class="comment-form-posting-as-cancel"><a href="javascript:HighlanderComments.cancelExternalWindow();">Cancel</a></div>
+		<p>Connecting to %s</p>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+var highlander_expando_javascript = function(){
+	var input = document.createElement( 'input' ),
+	    comment = jQuery( '#comment' );
+
+	if ( 'placeholder' in input ) {
+		comment.attr( 'placeholder', jQuery( '.comment-textarea label' ).remove().text() );
+	}
+
+	// Expando Mode: start small, then auto-resize on first click + text length
+	jQuery( '#comment-form-identity' ).hide();
+	jQuery( '#comment-form-subscribe' ).hide();
+	jQuery( '#commentform .form-submit' ).hide();
+
+	comment.css( { 'height':'10px' } ).one( 'focus', function() {
+		var timer = setInterval( HighlanderComments.resizeCallback, 10 )
+		jQuery( this ).animate( { 'height': HighlanderComments.initialHeight } ).delay( 100 ).queue( function(n) { clearInterval( timer ); HighlanderComments.resizeCallback(); n(); } );
+		jQuery( '#comment-form-identity' ).slideDown();
+		jQuery( '#comment-form-subscribe' ).slideDown();
+		jQuery( '#commentform .form-submit' ).slideDown();
+	});
+}
+jQuery(document).ready( highlander_expando_javascript );
+</script>
+
+<div id="comment-form-subscribe" style="display: none;">
+	<p class="comment-subscription-form"><input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;"> <label class="subscribe-label" id="subscribe-label" for="subscribe" style="display: inline;">Notify me of new comments via email.</label></p><p class="post-subscription-form"><input type="checkbox" name="subscribe_blog" id="subscribe_blog" value="subscribe" style="width: auto;"> <label class="subscribe-label" id="subscribe-blog-label" for="subscribe_blog" style="display: inline;">Notify me of new posts via email.</label></p></div>
+
+
+
+
+<p class="form-submit" style="display: none;"><input name="submit" type="submit" id="comment-submit" class="submit" value="Post Comment"> <input type="hidden" name="comment_post_ID" value="129" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="373e504176"></p>
+<input type="hidden" name="genseq" value="1496825067">
+<p style="display: none;"></p>			<input type="hidden" id="ak_js" name="ak_js" value="1496825044045"></form>
+			</div><!-- #respond -->
+	<div style="clear: both"></div>
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+
+	</div><!-- #main -->
+
+	<footer id="colophon" role="contentinfo">
+
+			
+
+			<div id="site-generator">
+				 				<a href="https://wordpress.com/?ref=footer_website">Create a free website or blog at WordPress.com.</a>
+			</div>
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<!--  -->
+<script type="text/javascript" src="./ILI9325 2.4 TFT _ Stm32f4_files/gprofiles.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./ILI9325 2.4 TFT _ Stm32f4_files/wpgroho.js"></script>
+
+	<script>
+		//initialize and attach hovercards to all gravatars
+		jQuery( document ).ready( function( $ ) {
+
+			if (typeof Gravatar === "undefined"){
+				return;
+			}
+
+			if ( typeof Gravatar.init !== "function" ) {
+				return;
+			}			
+
+			Gravatar.profile_cb = function( hash, id ) {
+				WPGroHo.syncProfileData( hash, id );
+			};
+			Gravatar.my_hash = WPGroHo.my_hash;
+			Gravatar.init( 'body', '#wp-admin-bar-my-account' );
+		});
+	</script>
+
+		<div style="display:none">
+	<div class="grofile-hash-map-7ee6786d70cf0ec7611e5275e42e8233">
+	</div>
+	<div class="grofile-hash-map-59b0423721dce43b6cadc5f62a663ccb">
+	</div>
+	<div class="grofile-hash-map-452a475464fc139c1229668db0c59457">
+	</div>
+	<div class="grofile-hash-map-9a2a960436f1caf4ace04c7d514dee4c">
+	</div>
+	</div>
+<script type="text/javascript">
+/* <![CDATA[ */
+var HighlanderComments = {"loggingInText":"Logging In\u2026","submittingText":"Posting Comment\u2026","postCommentText":"Post Comment","connectingToText":"Connecting to %s","commentingAsText":"%1$s: You are commenting using your %2$s account.","logoutText":"Log Out","loginText":"Log In","connectURL":"https:\/\/stm32f4.wordpress.com\/public.api\/connect\/?action=request","logoutURL":"https:\/\/stm32f4.wordpress.com\/wp-login.php?action=logout&_wpnonce=61608876ce","homeURL":"https:\/\/stm32f4.wordpress.com\/","postID":"129","gravDefault":"identicon","enterACommentError":"Please enter a comment","enterEmailError":"Please enter your email address here","invalidEmailError":"Invalid email address","enterAuthorError":"Please enter your name here","gravatarFromEmail":"This picture will show whenever you leave a comment. Click to customize it.","logInToExternalAccount":"Log in to use details from one of these accounts.","change":"Change","changeAccount":"Change Account","comment_registration":"","userIsLoggedIn":"","isJetpack":"0","text_direction":"ltr"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource(4)"></script>
+
+	<div id="carousel-reblog-box">
+		<form action="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#" name="carousel-reblog">
+			<textarea id="carousel-reblog-content" name="carousel-reblog-content" placeholder="Add your thoughts here... (optional)"></textarea>
+			<label for="carousel-reblog-to-blog-id" id="carousel-reblog-lblogid">Post to</label>
+			<select name="carousel-reblog-to-blog-id" id="carousel-reblog-to-blog-id">
+						</select>
+
+			<div class="submit">
+				<span class="canceltext"><a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/#" class="cancel">Cancel</a></span>
+				<input type="submit" name="carousel-reblog-submit" class="button" id="carousel-reblog-submit" value="Reblog Post">
+				<input type="hidden" id="carousel-reblog-blog-id" value="41594900">
+				<input type="hidden" id="carousel-reblog-blog-url" value="https://stm32f4.wordpress.com">
+				<input type="hidden" id="carousel-reblog-blog-title" value="Stm32f4">
+				<input type="hidden" id="carousel-reblog-post-url" value="">
+				<input type="hidden" id="carousel-reblog-post-title" value="">
+			</div>
+
+			<input type="hidden" id="_wpnonce" name="_wpnonce" value="2d2dd0f940"><input type="hidden" name="_wp_http_referer" value="/lcd-modules/ili9325-2-4-tft/">		</form>
+
+		<div class="arrow"></div>
+	</div>
+
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https:\/\/stm32f4.wordpress.com\/lcd-modules\/ili9325-2-4-tft\/":129};
+	</script>
+		<script type="text/javascript">
+			var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-twitter' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+		});
+		</script>
+				<script type="text/javascript">
+			var windowOpen;
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-facebook' ).on( 'click', function() {
+				if ( 'undefined' !== typeof windowOpen ){ // If there's another sharing window open, close it.
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery(this).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+		});
+		</script>
+		<script type="text/javascript" src="./ILI9325 2.4 TFT _ Stm32f4_files/form.js"></script>
+<link rel="stylesheet" id="all-css-0-3" href="./ILI9325 2.4 TFT _ Stm32f4_files/jetpack-carousel.css" type="text/css" media="all">
+<!--[if lte IE 8]>
+<link rel='stylesheet' id='jetpack-carousel-ie8fix-css'  href='https://s1.wp.com/wp-content/mu-plugins/carousel/jetpack-carousel-ie8fix.css?m=1412618825h&#038;ver=20121024' type='text/css' media='all' />
+<![endif]-->
+<script type="text/javascript">
+/* <![CDATA[ */
+var actionbardata = {"siteID":"41594900","siteName":"Stm32f4","siteURL":"http:\/\/stm32f4.wordpress.com","icon":"<img alt='' src='https:\/\/s1.wp.com\/i\/logo\/wpcom-gray-white.png' class='avatar avatar-50' height='50' width='50' \/>","canManageOptions":"","canCustomizeSite":"","isFollowing":"","themeSlug":"pub\/twentyeleven","signupURL":"https:\/\/wordpress.com\/start\/","loginURL":"https:\/\/stm32f4.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F","themeURL":"https:\/\/wordpress.com\/theme\/twentyeleven\/","xhrURL":"https:\/\/stm32f4.wordpress.com\/wp-admin\/admin-ajax.php","nonce":"1bdbfcaf2e","isSingular":"1","isFolded":"","isLoggedIn":"","isMobile":"","subscribeNonce":"<input type=\"hidden\" id=\"_wpnonce\" name=\"_wpnonce\" value=\"eff3dc9aa8\" \/>","referer":"https:\/\/stm32f4.wordpress.com\/lcd-modules\/ili9325-2-4-tft\/","canFollow":"1","statusMessage":"","customizeLink":"https:\/\/stm32f4.wordpress.com\/wp-admin\/customize.php?url=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F","postID":"129","shortlink":"http:\/\/wp.me\/P2OwJu-25","canEditPost":"","editLink":"https:\/\/wordpress.com\/page\/stm32f4.wordpress.com\/129","statsLink":"https:\/\/wordpress.com\/stats\/post\/129\/stm32f4.wordpress.com","i18n":{"view":"View site","follow":"Follow","following":"Following","edit":"Edit","login":"Log in","signup":"Sign up","customize":"Customize","report":"Report this content","themeInfo":"Get theme: Twenty Eleven","shortlink":"Copy shortlink","copied":"Copied","followedText":"New posts from this site will now appear in your <a href=\"https:\/\/wordpress.com\/\">Reader<\/a>","foldBar":"Collapse this bar","unfoldBar":"Expand this bar","editSubs":"Manage subscriptions","viewReader":"View site in the Reader","subscribe":"Sign me up","enterEmail":"Enter your email address","followers":"","alreadyUser":"Already have a WordPress.com account? <a href=\"https:\/\/stm32f4.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F\">Log in now.<\/a>","stats":"Stats"}};
+/* ]]> */
+</script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"https:\/\/stm32f4.wordpress.com\/wp-admin\/admin-ajax.php","nonce":"a028a5943c","display_exif":"1","display_geo":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","download_original":"View full size <span class=\"photo-size\">{0}<span class=\"photo-size-times\">\u00d7<\/span>{1}<\/span>","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","comment_registration":"0","require_name_email":"1","login_url":"https:\/\/stm32f4.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F","blog_id":"41594900","local_comments_commenting_as":"<fieldset><label for=\"email\">Email (Required)<\/label> <input type=\"text\" name=\"email\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-email-field\" \/><\/fieldset><fieldset><label for=\"author\">Name (Required)<\/label> <input type=\"text\" name=\"author\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-author-field\" \/><\/fieldset><fieldset><label for=\"url\">Website<\/label> <input type=\"text\" name=\"url\" class=\"jp-carousel-comment-form-field jp-carousel-comment-form-text-field\" id=\"jp-carousel-comment-form-url-field\" \/><\/fieldset>","reblog":"Reblog","reblogged":"Reblogged","reblog_add_thoughts":"Add your thoughts here... (optional)","reblogging":"Reblogging...","post_reblog":"Post Reblog","stats_query_args":"blog=41594900&v=wpcom&tz=1&user_id=0&subd=stm32f4","is_public":"1","reblog_enabled":""};
+/* ]]> */
+</script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./ILI9325 2.4 TFT _ Stm32f4_files/saved_resource(5)"></script><div id="actionbar" class="actnbr-pub-twentyeleven actnbr-has-follow"><ul><li class="actnbr-btn actnbr-hidden"> 			    	<a class="actnbr-action actnbr-actn-follow" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/"><svg class="gridicon gridicon__follow" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M23 16v2h-3v3h-2v-3h-3v-2h3v-3h2v3h3zM20 2v9h-4v3h-3v4H4c-1.1 0-2-.9-2-2V2h18zM8 13v-1H4v1h4zm3-3H4v1h7v-1zm0-2H4v1h7V8zm7-4H4v2h14V4z"></path></g></svg><span>Follow</span></a> 			    	<div class="actnbr-popover tip tip-top-left actnbr-notice"> 			    		<div class="tip-arrow"></div> 			    		<div class="tip-inner actnbr-follow-bubble"></div> 			    	</div> 			    </li><li class="actnbr-ellipsis actnbr-hidden"> 			  <svg class="gridicon gridicon__ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><circle cx="5" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle></g></svg> 			  <div class="actnbr-popover tip tip-top-left actnbr-more"> 			  	<div class="tip-arrow"></div> 			  	<div class="tip-inner"> 				  <ul> 				    <li class="actnbr-sitename actnbr-hidden"><a href="http://stm32f4.wordpress.com/"><img alt="" src="./ILI9325 2.4 TFT _ Stm32f4_files/wpcom-gray-white.png" class="avatar avatar-50" height="50" width="50"> Stm32f4</a></li> 				   	<li class="actnbr-folded-customize actnbr-hidden"><a href="https://stm32f4.wordpress.com/wp-admin/customize.php?url=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F"><svg class="gridicon gridicon__customize" height="20px" width="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M2 6c0-1.505.78-3.08 2-4 0 .845.69 2 2 2 1.657 0 3 1.343 3 3 0 .386-.08.752-.212 1.09.74.594 1.476 1.19 2.19 1.81L8.9 11.98c-.62-.716-1.214-1.454-1.807-2.192C6.753 9.92 6.387 10 6 10c-2.21 0-4-1.79-4-4zm12.152 6.848l1.34-1.34c.607.304 1.283.492 2.008.492 2.485 0 4.5-2.015 4.5-4.5 0-.725-.188-1.4-.493-2.007L18 9l-2-2 3.507-3.507C18.9 3.188 18.225 3 17.5 3 15.015 3 13 5.015 13 7.5c0 .725.188 1.4.493 2.007L3 20l2 2 6.848-6.848c1.885 1.928 3.874 3.753 5.977 5.45l1.425 1.148 1.5-1.5-1.15-1.425c-1.695-2.103-3.52-4.092-5.448-5.977z" data-reactid=".2.1.1:0.1b.0"></path></g></svg><span>Customize<span></span></span></a></li> 				    <li class="actnbr-folded-follow actnbr-hidden"><a class="actnbr-action actnbr-actn-follow" href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/"><svg class="gridicon gridicon__follow" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M23 16v2h-3v3h-2v-3h-3v-2h3v-3h2v3h3zM20 2v9h-4v3h-3v4H4c-1.1 0-2-.9-2-2V2h18zM8 13v-1H4v1h4zm3-3H4v1h7v-1zm0-2H4v1h7V8zm7-4H4v2h14V4z"></path></g></svg><span>Follow</span></a></li> 					<li class="actnbr-signup actnbr-hidden"><a href="https://wordpress.com/start/">Sign up</a></li> 				    <li class="actnbr-login actnbr-hidden"><a href="https://stm32f4.wordpress.com/wp-login.php?redirect_to=https%3A%2F%2Fstm32f4.wordpress.com%2Flcd-modules%2Fili9325-2-4-tft%2F">Log in</a></li> 				     				    <li class="actnbr-shortlink actnbr-hidden"><a href="http://wp.me/P2OwJu-25">Copy shortlink</a></li> 				    <li class="flb-report actnbr-hidden"><a href="http://en.wordpress.com/abuse/">Report this content</a></li> 				     				     				    <li class="actnbr-subs actnbr-hidden"><a href="https://subscribe.wordpress.com/">Manage subscriptions</a></li> 				    <li class="actnbr-fold actnbr-hidden"><a href="https://stm32f4.wordpress.com/lcd-modules/ili9325-2-4-tft/">Collapse this bar</a></li> 			      </ul> 			    </div> 		      </div> 		    </li> 	      </ul></div>
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script>	<script type="text/javascript">
+	var skimlinks_pub_id = "725X584219"
+	var skimlinks_sitename = "stm32f4.wordpress.com";
+	</script>
+	<script type="text/javascript" defer="" src="./ILI9325 2.4 TFT _ Stm32f4_files/725X1342.skimlinks.js"></script>		<iframe src="./ILI9325 2.4 TFT _ Stm32f4_files/master.html" scrolling="no" id="likes-master" name="likes-master" style="display:none;"></iframe>
+		<div id="likes-other-gravatars"><div class="likes-text"><span>%d</span> bloggers like this:</div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+		<script>
+			var _comscore = _comscore || [];
+			_comscore.push({
+				c1: "2",
+				c2: "7518284"
+			});
+			(function() {
+				var s = document.createElement("script"),
+					el = document.getElementsByTagName("script")[0];
+				s.defer = true;
+				s.src = (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js";
+				el.parentNode.insertBefore(s, el);
+			})();
+		</script>
+		<noscript>
+			&lt;p class="robots-nocontent"&gt;&lt;img src="https://sb.scorecardresearch.com/p?c1=2&amp;c2=7518284&amp;c3=&amp;c4=&amp;c5=&amp;c6=&amp;c15=&amp;cv=2.0&amp;cj=1" alt="" style="display:none;" width="1" height="1" /&gt;&lt;/p&gt;
+		</noscript><script src="./ILI9325 2.4 TFT _ Stm32f4_files/w.js" type="text/javascript" async="" defer=""></script>
+<script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'41594900','blog_tz':'1','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+_stq.push(['view', {'blog':'41594900','v':'wpcom','tz':'1','user_id':'0','post':'129','subd':'stm32f4'}]);
+_stq.push(['extra', {'crypt':'UE40eW5QN0p8M2Y/RE1LVmwrVi5vQS5fVFtfdHBbPyw1VXIrU3hWLHhzVndTdktBX0ddJnpXRjVaOTd6fj1YMX4ydzRUSk0wbVRfODlnNUZzflpnbkZvTEF3TSxkZVc2MWtvclpaVGNuRHpdMHp1NFpnN0RSd18ub0pTaXk4RD9kRnU0WFJiMFdLPSVEPWZJYzhaUTVPOXd0MXRdUmJDYn54WlVLT0RuOVBZZTZsU2JSPV16TGlJPUgvOWFaOEd1cFpzaUZ0WFVQSC01U05UW0Jbd1R1NnVaUC1hU1pycT1LU3E3bHxxK1k/V25aTXpwK1Z3X0Rwd2ltd35UXTM='}]);
+_stq.push([ 'clickTrackerInit', '41594900', '129' ]);
+	</script>
+<noscript>&lt;img src="https://pixel.wp.com/b.gif?v=noscript" style="height:0px;width:0px;overflow:hidden" alt="" /&gt;</noscript>
+<script>
+if ( 'object' === typeof wpcom_mobile_user_agent_info ) {
+
+	wpcom_mobile_user_agent_info.init();
+	var mobileStatsQueryString = "";
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedPlatformName )
+		mobileStatsQueryString += "&x_" + 'mobile_platforms' + '=' + wpcom_mobile_user_agent_info.matchedPlatformName;
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedUserAgentName )
+		mobileStatsQueryString += "&x_" + 'mobile_devices' + '=' + wpcom_mobile_user_agent_info.matchedUserAgentName;
+	
+	if( wpcom_mobile_user_agent_info.isIPad() )
+		mobileStatsQueryString += "&x_" + 'ipad_views' + '=' + 'views';
+
+	if( "" != mobileStatsQueryString ) {
+		new Image().src = document.location.protocol + '//pixel.wp.com/g.gif?v=wpcom-no-pv' + mobileStatsQueryString + '&baba=' + Math.random();
+	}
+	
+}
+</script>
+
+<img src="./ILI9325 2.4 TFT _ Stm32f4_files/g.gif" alt=":)" id="wpstats"></body></html>
