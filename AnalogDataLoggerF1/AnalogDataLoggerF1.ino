@@ -42,6 +42,7 @@ extern uint8_t SmallSymbolFont[];
 // Настройка монитора
 
 UTFT myGLCD(ITDB32S,25,26,27,28);
+//UTFT myGLCD(ITDB32S, 25, 26, 27, 28);
 
 UTouch        myTouch(6,5,4,3,2);
 //
@@ -6848,10 +6849,10 @@ void file_serial()
 //------------------------------------------------------------------------------
 void setup(void) 
 {
-	if (ERROR_LED_PIN >= 0)
-		{
-			pinMode(ERROR_LED_PIN, OUTPUT);
-		}
+	//if (ERROR_LED_PIN >= 0)
+	//	{
+	//		pinMode(ERROR_LED_PIN, OUTPUT);
+	//	}
 	Serial.begin(115200);
 	Serial.print(F("FreeRam: "));
 	Serial.println(FreeRam());
