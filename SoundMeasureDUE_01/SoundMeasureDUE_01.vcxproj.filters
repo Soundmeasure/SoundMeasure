@@ -16,9 +16,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SoundMeasureDUE_01.ino" />
+    <None Include="setTimeDateDUE.ino" />
+    <None Include="utils.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.SoundMeasureDUE_01.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnalogBinLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
