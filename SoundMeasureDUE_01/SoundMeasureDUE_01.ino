@@ -41,7 +41,12 @@ extern uint8_t SmallSymbolFont[];
 
 // Настройка монитора
 
-UTFT myGLCD(ITDB32S,25,26,27,28);
+//UTFT myGLCD(ITDB32S,25,26,27,28);
+UTFT myGLCD(TFT01_24_8, 38, 39, 40, 41);   // Remember to change the model parameter to suit your display module!
+//UTFT myGLCD(ITDB24,25,26,27,28);
+//UTFT myGLCD(ITDB24D, 38, 39, 40, 41);
+//UTFT myGLCD(ITDB24DWOT, 38, 39, 40, 41);
+//UTFT myGLCD(ITDB24E_8, 38, 39, 40, 41);
 
 
 UTouch        myTouch(6,5,4,3,2);
@@ -6865,6 +6870,7 @@ void setup(void)
 	//myTouch.setPrecision(PREC_HI);
 	myButtons.setTextFont(BigFont);
 	myButtons.setSymbolFont(Dingbats1_XL);
+	/*
 	// initialize file system.
 	if (!sd.begin(SD_CS_PIN, SPI_FULL_SPEED)) 
 	  {
@@ -6914,11 +6920,14 @@ void setup(void)
 	preob_num_str();
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
+	*/
 	Serial.println(F("Setup Ok!"));
 }
 //------------------------------------------------------------------------------
 void loop(void) 
 {
-	draw_Glav_Menu();
-	swichMenu();
+//	draw_Glav_Menu();
+//	swichMenu();
+	myGLCD.print("SD card problem?", CENTER, 100);
+	delay(100);
 }
