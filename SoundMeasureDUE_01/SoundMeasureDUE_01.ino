@@ -41,8 +41,8 @@ extern uint8_t SmallSymbolFont[];
 
 // Настройка монитора
 
-//UTFT myGLCD(ITDB32S,25,26,27,28);
-UTFT myGLCD(TFT01_28, 38, 39, 40, 41);
+UTFT myGLCD(ITDB32S,25,26,27,28);
+//UTFT myGLCD(TFT01_28, 38, 39, 40, 41);
 
 
 
@@ -6867,7 +6867,7 @@ void setup(void)
 	//myTouch.setPrecision(PREC_HI);
 	myButtons.setTextFont(BigFont);
 	myButtons.setSymbolFont(Dingbats1_XL);
-	/*
+	
 	// initialize file system.
 	if (!sd.begin(SD_CS_PIN, SPI_FULL_SPEED)) 
 	  {
@@ -6889,14 +6889,14 @@ void setup(void)
 	  }
 
 	ADC_MR |= 0x00000100 ; // ADC full speed
-
+	/*
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Настройка звукового генератора  
 	AD9850.reset();                    //reset module
 	delay(1000);
 	AD9850.powerDown();                //set signal output to LOW
 	AD9850.set_frequency(0,0,500);    //set power=UP, phase=0, 1kHz frequency 
-
+	*/
 	chench_Channel();
 
 	//adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
@@ -6915,6 +6915,7 @@ void setup(void)
 //	cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
 	myGLCD.setBackColor(0, 0, 255);
 	preob_num_str();
+	/*
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
 	*/
@@ -6923,8 +6924,7 @@ void setup(void)
 //------------------------------------------------------------------------------
 void loop(void) 
 {
-//	draw_Glav_Menu();
-//	swichMenu();
-	myGLCD.print("SD card problem?", CENTER, 100);
+	draw_Glav_Menu();
+	swichMenu();
 	delay(100);
 }
