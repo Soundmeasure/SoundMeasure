@@ -41,13 +41,9 @@ extern uint8_t SmallSymbolFont[];
 
 // Настройка монитора
 
-UTFT myGLCD(ITDB32S,25,26,27,28);
-//UTFT myGLCD(TFT01_24_8, 38, 39, 40, 41);   // Remember to change the model parameter to suit your display module!
-//UTFT myGLCD(ITDB24,25,26,27,28);
-//UTFT myGLCD(ITDB24D, 38, 39, 40, 41);
-//UTFT myGLCD(ITDB24DWOT, 38, 39, 40, 41);
-//UTFT myGLCD(ITDB24E_8, 38, 39, 40, 41);
-//UTFT myGLCD(ITDB24, 38, 39, 40, 41);
+//UTFT myGLCD(ITDB32S,25,26,27,28);
+UTFT myGLCD(TFT01_28, 38, 39, 40, 41);
+
 
 
 UTouch        myTouch(6,5,4,3,2);
