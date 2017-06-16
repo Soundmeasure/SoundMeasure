@@ -1,6 +1,14 @@
-/**
+/*
+Программа тестирования звукового канала
+Заказчик "Децима"
+Начало работ 01.06.2017г.
+
+Тестируемые параметры:
+Измерение задержки прохождения звукового сигнала.
+Регистрация помех в тестируемом канале.
+
  
- */
+*/
 
 #define __SAM3X8E__
 
@@ -21,6 +29,32 @@
 
 
 
+
+
+//++++++++++++++++ Настройка дисплея ++++++++++++++++++++++
+
+UTFT myGLCD(ITDB32S, 25, 26, 27, 28);               // Поделючение дисплея 3.2"
+//UTFT myGLCD(TFT01_28, 38, 39, 40, 41);               // Поделючение дисплея 2.8"
+
+UTouch        myTouch(6, 5, 4, 3, 2);               // Настроить тачскрин
+
+UTFT_Buttons  myButtons(&myGLCD, &myTouch);         // Настройка программы кнопок  
+
+boolean default_colors = true;
+uint8_t menu_redraw_required = 0;
+
+// Объявление применямых шрифтов
+
+extern uint8_t SmallFont[];
+extern uint8_t BigFont[];
+extern uint8_t Dingbats1_XL[];
+extern uint8_t SmallSymbolFont[];
+
+
+//----------------------Конец  Настройки дисплея --------------------------------
+
+
+
 //+++++++++++++++++++++++ SD info ++++++++++++++++++++++++++
 SdFile file;
 
@@ -32,31 +66,8 @@ SdBaseFile binFile;
 
 Sd2Card card;
 
-// Declare which fonts we will be using
+StdioStream csvStream;                // Строки для работы с файлами.
 
-extern uint8_t SmallFont[];
-extern uint8_t BigFont[];
-extern uint8_t Dingbats1_XL[];
-extern uint8_t SmallSymbolFont[];
-
-// Настройка монитора
-
-UTFT myGLCD(ITDB32S,25,26,27,28);
-//UTFT myGLCD(TFT01_28, 38, 39, 40, 41);
-
-
-
-UTouch        myTouch(6,5,4,3,2);
-
-UTFT_Buttons  myButtons(&myGLCD, &myTouch);
-
-boolean default_colors = true;
-uint8_t menu_redraw_required = 0;
-
-StdioStream csvStream;
-
-
-//----------------------Конец  Настройки дисплея --------------------------------
 
 //*********************Работа с именем файла ******************************
 char file_name[13] ;
@@ -79,7 +90,7 @@ char list_files_tab[200][13];
 uint32_t size_files_tab[200] ;
 int set_files = 0;
 
-//**************************  Меню прибора ***************************************
+//************************** Настройка часов ***************************************
 
 const int clockCenterX=119;
 const int clockCenterY=119;
@@ -181,19 +192,19 @@ char  txt_menu1_2[]          = "CAMO\x89\x86""CE\x8C";                          
 char  txt_menu1_3[]          = "PE\x81\x86""CT.+ CAMO\x89.";                                                // "РЕГИСТ. + САМОП."
 char  txt_menu1_4[]          = "PA\x80OTA c SD";                                                            // "РАБОТА с SD"
 
-char  txt_ADC_menu1[]        = "\x85""a\xA3\x9D""c\xAC \x99""a\xA2\xA2\xABx";                                                               //
-char  txt_ADC_menu2[]        = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                                                    //
-char  txt_ADC_menu3[]        = "\x89""epe\x99""a\xA7""a \x97 KOM";                                                            //
-char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                                      //
+char  txt_ADC_menu1[]        = "\x85""a\xA3\x9D""c\xAC \x99""a\xA2\xA2\xABx";                               //
+char  txt_ADC_menu2[]        = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                      //
+char  txt_ADC_menu3[]        = "\x89""epe\x99""a\xA7""a \x97 KOM";                                          //
+char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                               //
 
-char  txt_osc_menu1[]        = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                                              //
-char  txt_osc_menu2[]        = "Oc\xA6\x9D\xA0\xA0.1-18\xA1\x9D\xA2";                                                               //
-char  txt_osc_menu3[]        = "O\xA8\x9d\x96\x9F\x9D";                                                                    //
+char  txt_osc_menu1[]        = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                             //
+char  txt_osc_menu2[]        = "Oc\xA6\x9D\xA0\xA0.1-18\xA1\x9D\xA2";                                       //
+char  txt_osc_menu3[]        = "O\xA8\x9d\x96\x9F\x9D";                                                     //
 char  txt_osc_menu4[]        = "B\x91XO\x82";           
 
-char  txt_SD_menu1[]         = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                                                 //
-char  txt_SD_menu2[]         = "\x86\xA2\xA5o SD";                                                                   //
-char  txt_SD_menu3[]         = "\x8Bop\xA1""a\xA4 SD";                                                                 //
+char  txt_SD_menu1[]         = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                      //
+char  txt_SD_menu2[]         = "\x86\xA2\xA5o SD";                                                          //
+char  txt_SD_menu3[]         = "\x8Bop\xA1""a\xA4 SD";                                                      //
 char  txt_SD_menu4[]         = "B\x91XO\x82";           
 
 char  txt_info6[]             = "Info: ";                                                                   //Info: 
@@ -269,7 +280,6 @@ uint32_t ulChannel;
 
 int Channel_x = 0;
 int Channel_trig = 0;
-bool Channel0 = true;
 bool Channel1 = false;
 bool Channel2 = false;
 bool Channel3 = false;
