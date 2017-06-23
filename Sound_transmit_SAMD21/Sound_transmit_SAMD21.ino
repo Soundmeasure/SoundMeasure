@@ -3,14 +3,14 @@
 ---------------------------------------
 Модуль NRF24L01 Подключение
 +++++++++++++++++++++++++++++++++++++++
-SAMD21E18A      NRF24L01
+SAMD21G18A      NRF24L01
 GND              1 GND
 VCC +3,3V        2 VCC +3,3V
-D8               3 CE
-D7		         4 SCN
-SCK  D13*	     5 SCK
-MOSI D11* 	     6 MOSI
-MISO D12*	     7 MISO
+D5   (24)        3 CE
+D6	 (29)        4 SCN
+SCK  (20) 	     5 SCK
+MOSI (19)  	     6 MOSI
+MISO (21)	     7 MISO
 
 * уточнить
 ------------------------------------------
@@ -20,12 +20,21 @@ MISO D12*	     7 MISO
 
 
 
+#include <SPI.h>
+#include "RF24.h"
 
-#include <SPI.h>                                          // Подключаем библиотеку для работы с шиной SPI
-#include <nRF24L01.h>                                     // Подключаем файл настроек из библиотеки RF24
-#include <RF24.h>                                         // Подключаем библиотеку для работы с nRF24L01+
-RF24           radio(8, 7);                               // Создаём объект radio для работы с библиотекой RF24, указывая номера выводов nRF24L01+ (CE, CSN)
-int            data[10];                                  // Создаём массив для передачи данных
+/****************** User Config ***************************/
+/***      Set this radio as radio number 0 or 1         ***/
+bool radioNumber = 1;
+
+/* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 */
+RF24 radio(5, 6);
+/**********************************************************/
+
+byte addresses[][6] = { "1Node","2Node" };
+
+// Used to control whether this node is sending or receiving
+bool role = 0;
 
 #define Serial SERIAL_PORT_USBVIRTUAL
 
@@ -34,33 +43,124 @@ int            data[10];                                  // Создаём массив для 
 void setup()
 {
 	Serial.begin(115200);
+	Serial.println(F("RF24/examples/GettingStarted"));
+	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
 
-	while (!Serial) {}
+	radio.begin();
 
+	// Set the PA Level low to prevent power supply related issues since this is a
+	// getting_started sketch, and the likelihood of close proximity of the devices. RF24_PA_MAX is default.
+	radio.setPALevel(RF24_PA_LOW);
 
-	Serial.println("\r\nSetup start");
+	// Open a writing and reading pipe on each radio, with opposite addresses
+	if (radioNumber) {
+		radio.openWritingPipe(addresses[1]);
+		radio.openReadingPipe(1, addresses[0]);
+	}
+	else {
+		radio.openWritingPipe(addresses[0]);
+		radio.openReadingPipe(1, addresses[1]);
+	}
 
-	radio.begin();                                        // Инициируем работу nRF24L01+
-	radio.setChannel(5);                                  // Указываем канал передачи данных (от 0 до 127), 5 - значит передача данных осуществляется на частоте 2,405 ГГц (на одном канале может быть только 1 приёмник и до 6 передатчиков)
-	radio.setDataRate(RF24_1MBPS);                        // Указываем скорость передачи данных (RF24_250KBPS, RF24_1MBPS, RF24_2MBPS), RF24_1MBPS - 1Мбит/сек
-	radio.setPALevel(RF24_PA_MIN);                        // Указываем мощность передатчика (RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_HIGH=-6dBm, RF24_PA_MAX=0dBm)
-	//radio.setPALevel      (RF24_PA_HIGH);               // Указываем мощность передатчика (RF24_PA_MIN=-18dBm, RF24_PA_LOW=-12dBm, RF24_PA_HIGH=-6dBm, RF24_PA_MAX=0dBm)
-	radio.openWritingPipe(0x1234567890LL);                // Открываем трубу с идентификатором 0x1234567890 для передачи данных (на одном канале может быть открыто до 6 разных труб, которые должны отличаться только последним байтом идентификатора)
-
-
-	
-	Serial.println("\r\n==================");
+	// Start the radio listening for data
+	radio.startListening();
 }
 
-void loop()
-{
 
-	//data[0] = analogRead(A1);                             // считываем показания Trema слайдера с вывода A1 и записываем их в 0 элемент массива data
-	//data[1] = analogRead(A2);                             // считываем показания Trema потенциометра с вывода A2 и записываем их в 1 элемент массива data
-	//radio.write(&data, sizeof(data));                     // отправляем данные из массива data указывая сколько байт массива мы хотим отправить
-	//Serial.println(data[0]);
-	delay(100);
+void loop() {
 
 
-}
+	/****************** Ping Out Role ***************************/
+	if (role == 1) {
+
+		radio.stopListening();                                    // First, stop listening so we can talk.
+
+
+		Serial.println(F("Now sending"));
+
+		unsigned long start_time = micros();                             // Take the time, and send it.  This will block until complete
+		if (!radio.write(&start_time, sizeof(unsigned long))) {
+			Serial.println(F("failed"));
+		}
+
+		radio.startListening();                                    // Now, continue listening
+
+		unsigned long started_waiting_at = micros();               // Set up a timeout period, get the current microseconds
+		boolean timeout = false;                                   // Set up a variable to indicate if a response was received or not
+
+		while (!radio.available()) {                             // While nothing is received
+			if (micros() - started_waiting_at > 200000) {            // If waited longer than 200ms, indicate timeout and exit while loop
+				timeout = true;
+				break;
+			}
+		}
+
+		if (timeout) {                                             // Describe the results
+			Serial.println(F("Failed, response timed out."));
+		}
+		else {
+			unsigned long got_time;                                 // Grab the response, compare, and send to debugging spew
+			radio.read(&got_time, sizeof(unsigned long));
+			unsigned long end_time = micros();
+
+			// Spew it
+			Serial.print(F("Sent "));
+			Serial.print(start_time);
+			Serial.print(F(", Got response "));
+			Serial.print(got_time);
+			Serial.print(F(", Round-trip delay "));
+			Serial.print(end_time - start_time);
+			Serial.println(F(" microseconds"));
+		}
+
+		// Try again 1s later
+		delay(1000);
+	}
+
+
+
+	/****************** Pong Back Role ***************************/
+
+	if (role == 0)
+	{
+		unsigned long got_time;
+
+		if (radio.available()) {
+			// Variable for the received timestamp
+			while (radio.available()) {                                   // While there is data ready
+				radio.read(&got_time, sizeof(unsigned long));             // Get the payload
+			}
+
+			radio.stopListening();                                        // First, stop listening so we can talk   
+			radio.write(&got_time, sizeof(unsigned long));              // Send the final one back.      
+			radio.startListening();                                       // Now, resume listening so we catch the next packets.     
+			Serial.print(F("Sent response "));
+			Serial.println(got_time);
+		}
+	}
+
+
+
+
+	/****************** Change Roles via Serial Commands ***************************/
+
+	if (Serial.available())
+	{
+		char c = toupper(Serial.read());
+		if (c == 'T' && role == 0) {
+			Serial.println(F("*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK"));
+			role = 1;                  // Become the primary transmitter (ping out)
+
+		}
+		else
+			if (c == 'R' && role == 1) {
+				Serial.println(F("*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK"));
+				role = 0;                // Become the primary receiver (pong back)
+				radio.startListening();
+
+			}
+	}
+
+
+} // Loop
 
