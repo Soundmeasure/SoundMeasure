@@ -13,7 +13,7 @@
 #ifndef _VSARDUINO_H_
 #define _VSARDUINO_H_
 #define F_CPU 48000000L
-#define ARDUINO 10801
+#define ARDUINO 10802
 #define ARDUINO_CDC_UART
 #define ARDUINO_ARCH_SAMD
 #define __SAMD21E18A__
