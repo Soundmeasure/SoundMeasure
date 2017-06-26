@@ -19,13 +19,24 @@
 
 #include <SPI.h>
 #include "RF24.h"
+#include <LCD5110_Basic.h>    // подключаем библиотеку
+
+
+LCD5110 myGLCD(7,6,5,4,3); // объявляем номера пинов LCD
+
+extern uint8_t SmallFont[]; // малый шрифт (из библиотеки)
+extern uint8_t MediumNumbers[]; // средний шрифт для цифр (из библиотеки)
+
+int seconds = 0; // счётчик секунд
+
+
 
 /****************** User Config ***************************/
 /***      Set this radio as radio number 0 or 1         ***/
 bool radioNumber = 1;
 
 /* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 */
-RF24 radio(5, 6);
+RF24 radio(11, 12);
 /**********************************************************/
 
 byte addresses[][6] = { "1Node","2Node" };
