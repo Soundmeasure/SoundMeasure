@@ -1,6 +1,5 @@
-// UTFT_Demo_220x176_Serial 
-// Copyright (C)2015 Rinky-Dink Electronics, Henning Karlsen. All right reserved
-// web: http://www.RinkyDinkElectronics.com/
+// UTFT_Demo_220x176_Serial (C)2012 Henning Karlsen
+// web: http://www.henningkarlsen.com/electronics
 //
 // This program is a demo of how to use most of the functions
 // of the library with a supported display modules.
@@ -46,7 +45,7 @@ void loop()
   myGLCD.print("** Universal TFT Library **", CENTER, 1);
   myGLCD.setBackColor(64, 64, 64);
   myGLCD.setColor(255,255,0);
-  myGLCD.print("> Rinky-Dink Electronics <", CENTER, 163);
+  myGLCD.print("> elec.henningkarlsen.com <", CENTER, 163);
 
   myGLCD.setColor(0, 0, 255);
   myGLCD.drawRect(0, 14, 219, 161);
