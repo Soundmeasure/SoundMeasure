@@ -21,7 +21,7 @@ unsigned long previousMillis = 0;        // will store last time LED was updated
 const long interval = 1000;           // interval at which to blink (milliseconds)
 int thisByte = 33;
 
-//#define Serial SerialUSB
+#define Serial SerialUSB
 
 
 void setup() {
@@ -136,5 +136,5 @@ void loop()
 
 
 
-	//delay(1000);
+	delay(1000);
 }
