@@ -337,7 +337,8 @@ const uint32_t FILE_BLOCK_COUNT = 256000;
 const int8_t ERROR_LED_PIN = 13;
 
 // SD chip select pin.
-const uint8_t SD_CS_PIN = 10;
+//const uint8_t SD_CS_PIN = 10;
+const uint8_t SD_CS_PIN = 53;
 uint32_t const ERASE_SIZE = 262144L;
 //------------------------------------------------------------------------------
 
