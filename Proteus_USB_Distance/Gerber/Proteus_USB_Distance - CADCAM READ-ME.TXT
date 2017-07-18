@@ -1,0 +1,86 @@
+LABCENTER PROTEUS TOOL INFORMATION FILE
+=======================================
+
+In case of difficulty, please e-mail support@labcenter.co.uk
+
+Tool set up for Proteus layout 'Proteus_USB_Distance.pdsprj'.
+CADCAM generated at 14:43:32 on 18 июля 2017 г..
+
+File List
+---------
+Top Copper              : Proteus_USB_Distance - CADCAM Top Copper.TXT
+Bottom Copper           : Proteus_USB_Distance - CADCAM Bottom Copper.TXT
+Top Silk Screen         : Proteus_USB_Distance - CADCAM Top Silk Screen.TXT
+Top Solder Resist       : Proteus_USB_Distance - CADCAM Top Solder Resist.TXT
+Bottom Solder Resist    : Proteus_USB_Distance - CADCAM Bottom Solder Resist.TXT
+Top SMT Paste Mask      : Proteus_USB_Distance - CADCAM Top SMT Paste Mask.TXT
+Mechanical 1            : Proteus_USB_Distance - CADCAM Mechanical 1.TXT
+Drill                   : Proteus_USB_Distance - CADCAM Drill.TXT
+
+Photoplotter Setup
+------------------
+Format: RS274X, ASCII, 2.4, imperial, absolute, eob=*, LZO
+Notes:  D=Diameter, S=Side, W=Width, H=Height, C=Chamfer
+
+D10	CIRCLE  D=10th                                                            DRAW
+D11	CIRCLE  D=12th                                                            DRAW
+D12	CIRCLE  D=15th                                                            DRAW
+D13	CIRCLE  D=20th                                                            DRAW
+D14	CIRCLE  D=30th                                                            FLASH
+D15	CIRCLE  D=2.5th                                                           DRAW
+D16	CIRCLE  D=140th                                                           FLASH
+D17	RECT    W=62.9th              H=11.8th                                    FLASH
+D18	RECT    W=11.8th              H=62.9th                                    FLASH
+D19	SQUARE  S=80th                                                            FLASH
+D70	RECT    W=100th               H=18th                                      FLASH
+D71	CIRCLE  D=55th                                                            FLASH
+D20	DIL     W=100th               H=60th                C=12th                FLASH
+D21	RECT    W=40th                H=35th                                      FLASH
+D22	RECT    W=65th                H=43th                                      FLASH
+D23	RECT    W=71th                H=24th                                      FLASH
+D24	RECT    W=70th                H=20th                                      FLASH
+D25	RECT    W=37th                H=57th                                      FLASH
+D26	RECT    W=40th                H=50th                                      FLASH
+D27	RECT    W=37th                H=39th                                      FLASH
+D28	RECT    W=39th                H=37th                                      FLASH
+D29	SQUARE  S=35th                                                            FLASH
+D72	RECT    W=93th                H=96th                                      FLASH
+D73	CIRCLE  D=80th                                                            FLASH
+D30	RECT    W=61th                H=24th                                      FLASH
+D31	CIRCLE  D=60th                                                            FLASH
+D32	CIRCLE  D=190th                                                           FLASH
+D33	CIRCLE  D=100th                                                           FLASH
+D34	CIRCLE  D=8th                                                             DRAW
+D35	CIRCLE  D=9.8th                                                           DRAW
+D36	CIRCLE  D=7.8th                                                           DRAW
+D37	CIRCLE  D=23.6th                                                          DRAW
+D38	CIRCLE  D=50th                                                            FLASH
+D39	RECT    W=82.9th              H=31.8th                                    FLASH
+D40	RECT    W=31.8th              H=82.9th                                    FLASH
+D41	SQUARE  S=100th                                                           FLASH
+D42	RECT    W=120th               H=38th                                      FLASH
+D43	DIL     W=120th               H=80th                C=12th                FLASH
+D44	RECT    W=60th                H=55th                                      FLASH
+D45	RECT    W=90th                H=40th                                      FLASH
+D46	RECT    W=60th                H=70th                                      FLASH
+D47	SQUARE  S=55th                                                            FLASH
+D48	CIRCLE  D=210th                                                           FLASH
+D49	CIRCLE  D=130th                                                           FLASH
+D50	CIRCLE  D=5th                                                             DRAW
+
+NC Drill Setup
+--------------
+Format: ASCII, 2.4, imperial, absolute, eob=<CR><LF>, no zero suppression.
+Notes:  Tool sizes are diameters. Layer sets are in brackets - 0=TOP, 15=BOTTOM, 1-14=INNER.
+
+T01	15th (0-15)
+T02	118th (0-15)
+T03	40th (0-15)
+T04	32th (0-15)
+T05	30th (0-15)
+T06	35th (0-15)
+T07	120th (0-15)
+T08	60th (0-15)
+
+
+[END OF FILE]
