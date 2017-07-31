@@ -14,7 +14,7 @@
 #define _VSARDUINO_H_
 #define printf iprintf
 #define F_CPU 84000000L
-#define ARDUINO 10801
+#define ARDUINO 10607
 #define ARDUINO_SAM_DUE
 #define ARDUINO_ARCH_SAM
 #define __SAM3X8E__
@@ -45,8 +45,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #define __INT32_TYPE__ long
 #define _Pragma(x) pragma
 
-#include "sam3xa.h"
-#include <arduino.h>
+//#include "sam3xa.h"
+#include <Arduino.h>
 #include <pins_arduino.h> 
 #include <variant.h> 
 #include <variant.cpp> 

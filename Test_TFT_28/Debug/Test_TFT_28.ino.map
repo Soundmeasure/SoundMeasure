@@ -25,7 +25,7 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Deb
 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
                               C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o (analogOutputInit)
 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
-                              C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o (pinMode)
+                              C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o (pinMode)
 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
                               c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m/crt0.o (main)
 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
@@ -898,7 +898,7 @@ Discarded input sections
                 0x00000000      0x2b8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
  .debug_ranges  0x00000000      0x658 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
  .debug_line    0x00000000      0xc34 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
- .debug_str     0x00000000      0xf7e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
+ .debug_str     0x00000000      0xf58 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
  .ARM.attributes
                 0x00000000       0x33 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
@@ -952,7 +952,7 @@ Discarded input sections
                 0x00000000       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
  .debug_ranges  0x00000000       0x10 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
  .debug_line    0x00000000      0x121 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
- .debug_str     0x00000000      0x234 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
+ .debug_str     0x00000000      0x20e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
  .ARM.attributes
                 0x00000000       0x33 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
@@ -1886,7 +1886,7 @@ END GROUP
 LOAD c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtend.o
 LOAD c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
 
-.text           0x00080000     0xd848
+.text           0x00080000     0xd858
                 0x00080000                . = ALIGN (0x4)
                 0x00080000                _sfixed = .
  *(.vectors .vectors.*)
@@ -1894,923 +1894,923 @@ LOAD c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-
                 0x00080000                exception_table
  *(.text .text.* .gnu.linkonce.t.*)
  .text          0x000800f4       0x54 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
- .text.setup    0x00080148       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+ .text.setup    0x00080148       0x30 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
                 0x00080148                setup
- .text.loop     0x00080168      0xa08 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
-                0x00080168                loop
+ .text.loop     0x00080178      0xa08 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+                0x00080178                loop
  .text.startup._GLOBAL__sub_I_myGLCD
-                0x00080b70       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+                0x00080b80       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
  .text._ZL10SPI_0_Initv
-                0x00080b94       0x48 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
+                0x00080ba4       0x48 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
  .text.startup._GLOBAL__sub_I__ZN8SPIClassC2EP3SpimPFvvE
-                0x00080bdc       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
+                0x00080bec       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
  .text._ZN4UTFT12LCD_Writ_BusEcch
-                0x00080c00      0x2dc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00080c00                UTFT::LCD_Writ_Bus(char, char, unsigned char)
+                0x00080c10      0x2dc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00080c10                UTFT::LCD_Writ_Bus(char, char, unsigned char)
  .text._ZN4UTFT24_set_direction_registersEh
-                0x00080edc       0x38 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00080edc                UTFT::_set_direction_registers(unsigned char)
+                0x00080eec       0x38 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00080eec                UTFT::_set_direction_registers(unsigned char)
  .text._ZN4UTFT13_fast_fill_16Eiil
-                0x00080f14      0x208 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00080f14                UTFT::_fast_fill_16(int, int, long)
+                0x00080f24      0x208 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00080f24                UTFT::_fast_fill_16(int, int, long)
  .text._ZN4UTFT12_fast_fill_8Eil
-                0x0008111c      0x2f0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x0008111c                UTFT::_fast_fill_8(int, long)
+                0x0008112c      0x2f0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x0008112c                UTFT::_fast_fill_8(int, long)
  .text._ZN4UTFTC2Ehiiiii
-                0x0008140c      0x19c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x0008140c                UTFT::UTFT(unsigned char, int, int, int, int, int)
-                0x0008140c                UTFT::UTFT(unsigned char, int, int, int, int, int)
+                0x0008141c      0x19c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x0008141c                UTFT::UTFT(unsigned char, int, int, int, int, int)
+                0x0008141c                UTFT::UTFT(unsigned char, int, int, int, int, int)
  .text._ZN4UTFT13LCD_Write_COMEc
-                0x000815a8       0x26 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x000815a8                UTFT::LCD_Write_COM(char)
+                0x000815b8       0x26 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000815b8                UTFT::LCD_Write_COM(char)
  .text._ZN4UTFT14LCD_Write_DATAEcc
-                0x000815ce       0x36 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x000815ce                UTFT::LCD_Write_DATA(char, char)
+                0x000815de       0x36 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000815de                UTFT::LCD_Write_DATA(char, char)
  .text._ZN4UTFT14LCD_Write_DATAEc
-                0x00081604       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00081604                UTFT::LCD_Write_DATA(char)
+                0x00081614       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00081614                UTFT::LCD_Write_DATA(char)
  .text._ZN4UTFT18LCD_Write_COM_DATAEci
-                0x00081628       0x1a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00081628                UTFT::LCD_Write_COM_DATA(char, int)
+                0x00081638       0x1a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00081638                UTFT::LCD_Write_COM_DATA(char, int)
  .text._ZN4UTFT5setXYEjjjj
-                0x00081642      0x2e6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00081642                UTFT::setXY(unsigned int, unsigned int, unsigned int, unsigned int)
+                0x00081652      0x2e6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00081652                UTFT::setXY(unsigned int, unsigned int, unsigned int, unsigned int)
  .text._ZN4UTFT7InitLCDEh
-                0x00081928     0x3160 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00081928                UTFT::InitLCD(unsigned char)
+                0x00081938     0x3160 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00081938                UTFT::InitLCD(unsigned char)
  .text._ZN4UTFT5clrXYEv
-                0x00084a88       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084a88                UTFT::clrXY()
+                0x00084a98       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084a98                UTFT::clrXY()
  .text._ZN4UTFT10drawCircleEiii
-                0x00084aac      0x1d0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084aac                UTFT::drawCircle(int, int, int)
+                0x00084abc      0x1d0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084abc                UTFT::drawCircle(int, int, int)
  .text._ZN4UTFT6clrScrEv
-                0x00084c7c       0x9c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084c7c                UTFT::clrScr()
+                0x00084c8c       0x9c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084c8c                UTFT::clrScr()
  .text._ZN4UTFT7fillScrEj
-                0x00084d18       0xae C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084d18                UTFT::fillScr(unsigned int)
+                0x00084d28       0xae C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084d28                UTFT::fillScr(unsigned int)
  .text._ZN4UTFT7fillScrEhhh
-                0x00084dc6       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084dc6                UTFT::fillScr(unsigned char, unsigned char, unsigned char)
+                0x00084dd6       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084dd6                UTFT::fillScr(unsigned char, unsigned char, unsigned char)
  .text._ZN4UTFT8setColorEhhh
-                0x00084ddc       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084ddc                UTFT::setColor(unsigned char, unsigned char, unsigned char)
+                0x00084dec       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084dec                UTFT::setColor(unsigned char, unsigned char, unsigned char)
  .text._ZN4UTFT12setBackColorEhhh
-                0x00084df4       0x1e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084df4                UTFT::setBackColor(unsigned char, unsigned char, unsigned char)
+                0x00084e04       0x1e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084e04                UTFT::setBackColor(unsigned char, unsigned char, unsigned char)
  .text._ZN4UTFT8setPixelEj
-                0x00084e12        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084e12                UTFT::setPixel(unsigned int)
+                0x00084e22        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084e22                UTFT::setPixel(unsigned int)
  .text._ZN4UTFT9drawPixelEii
-                0x00084e1e       0x3c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084e1e                UTFT::drawPixel(int, int)
+                0x00084e2e       0x3c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084e2e                UTFT::drawPixel(int, int)
  .text._ZN4UTFT9drawHLineEiii
-                0x00084e5a       0x8e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084e5a                UTFT::drawHLine(int, int, int)
+                0x00084e6a       0x8e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084e6a                UTFT::drawHLine(int, int, int)
  .text._ZN4UTFT13fillRoundRectEiiii
-                0x00084ee8       0xac C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084ee8                UTFT::fillRoundRect(int, int, int, int)
+                0x00084ef8       0xac C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084ef8                UTFT::fillRoundRect(int, int, int, int)
  .text._ZN4UTFT10fillCircleEiii
-                0x00084f94       0x5a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084f94                UTFT::fillCircle(int, int, int)
+                0x00084fa4       0x5a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084fa4                UTFT::fillCircle(int, int, int)
  .text._ZN4UTFT9drawVLineEiii
-                0x00084fee       0x90 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00084fee                UTFT::drawVLine(int, int, int)
+                0x00084ffe       0x90 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00084ffe                UTFT::drawVLine(int, int, int)
  .text._ZN4UTFT8drawRectEiiii
-                0x0008507e       0x5a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x0008507e                UTFT::drawRect(int, int, int, int)
+                0x0008508e       0x5a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x0008508e                UTFT::drawRect(int, int, int, int)
  .text._ZN4UTFT13drawRoundRectEiiii
-                0x000850d8       0xc2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x000850d8                UTFT::drawRoundRect(int, int, int, int)
+                0x000850e8       0xc2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000850e8                UTFT::drawRoundRect(int, int, int, int)
  .text._ZN4UTFT8fillRectEiiii
-                0x0008519a      0x12a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x0008519a                UTFT::fillRect(int, int, int, int)
+                0x000851aa      0x12a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000851aa                UTFT::fillRect(int, int, int, int)
  .text._ZN4UTFT8drawLineEiiii
-                0x000852c4      0x102 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x000852c4                UTFT::drawLine(int, int, int, int)
+                0x000852d4      0x102 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000852d4                UTFT::drawLine(int, int, int, int)
  .text._ZN4UTFT9printCharEhii
-                0x000853c6      0x1d0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x000853c6                UTFT::printChar(unsigned char, int, int)
- *fill*         0x00085596        0x2 
+                0x000853d6      0x1d0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000853d6                UTFT::printChar(unsigned char, int, int)
+ *fill*         0x000855a6        0x2 
  .text._ZN4UTFT10rotateCharEhiiii
-                0x00085598      0x1b0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00085598                UTFT::rotateChar(unsigned char, int, int, int, int)
+                0x000855a8      0x1b0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000855a8                UTFT::rotateChar(unsigned char, int, int, int, int)
  .text._ZN4UTFT5printEPciii
-                0x00085748       0xac C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x00085748                UTFT::print(char*, int, int, int)
+                0x00085758       0xac C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00085758                UTFT::print(char*, int, int, int)
  .text._ZN4UTFT9printNumIEliiic
-                0x000857f4       0xe8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x000857f4                UTFT::printNumI(long, int, int, int, char)
+                0x00085804       0xe8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x00085804                UTFT::printNumI(long, int, int, int, char)
  .text._ZN4UTFT7setFontEPh
-                0x000858dc       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                0x000858dc                UTFT::setFont(unsigned char*)
+                0x000858ec       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x000858ec                UTFT::setFont(unsigned char*)
  .text._Z11serialEventv
-                0x000858f8        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x000858f8                serialEvent()
- *fill*         0x000858fa        0x2 
- .text.UART_Handler
-                0x000858fc        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x000858fc                UART_Handler
- .text._Z12serialEvent1v
                 0x00085908        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x00085908                serialEvent1()
+                0x00085908                serialEvent()
+ *fill*         0x0008590a        0x2 
+ .text.UART_Handler
+                0x0008590c        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x0008590c                UART_Handler
+ .text._Z12serialEvent1v
+                0x00085918        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x00085918                serialEvent1()
  .text._Z12serialEvent2v
-                0x0008590a        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x0008590a                serialEvent2()
+                0x0008591a        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x0008591a                serialEvent2()
  .text._Z12serialEvent3v
-                0x0008590c        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x0008590c                serialEvent3()
- *fill*         0x0008590e        0x2 
+                0x0008591c        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x0008591c                serialEvent3()
+ *fill*         0x0008591e        0x2 
  .text.USART0_Handler
-                0x00085910        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x00085910                USART0_Handler
+                0x00085920        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x00085920                USART0_Handler
  .text.USART1_Handler
-                0x0008591c        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x0008591c                USART1_Handler
+                0x0008592c        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x0008592c                USART1_Handler
  .text.USART3_Handler
-                0x00085928        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x00085928                USART3_Handler
- .text.init     0x00085934      0x128 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x00085934                init
+                0x00085938        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x00085938                USART3_Handler
+ .text.init     0x00085944      0x128 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x00085944                init
  .text.startup._GLOBAL__sub_I_g_APinDescription
-                0x00085a5c       0xd4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x00085a6c       0xd4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
  .text._Z14serialEventRunv
-                0x00085b30       0x44 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x00085b30                serialEventRun()
+                0x00085b40       0x44 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x00085b40                serialEventRun()
  .text.PIO_PullUp
-                0x00085b74        0xa C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
-                0x00085b74                PIO_PullUp
+                0x00085b84        0xa C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
+                0x00085b84                PIO_PullUp
  .text.PIO_SetPeripheral
-                0x00085b7e       0x26 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
-                0x00085b7e                PIO_SetPeripheral
+                0x00085b8e       0x26 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
+                0x00085b8e                PIO_SetPeripheral
  .text.PIO_SetInput
-                0x00085ba4       0x26 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
-                0x00085ba4                PIO_SetInput
+                0x00085bb4       0x26 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
+                0x00085bb4                PIO_SetInput
  .text.PIO_SetOutput
-                0x00085bca       0x24 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
-                0x00085bca                PIO_SetOutput
- *fill*         0x00085bee        0x2 
+                0x00085bda       0x24 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
+                0x00085bda                PIO_SetOutput
+ *fill*         0x00085bfe        0x2 
  .text.PIO_Configure
-                0x00085bf0       0x64 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
-                0x00085bf0                PIO_Configure
+                0x00085c00       0x64 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
+                0x00085c00                PIO_Configure
  .text.PIO_GetOutputDataStatus
-                0x00085c54       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
-                0x00085c54                PIO_GetOutputDataStatus
+                0x00085c64       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pio.o)
+                0x00085c64                PIO_GetOutputDataStatus
  .text.pmc_enable_upll_clock
-                0x00085c68       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
-                0x00085c68                pmc_enable_upll_clock
+                0x00085c78       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
+                0x00085c78                pmc_enable_upll_clock
  .text.pmc_enable_periph_clk
-                0x00085c7c       0x44 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
-                0x00085c7c                pmc_enable_periph_clk
+                0x00085c8c       0x44 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
+                0x00085c8c                pmc_enable_periph_clk
  .text.pmc_disable_periph_clk
-                0x00085cc0       0x40 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
-                0x00085cc0                pmc_disable_periph_clk
+                0x00085cd0       0x40 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
+                0x00085cd0                pmc_disable_periph_clk
  .text.pmc_switch_udpck_to_upllck
-                0x00085d00       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
-                0x00085d00                pmc_switch_udpck_to_upllck
+                0x00085d10       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
+                0x00085d10                pmc_switch_udpck_to_upllck
  .text.pmc_enable_udpck
-                0x00085d14        0xc C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
-                0x00085d14                pmc_enable_udpck
+                0x00085d24        0xc C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
+                0x00085d24                pmc_enable_udpck
  .text.SystemInit
-                0x00085d20       0x88 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(system_sam3xa.o)
-                0x00085d20                SystemInit
+                0x00085d30       0x88 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(system_sam3xa.o)
+                0x00085d30                SystemInit
  .text.Reset_Handler
-                0x00085da8       0x78 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(startup_sam3xa.o)
-                0x00085da8                Reset_Handler
+                0x00085db8       0x78 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(startup_sam3xa.o)
+                0x00085db8                Reset_Handler
  .text.adc_init
-                0x00085e20       0x98 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
-                0x00085e20                adc_init
+                0x00085e30       0x98 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
+                0x00085e30                adc_init
  .text.adc_configure_trigger
-                0x00085eb8        0xe C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
-                0x00085eb8                adc_configure_trigger
+                0x00085ec8        0xe C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
+                0x00085ec8                adc_configure_trigger
  .text.adc_configure_timing
-                0x00085ec6       0x1a C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
-                0x00085ec6                adc_configure_timing
+                0x00085ed6       0x1a C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
+                0x00085ed6                adc_configure_timing
  .text.adc_disable_channel
-                0x00085ee0        0xa C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
-                0x00085ee0                adc_disable_channel
+                0x00085ef0        0xa C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
+                0x00085ef0                adc_disable_channel
  .text.adc_disable_all_channel
-                0x00085eea        0x8 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
-                0x00085eea                adc_disable_all_channel
+                0x00085efa        0x8 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
+                0x00085efa                adc_disable_all_channel
  .text.adc_disable_interrupt
-                0x00085ef2        0x4 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
-                0x00085ef2                adc_disable_interrupt
- *fill*         0x00085ef6        0x2 
+                0x00085f02        0x4 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
+                0x00085f02                adc_disable_interrupt
+ *fill*         0x00085f06        0x2 
  .text.UOTGHS_Handler
-                0x00085ef8       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs.o)
-                0x00085ef8                UOTGHS_Handler
- .text.__halt   0x00085f08        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
-                0x00085f08                DACC_Handler
-                0x00085f08                DebugMon_Handler
-                0x00085f08                DMAC_Handler
-                0x00085f08                TRNG_Handler
-                0x00085f08                HardFault_Handler
-                0x00085f08                TC2_Handler
-                0x00085f08                TWI1_Handler
-                0x00085f08                NMI_Handler
-                0x00085f08                TC7_Handler
-                0x00085f08                ADC_Handler
-                0x00085f08                SMC_Handler
-                0x00085f08                RTT_Handler
-                0x00085f08                EFC1_Handler
-                0x00085f08                PIOB_Handler
-                0x00085f08                RTC_Handler
-                0x00085f08                UsageFault_Handler
-                0x00085f08                TC6_Handler
-                0x00085f08                WDT_Handler
-                0x00085f08                CAN0_Handler
-                0x00085f08                TC4_Handler
-                0x00085f08                TC1_Handler
-                0x00085f08                HSMCI_Handler
-                0x00085f08                TC3_Handler
-                0x00085f08                TWI0_Handler
-                0x00085f08                PIOA_Handler
-                0x00085f08                SSC_Handler
-                0x00085f08                EFC0_Handler
-                0x00085f08                PMC_Handler
-                0x00085f08                PWM_Handler
-                0x00085f08                CAN1_Handler
-                0x00085f08                MemManage_Handler
-                0x00085f08                SUPC_Handler
-                0x00085f08                TC8_Handler
-                0x00085f08                USART2_Handler
-                0x00085f08                PIOD_Handler
-                0x00085f08                EMAC_Handler
-                0x00085f08                PIOC_Handler
-                0x00085f08                BusFault_Handler
-                0x00085f08                RSTC_Handler
-                0x00085f08                TC0_Handler
-                0x00085f08                TC5_Handler
-                0x00085f08                SPI0_Handler
+                0x00085f08       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs.o)
+                0x00085f08                UOTGHS_Handler
+ .text.__halt   0x00085f18        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
+                0x00085f18                DACC_Handler
+                0x00085f18                DebugMon_Handler
+                0x00085f18                DMAC_Handler
+                0x00085f18                TRNG_Handler
+                0x00085f18                HardFault_Handler
+                0x00085f18                TC2_Handler
+                0x00085f18                TWI1_Handler
+                0x00085f18                NMI_Handler
+                0x00085f18                TC7_Handler
+                0x00085f18                ADC_Handler
+                0x00085f18                SMC_Handler
+                0x00085f18                RTT_Handler
+                0x00085f18                EFC1_Handler
+                0x00085f18                PIOB_Handler
+                0x00085f18                RTC_Handler
+                0x00085f18                UsageFault_Handler
+                0x00085f18                TC6_Handler
+                0x00085f18                WDT_Handler
+                0x00085f18                CAN0_Handler
+                0x00085f18                TC4_Handler
+                0x00085f18                TC1_Handler
+                0x00085f18                HSMCI_Handler
+                0x00085f18                TC3_Handler
+                0x00085f18                TWI0_Handler
+                0x00085f18                PIOA_Handler
+                0x00085f18                SSC_Handler
+                0x00085f18                EFC0_Handler
+                0x00085f18                PMC_Handler
+                0x00085f18                PWM_Handler
+                0x00085f18                CAN1_Handler
+                0x00085f18                MemManage_Handler
+                0x00085f18                SUPC_Handler
+                0x00085f18                TC8_Handler
+                0x00085f18                USART2_Handler
+                0x00085f18                PIOD_Handler
+                0x00085f18                EMAC_Handler
+                0x00085f18                PIOC_Handler
+                0x00085f18                BusFault_Handler
+                0x00085f18                RSTC_Handler
+                0x00085f18                TC0_Handler
+                0x00085f18                TC5_Handler
+                0x00085f18                SPI0_Handler
  .text.SVC_Handler
-                0x00085f0a        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
-                0x00085f0a                SVC_Handler
+                0x00085f1a        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
+                0x00085f1a                SVC_Handler
  .text.PendSV_Handler
-                0x00085f0e        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
-                0x00085f0e                PendSV_Handler
+                0x00085f1e        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
+                0x00085f1e                PendSV_Handler
  .text.SysTick_Handler
-                0x00085f12       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
-                0x00085f12                SysTick_Handler
- .text.__empty  0x00085f28        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
-                0x00085f28                yield
- .text.__false  0x00085f2a        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
-                0x00085f2a                sysTickHook
- .text.__halt   0x00085f2e        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
-                0x00085f2e                svcHook
-                0x00085f2e                pendSVHook
- .text._sbrk    0x00085f30       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f30                _sbrk
- .text.link     0x00085f4c        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f4c                link
- .text._close   0x00085f52        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f52                _close
- .text._fstat   0x00085f58        0xa C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f58                _fstat
- .text._isatty  0x00085f62        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f62                _isatty
- .text._lseek   0x00085f66        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f66                _lseek
- .text._read    0x00085f6a        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f6a                _read
- *fill*         0x00085f6e        0x2 
- .text._write   0x00085f70       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f70                _write
- .text._exit    0x00085f94       0x10 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085f94                _exit
- .text._kill    0x00085fa4        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085fa4                _kill
- .text._getpid  0x00085fa6        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                0x00085fa6                _getpid
- .text.millis   0x00085fac        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
-                0x00085fac                millis
- .text.delay    0x00085fb0       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
-                0x00085fb0                delay
+                0x00085f22       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
+                0x00085f22                SysTick_Handler
+ .text.__empty  0x00085f38        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
+                0x00085f38                yield
+ .text.__false  0x00085f3a        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
+                0x00085f3a                sysTickHook
+ .text.__halt   0x00085f3e        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
+                0x00085f3e                svcHook
+                0x00085f3e                pendSVHook
+ .text._sbrk    0x00085f40       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f40                _sbrk
+ .text.link     0x00085f5c        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f5c                link
+ .text._close   0x00085f62        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f62                _close
+ .text._fstat   0x00085f68        0xa C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f68                _fstat
+ .text._isatty  0x00085f72        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f72                _isatty
+ .text._lseek   0x00085f76        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f76                _lseek
+ .text._read    0x00085f7a        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f7a                _read
+ *fill*         0x00085f7e        0x2 
+ .text._write   0x00085f80       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085f80                _write
+ .text._exit    0x00085fa4       0x10 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085fa4                _exit
+ .text._kill    0x00085fb4        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085fb4                _kill
+ .text._getpid  0x00085fb6        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                0x00085fb6                _getpid
+ .text.millis   0x00085fbc        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
+                0x00085fbc                millis
+ .text.delay    0x00085fc0       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
+                0x00085fc0                delay
  .text.analogOutputInit
-                0x00085fcc        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
-                0x00085fcc                analogOutputInit
- *fill*         0x00085fce        0x2 
- .text.pinMode  0x00085fd0      0x108 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
-                0x00085fd0                pinMode
+                0x00085fdc        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
+                0x00085fdc                analogOutputInit
+ *fill*         0x00085fde        0x2 
+ .text.pinMode  0x00085fe0      0x108 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
+                0x00085fe0                pinMode
  .text.digitalWrite
-                0x000860d8       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
-                0x000860d8                digitalWrite
+                0x000860e8       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
+                0x000860e8                digitalWrite
  .text.initVariant
-                0x00086148        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
-                0x00086148                initVariant
- *fill*         0x0008614a        0x2 
+                0x00086158        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
+                0x00086158                initVariant
+ *fill*         0x0008615a        0x2 
  .text.startup.main
-                0x0008614c       0x38 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
-                0x0008614c                main
+                0x0008615c       0x38 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
+                0x0008615c                main
  .text.initiateReset
-                0x00086184        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
-                0x00086184                initiateReset
+                0x00086194        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
+                0x00086194                initiateReset
  .text.cancelReset
-                0x00086190       0x10 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
-                0x00086190                cancelReset
+                0x000861a0       0x10 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
+                0x000861a0                cancelReset
  .text.tickReset
-                0x000861a0       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
-                0x000861a0                tickReset
+                0x000861b0       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
+                0x000861b0                tickReset
  .text._ZN10RingBufferC2Ev
-                0x000861c0       0x1a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
-                0x000861c0                RingBuffer::RingBuffer()
-                0x000861c0                RingBuffer::RingBuffer()
+                0x000861d0       0x1a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
+                0x000861d0                RingBuffer::RingBuffer()
+                0x000861d0                RingBuffer::RingBuffer()
  .text._ZN10RingBuffer10store_charEh
-                0x000861da       0x1e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
-                0x000861da                RingBuffer::store_char(unsigned char)
+                0x000861ea       0x1e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
+                0x000861ea                RingBuffer::store_char(unsigned char)
  .text._ZN9UARTClasscvbEv
-                0x000861f8        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x000861f8                UARTClass::operator bool()
+                0x00086208        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x00086208                UARTClass::operator bool()
  .text._ZN9UARTClass9availableEv
-                0x000861fc       0x12 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x000861fc                UARTClass::available()
+                0x0008620c       0x12 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x0008620c                UARTClass::available()
  .text._ZN9UARTClass4peekEv
-                0x0008620e       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x0008620e                UARTClass::peek()
+                0x0008621e       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x0008621e                UARTClass::peek()
  .text._ZN9UARTClass4readEv
-                0x0008622a       0x2a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x0008622a                UARTClass::read()
+                0x0008623a       0x2a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x0008623a                UARTClass::read()
  .text._ZN9UARTClass5flushEv
-                0x00086254       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x00086254                UARTClass::flush()
+                0x00086264       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x00086264                UARTClass::flush()
  .text._ZN9UARTClass5writeEh
-                0x0008626c       0x54 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x0008626c                UARTClass::write(unsigned char)
+                0x0008627c       0x54 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x0008627c                UARTClass::write(unsigned char)
  .text._ZN9UARTClass3endEv
-                0x000862c0       0x3c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x000862c0                UARTClass::end()
+                0x000862d0       0x3c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x000862d0                UARTClass::end()
  .text._ZN9UARTClassC2EP4Uart4IRQnmP10RingBufferS4_
-                0x000862fc       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x000862fc                UARTClass::UARTClass(Uart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
-                0x000862fc                UARTClass::UARTClass(Uart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
+                0x0008630c       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x0008630c                UARTClass::UARTClass(Uart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
+                0x0008630c                UARTClass::UARTClass(Uart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
  .text._ZN9UARTClass4initEmm
-                0x00086320       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x00086320                UARTClass::init(unsigned long, unsigned long)
+                0x00086330       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x00086330                UARTClass::init(unsigned long, unsigned long)
  .text._ZN9UARTClass5beginEm
-                0x00086390        0x8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x00086390                UARTClass::begin(unsigned long)
+                0x000863a0        0x8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x000863a0                UARTClass::begin(unsigned long)
  .text._ZN9UARTClass10IrqHandlerEv
-                0x00086398       0x5a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x00086398                UARTClass::IrqHandler()
+                0x000863a8       0x5a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x000863a8                UARTClass::IrqHandler()
  .text._ZN10USARTClass5beginEm
-                0x000863f2        0x8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
-                0x000863f2                USARTClass::begin(unsigned long)
- *fill*         0x000863fa        0x2 
+                0x00086402        0x8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
+                0x00086402                USARTClass::begin(unsigned long)
+ *fill*         0x0008640a        0x2 
  .text._ZN10USARTClassC2EP5Usart4IRQnmP10RingBufferS4_
-                0x000863fc       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
-                0x000863fc                USARTClass::USARTClass(Usart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
-                0x000863fc                USARTClass::USARTClass(Usart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
+                0x0008640c       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
+                0x0008640c                USARTClass::USARTClass(Usart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
+                0x0008640c                USARTClass::USARTClass(Usart*, IRQn, unsigned long, RingBuffer*, RingBuffer*)
  .text._watchdogDefaultSetup
-                0x00086420        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
-                0x00086420                _watchdogDefaultSetup
-                0x00086420                watchdogSetup()
+                0x00086430        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
+                0x00086430                _watchdogDefaultSetup
+                0x00086430                watchdogSetup()
  .text._Z6randoml
-                0x0008642c       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
-                0x0008642c                random(long)
- *fill*         0x00086442        0x2 
+                0x0008643c       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
+                0x0008643c                random(long)
+ *fill*         0x00086452        0x2 
  .text.unlikely._ZL11USB_SendZlpv
-                0x00086444       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x00086454       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
  .text._Z14USBD_Availablem
-                0x00086464       0x2c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x00086464                USBD_Available(unsigned long)
+                0x00086474       0x2c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x00086474                USBD_Available(unsigned long)
  .text._Z9USBD_RecvmPvm
-                0x00086490       0x7c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x00086490                USBD_Recv(unsigned long, void*, unsigned long)
+                0x000864a0       0x7c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x000864a0                USBD_Recv(unsigned long, void*, unsigned long)
  .text._Z9USBD_Recvm
-                0x0008650c       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008650c                USBD_Recv(unsigned long)
- *fill*         0x0008652e        0x2 
+                0x0008651c       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008651c                USBD_Recv(unsigned long)
+ *fill*         0x0008653e        0x2 
  .text._Z9USBD_SendmPKvm
-                0x00086530       0x4c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x00086530                USBD_Send(unsigned long, void const*, unsigned long)
+                0x00086540       0x4c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x00086540                USBD_Send(unsigned long, void const*, unsigned long)
  .text._Z16USBD_SendControlhPKvm
-                0x0008657c       0x40 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008657c                USBD_SendControl(unsigned char, void const*, unsigned long)
+                0x0008658c       0x40 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008658c                USBD_SendControl(unsigned char, void const*, unsigned long)
  .text.unlikely._ZL24USB_SendStringDescriptorPKhi
-                0x000865bc       0x64 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x000865cc       0x64 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
  .text._Z16USBD_RecvControlPvm
-                0x00086620       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x00086620                USBD_RecvControl(void*, unsigned long)
+                0x00086630       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x00086630                USBD_RecvControl(void*, unsigned long)
  .text._Z26USBD_ClassInterfaceRequestR8USBSetup
-                0x0008663c       0x1e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008663c                USBD_ClassInterfaceRequest(USBSetup&)
+                0x0008664c       0x1e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008664c                USBD_ClassInterfaceRequest(USBSetup&)
  .text._Z19USBD_SendInterfacesv
-                0x0008665a       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008665a                USBD_SendInterfaces()
+                0x0008666a       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008666a                USBD_SendInterfaces()
  .text._Z24USBD_SendOtherInterfacesv
-                0x0008667c       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008667c                USBD_SendOtherInterfaces()
+                0x0008668c       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008668c                USBD_SendOtherInterfaces()
  .text._Z10USBD_Flushm
-                0x0008669e       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008669e                USBD_Flush(unsigned long)
+                0x000866ae       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x000866ae                USBD_Flush(unsigned long)
  .text._ZN10USBDevice_C2Ev
-                0x000866b4       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x000866b4                USBDevice_::USBDevice_()
-                0x000866b4                USBDevice_::USBDevice_()
+                0x000866c4       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x000866c4                USBDevice_::USBDevice_()
+                0x000866c4                USBDevice_::USBDevice_()
  .text._ZN10USBDevice_6attachEv
-                0x000866d8       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x000866d8                USBDevice_::attach()
+                0x000866e8       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x000866e8                USBDevice_::attach()
  .text.startup._GLOBAL__sub_I_EndPoints
-                0x000866f8        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x00086708        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
  .text._ZL7USB_ISRv
-                0x00086704      0x454 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x00086714      0x454 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
  .text._ZN5Print5writeEPKhj
-                0x00086b58       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
-                0x00086b58                Print::write(unsigned char const*, unsigned int)
- *fill*         0x00086b7a        0x2 
+                0x00086b68       0x22 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
+                0x00086b68                Print::write(unsigned char const*, unsigned int)
+ *fill*         0x00086b8a        0x2 
  .text._ZN7Serial_9availableEv
-                0x00086b7c       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086b7c                Serial_::available()
+                0x00086b8c       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086b8c                Serial_::available()
  .text._ZN7Serial_17availableForWriteEv
-                0x00086b94        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086b94                Serial_::availableForWrite()
- *fill*         0x00086b9a        0x2 
+                0x00086ba4        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086ba4                Serial_::availableForWrite()
+ *fill*         0x00086baa        0x2 
  .text._ZN7Serial_4peekEv
-                0x00086b9c       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086b9c                Serial_::peek()
+                0x00086bac       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086bac                Serial_::peek()
  .text._ZN7Serial_5writeEh
-                0x00086bbc       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086bbc                Serial_::write(unsigned char)
- *fill*         0x00086bd2        0x2 
+                0x00086bcc       0x16 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086bcc                Serial_::write(unsigned char)
+ *fill*         0x00086be2        0x2 
  .text._ZN7Serial_4readEv
-                0x00086bd4       0x44 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086bd4                Serial_::read()
+                0x00086be4       0x44 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086be4                Serial_::read()
  .text._ZN7Serial_5flushEv
-                0x00086c18        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086c18                Serial_::flush()
- *fill*         0x00086c1e        0x2 
+                0x00086c28        0x6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086c28                Serial_::flush()
+ *fill*         0x00086c2e        0x2 
  .text._ZN7Serial_6acceptEv
-                0x00086c20       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086c20                Serial_::accept()
+                0x00086c30       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086c30                Serial_::accept()
  .text._ZN7Serial_5writeEPKhj
-                0x00086c90       0x2c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086c90                Serial_::write(unsigned char const*, unsigned int)
+                0x00086ca0       0x2c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086ca0                Serial_::write(unsigned char const*, unsigned int)
  .text._Z16CDC_GetInterfacePh
-                0x00086cbc       0x14 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086cbc                CDC_GetInterface(unsigned char*)
+                0x00086ccc       0x14 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086ccc                CDC_GetInterface(unsigned char*)
  .text._Z21CDC_GetOtherInterfacePh
-                0x00086cd0       0x14 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086cd0                CDC_GetOtherInterface(unsigned char*)
+                0x00086ce0       0x14 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086ce0                CDC_GetOtherInterface(unsigned char*)
  .text._Z9CDC_SetupR8USBSetup
-                0x00086ce4       0x78 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x00086ce4                CDC_Setup(USBSetup&)
+                0x00086cf4       0x78 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086cf4                CDC_Setup(USBSetup&)
  .text.startup._GLOBAL__sub_I_cdc_rx_buffer
-                0x00086d5c       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x00086d6c       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
  .text._ZN13PluggableUSB_12getInterfaceEPh
-                0x00086d78       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
-                0x00086d78                PluggableUSB_::getInterface(unsigned char*)
+                0x00086d88       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+                0x00086d88                PluggableUSB_::getInterface(unsigned char*)
  .text._ZN13PluggableUSB_13getDescriptorER8USBSetup
-                0x00086da0       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
-                0x00086da0                PluggableUSB_::getDescriptor(USBSetup&)
+                0x00086db0       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+                0x00086db0                PluggableUSB_::getDescriptor(USBSetup&)
  .text._ZN13PluggableUSB_12getShortNameEPc
-                0x00086dbc       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
-                0x00086dbc                PluggableUSB_::getShortName(char*)
+                0x00086dcc       0x1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+                0x00086dcc                PluggableUSB_::getShortName(char*)
  .text._ZN13PluggableUSB_5setupER8USBSetup
-                0x00086dd8       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
-                0x00086dd8                PluggableUSB_::setup(USBSetup&)
+                0x00086de8       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+                0x00086de8                PluggableUSB_::setup(USBSetup&)
  .text._Z12PluggableUSBv
-                0x00086df8       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
-                0x00086df8                PluggableUSB()
+                0x00086e08       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+                0x00086e08                PluggableUSB()
  .text.TimeTick_Increment
-                0x00086e20       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(timetick.o)
-                0x00086e20                TimeTick_Increment
+                0x00086e30       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(timetick.o)
+                0x00086e30                TimeTick_Increment
  .text.GetTickCount
-                0x00086e30        0xc C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(timetick.o)
-                0x00086e30                GetTickCount
+                0x00086e40        0xc C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(timetick.o)
+                0x00086e40                GetTickCount
  .text.WDT_Disable
-                0x00086e3c        0x8 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(wdt.o)
-                0x00086e3c                WDT_Disable
+                0x00086e4c        0x8 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(wdt.o)
+                0x00086e4c                WDT_Disable
  .text.UDD_SetStack
-                0x00086e44        0xc C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086e44                UDD_SetStack
+                0x00086e54        0xc C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00086e54                UDD_SetStack
  .text.UDD_Init
-                0x00086e50       0xd0 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086e50                UDD_Init
+                0x00086e60       0xd0 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00086e60                UDD_Init
  .text.UDD_Attach
-                0x00086f20       0x50 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086f20                UDD_Attach
+                0x00086f30       0x50 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00086f30                UDD_Attach
  .text.UDD_InitEP
-                0x00086f70       0x2c C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086f70                UDD_InitEP
+                0x00086f80       0x2c C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00086f80                UDD_InitEP
  .text.UDD_InitEndpoints
-                0x00086f9c       0x3c C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086f9c                UDD_InitEndpoints
+                0x00086fac       0x3c C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00086fac                UDD_InitEndpoints
  .text.UDD_WaitIN
-                0x00086fd8       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086fd8                UDD_WaitIN
- .text.UDD_WaitOUT
                 0x00086fe8       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086fe8                UDD_WaitOUT
+                0x00086fe8                UDD_WaitIN
+ .text.UDD_WaitOUT
+                0x00086ff8       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00086ff8                UDD_WaitOUT
  .text.UDD_ClearIN
-                0x00086ff8       0x18 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00086ff8                UDD_ClearIN
+                0x00087008       0x18 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087008                UDD_ClearIN
  .text.UDD_ClearOUT
-                0x00087010       0x18 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00087010                UDD_ClearOUT
+                0x00087020       0x18 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087020                UDD_ClearOUT
  .text.UDD_ReceivedSetupInt
-                0x00087028       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00087028                UDD_ReceivedSetupInt
- .text.UDD_ClearSetupInt
                 0x00087038       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00087038                UDD_ClearSetupInt
+                0x00087038                UDD_ReceivedSetupInt
+ .text.UDD_ClearSetupInt
+                0x00087048       0x10 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087048                UDD_ClearSetupInt
  .text.UDD_Send
-                0x00087048       0x88 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00087048                UDD_Send
+                0x00087058       0x88 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087058                UDD_Send
  .text.UDD_Send8
-                0x000870d0       0x24 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x000870d0                UDD_Send8
+                0x000870e0       0x24 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x000870e0                UDD_Send8
  .text.UDD_Recv8
-                0x000870f4       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x000870f4                UDD_Recv8
+                0x00087104       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087104                UDD_Recv8
  .text.UDD_Recv
-                0x0008711c       0x34 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x0008711c                UDD_Recv
+                0x0008712c       0x34 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x0008712c                UDD_Recv
  .text.UDD_Stall
-                0x00087150       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00087150                UDD_Stall
+                0x00087160       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087160                UDD_Stall
  .text.UDD_FifoByteCount
-                0x00087164       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00087164                UDD_FifoByteCount
+                0x00087174       0x14 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087174                UDD_FifoByteCount
  .text.UDD_ReleaseRX
-                0x00087178       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x00087178                UDD_ReleaseRX
+                0x00087188       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x00087188                UDD_ReleaseRX
  .text.UDD_ReleaseTX
-                0x000871a0       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x000871a0                UDD_ReleaseTX
+                0x000871b0       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x000871b0                UDD_ReleaseTX
  .text.UDD_SetAddress
-                0x000871c8       0x20 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
-                0x000871c8                UDD_SetAddress
- .text.cos      0x000871e8       0x8c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_cos.o)
-                0x000871e8                cos
- .text.sin      0x00087274       0x94 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_sin.o)
-                0x00087274                sin
- .text.tan      0x00087308       0x60 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_tan.o)
-                0x00087308                tan
+                0x000871d8       0x20 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x000871d8                UDD_SetAddress
+ .text.cos      0x000871f8       0x8c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_cos.o)
+                0x000871f8                cos
+ .text.sin      0x00087284       0x94 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_sin.o)
+                0x00087284                sin
+ .text.tan      0x00087318       0x60 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_tan.o)
+                0x00087318                tan
  .text.__ieee754_rem_pio2
-                0x00087368      0x440 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_rem_pio2.o)
-                0x00087368                __ieee754_rem_pio2
+                0x00087378      0x440 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_rem_pio2.o)
+                0x00087378                __ieee754_rem_pio2
  .text.__kernel_cos
-                0x000877a8      0x248 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_cos.o)
-                0x000877a8                __kernel_cos
+                0x000877b8      0x248 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_cos.o)
+                0x000877b8                __kernel_cos
  .text.__kernel_rem_pio2
-                0x000879f0      0x7bc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_rem_pio2.o)
-                0x000879f0                __kernel_rem_pio2
- *fill*         0x000881ac        0x4 
+                0x00087a00      0x7bc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_rem_pio2.o)
+                0x00087a00                __kernel_rem_pio2
+ *fill*         0x000881bc        0x4 
  .text.__kernel_sin
-                0x000881b0      0x170 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_sin.o)
-                0x000881b0                __kernel_sin
+                0x000881c0      0x170 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_sin.o)
+                0x000881c0                __kernel_sin
  .text.__kernel_tan
-                0x00088320      0x3b0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_tan.o)
-                0x00088320                __kernel_tan
- .text.fabs     0x000886d0        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_fabs.o)
-                0x000886d0                fabs
- .text.floor    0x000886d8      0x120 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_floor.o)
-                0x000886d8                floor
- .text.scalbn   0x000887f8      0x100 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_scalbn.o)
-                0x000887f8                scalbn
+                0x00088330      0x3b0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_tan.o)
+                0x00088330                __kernel_tan
+ .text.fabs     0x000886e0        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_fabs.o)
+                0x000886e0                fabs
+ .text.floor    0x000886e8      0x120 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_floor.o)
+                0x000886e8                floor
+ .text.scalbn   0x00088808      0x100 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_scalbn.o)
+                0x00088808                scalbn
  .text.copysign
-                0x000888f8       0x14 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_copysign.o)
-                0x000888f8                copysign
- .text          0x0008890c      0x370 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_addsubdf3.o)
-                0x0008890c                __aeabi_drsub
-                0x00088914                __aeabi_dsub
-                0x00088914                __subdf3
-                0x00088918                __aeabi_dadd
-                0x00088918                __adddf3
-                0x00088b90                __floatunsidf
-                0x00088b90                __aeabi_ui2d
-                0x00088bb0                __floatsidf
-                0x00088bb0                __aeabi_i2d
-                0x00088bd4                __aeabi_f2d
-                0x00088bd4                __extendsfdf2
-                0x00088c10                __floatundidf
-                0x00088c10                __aeabi_ul2d
-                0x00088c20                __floatdidf
-                0x00088c20                __aeabi_l2d
- .text          0x00088c7c      0x424 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_muldivdf3.o)
-                0x00088c7c                __aeabi_dmul
-                0x00088c7c                __muldf3
-                0x00088ed0                __divdf3
-                0x00088ed0                __aeabi_ddiv
- .text          0x000890a0      0x110 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_cmpdf2.o)
-                0x000890a0                __gtdf2
-                0x000890a0                __gedf2
-                0x000890a8                __ltdf2
-                0x000890a8                __ledf2
-                0x000890b0                __nedf2
-                0x000890b0                __eqdf2
-                0x000890b0                __cmpdf2
-                0x0008912c                __aeabi_cdrcmple
-                0x0008913c                __aeabi_cdcmpeq
-                0x0008913c                __aeabi_cdcmple
-                0x0008914c                __aeabi_dcmpeq
-                0x00089160                __aeabi_dcmplt
-                0x00089174                __aeabi_dcmple
-                0x00089188                __aeabi_dcmpge
-                0x0008919c                __aeabi_dcmpgt
- .text          0x000891b0       0x50 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_fixdfsi.o)
-                0x000891b0                __aeabi_d2iz
-                0x000891b0                __fixdfsi
+                0x00088908       0x14 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-s_copysign.o)
+                0x00088908                copysign
+ .text          0x0008891c      0x370 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_addsubdf3.o)
+                0x0008891c                __aeabi_drsub
+                0x00088924                __aeabi_dsub
+                0x00088924                __subdf3
+                0x00088928                __aeabi_dadd
+                0x00088928                __adddf3
+                0x00088ba0                __floatunsidf
+                0x00088ba0                __aeabi_ui2d
+                0x00088bc0                __floatsidf
+                0x00088bc0                __aeabi_i2d
+                0x00088be4                __aeabi_f2d
+                0x00088be4                __extendsfdf2
+                0x00088c20                __floatundidf
+                0x00088c20                __aeabi_ul2d
+                0x00088c30                __floatdidf
+                0x00088c30                __aeabi_l2d
+ .text          0x00088c8c      0x424 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_muldivdf3.o)
+                0x00088c8c                __aeabi_dmul
+                0x00088c8c                __muldf3
+                0x00088ee0                __divdf3
+                0x00088ee0                __aeabi_ddiv
+ .text          0x000890b0      0x110 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_cmpdf2.o)
+                0x000890b0                __gtdf2
+                0x000890b0                __gedf2
+                0x000890b8                __ltdf2
+                0x000890b8                __ledf2
+                0x000890c0                __nedf2
+                0x000890c0                __eqdf2
+                0x000890c0                __cmpdf2
+                0x0008913c                __aeabi_cdrcmple
+                0x0008914c                __aeabi_cdcmpeq
+                0x0008914c                __aeabi_cdcmple
+                0x0008915c                __aeabi_dcmpeq
+                0x00089170                __aeabi_dcmplt
+                0x00089184                __aeabi_dcmple
+                0x00089198                __aeabi_dcmpge
+                0x000891ac                __aeabi_dcmpgt
+ .text          0x000891c0       0x50 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_arm_fixdfsi.o)
+                0x000891c0                __aeabi_d2iz
+                0x000891c0                __fixdfsi
  .text.__libc_init_array
-                0x00089200       0x50 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-init.o)
-                0x00089200                __libc_init_array
- .text.iprintf  0x00089250       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-iprintf.o)
-                0x00089250                iprintf
- .text.malloc   0x00089278       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-malloc.o)
-                0x00089278                malloc
+                0x00089210       0x50 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-init.o)
+                0x00089210                __libc_init_array
+ .text.iprintf  0x00089260       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-iprintf.o)
+                0x00089260                iprintf
+ .text.malloc   0x00089288       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-malloc.o)
+                0x00089288                malloc
  .text._malloc_r
-                0x00089288      0x538 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
-                0x00089288                _malloc_r
- .text          0x000897c0       0xec c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memcpy.o)
-                0x000897c0                memcpy
- .text.memmove  0x000898ac       0xcc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memmove.o)
-                0x000898ac                memmove
- .text.memset   0x00089978       0x94 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memset.o)
-                0x00089978                memset
+                0x00089298      0x538 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
+                0x00089298                _malloc_r
+ .text          0x000897d0       0xec c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memcpy.o)
+                0x000897d0                memcpy
+ .text.memmove  0x000898bc       0xcc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memmove.o)
+                0x000898bc                memmove
+ .text.memset   0x00089988       0x94 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memset.o)
+                0x00089988                memset
  .text.__malloc_lock
-                0x00089a0c        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mlock.o)
-                0x00089a0c                __malloc_lock
+                0x00089a1c        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mlock.o)
+                0x00089a1c                __malloc_lock
  .text.__malloc_unlock
-                0x00089a10        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mlock.o)
-                0x00089a10                __malloc_unlock
- .text.rand     0x00089a14       0x40 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-rand.o)
-                0x00089a14                rand
+                0x00089a20        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mlock.o)
+                0x00089a20                __malloc_unlock
+ .text.rand     0x00089a24       0x40 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-rand.o)
+                0x00089a24                rand
  .text._realloc_r
-                0x00089a54      0x3c0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-reallocr.o)
-                0x00089a54                _realloc_r
- .text._sbrk_r  0x00089e14       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-sbrkr.o)
-                0x00089e14                _sbrk_r
- .text.strlen   0x00089e38       0x60 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-strlen.o)
-                0x00089e38                strlen
- .text.kill     0x00089e98       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-syskill.o)
-                0x00089e98                kill
+                0x00089a64      0x3c0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-reallocr.o)
+                0x00089a64                _realloc_r
+ .text._sbrk_r  0x00089e24       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-sbrkr.o)
+                0x00089e24                _sbrk_r
+ .text.strlen   0x00089e48       0x60 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-strlen.o)
+                0x00089e48                strlen
+ .text.kill     0x00089ea8       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-syskill.o)
+                0x00089ea8                kill
  .text.__sprint_r.part.0
-                0x00089ea8       0x78 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
+                0x00089eb8       0x78 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
  .text._vfiprintf_r
-                0x00089f20      0xc54 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
-                0x00089f20                _vfiprintf_r
+                0x00089f30      0xc54 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
+                0x00089f30                _vfiprintf_r
  .text.__sbprintf
-                0x0008ab74       0x7c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
+                0x0008ab84       0x7c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
  .text.__swsetup_r
-                0x0008abf0       0xc4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wsetup.o)
-                0x0008abf0                __swsetup_r
+                0x0008ac00       0xc4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wsetup.o)
+                0x0008ac00                __swsetup_r
  .text.startup.register_fini
-                0x0008acb4       0x14 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-__call_atexit.o)
- .text.atexit   0x0008acc8        0xc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-atexit.o)
-                0x0008acc8                atexit
+                0x0008acc4       0x14 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-__call_atexit.o)
+ .text.atexit   0x0008acd8        0xc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-atexit.o)
+                0x0008acd8                atexit
  .text.__sflush_r
-                0x0008acd4      0x148 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fflush.o)
-                0x0008acd4                __sflush_r
+                0x0008ace4      0x148 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fflush.o)
+                0x0008ace4                __sflush_r
  .text._fflush_r
-                0x0008ae1c       0x2c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fflush.o)
-                0x0008ae1c                _fflush_r
+                0x0008ae2c       0x2c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fflush.o)
+                0x0008ae2c                _fflush_r
  .text._cleanup_r
-                0x0008ae48        0xc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
-                0x0008ae48                _cleanup_r
- .text.__sinit  0x0008ae54       0xf4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
-                0x0008ae54                __sinit
+                0x0008ae58        0xc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
+                0x0008ae58                _cleanup_r
+ .text.__sinit  0x0008ae64       0xf4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
+                0x0008ae64                __sinit
  .text.__sfp_lock_acquire
-                0x0008af48        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
-                0x0008af48                __sfp_lock_acquire
+                0x0008af58        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
+                0x0008af58                __sfp_lock_acquire
  .text.__sfp_lock_release
-                0x0008af4c        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
-                0x0008af4c                __sfp_lock_release
+                0x0008af5c        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-findfp.o)
+                0x0008af5c                __sfp_lock_release
  .text.__libc_fini_array
-                0x0008af50       0x30 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fini.o)
-                0x0008af50                __libc_fini_array
+                0x0008af60       0x30 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fini.o)
+                0x0008af60                __libc_fini_array
  .text._fputwc_r
-                0x0008af80       0xc0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fputwc.o)
-                0x0008af80                _fputwc_r
+                0x0008af90       0xc0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fputwc.o)
+                0x0008af90                _fputwc_r
  .text._malloc_trim_r
-                0x0008b040       0x9c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-freer.o)
-                0x0008b040                _malloc_trim_r
- .text._free_r  0x0008b0dc      0x198 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-freer.o)
-                0x0008b0dc                _free_r
+                0x0008b050       0x9c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-freer.o)
+                0x0008b050                _malloc_trim_r
+ .text._free_r  0x0008b0ec      0x198 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-freer.o)
+                0x0008b0ec                _free_r
  .text.__sfvwrite_r
-                0x0008b274      0x314 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fvwrite.o)
-                0x0008b274                __sfvwrite_r
- .text._fwalk   0x0008b588       0x48 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fwalk.o)
-                0x0008b588                _fwalk
+                0x0008b284      0x314 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fvwrite.o)
+                0x0008b284                __sfvwrite_r
+ .text._fwalk   0x0008b598       0x48 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fwalk.o)
+                0x0008b598                _fwalk
  .text.__locale_charset
-                0x0008b5d0        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-locale.o)
-                0x0008b5d0                __locale_charset
+                0x0008b5e0        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-locale.o)
+                0x0008b5e0                __locale_charset
  .text.__locale_mb_cur_max
-                0x0008b5d8        0xc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-locale.o)
-                0x0008b5d8                __locale_mb_cur_max
+                0x0008b5e8        0xc c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-locale.o)
+                0x0008b5e8                __locale_mb_cur_max
  .text.__smakebuf_r
-                0x0008b5e4       0xe0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-makebuf.o)
-                0x0008b5e4                __smakebuf_r
- .text.memchr   0x0008b6c4       0x94 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memchr-stub.o)
-                0x0008b6c4                memchr
- .text._kill_r  0x0008b758       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-signalr.o)
-                0x0008b758                _kill_r
- .text.__sread  0x0008b780       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
-                0x0008b780                __sread
+                0x0008b5f4       0xe0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-makebuf.o)
+                0x0008b5f4                __smakebuf_r
+ .text.memchr   0x0008b6d4       0x94 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-memchr-stub.o)
+                0x0008b6d4                memchr
+ .text._kill_r  0x0008b768       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-signalr.o)
+                0x0008b768                _kill_r
+ .text.__sread  0x0008b790       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
+                0x0008b790                __sread
  .text.__swrite
-                0x0008b7a4       0x38 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
-                0x0008b7a4                __swrite
- .text.__sseek  0x0008b7dc       0x20 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
-                0x0008b7dc                __sseek
+                0x0008b7b4       0x38 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
+                0x0008b7b4                __swrite
+ .text.__sseek  0x0008b7ec       0x20 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
+                0x0008b7ec                __sseek
  .text.__sclose
-                0x0008b7fc        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
-                0x0008b7fc                __sclose
+                0x0008b80c        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-stdio.o)
+                0x0008b80c                __sclose
  .text.__swbuf_r
-                0x0008b804       0xa8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wbuf.o)
-                0x0008b804                __swbuf_r
+                0x0008b814       0xa8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wbuf.o)
+                0x0008b814                __swbuf_r
  .text._wcrtomb_r
-                0x0008b8ac       0x50 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wcrtomb.o)
-                0x0008b8ac                _wcrtomb_r
+                0x0008b8bc       0x50 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wcrtomb.o)
+                0x0008b8bc                _wcrtomb_r
  .text.__ascii_wctomb
-                0x0008b8fc       0x1c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wctomb_r.o)
-                0x0008b8fc                __ascii_wctomb
+                0x0008b90c       0x1c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-wctomb_r.o)
+                0x0008b90c                __ascii_wctomb
  .text._write_r
-                0x0008b918       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-writer.o)
-                0x0008b918                _write_r
+                0x0008b928       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-writer.o)
+                0x0008b928                _write_r
  .text.__register_exitproc
-                0x0008b940       0xa8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-__atexit.o)
-                0x0008b940                __register_exitproc
+                0x0008b950       0xa8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-__atexit.o)
+                0x0008b950                __register_exitproc
  .text._close_r
-                0x0008b9e8       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-closer.o)
-                0x0008b9e8                _close_r
+                0x0008b9f8       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-closer.o)
+                0x0008b9f8                _close_r
  .text._fclose_r
-                0x0008ba0c       0x80 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fclose.o)
-                0x0008ba0c                _fclose_r
- .text.fclose   0x0008ba8c       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fclose.o)
-                0x0008ba8c                fclose
+                0x0008ba1c       0x80 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fclose.o)
+                0x0008ba1c                _fclose_r
+ .text.fclose   0x0008ba9c       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fclose.o)
+                0x0008ba9c                fclose
  .text._fstat_r
-                0x0008ba9c       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fstatr.o)
-                0x0008ba9c                _fstat_r
+                0x0008baac       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-fstatr.o)
+                0x0008baac                _fstat_r
  .text._isatty_r
-                0x0008bac4       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-isattyr.o)
-                0x0008bac4                _isatty_r
+                0x0008bad4       0x24 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-isattyr.o)
+                0x0008bad4                _isatty_r
  .text._lseek_r
-                0x0008bae8       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-lseekr.o)
-                0x0008bae8                _lseek_r
- .text._read_r  0x0008bb10       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-readr.o)
-                0x0008bb10                _read_r
- .text          0x0008bb38       0x2c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_aeabi_uldivmod.o)
-                0x0008bb38                __aeabi_uldivmod
- .text          0x0008bb64       0x60 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(bpabi.o)
-                0x0008bb64                __gnu_ldivmod_helper
-                0x0008bb94                __gnu_uldivmod_helper
- .text          0x0008bbc4        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_dvmd_tls.o)
-                0x0008bbc4                __aeabi_idiv0
-                0x0008bbc4                __aeabi_ldiv0
- .text          0x0008bbc8      0x2a0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_divdi3.o)
-                0x0008bbc8                __divdi3
- .text          0x0008be68      0x290 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_udivdi3.o)
-                0x0008be68                __udivdi3
+                0x0008baf8       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-lseekr.o)
+                0x0008baf8                _lseek_r
+ .text._read_r  0x0008bb20       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-readr.o)
+                0x0008bb20                _read_r
+ .text          0x0008bb48       0x2c c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_aeabi_uldivmod.o)
+                0x0008bb48                __aeabi_uldivmod
+ .text          0x0008bb74       0x60 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(bpabi.o)
+                0x0008bb74                __gnu_ldivmod_helper
+                0x0008bba4                __gnu_uldivmod_helper
+ .text          0x0008bbd4        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_dvmd_tls.o)
+                0x0008bbd4                __aeabi_idiv0
+                0x0008bbd4                __aeabi_ldiv0
+ .text          0x0008bbd8      0x2a0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_divdi3.o)
+                0x0008bbd8                __divdi3
+ .text          0x0008be78      0x290 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_udivdi3.o)
+                0x0008be78                __udivdi3
  *(.glue_7t)
  .glue_7t       0x00000000        0x0 linker stubs
  *(.glue_7)
  .glue_7        0x00000000        0x0 linker stubs
  *(.rodata .rodata* .gnu.linkonce.r.*)
  .rodata.str1.1
-                0x0008c0f8       0x96 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+                0x0008c108       0x96 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
  .rodata.SmallFont
-                0x0008c18e      0x6c4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
-                0x0008c18e                SmallFont
- *fill*         0x0008c852        0x2 
- .rodata        0x0008c854      0x174 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                0x0008c19e      0x6c4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
+                0x0008c19e                SmallFont
+ *fill*         0x0008c862        0x2 
+ .rodata        0x0008c864      0x174 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
  .rodata.g_APinDescription
-                0x0008c9c8      0xa2c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                0x0008c9c8                g_APinDescription
- .rodata        0x0008d3f4       0x40 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
+                0x0008c9d8      0xa2c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                0x0008c9d8                g_APinDescription
+ .rodata        0x0008d404       0x40 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(adc.o)
  .rodata.str1.1
-                0x0008d434       0x19 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
- *fill*         0x0008d44d        0x3 
+                0x0008d444       0x19 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+ *fill*         0x0008d45d        0x3 
  .rodata._ZTV9UARTClass
-                0x0008d450       0x30 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                0x0008d450                vtable for UARTClass
+                0x0008d460       0x30 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                0x0008d460                vtable for UARTClass
  .rodata._ZTV10USARTClass
-                0x0008d480       0x30 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
-                0x0008d480                vtable for USARTClass
+                0x0008d490       0x30 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
+                0x0008d490                vtable for USARTClass
  .rodata.STRING_PRODUCT
-                0x0008d4b0        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008d4b0                STRING_PRODUCT
+                0x0008d4c0        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008d4c0                STRING_PRODUCT
  .rodata.USB_DeviceDescriptor
-                0x0008d4bc       0x12 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008d4bc                USB_DeviceDescriptor
+                0x0008d4cc       0x12 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008d4cc                USB_DeviceDescriptor
  .rodata.STRING_LANGUAGE
-                0x0008d4ce        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008d4ce                STRING_LANGUAGE
+                0x0008d4de        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008d4de                STRING_LANGUAGE
  .rodata._ZL18test_packet_buffer
-                0x0008d4d2       0x35 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008d4e2       0x35 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
  .rodata.STRING_MANUFACTURER
-                0x0008d507        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008d507                STRING_MANUFACTURER
+                0x0008d517        0xc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008d517                STRING_MANUFACTURER
  .rodata.USB_DeviceDescriptorA
-                0x0008d513       0x12 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                0x0008d513                USB_DeviceDescriptorA
+                0x0008d523       0x12 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                0x0008d523                USB_DeviceDescriptorA
  .rodata._ZL19USB_DeviceQualifier
-                0x0008d525        0x9 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
- *fill*         0x0008d52e        0x2 
+                0x0008d535        0x9 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+ *fill*         0x0008d53e        0x2 
  .rodata._ZTV7Serial_
-                0x0008d530       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x0008d530                vtable for Serial_
+                0x0008d540       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x0008d540                vtable for Serial_
  .rodata._ZL18_cdcOtherInterface
-                0x0008d558       0x42 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x0008d568       0x42 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
  .rodata._ZL13_cdcInterface
-                0x0008d59a       0x42 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x0008d5aa       0x42 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
  .rodata.npio2_hw
-                0x0008d5dc       0x80 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_rem_pio2.o)
+                0x0008d5ec       0x80 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_rem_pio2.o)
  .rodata.two_over_pi
-                0x0008d65c      0x108 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_rem_pio2.o)
+                0x0008d66c      0x108 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-e_rem_pio2.o)
  .rodata.init_jk
-                0x0008d764       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_rem_pio2.o)
- *fill*         0x0008d774        0x4 
- .rodata.PIo2   0x0008d778       0x40 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_rem_pio2.o)
+                0x0008d774       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_rem_pio2.o)
+ *fill*         0x0008d784        0x4 
+ .rodata.PIo2   0x0008d788       0x40 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libm.a(lib_a-k_rem_pio2.o)
  .rodata.str1.4
-                0x0008d7b8        0x2 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-impure.o)
+                0x0008d7c8        0x2 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-impure.o)
                                   0x4 (size before relaxing)
- *fill*         0x0008d7ba        0x2 
+ *fill*         0x0008d7ca        0x2 
  .rodata._global_impure_ptr
-                0x0008d7bc        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-impure.o)
-                0x0008d7bc                _global_impure_ptr
+                0x0008d7cc        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-impure.o)
+                0x0008d7cc                _global_impure_ptr
  .rodata.blanks.6717
-                0x0008d7c0       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
+                0x0008d7d0       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
  .rodata.str1.4
-                0x0008d7d0       0x30 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
+                0x0008d7e0       0x30 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
  .rodata.zeroes.6718
-                0x0008d800       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
+                0x0008d810       0x10 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-vfiprintf.o)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0008d810                . = ALIGN (0x4)
+                0x0008d820                . = ALIGN (0x4)
  *(.init)
- .init          0x0008d810        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
-                0x0008d810                _init
- .init          0x0008d814        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
-                0x0008d81c                . = ALIGN (0x4)
-                0x0008d81c                __preinit_array_start = .
+ .init          0x0008d820        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+                0x0008d820                _init
+ .init          0x0008d824        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+                0x0008d82c                . = ALIGN (0x4)
+                0x0008d82c                __preinit_array_start = .
  *(.preinit_array)
-                0x0008d81c                __preinit_array_end = .
-                0x0008d81c                . = ALIGN (0x4)
-                0x0008d81c                __init_array_start = .
+                0x0008d82c                __preinit_array_end = .
+                0x0008d82c                . = ALIGN (0x4)
+                0x0008d82c                __init_array_start = .
  *(SORT(.init_array.*))
  .init_array.00000
-                0x0008d81c        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-__call_atexit.o)
+                0x0008d82c        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-__call_atexit.o)
  *(.init_array)
- .init_array    0x0008d820        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
- .init_array    0x0008d824        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
- .init_array    0x0008d828        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
- .init_array    0x0008d82c        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
- .init_array    0x0008d830        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
- .init_array    0x0008d834        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                0x0008d838                __init_array_end = .
-                0x0008d838                . = ALIGN (0x4)
+ .init_array    0x0008d830        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+ .init_array    0x0008d834        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+ .init_array    0x0008d838        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
+ .init_array    0x0008d83c        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+ .init_array    0x0008d840        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+ .init_array    0x0008d844        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                0x0008d848                __init_array_end = .
+                0x0008d848                . = ALIGN (0x4)
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *crtend.o(.ctors)
-                0x0008d838                . = ALIGN (0x4)
+                0x0008d848                . = ALIGN (0x4)
  *(.fini)
- .fini          0x0008d838        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
-                0x0008d838                _fini
- .fini          0x0008d83c        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
-                0x0008d844                . = ALIGN (0x4)
-                0x0008d844                __fini_array_start = .
+ .fini          0x0008d848        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crti.o
+                0x0008d848                _fini
+ .fini          0x0008d84c        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtn.o
+                0x0008d854                . = ALIGN (0x4)
+                0x0008d854                __fini_array_start = .
  *(.fini_array)
- .fini_array    0x0008d844        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+ .fini_array    0x0008d854        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
  *(SORT(.fini_array.*))
-                0x0008d848                __fini_array_end = .
+                0x0008d858                __fini_array_end = .
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *crtend.o(.dtors)
-                0x0008d848                . = ALIGN (0x4)
-                0x0008d848                _efixed = .
-                0x0008d848                PROVIDE (__exidx_start, .)
+                0x0008d858                . = ALIGN (0x4)
+                0x0008d858                _efixed = .
+                0x0008d858                PROVIDE (__exidx_start, .)
 
-.vfp11_veneer   0x0008d848        0x0
+.vfp11_veneer   0x0008d858        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x0008d848        0x0
+.v4_bx          0x0008d858        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
-.iplt           0x0008d848        0x0
+.iplt           0x0008d858        0x0
  .iplt          0x00000000        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
 
-.ARM.exidx      0x0008d848        0x8
+.ARM.exidx      0x0008d858        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0008d848        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_divdi3.o)
- .ARM.exidx     0x0008d850        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_udivdi3.o)
+ .ARM.exidx     0x0008d858        0x8 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_divdi3.o)
+ .ARM.exidx     0x0008d860        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m\libgcc.a(_udivdi3.o)
                                   0x8 (size before relaxing)
-                0x0008d850                PROVIDE (__exidx_end, .)
+                0x0008d860                PROVIDE (__exidx_end, .)
 
-.eh_frame       0x0008d850        0x0
- .eh_frame      0x0008d850        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+.eh_frame       0x0008d860        0x0
+ .eh_frame      0x0008d860        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
 
-.rel.dyn        0x0008d850        0x0
+.rel.dyn        0x0008d860        0x0
  .rel.iplt      0x00000000        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
 
-.jcr            0x0008d850        0x0
- .jcr           0x0008d850        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
+.jcr            0x0008d860        0x0
+ .jcr           0x0008d860        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
 
-.igot.plt       0x0008d850        0x0
+.igot.plt       0x0008d860        0x0
  .igot.plt      0x00000000        0x0 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/armv7-m/crtbegin.o
-                0x0008d850                . = ALIGN (0x4)
-                0x0008d850                _etext = .
+                0x0008d860                . = ALIGN (0x4)
+                0x0008d860                _etext = .
 
-.relocate       0x20070000      0x8d4 load address 0x0008d850
+.relocate       0x20070000      0x8d4 load address 0x0008d860
                 0x20070000                . = ALIGN (0x4)
                 0x20070000                _srelocate = .
  *(.ramfunc .ramfunc.*)
@@ -2858,7 +2858,7 @@ LOAD c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-
                 0x200708d4                . = ALIGN (0x4)
                 0x200708d4                _erelocate = .
 
-.bss            0x200708d4      0x8cc load address 0x0008e124
+.bss            0x200708d4      0x8cc load address 0x0008e134
                 0x200708d4                . = ALIGN (0x4)
                 0x200708d4                _sbss = .
                 0x200708d4                _szero = .
@@ -3216,29 +3216,29 @@ OUTPUT(C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(interrupt_sam_nvic.o)
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
 
-.debug_info     0x00000000    0x248ab
- .debug_info    0x00000000     0x31f3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
- .debug_info    0x000031f3     0x1a73 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
- .debug_info    0x00004c66       0x9e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
- .debug_info    0x00004d04     0xe9ba C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
- .debug_info    0x000136be     0x1a43 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
- .debug_info    0x00015101      0x2da C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
- .debug_info    0x000153db       0x60 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
- .debug_info    0x0001543b      0x62b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
- .debug_info    0x00015a66      0x52f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
- .debug_info    0x00015f95     0x1d7e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
- .debug_info    0x00017d13      0xe00 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
- .debug_info    0x00018b13      0x3cf C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
- .debug_info    0x00018ee2      0x3df C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
- .debug_info    0x000192c1      0x1f6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
- .debug_info    0x000194b7     0x24e3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
- .debug_info    0x0001b99a      0xbe2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
- .debug_info    0x0001c57c      0x220 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
- .debug_info    0x0001c79c      0x276 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
- .debug_info    0x0001ca12     0x209d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
- .debug_info    0x0001eaaf     0x27cd C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
- .debug_info    0x0002127c     0x2f8e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
- .debug_info    0x0002420a      0x6a1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+.debug_info     0x00000000    0x24904
+ .debug_info    0x00000000     0x324c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+ .debug_info    0x0000324c     0x1a73 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
+ .debug_info    0x00004cbf       0x9e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
+ .debug_info    0x00004d5d     0xe9ba C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+ .debug_info    0x00013717     0x1a43 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+ .debug_info    0x0001515a      0x2da C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
+ .debug_info    0x00015434       0x60 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
+ .debug_info    0x00015494      0x62b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+ .debug_info    0x00015abf      0x52f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
+ .debug_info    0x00015fee     0x1d7e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
+ .debug_info    0x00017d6c      0xe00 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
+ .debug_info    0x00018b6c      0x3cf C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
+ .debug_info    0x00018f3b      0x3df C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
+ .debug_info    0x0001931a      0x1f6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
+ .debug_info    0x00019510     0x24e3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+ .debug_info    0x0001b9f3      0xbe2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
+ .debug_info    0x0001c5d5      0x220 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
+ .debug_info    0x0001c7f5      0x276 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
+ .debug_info    0x0001ca6b     0x209d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+ .debug_info    0x0001eb08     0x27cd C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
+ .debug_info    0x000212d5     0x2f8e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+ .debug_info    0x00024263      0x6a1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
 
 .debug_abbrev   0x00000000     0x3ffb
  .debug_abbrev  0x00000000      0x3b2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
@@ -3352,75 +3352,75 @@ OUTPUT(C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_
  .debug_ranges  0x00000d18       0xd8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
  .debug_ranges  0x00000df0       0xd0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
 
-.debug_line     0x00000000     0x86cf
- .debug_line    0x00000000      0x6d1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
- .debug_line    0x000006d1      0x91e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
- .debug_line    0x00000fef       0x66 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
- .debug_line    0x00001055     0x2149 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
- .debug_line    0x0000319e      0x64b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
- .debug_line    0x000037e9      0x36c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
- .debug_line    0x00003b55       0xb4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
- .debug_line    0x00003c09      0x4b0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
- .debug_line    0x000040b9      0x370 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
- .debug_line    0x00004429      0x60b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
- .debug_line    0x00004a34      0x4c5 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
- .debug_line    0x00004ef9      0x3ea C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
- .debug_line    0x000052e3      0x4b3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
- .debug_line    0x00005796      0x1e0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
- .debug_line    0x00005976      0x674 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
- .debug_line    0x00005fea      0x517 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
- .debug_line    0x00006501      0x401 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
- .debug_line    0x00006902      0x214 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
- .debug_line    0x00006b16      0x94d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
- .debug_line    0x00007463      0x72f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
- .debug_line    0x00007b92      0x832 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
- .debug_line    0x000083c4      0x30b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+.debug_line     0x00000000     0x86e4
+ .debug_line    0x00000000      0x6e6 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+ .debug_line    0x000006e6      0x91e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
+ .debug_line    0x00001004       0x66 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
+ .debug_line    0x0000106a     0x2149 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+ .debug_line    0x000031b3      0x64b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+ .debug_line    0x000037fe      0x36c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
+ .debug_line    0x00003b6a       0xb4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
+ .debug_line    0x00003c1e      0x4b0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+ .debug_line    0x000040ce      0x370 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
+ .debug_line    0x0000443e      0x60b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
+ .debug_line    0x00004a49      0x4c5 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
+ .debug_line    0x00004f0e      0x3ea C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
+ .debug_line    0x000052f8      0x4b3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
+ .debug_line    0x000057ab      0x1e0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
+ .debug_line    0x0000598b      0x674 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+ .debug_line    0x00005fff      0x517 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
+ .debug_line    0x00006516      0x401 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
+ .debug_line    0x00006917      0x214 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
+ .debug_line    0x00006b2b      0x94d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+ .debug_line    0x00007478      0x72f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
+ .debug_line    0x00007ba7      0x832 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+ .debug_line    0x000083d9      0x30b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
 
-.debug_str      0x00000000     0x5e15
- .debug_str     0x00000000     0x14c1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
-                               0x15a5 (size before relaxing)
- .debug_str     0x000014c1      0xaed C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
-                                0xee7 (size before relaxing)
- .debug_str     0x00001fae      0x121 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
+.debug_str      0x00000000     0x5def
+ .debug_str     0x00000000     0x14b0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
+                               0x1594 (size before relaxing)
+ .debug_str     0x000014b0      0xae5 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
+                                0xec1 (size before relaxing)
+ .debug_str     0x00001f95      0x121 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\DefaultFonts.c.o
                                 0x142 (size before relaxing)
- .debug_str     0x000020cf      0x143 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
-                               0x1abb (size before relaxing)
- .debug_str     0x00002212      0x9df C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
-                               0x1203 (size before relaxing)
- .debug_str     0x00002bf1       0xde C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
-                                0x309 (size before relaxing)
- .debug_str     0x00002ccf       0x76 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
+ .debug_str     0x000020b6      0x136 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                               0x1a95 (size before relaxing)
+ .debug_str     0x000021ec      0x9df C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
+                               0x11dd (size before relaxing)
+ .debug_str     0x00002bcb       0xde C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(cortex_handlers.c.o)
+                                0x2e3 (size before relaxing)
+ .debug_str     0x00002ca9       0x76 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(hooks.c.o)
                                 0x140 (size before relaxing)
- .debug_str     0x00002d45      0x201 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
-                                0x4da (size before relaxing)
- .debug_str     0x00002f46       0x9a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
-                                0x373 (size before relaxing)
- .debug_str     0x00002fe0      0x7f1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
-                               0x1066 (size before relaxing)
- .debug_str     0x000037d1       0xd1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
-                                0xa17 (size before relaxing)
- .debug_str     0x000038a2      0x133 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
-                                0x429 (size before relaxing)
- .debug_str     0x000039d5       0xf8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
-                                0x3ea (size before relaxing)
- .debug_str     0x00003acd       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
+ .debug_str     0x00002d1f      0x201 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(syscalls_sam3.c.o)
+                                0x4b4 (size before relaxing)
+ .debug_str     0x00002f20       0x9a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring.c.o)
+                                0x34d (size before relaxing)
+ .debug_str     0x00002fba      0x7f1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
+                               0x1040 (size before relaxing)
+ .debug_str     0x000037ab       0xd1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_digital.c.o)
+                                0x9f1 (size before relaxing)
+ .debug_str     0x0000387c      0x133 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(main.cpp.o)
+                                0x403 (size before relaxing)
+ .debug_str     0x000039af       0xf8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Reset.cpp.o)
+                                0x3c4 (size before relaxing)
+ .debug_str     0x00003aa7       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(RingBuffer.cpp.o)
                                 0x2a9 (size before relaxing)
- .debug_str     0x00003b55      0x6d0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
-                               0x17cd (size before relaxing)
- .debug_str     0x00004225      0x259 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
-                                0xa35 (size before relaxing)
- .debug_str     0x0000447e      0x127 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
+ .debug_str     0x00003b2f      0x6d0 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(UARTClass.cpp.o)
+                               0x17a7 (size before relaxing)
+ .debug_str     0x000041ff      0x259 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USARTClass.cpp.o)
+                                0xa0f (size before relaxing)
+ .debug_str     0x00004458      0x127 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(watchdog.cpp.o)
                                 0x31b (size before relaxing)
- .debug_str     0x000045a5       0xff C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
+ .debug_str     0x0000457f       0xff C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WMath.cpp.o)
                                 0x2f9 (size before relaxing)
- .debug_str     0x000046a4      0xe15 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
-                               0x134b (size before relaxing)
- .debug_str     0x000054b9      0x3ee C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
-                               0x104c (size before relaxing)
- .debug_str     0x000058a7      0x4cc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
-                               0x1d4a (size before relaxing)
- .debug_str     0x00005d73       0xa2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
-                                0x5e9 (size before relaxing)
+ .debug_str     0x0000467e      0xe15 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(USBCore.cpp.o)
+                               0x1325 (size before relaxing)
+ .debug_str     0x00005493      0x3ee C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(Print.cpp.o)
+                               0x1026 (size before relaxing)
+ .debug_str     0x00005881      0x4cc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(CDC.cpp.o)
+                               0x1d24 (size before relaxing)
+ .debug_str     0x00005d4d       0xa2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(PluggableUSB.cpp.o)
+                                0x5c3 (size before relaxing)
 
 .debug_frame    0x00000000     0x24e0
  .debug_frame   0x00000000       0x6c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
@@ -4708,6 +4708,7 @@ digitalWrite                                      C:\Users\moseichuk\AppData\Loc
                                                   C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
                                                   C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\variant\variant.cpp.o
                                                   C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
+                                                  C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
 dtostrf                                           C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(dtostrf.c.o)
                                                   C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(WString.cpp.o)
 errno                                             c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-readr.o)
@@ -4829,6 +4830,7 @@ pinMode                                           C:\Users\moseichuk\AppData\Loc
                                                   C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug/core.a(wiring_analog.c.o)
                                                   C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\UTFT\UTFT.cpp.o
                                                   C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\SPI\SPI.cpp.o
+                                                  C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o
 pmc_clr_fast_startup_input                        C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
 pmc_disable_all_pck                               C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)
 pmc_disable_all_periph_clk                        C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(pmc.o)

@@ -45,6 +45,8 @@ void setup()
 	// Setup the LCD
 	myGLCD.InitLCD();
 	myGLCD.setFont(SmallFont);
+	pinMode(9, OUTPUT);
+	digitalWrite(9, LOW);
 
 }
 

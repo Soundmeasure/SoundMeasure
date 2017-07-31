@@ -43,8 +43,8 @@ SdBaseFile binFile;
 
 Sd2Card card;
 
-// Declare which fonts we will be using
 
+// Declare which fonts we will be using
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
 extern uint8_t Dingbats1_XL[];
@@ -53,6 +53,7 @@ extern uint8_t SmallSymbolFont[];
 // Настройка монитора
 
 UTFT myGLCD(ITDB32S, 25, 26, 27, 28);
+//UTFT myGLCD(TFT01_28, 38, 39, 40, 41);
 
 UTouch        myTouch(6, 5, 4, 3, 2);
 //
@@ -6468,7 +6469,7 @@ void view_read_file(int view_page)
 }
 void measure_power()
 {                                            // Программа измерения напряжения питания с делителем 1/3 
-											 // Установить резистивный делитель +15к общ 10к на разъем питания
+	/*										 // Установить резистивный делитель +15к общ 10к на разъем питания
 	uint32_t logTime1 = 0;
 	logTime1 = millis();
 	if (logTime1 - StartSample > 500)  //  индикация 
@@ -6522,6 +6523,7 @@ void measure_power()
 		myGLCD.setColor(VGA_WHITE);
 		myGLCD.printNumF(ind_power, 1, 289, 172);
 	}
+	*/
 }
 
 void print_serial(File dir, int numTabs)
@@ -6882,6 +6884,311 @@ void file_serial()
 	// delay(500);
 
 }
+void test_TFT()
+{
+	int buf[318];
+	int x, x2;
+	int y, y2;
+	int r;
+	//myGLCD.InitLCD();
+	myGLCD.setFont(SmallFont);
+	pinMode(9, OUTPUT);
+	digitalWrite(9, LOW);
+	// Clear the screen and draw the frame
+	myGLCD.clrScr();
+
+	myGLCD.setColor(255, 0, 0);
+	myGLCD.fillRect(0, 0, 319, 13);
+	myGLCD.setColor(64, 64, 64);
+	myGLCD.fillRect(0, 226, 319, 239);
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.setBackColor(255, 0, 0);
+	myGLCD.print("* Universal Color TFT Display Library *", CENTER, 1);
+	myGLCD.setBackColor(64, 64, 64);
+	myGLCD.setColor(255, 255, 0);
+	myGLCD.print("<http://www.RinkyDinkElectronics.com/>", CENTER, 227);
+
+	myGLCD.setColor(0, 0, 255);
+	myGLCD.drawRect(0, 14, 319, 225);
+
+	// Draw crosshairs
+	myGLCD.setColor(0, 0, 255);
+	myGLCD.setBackColor(0, 0, 0);
+	myGLCD.drawLine(159, 15, 159, 224);
+	myGLCD.drawLine(1, 119, 318, 119);
+	for (int i = 9; i<310; i += 10)
+		myGLCD.drawLine(i, 117, i, 121);
+	for (int i = 19; i<220; i += 10)
+		myGLCD.drawLine(157, i, 161, i);
+
+	// Draw sin-, cos- and tan-lines  
+	myGLCD.setColor(0, 255, 255);
+	myGLCD.print("Sin", 5, 15);
+	for (int i = 1; i<318; i++)
+	{
+		myGLCD.drawPixel(i, 119 + (sin(((i*1.13)*3.14) / 180) * 95));
+	}
+
+	myGLCD.setColor(255, 0, 0);
+	myGLCD.print("Cos", 5, 27);
+	for (int i = 1; i<318; i++)
+	{
+		myGLCD.drawPixel(i, 119 + (cos(((i*1.13)*3.14) / 180) * 95));
+	}
+
+	myGLCD.setColor(255, 255, 0);
+	myGLCD.print("Tan", 5, 39);
+	for (int i = 1; i<318; i++)
+	{
+		myGLCD.drawPixel(i, 119 + (tan(((i*1.13)*3.14) / 180)));
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+	myGLCD.setColor(0, 0, 255);
+	myGLCD.setBackColor(0, 0, 0);
+	myGLCD.drawLine(159, 15, 159, 224);
+	myGLCD.drawLine(1, 119, 318, 119);
+
+	// Draw a moving sinewave
+	x = 1;
+	for (int i = 1; i<(318 * 20); i++)
+	{
+		x++;
+		if (x == 319)
+			x = 1;
+		if (i>319)
+		{
+			if ((x == 159) || (buf[x - 1] == 119))
+				myGLCD.setColor(0, 0, 255);
+			else
+				myGLCD.setColor(0, 0, 0);
+			myGLCD.drawPixel(x, buf[x - 1]);
+		}
+		myGLCD.setColor(0, 255, 255);
+		y = 119 + (sin(((i*1.1)*3.14) / 180)*(90 - (i / 100)));
+		myGLCD.drawPixel(x, y);
+		buf[x - 1] = y;
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	// Draw some filled rectangles
+	for (int i = 1; i<6; i++)
+	{
+		switch (i)
+		{
+		case 1:
+			myGLCD.setColor(255, 0, 255);
+			break;
+		case 2:
+			myGLCD.setColor(255, 0, 0);
+			break;
+		case 3:
+			myGLCD.setColor(0, 255, 0);
+			break;
+		case 4:
+			myGLCD.setColor(0, 0, 255);
+			break;
+		case 5:
+			myGLCD.setColor(255, 255, 0);
+			break;
+		}
+		myGLCD.fillRect(70 + (i * 20), 30 + (i * 20), 130 + (i * 20), 90 + (i * 20));
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	// Draw some filled, rounded rectangles
+	for (int i = 1; i<6; i++)
+	{
+		switch (i)
+		{
+		case 1:
+			myGLCD.setColor(255, 0, 255);
+			break;
+		case 2:
+			myGLCD.setColor(255, 0, 0);
+			break;
+		case 3:
+			myGLCD.setColor(0, 255, 0);
+			break;
+		case 4:
+			myGLCD.setColor(0, 0, 255);
+			break;
+		case 5:
+			myGLCD.setColor(255, 255, 0);
+			break;
+		}
+		myGLCD.fillRoundRect(190 - (i * 20), 30 + (i * 20), 250 - (i * 20), 90 + (i * 20));
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	// Draw some filled circles
+	for (int i = 1; i<6; i++)
+	{
+		switch (i)
+		{
+		case 1:
+			myGLCD.setColor(255, 0, 255);
+			break;
+		case 2:
+			myGLCD.setColor(255, 0, 0);
+			break;
+		case 3:
+			myGLCD.setColor(0, 255, 0);
+			break;
+		case 4:
+			myGLCD.setColor(0, 0, 255);
+			break;
+		case 5:
+			myGLCD.setColor(255, 255, 0);
+			break;
+		}
+		myGLCD.fillCircle(100 + (i * 20), 60 + (i * 20), 30);
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	// Draw some lines in a pattern
+	myGLCD.setColor(255, 0, 0);
+	for (int i = 15; i<224; i += 5)
+	{
+		myGLCD.drawLine(1, i, (i*1.44) - 10, 224);
+	}
+	myGLCD.setColor(255, 0, 0);
+	for (int i = 224; i>15; i -= 5)
+	{
+		myGLCD.drawLine(318, i, (i*1.44) - 11, 15);
+	}
+	myGLCD.setColor(0, 255, 255);
+	for (int i = 224; i>15; i -= 5)
+	{
+		myGLCD.drawLine(1, i, 331 - (i*1.44), 15);
+	}
+	myGLCD.setColor(0, 255, 255);
+	for (int i = 15; i<224; i += 5)
+	{
+		myGLCD.drawLine(318, i, 330 - (i*1.44), 224);
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	// Draw some random circles
+	for (int i = 0; i<100; i++)
+	{
+		myGLCD.setColor(random(255), random(255), random(255));
+		x = 32 + random(256);
+		y = 45 + random(146);
+		r = random(30);
+		myGLCD.drawCircle(x, y, r);
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	// Draw some random rectangles
+	for (int i = 0; i<100; i++)
+	{
+		myGLCD.setColor(random(255), random(255), random(255));
+		x = 2 + random(316);
+		y = 16 + random(207);
+		x2 = 2 + random(316);
+		y2 = 16 + random(207);
+		myGLCD.drawRect(x, y, x2, y2);
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	// Draw some random rounded rectangles
+	for (int i = 0; i<100; i++)
+	{
+		myGLCD.setColor(random(255), random(255), random(255));
+		x = 2 + random(316);
+		y = 16 + random(207);
+		x2 = 2 + random(316);
+		y2 = 16 + random(207);
+		myGLCD.drawRoundRect(x, y, x2, y2);
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	for (int i = 0; i<100; i++)
+	{
+		myGLCD.setColor(random(255), random(255), random(255));
+		x = 2 + random(316);
+		y = 16 + random(209);
+		x2 = 2 + random(316);
+		y2 = 16 + random(209);
+		myGLCD.drawLine(x, y, x2, y2);
+	}
+
+	delay(2000);
+
+	myGLCD.setColor(0, 0, 0);
+	myGLCD.fillRect(1, 15, 318, 224);
+
+	for (int i = 0; i<10000; i++)
+	{
+		myGLCD.setColor(random(255), random(255), random(255));
+		myGLCD.drawPixel(2 + random(316), 16 + random(209));
+	}
+
+	delay(2000);
+
+	myGLCD.fillScr(0, 0, 255);
+	myGLCD.setColor(255, 0, 0);
+	myGLCD.fillRoundRect(80, 70, 239, 169);
+
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.setBackColor(255, 0, 0);
+	myGLCD.print("That's it!", CENTER, 93);
+	myGLCD.print("Restarting in a", CENTER, 119);
+	myGLCD.print("few seconds...", CENTER, 132);
+
+	myGLCD.setColor(0, 255, 0);
+	myGLCD.setBackColor(0, 0, 255);
+	myGLCD.print("Runtime: (msecs)", CENTER, 210);
+	myGLCD.printNumI(millis(), CENTER, 225);
+
+	//delay(1000);
+
+
+
+
+
+}
+
+
+
+
+
 //------------------------------------------------------------------------------
 void setup(void)
 {
@@ -6892,65 +7199,70 @@ void setup(void)
 	Serial.begin(115200);
 	Serial.print(F("FreeRam: "));
 	Serial.println(FreeRam());
+	// Setup the LCD
 	myGLCD.InitLCD();
-	myGLCD.clrScr();
-	myGLCD.setFont(BigFont);
-	myGLCD.setBackColor(0, 0, 255);
+//	myGLCD.setFont(SmallFont);
+	pinMode(9, OUTPUT);
+	//digitalWrite(9, LOW);
+	//myGLCD.clrScr();
+	//myGLCD.setFont(BigFont);
+	//myGLCD.setBackColor(0, 0, 255);
 
-	myTouch.InitTouch();
-	myTouch.setPrecision(PREC_MEDIUM);
-	//myTouch.setPrecision(PREC_HI);
-	myButtons.setTextFont(BigFont);
-	myButtons.setSymbolFont(Dingbats1_XL);
-	// initialize file system.
-	if (!sd.begin(SD_CS_PIN, SPI_FULL_SPEED))
-	{
-		sd.initErrorPrint();
-		myGLCD.setBackColor(0, 0, 0);
-		myGLCD.setColor(255, 100, 0);
-		myGLCD.print("Can't access SD card", CENTER, 40);
-		myGLCD.print("Do not reformat", CENTER, 70);
-		myGLCD.print("SD card problem?", CENTER, 100);
-		myGLCD.setColor(VGA_LIME);
-		myGLCD.print(txt_info11, CENTER, 200);
-		myGLCD.setColor(255, 255, 255);
-		while (myTouch.dataAvailable()) {}
-		delay(50);
-		while (!myTouch.dataAvailable()) {}
-		delay(50);
-		myGLCD.clrScr();
-		myGLCD.print("Run Setup", CENTER, 120);
-	}
+	//myTouch.InitTouch();
+	//myTouch.setPrecision(PREC_MEDIUM);
+	////myTouch.setPrecision(PREC_HI);
+	//myButtons.setTextFont(BigFont);
+	//myButtons.setSymbolFont(Dingbats1_XL);
+	//// initialize file system.
+	//if (!sd.begin(SD_CS_PIN, SPI_FULL_SPEED))
+	//{
+	//	sd.initErrorPrint();
+	//	myGLCD.setBackColor(0, 0, 0);
+	//	myGLCD.setColor(255, 100, 0);
+	//	myGLCD.print("Can't access SD card", CENTER, 40);
+	//	myGLCD.print("Do not reformat", CENTER, 70);
+	//	myGLCD.print("SD card problem?", CENTER, 100);
+	//	myGLCD.setColor(VGA_LIME);
+	//	myGLCD.print(txt_info11, CENTER, 200);
+	//	myGLCD.setColor(255, 255, 255);
+	//	while (myTouch.dataAvailable()) {}
+	//	delay(50);
+	//	while (!myTouch.dataAvailable()) {}
+	//	delay(50);
+	//	myGLCD.clrScr();
+	//	myGLCD.print("Run Setup", CENTER, 120);
+	//}
 
-	ADC_MR |= 0x00000100; // ADC full speed
+	//ADC_MR |= 0x00000100; // ADC full speed
 
-						  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-						  // Настройка звукового генератора  
-	AD9850.reset();                    //reset module
-	delay(1000);
-	AD9850.powerDown();                //set signal output to LOW
-	AD9850.set_frequency(0, 0, 500);    //set power=UP, phase=0, 1kHz frequency 
+	//					  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	//					  // Настройка звукового генератора  
+	////AD9850.reset();                    //reset module
+	////delay(1000);
+	////AD9850.powerDown();                //set signal output to LOW
+	////AD9850.set_frequency(0, 0, 500);    //set power=UP, phase=0, 1kHz frequency 
 
-	chench_Channel();
+	//chench_Channel();
 
-	//adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
-	Timer3.attachInterrupt(firstHandler); // Every 50us
-	Timer4.attachInterrupt(secondHandler).setFrequency(1);
-	rtc_clock.init();
-	rtc_clock.set_time(__TIME__);
-	rtc_clock.set_date(__DATE__);
-	SdFile::dateTimeCallback(dateTime);
-	//++++++++++++++++ SD info ++++++++++++++++++++++++++++++
+	////adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
+	//Timer3.attachInterrupt(firstHandler); // Every 50us
+	//Timer4.attachInterrupt(secondHandler).setFrequency(1);
+	//rtc_clock.init();
+	//rtc_clock.set_time(__TIME__);
+	//rtc_clock.set_date(__DATE__);
+	//SdFile::dateTimeCallback(dateTime);
+	////++++++++++++++++ SD info ++++++++++++++++++++++++++++++
 
-	// use uppercase in hex and use 0X base prefix
-	cout << uppercase << showbase << endl;
-	// pstr stores strings in flash to save RAM
+	//// use uppercase in hex and use 0X base prefix
+	//cout << uppercase << showbase << endl;
+	//// pstr stores strings in flash to save RAM
 
-	//	cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
-	myGLCD.setBackColor(0, 0, 255);
-	preob_num_str();
-	pinMode(strob_pin, INPUT);
-	digitalWrite(strob_pin, HIGH);
+	////	cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
+	//myGLCD.setBackColor(0, 0, 255);
+	//preob_num_str();
+	//pinMode(strob_pin, INPUT);
+	//digitalWrite(strob_pin, HIGH);
+	test_TFT();
 	Serial.println(F("Setup Ok!"));
 }
 //------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp.o: \
  C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Debug\Test_TFT_28.cpp \
- C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/arduino.h \
+ C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/Arduino.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/avr/pgmspace.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/avr/interrupt.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/binary.h \
@@ -118,7 +118,6 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Test_TFT_28\arduino_due_x_dbg\Deb
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/Printable.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/wiring_pulse.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/variant.h \
- C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/Arduino.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/UARTClass.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/RingBuffer.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/USARTClass.h \
