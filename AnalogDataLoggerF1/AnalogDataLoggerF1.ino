@@ -6949,8 +6949,8 @@ void setup(void)
 	chench_Channel();
 
 	//adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
-	Timer3.attachInterrupt(firstHandler); // Every 50us
-	Timer4.attachInterrupt(secondHandler).setFrequency(1);
+	//Timer3.attachInterrupt(firstHandler); // Every 50us
+	//Timer4.attachInterrupt(secondHandler).setFrequency(1);
 	rtc_clock.init();
 	rtc_clock.set_time(__TIME__);
 	rtc_clock.set_date(__DATE__);
