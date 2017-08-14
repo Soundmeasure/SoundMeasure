@@ -1,4 +1,4 @@
-/**
+/*
  
  */
 
@@ -63,7 +63,7 @@ StdioStream csvStream;
 #define control_word1    0x07                       // Байт инструкции резистор №1
 #define control_word2    0x87                       // Байт инструкции резистор №2
 byte resistance = 0x00;                             // Сопротивление 0x00..0xFF - 0Ом..100кОм
-											        //byte level_resist      = 0;                       // Байт считанных данных величины резистора
+											        // byte level_resist      = 0;                       // Байт считанных данных величины резистора
 
 
 
