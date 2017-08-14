@@ -13,6 +13,7 @@
 #include <UTFT_Buttons.h>
 #include <DueTimer.h>
 #include <AH_AD9850.h>
+#include "AD524X.h"
 #include "Wire.h"
 #include <rtc_clock.h>
 //#include <SD.h>
@@ -59,14 +60,14 @@ StdioStream csvStream;
 //----------------------Конец  Настройки дисплея --------------------------------
 
 //+++++++++++++++++++++++ Настройка электронного резистора +++++++++++++++++++++++++++++++++++++
-#define address_AD5252   0x2F                       // Адрес микросхемы AD5252  
+#define address_AD5242   0x2F                       // Адрес микросхемы AD5242  
 #define control_word1    0x07                       // Байт инструкции резистор №1
 #define control_word2    0x87                       // Байт инструкции резистор №2
 byte resistance = 0x00;                             // Сопротивление 0x00..0xFF - 0Ом..100кОм
 											        // byte level_resist      = 0;                       // Байт считанных данных величины резистора
 
 
-
+AD524X AD01(0x2C);  // AD0 & AD1 == GND
 
 
 
@@ -6871,13 +6872,13 @@ void resistor(int resist, int valresist)
 	switch (resist)
 	{
 	case 1:
-		Wire.beginTransmission(address_AD5252);     // transmit to device
+		Wire.beginTransmission(address_AD5242);     // transmit to device
 		Wire.write(byte(control_word1));            // sends instruction byte  
 		Wire.write(resistance);                     // sends potentiometer value byte  
 		Wire.endTransmission();                     // stop transmitting
 		break;
 	case 2:
-		Wire.beginTransmission(address_AD5252);     // transmit to device
+		Wire.beginTransmission(address_AD5242);     // transmit to device
 		Wire.write(byte(control_word2));            // sends instruction byte  
 		Wire.write(resistance);                     // sends potentiometer value byte  
 		Wire.endTransmission();                     // stop transmitting
@@ -6949,8 +6950,8 @@ void setup(void)
 	chench_Channel();
 
 	//adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
-	//Timer3.attachInterrupt(firstHandler); // Every 50us
-	//Timer4.attachInterrupt(secondHandler).setFrequency(1);
+	Timer3.attachInterrupt(firstHandler); // Every 50us
+	Timer4.attachInterrupt(secondHandler).setFrequency(1);
 	rtc_clock.init();
 	rtc_clock.set_time(__TIME__);
 	rtc_clock.set_date(__DATE__);
@@ -6966,8 +6967,15 @@ void setup(void)
 	preob_num_str();
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
-	resistor(1, 200);                                // Установить уровень сигнала
-	resistor(2, 200);                                // Установить уровень сигнала
+//	resistor(1, 200);                                // Установить уровень сигнала
+//	resistor(2, 200);                                // Установить уровень сигнала
+
+	Serial.print("\nStart AD524X_write : ");
+	Serial.println(AD524X_VERSION);
+
+	Wire.begin();
+	//TWBR = 12;  // 400 KHz
+
 	myGLCD.clrScr();
 	myGLCD.setFont(BigFont);
 	myGLCD.setBackColor(0, 0, 0);
@@ -6978,6 +6986,20 @@ void setup(void)
 //------------------------------------------------------------------------------
 void loop(void) 
 {
-	draw_Glav_Menu();
-	swichMenu();
+	for (int val = 0; val < 255; val++)
+	{
+		AD01.write(1, val);
+		if (val == 200)
+		{
+			AD01.write(1, val, HIGH, LOW);
+		}
+		if (val == 0)
+		{
+			AD01.write(1, val, LOW, LOW);
+		}
+		Serial.println(val);
+		delay(20);
+	}
+	//draw_Glav_Menu();
+	//swichMenu();
 }
