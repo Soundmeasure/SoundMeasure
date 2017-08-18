@@ -1,6 +1,5 @@
-// UTFT_Buttons_Demo_320x240 
-// Copyright (C)2016 Rinky-Dink Electronics, Henning Karlsen. All right reserved
-// web: http://www.RinkyDinkElectronics.com/
+// UTFT_Buttons_Demo_320x240 (C)2013 Henning Karlsen
+// web: http://www.henningkarlsen.com/electronics
 //
 // A small demo to demonstrate the use of some of the
 // functions of the UTFT_Buttons add-on library.
@@ -9,12 +8,12 @@
 // of 320x240 pixels, but should work on larger screens as
 // well.
 //
-// This program requires both the UTFT and URTouch libraries
+// This program requires both the UTFT and UTouch libraries
 // in addition to the UTFT_Buttons add-on library.
 //
 
 #include <UTFT.h>
-#include <URTouch.h>
+#include <UTouch.h>
 #include <UTFT_Buttons.h>
 
 // Declare which fonts we will be using
@@ -31,12 +30,11 @@ extern uint8_t Dingbats1_XL[];
 // Standard chipKit Uno32/uC32                 : <display model>,34,35,36,37
 // Standard chipKit Max32                      : <display model>,82,83,84,85
 // AquaLEDSource All in One Super Screw Shield : <display model>,82,83,84,85
-// CC3200 LaunchPad (pins used in the examples): <display model>,15,18,11,32
 //
 // Remember to change the model parameter to suit your display module!
 UTFT          myGLCD(ITDB32S,38,39,40,41);
 
-// Set up URTouch...
+// Set up UTouch...
 // Set the pins to the correct ones for your development board
 // -----------------------------------------------------------
 // Standard Arduino 2009/Uno/Leonardo shield   : 15,10,14,9,8
@@ -45,9 +43,7 @@ UTFT          myGLCD(ITDB32S,38,39,40,41);
 // Standard chipKit Uno32/uC32                 : 20,21,22,23,24
 // Standard chipKit Max32                      : 62,63,64,65,66
 // AquaLEDSource All in One Super Screw Shield : 62,63,64,65,66
-// CC3200 LaunchPad (pins used in the examples): 31,13,19,28,17
-//
-URTouch        myTouch(6,5,4,3,2);
+UTouch        myTouch(6,5,4,3,2);
 
 // Finally we set up UTFT_Buttons :)
 UTFT_Buttons  myButtons(&myGLCD, &myTouch);

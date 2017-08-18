@@ -1,6 +1,5 @@
-// UTFT_Geometry_Demo_320x240 
-// Copyright (C)2015 Rinky-Dink Electronics, Henning Karlsen. All right reserved
-// web: http://www.RinkyDinkElectronics.com/
+// UTFT_Geometry_Demo_320x240 (C)2013 Henning Karlsen
+// web: http://www.henningkarlsen.com/electronics
 //
 // A small demo to demonstrate the use of some of the
 // functions of the UTFT_Geometry add-on library.
@@ -26,7 +25,6 @@ extern uint8_t SmallFont[];
 // Standard chipKit Uno32/uC32                 : <display model>,34,35,36,37
 // Standard chipKit Max32                      : <display model>,82,83,84,85
 // AquaLEDSource All in One Super Screw Shield : <display model>,82,83,84,85
-// CC3200 LaunchPad (pins used in the examples): <display model>,15,18,11,32
 //
 // Remember to change the model parameter to suit your display module!
 UTFT myGLCD(ITDB32S,38,39,40,41);
@@ -62,7 +60,7 @@ void loop()
   myGLCD.print("*** UTFT Geometry Add-on Library ***", CENTER, 1);
   myGLCD.setBackColor(VGA_GRAY);
   myGLCD.setColor(VGA_YELLOW);
-  myGLCD.print("<http://www.RinkyDinkElectronics.com/>", CENTER, 227);
+  myGLCD.print("<http://electronics.henningkarlsen.com>", CENTER, 227);
 
   myGLCD.setColor(VGA_BLUE);
   myGLCD.drawRect(0, 14, 319, 225);

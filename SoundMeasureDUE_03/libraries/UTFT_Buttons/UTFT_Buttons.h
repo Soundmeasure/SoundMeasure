@@ -1,29 +1,25 @@
 /*
   UTFT_Buttons.h - Add-on Library for UTFT: Buttons
-  Copyright (C)2016 Rinky-Dink Electronics, Henning Karlsen. All right reserved
+  Copyright (C)2013 Henning Karlsen. All right reserved
   
   This library adds simple but easy to use buttons to extend the use
-  of the UTFT and URTouch libraries.
+  of the UTFT and UTouch libraries.
 
-  You can find the latest version of the library at 
-  http://www.RinkyDinkElectronics.com/
+  You can always find the latest version of the library at 
+  http://electronics.henningkarlsen.com/
+
+  If you make any modifications or improvements to the code, I would 
+  appreciate that you share the code with me so that I might include 
+  it in the next release. I can be contacted through 
+  http://electronics.henningkarlsen.com/contact.php.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the CC BY-NC-SA 3.0 license.
   Please see the included documents for further information.
-
-  Commercial use of this library requires you to buy a license that
-  will allow commercial use. This includes using the library,
-  modified or not, as a tool to sell products.
-
-  The license applies to all part of the library including the 
-  examples and tools supplied with the library.
 */
 
 #ifndef UTFT_Buttons_h
 #define UTFT_Buttons_h
-
-#define UTFT_BUTTONS_VERSION	103
 
 #if defined(__AVR__)
 	#include "Arduino.h"
@@ -34,7 +30,7 @@
 #endif
 
 #include <UTFT.h>
-#include <URTouch.h>
+#include <UTouch.h>
 #if ((!defined(UTFT_VERSION)) || (UTFT_VERSION<241))
 	#error : You will need UTFT v2.41 or higher to use this add-on library...
 #endif
@@ -60,7 +56,7 @@ typedef struct
 class UTFT_Buttons
 {
 	public:
-		UTFT_Buttons(UTFT *ptrUTFT, URTouch *ptrURTouch);
+		UTFT_Buttons(UTFT *ptrUTFT, UTouch *ptrUTouch);
 
 		int		addButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height, char *label, uint16_t flags=0);
 		int		addButton(uint16_t x, uint16_t y, uint16_t width, uint16_t height, bitmapdatatype data, uint16_t flags=0);
@@ -79,7 +75,7 @@ class UTFT_Buttons
 
 	protected:
 		UTFT		*_UTFT;
-		URTouch		*_URTouch;
+		UTouch		*_UTouch;
 		button_type	buttons[MAX_BUTTONS];
 		word		_color_text, _color_text_inactive, _color_background, _color_border, _color_hilite;
 		uint8_t		*_font_text, *_font_symbol;

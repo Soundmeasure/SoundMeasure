@@ -1,33 +1,31 @@
 /*
   UTFT_Buttons.cpp - Add-on Library for UTFT: Buttons
-  Copyright (C)2016 Rinky-Dink Electronics, Henning Karlsen. All right reserved
+  Copyright (C)2013 Henning Karlsen. All right reserved
   
   This library adds simple but easy to use buttons to extend the use
-  of the UTFT and URTouch libraries.
+  of the UTFT and UTouch libraries.
 
-  You can find the latest version of the library at 
-  http://www.RinkyDinkElectronics.com/
+  You can always find the latest version of the library at 
+  http://electronics.henningkarlsen.com/
+
+  If you make any modifications or improvements to the code, I would 
+  appreciate that you share the code with me so that I might include 
+  it in the next release. I can be contacted through 
+  http://electronics.henningkarlsen.com/contact.php.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the CC BY-NC-SA 3.0 license.
   Please see the included documents for further information.
-
-  Commercial use of this library requires you to buy a license that
-  will allow commercial use. This includes using the library,
-  modified or not, as a tool to sell products.
-
-  The license applies to all part of the library including the 
-  examples and tools supplied with the library.
 */
 
 #include "UTFT_Buttons.h"
 #include <UTFT.h>
-#include <URTouch.h>
+#include <UTouch.h>
 
-UTFT_Buttons::UTFT_Buttons(UTFT *ptrUTFT, URTouch *ptrURTouch)
+UTFT_Buttons::UTFT_Buttons(UTFT *ptrUTFT, UTouch *ptrUTouch)
 {
 	_UTFT = ptrUTFT;
-	_URTouch = ptrURTouch;
+	_UTouch = ptrUTouch;
 	deleteAllButtons();
 	_color_text				= VGA_WHITE;
 	_color_text_inactive	= VGA_GRAY;
@@ -202,12 +200,12 @@ void UTFT_Buttons::deleteAllButtons()
 
 int UTFT_Buttons::checkButtons()
 {
-    if (_URTouch->dataAvailable() == true)
+    if (_UTouch->dataAvailable() == true)
     {
-		_URTouch->read();
+		_UTouch->read();
 		int		result = -1;
-		int		touch_x = _URTouch->getX();
-		int		touch_y = _URTouch->getY();
+		int		touch_x = _UTouch->getX();
+		int		touch_y = _UTouch->getY();
 		word	_current_color = _UTFT->getColor();
   
 		for (int i=0;i<MAX_BUTTONS;i++)
@@ -230,7 +228,7 @@ int UTFT_Buttons::checkButtons()
 			}
 		}
 
-		while (_URTouch->dataAvailable() == true) {};
+		while (_UTouch->dataAvailable() == true) {};
 
 		if (result != -1)
 		{
