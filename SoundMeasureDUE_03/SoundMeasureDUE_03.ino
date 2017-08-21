@@ -6441,7 +6441,8 @@ void measure_power()
 			StartSample = millis();
 			int m_power = 0;
 			float ind_power = 0;
-			ADC_CHER = 0x04;                         // Подключить канал А5, разрядность 12
+			//ADC_CHER = 0x04;                         // Подключить канал А5, разрядность 12
+			ADC_CHER = (0x1u << 3);                   // Подключить канал А3, разрядность 12
 			ADC_CR = ADC_START ; 	                 // Запустить преобразование
 			while (!(ADC_ISR_DRDY));                 // Ожидание конца преобразования
 			m_power =  ADC->ADC_CDR[2];              // Считать данные с канала А5
