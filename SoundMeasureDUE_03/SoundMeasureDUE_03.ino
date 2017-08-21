@@ -133,7 +133,7 @@ int hh,mm,ss,dow,dd,mon,yyyy;
 	int Sample_osc[254][4];
 	int OldSample_osc[254][4];
 	int PageSample_osc[240][10][4];
-	unsigned long PageSample_Num[10];
+	unsigned long PageSample_Num[100];
 	int Page_count = 0;
 	int x_pos_count = 0;
 	int YSample_osc[254][4];
@@ -1455,7 +1455,7 @@ void checkOverrun()
   if (!binFile.isOpen()) 
   {
 	//Serial.println(F("No current binary file"));
-		myGLCD.clrScr();
+	myGLCD.clrScr();
 	myGLCD.setBackColor(0, 0, 0);
 //	myGLCD.setFont( SmallFont);
 	myGLCD.setColor (255, 255, 255);
@@ -5639,17 +5639,17 @@ void printDirectory(File dir, int numTabs)
 			myGLCD.setColor(VGA_YELLOW);
 			myGLCD.setBackColor(0, 0, 255);
 			// Вывод количества страниц списка файлов
-			if (count_page < 10) 
+	    	if (count_page < 10) 
 				{
-					myGLCD.print("    ",146, 193);
+					myGLCD.print("    ",146+20, 193);
 					myGLCD.printNumI(count_page,157, 193);
 				}
-			if (count_page >= 10 & count_page <100 )
+			if (count_page > 9 & count_page <100 )
 				{
-					myGLCD.print("    ",146, 193);
+					myGLCD.print("    ",146+20, 193);
 					myGLCD.printNumI(count_page,153, 193);
 				}
-			if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+			if (count_page > 99 ) myGLCD.printNumI(count_page,148+20, 193);
 
 	while (true)
 		{
@@ -5684,13 +5684,13 @@ void printDirectory(File dir, int numTabs)
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,157, 193);
 								}
-							if (count_page >= 10 & count_page <100 )
+							if (count_page > 9 & count_page <100 )
 								{
 									myGLCD.setColor(VGA_YELLOW);
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,153, 193);
 								}
-							if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+							if (count_page > 99 ) myGLCD.printNumI(count_page,148 , 193);
 
 							max_count_files = count_page * 12;
 							min_count_files = max_count_files - 12;
@@ -5722,13 +5722,13 @@ void printDirectory(File dir, int numTabs)
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,157, 193);
 								}
-							if (count_page >= 10 & count_page <100 )
+							if (count_page > 9 & count_page <100 )
 								{
 									myGLCD.setColor(VGA_YELLOW);
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,153, 193);
 								}
-							if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+							if (count_page > 99 ) myGLCD.printNumI(count_page,148 , 193);
 
 							max_count_files = count_page * 12;
 							min_count_files = max_count_files - 12;
@@ -5805,7 +5805,7 @@ void printDirectory(File dir, int numTabs)
 							{
 								waitForIt(150, 60, 300, 120);
 								myGLCD.clrScr();
-								if(view_on) readFile();                                    // Просмотр файла
+								if(view_on) readFile();                        // Просмотр файла
 								myGLCD.clrScr();
 								myGLCD.setFont( SmallFont);
 								myGLCD.setColor(0, 0, 255);
@@ -5841,13 +5841,13 @@ void printDirectory(File dir, int numTabs)
 										myGLCD.print("    ",146, 193);
 										myGLCD.printNumI(count_page,157, 193);
 									}
-								if (count_page >= 10 & count_page <100 )
+								if (count_page > 9 & count_page <100 )
 									{
 										myGLCD.setColor(VGA_YELLOW);
 										myGLCD.print("    ",146, 193);
 										myGLCD.printNumI(count_page,153, 193);
 									}
-								if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+								if (count_page > 99 ) myGLCD.printNumI(count_page,148 , 193);
 
 								max_count_files = count_page * 12;
 								min_count_files = max_count_files - 12;
@@ -6225,7 +6225,7 @@ void readFile()
 												}
 							
 											Page_count++;                                                                    // Установить следующую страницу
-											if(Page_count>9) Page_count = 0;                                                 // Не больше 10 страниц
+											if(Page_count>99) Page_count = 0;                                                // Не больше 10 страниц
 										}
 								}
 						}                                          // Завершение программы поиска.  Признак окончания данных (5555)  обнаружен
@@ -6602,12 +6602,12 @@ void print_serial(File dir, int numTabs)
 					myGLCD.print("    ",146, 193);
 					myGLCD.printNumI(count_page,157, 193);
 				}
-			if (count_page >= 10 & count_page <100 )
+			if (count_page > 9 & count_page <100 )
 				{
 					myGLCD.print("    ",146, 193);
 					myGLCD.printNumI(count_page,153, 193);
 				}
-			if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+			if (count_page > 99 ) myGLCD.printNumI(count_page,148 , 193);
 
 	while (true)
 		{
@@ -6642,13 +6642,13 @@ void print_serial(File dir, int numTabs)
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,157, 193);
 								}
-							if (count_page >= 10 & count_page <100 )
+							if (count_page > 9 & count_page <100 )
 								{
 									myGLCD.setColor(VGA_YELLOW);
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,153, 193);
 								}
-							if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+							if (count_page > 99 ) myGLCD.printNumI(count_page,148 , 193);
 
 							max_count_files = count_page * 12;
 							min_count_files = max_count_files - 12;
@@ -6680,13 +6680,13 @@ void print_serial(File dir, int numTabs)
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,157, 193);
 								}
-							if (count_page >= 10 & count_page <100 )
+							if (count_page > 9 & count_page <100 )
 								{
 									myGLCD.setColor(VGA_YELLOW);
 									myGLCD.print("    ",146, 193);
 									myGLCD.printNumI(count_page,153, 193);
 								}
-							if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+							if (count_page > 99 ) myGLCD.printNumI(count_page,148 , 193);
 
 							max_count_files = count_page * 12;
 							min_count_files = max_count_files - 12;
@@ -6779,13 +6779,13 @@ void print_serial(File dir, int numTabs)
 										myGLCD.print("    ",146, 193);
 										myGLCD.printNumI(count_page,157, 193);
 									}
-								if (count_page >= 10 & count_page <100 )
+								if (count_page > 9 & count_page <100 )
 									{
 										myGLCD.setColor(VGA_YELLOW);
 										myGLCD.print("    ",146, 193);
 										myGLCD.printNumI(count_page,153, 193);
 									}
-								if (count_page >= 100 ) myGLCD.printNumI(count_page,148 , 193);
+								if (count_page > 99 ) myGLCD.printNumI(count_page,148 , 193);
 
 								max_count_files = count_page * 12;
 								min_count_files = max_count_files - 12;

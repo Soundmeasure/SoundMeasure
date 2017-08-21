@@ -4740,7 +4740,7 @@ LOAD c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-
                 0x20070bdc                . = ALIGN (0x4)
                 0x20070bdc                _erelocate = .
 
-.bss            0x20070bdc     0xd8e0 load address 0x000a6178
+.bss            0x20070bdc     0xda48 load address 0x000a6178
                 0x20070bdc                . = ALIGN (0x4)
                 0x20070bdc                _sbss = .
                 0x20070bdc                _szero = .
@@ -5025,173 +5025,173 @@ LOAD c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-
                 0x2007da94                str_day_file0
  *fill*         0x2007da97        0x1 
  .bss.PageSample_Num
-                0x2007da98       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007da98      0x190 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
                 0x2007da98                PageSample_Num
  .bss.osc_line_off0
-                0x2007dac0        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                0x2007dac0                osc_line_off0
+                0x2007dc28        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007dc28                osc_line_off0
  .bss.osc_line_off1
-                0x2007dac1        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                0x2007dac1                osc_line_off1
+                0x2007dc29        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007dc29                osc_line_off1
  .bss.osc_line_off2
-                0x2007dac2        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                0x2007dac2                osc_line_off2
+                0x2007dc2a        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007dc2a                osc_line_off2
  .bss.osc_line_off3
-                0x2007dac3        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                0x2007dac3                osc_line_off3
+                0x2007dc2b        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007dc2b                osc_line_off3
  .bss.count_repeat
-                0x2007dac4        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                0x2007dac4                count_repeat
- *fill*         0x2007dac6        0x2 
- .bss.root      0x2007dac8       0x34 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                0x2007dac8                root
- .bss.dgvh      0x2007dafc        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                0x2007dafc                dgvh
- .bss.Wire1     0x2007db00       0x94 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\Wire\Wire.cpp.o
-                0x2007db00                Wire1
- .bss.Wire      0x2007db94       0x94 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\Wire\Wire.cpp.o
-                0x2007db94                Wire
- .bss.SPI       0x2007dc28       0x44 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SPI\SPI.cpp.o
-                0x2007dc28                SPI
+                0x2007dc2c        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007dc2c                count_repeat
+ *fill*         0x2007dc2e        0x2 
+ .bss.root      0x2007dc30       0x34 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007dc30                root
+ .bss.dgvh      0x2007dc64        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                0x2007dc64                dgvh
+ .bss.Wire1     0x2007dc68       0x94 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\Wire\Wire.cpp.o
+                0x2007dc68                Wire1
+ .bss.Wire      0x2007dcfc       0x94 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\Wire\Wire.cpp.o
+                0x2007dcfc                Wire
+ .bss.SPI       0x2007dd90       0x44 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SPI\SPI.cpp.o
+                0x2007dd90                SPI
  .bss.useralarmFunc
-                0x2007dc6c        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\ArduinoDueRTCLibrary\rtc_clock.cpp.o
-                0x2007dc6c                useralarmFunc
- .bss.Timer0    0x2007dc70        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc70                Timer0
- .bss.Timer1    0x2007dc72        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc72                Timer1
- .bss.Timer2    0x2007dc74        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc74                Timer2
- .bss.Timer3    0x2007dc76        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc76                Timer3
- .bss.Timer4    0x2007dc78        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc78                Timer4
- .bss.Timer6    0x2007dc7a        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc7a                Timer6
- .bss.Timer7    0x2007dc7c        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc7c                Timer7
- .bss.Timer8    0x2007dc7e        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc7e                Timer8
+                0x2007ddd4        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\ArduinoDueRTCLibrary\rtc_clock.cpp.o
+                0x2007ddd4                useralarmFunc
+ .bss.Timer0    0x2007ddd8        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007ddd8                Timer0
+ .bss.Timer1    0x2007ddda        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007ddda                Timer1
+ .bss.Timer2    0x2007dddc        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007dddc                Timer2
+ .bss.Timer3    0x2007ddde        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007ddde                Timer3
+ .bss.Timer4    0x2007dde0        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007dde0                Timer4
+ .bss.Timer6    0x2007dde2        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007dde2                Timer6
+ .bss.Timer7    0x2007dde4        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007dde4                Timer7
+ .bss.Timer8    0x2007dde6        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007dde6                Timer8
  .bss._ZN8DueTimer9callbacksE
-                0x2007dc80       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dc80                DueTimer::callbacks
- .bss.Timer5    0x2007dca4        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dca4                Timer5
- .bss.Timer     0x2007dca6        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                0x2007dca6                Timer
+                0x2007dde8       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007dde8                DueTimer::callbacks
+ .bss.Timer5    0x2007de0c        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007de0c                Timer5
+ .bss.Timer     0x2007de0e        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                0x2007de0e                Timer
  .bss._ZN7FatFile5m_cwdE
-                0x2007dca8        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFile.cpp.o
-                0x2007dca8                FatFile::m_cwd
+                0x2007de10        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFile.cpp.o
+                0x2007de10                FatFile::m_cwd
  .bss._ZN7FatFile10m_dateTimeE
-                0x2007dcac        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFile.cpp.o
-                0x2007dcac                FatFile::m_dateTime
+                0x2007de14        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFile.cpp.o
+                0x2007de14                FatFile::m_dateTime
  .bss.tx_buffer2
-                0x2007dcb0       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007dcb0                tx_buffer2
+                0x2007de18       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007de18                tx_buffer2
  .bss.tx_buffer1
-                0x2007dd38       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007dd38                tx_buffer1
- .bss.Serial    0x2007ddc0       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007ddc0                Serial
+                0x2007dea0       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007dea0                tx_buffer1
+ .bss.Serial    0x2007df28       0x24 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007df28                Serial
  .bss.rx_buffer1
-                0x2007dde4       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007dde4                rx_buffer1
- .bss.Serial1   0x2007de6c       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007de6c                Serial1
- .bss.Serial2   0x2007de94       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007de94                Serial2
- .bss.Serial3   0x2007debc       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007debc                Serial3
+                0x2007df4c       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007df4c                rx_buffer1
+ .bss.Serial1   0x2007dfd4       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007dfd4                Serial1
+ .bss.Serial2   0x2007dffc       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007dffc                Serial2
+ .bss.Serial3   0x2007e024       0x28 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007e024                Serial3
  .bss.tx_buffer3
-                0x2007dee4       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007dee4                tx_buffer3
+                0x2007e04c       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007e04c                tx_buffer3
  .bss.tx_buffer4
-                0x2007df6c       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007df6c                tx_buffer4
+                0x2007e0d4       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007e0d4                tx_buffer4
  .bss.g_pinStatus
-                0x2007dff4       0x4f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007dff4                g_pinStatus
- *fill*         0x2007e043        0x1 
+                0x2007e15c       0x4f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007e15c                g_pinStatus
+ *fill*         0x2007e1ab        0x1 
  .bss.rx_buffer2
-                0x2007e044       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007e044                rx_buffer2
+                0x2007e1ac       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007e1ac                rx_buffer2
  .bss.rx_buffer3
-                0x2007e0cc       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007e0cc                rx_buffer3
+                0x2007e234       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007e234                rx_buffer3
  .bss.rx_buffer4
-                0x2007e154       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                0x2007e154                rx_buffer4
- .bss.gpf_isr   0x2007e1dc        0x4 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs.o)
-                0x2007e1dc                gpf_isr
+                0x2007e2bc       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                0x2007e2bc                rx_buffer4
+ .bss.gpf_isr   0x2007e344        0x4 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs.o)
+                0x2007e344                gpf_isr
  .bss.heap.6420
-                0x2007e1e0        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(syscalls_sam3.c.o)
- .bss._cmark    0x2007e1e4        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                0x2007e1e4                _cmark
+                0x2007e348        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(syscalls_sam3.c.o)
+ .bss._cmark    0x2007e34c        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                0x2007e34c                _cmark
  .bss._ZL14isEndpointHalt
-                0x2007e1e6        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
- *fill*         0x2007e1e7        0x1 
+                0x2007e34e        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+ *fill*         0x2007e34f        0x1 
  .bss._cdcComposite
-                0x2007e1e8        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                0x2007e1e8                _cdcComposite
+                0x2007e350        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                0x2007e350                _cdcComposite
  .bss._ZL21isRemoteWakeUpEnabled
-                0x2007e1ec        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
- *fill*         0x2007e1ed        0x3 
+                0x2007e354        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+ *fill*         0x2007e355        0x3 
  .bss._usbInitialized
-                0x2007e1f0        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                0x2007e1f0                _usbInitialized
+                0x2007e358        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                0x2007e358                _usbInitialized
  .bss.USBDevice
-                0x2007e1f4        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                0x2007e1f4                USBDevice
- *fill*         0x2007e1f5        0x3 
+                0x2007e35c        0x1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                0x2007e35c                USBDevice
+ *fill*         0x2007e35d        0x3 
  .bss._usbSetInterface
-                0x2007e1f8        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                0x2007e1f8                _usbSetInterface
- .bss._cend     0x2007e1fc        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                0x2007e1fc                _cend
- *fill*         0x2007e1fe        0x2 
+                0x2007e360        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                0x2007e360                _usbSetInterface
+ .bss._cend     0x2007e364        0x2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                0x2007e364                _cend
+ *fill*         0x2007e366        0x2 
  .bss._usbConfiguration
-                0x2007e200        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                0x2007e200                _usbConfiguration
+                0x2007e368        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                0x2007e368                _usbConfiguration
  .bss.cdc_rx_buffer
-                0x2007e204      0x208 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
-                0x2007e204                cdc_rx_buffer
+                0x2007e36c      0x208 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
+                0x2007e36c                cdc_rx_buffer
  .bss._ZZN7Serial_6acceptEvE5guard
-                0x2007e40c        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
+                0x2007e574        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
  .bss.SerialUSB
-                0x2007e410       0x14 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
-                0x2007e410                SerialUSB
+                0x2007e578       0x14 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
+                0x2007e578                SerialUSB
  .bss._ZZ12PluggableUSBvE3obj
-                0x2007e424        0x8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(PluggableUSB.cpp.o)
+                0x2007e58c        0x8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(PluggableUSB.cpp.o)
  .bss._ZGVZ12PluggableUSBvE3obj
-                0x2007e42c        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(PluggableUSB.cpp.o)
+                0x2007e594        0x4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(PluggableUSB.cpp.o)
  .bss._dwTickCount
-                0x2007e430        0x4 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(timetick.o)
+                0x2007e598        0x4 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(timetick.o)
  .bss.ul_recv_fifo_ptr
-                0x2007e434       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x2007e59c       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
  .bss.ul_send_fifo_ptr
-                0x2007e45c       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
+                0x2007e5c4       0x28 C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\variants\arduino_due_x/libsam_sam3x8e_gcc_rel.a(uotghs_device.o)
  .bss.__malloc_max_total_mem
-                0x2007e484        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
-                0x2007e484                __malloc_max_total_mem
+                0x2007e5ec        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
+                0x2007e5ec                __malloc_max_total_mem
  .bss.__malloc_max_sbrked_mem
-                0x2007e488        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
-                0x2007e488                __malloc_max_sbrked_mem
+                0x2007e5f0        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
+                0x2007e5f0                __malloc_max_sbrked_mem
  .bss.__malloc_top_pad
-                0x2007e48c        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
-                0x2007e48c                __malloc_top_pad
+                0x2007e5f4        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
+                0x2007e5f4                __malloc_top_pad
  .bss.__malloc_current_mallinfo
-                0x2007e490       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
-                0x2007e490                __malloc_current_mallinfo
+                0x2007e5f8       0x28 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-mallocr.o)
+                0x2007e5f8                __malloc_current_mallinfo
  *(COMMON)
- COMMON         0x2007e4b8        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-reent.o)
-                0x2007e4b8                errno
-                0x2007e4bc                . = ALIGN (0x4)
-                0x2007e4bc                _ebss = .
-                0x2007e4bc                _ezero = .
-                0x2007e4bc                . = ALIGN (0x4)
-                0x2007e4bc                _end = .
+ COMMON         0x2007e620        0x4 c:/users/moseichuk/appdata/local/arduino15/packages/arduino/tools/arm-none-eabi-gcc/4.8.3-2014q1/bin/../lib/gcc/arm-none-eabi/4.8.3/../../../../arm-none-eabi/lib/armv7-m\libg.a(lib_a-reent.o)
+                0x2007e620                errno
+                0x2007e624                . = ALIGN (0x4)
+                0x2007e624                _ebss = .
+                0x2007e624                _ezero = .
+                0x2007e624                . = ALIGN (0x4)
+                0x2007e624                _end = .
 
-.stack_dummy    0x2007e4bc        0x0
+.stack_dummy    0x2007e624        0x0
  *(.stack*)
                 0x20088000                __StackTop = (ORIGIN (ram) + 0x18000)
                 0x20088000                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
