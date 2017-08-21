@@ -12,7 +12,7 @@
 #include <UTouch.h>
 #include <UTFT_Buttons.h>
 #include <DueTimer.h>
-#include <AH_AD9850.h>
+//#include <AH_AD9850.h>
 #include "Wire.h"
 #include <rtc_clock.h>
 //#include <SD.h>
@@ -41,7 +41,6 @@ extern uint8_t SmallSymbolFont[];
 
 // Настройка монитора
 
-//UTFT myGLCD(ITDB32S,25,26,27,28);
 UTFT myGLCD(TFT01_28, 38, 39, 40, 41);
 
 UTouch        myTouch(6,5,4,3,2);
@@ -54,9 +53,19 @@ boolean default_colors = true;
 uint8_t menu_redraw_required = 0;
 
 StdioStream csvStream;
-#define intensityLCD 9            // Управления яркостью экрана
+#define intensityLCD 9            //Порт управления яркостью экрана
 
 //----------------------Конец  Настройки дисплея --------------------------------
+
+//+++++++++++++++++++++++ Настройка электронного резистора +++++++++++++++++++++++++++++++++++++
+#define address_AD5252   0x2F                       // Адрес микросхемы AD5252  
+#define control_word1    0x07                       // Байт инструкции резистор №1
+#define control_word2    0x87                       // Байт инструкции резистор №2
+byte resistance = 0x00;                             // Сопротивление 0x00..0xFF - 0Ом..100кОм
+//byte level_resist      = 0;                       // Байт считанных данных величины резистора
+//-----------------------------------------------------------------------------------------------
+
+
 
 //*********************Работа с именем файла ******************************
 char file_name[13] ;
@@ -235,12 +244,6 @@ void dateTime(uint16_t* date, uint16_t* time) // Программа записи времени и даты
   *time = FAT_TIME(hh, mm, ss);
 }
 
-//Настройка звукового генератора
-#define CLK     8  // Назначение выводов генератора сигналов
-#define FQUP    9  // Назначение выводов генератора сигналов
-#define BitData 10 // Назначение выводов генератора сигналов
-#define RESET   11 // Назначение выводов генератора сигналов
-AH_AD9850 AD9850(CLK, FQUP, BitData, RESET);// настройка звукового генератора
 
 // ADC speed one channel 480,000 samples/sec (no enable per read)
 //           one channel 288,000 samples/sec (enable per read)
@@ -328,7 +331,8 @@ const uint32_t FILE_BLOCK_COUNT = 256000;
 const int8_t ERROR_LED_PIN = 13;
 
 // SD chip select pin.
-const uint8_t SD_CS_PIN = 53;
+//const uint8_t SD_CS_PIN = 53;
+const uint8_t SD_CS_PIN = 10;
 uint32_t const ERASE_SIZE = 262144L;
 //------------------------------------------------------------------------------
 
@@ -1084,7 +1088,7 @@ void firstHandler()
 {
 	 int time_start = micros();
 	//ADC_CHER = Channel_x;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
-	ADC_CR = ADC_START ; 	// Запустить преобразование
+	ADC_CR = ADC_START ; 	   // Запустить преобразование
 
   // while (!(ADC_ISR & ADC_ISR_DRDY));
 
@@ -2422,7 +2426,7 @@ void AnalogClock()
 
 	if (oldsec!=ss)
 	{
-	  if ((ss==0) and (mm==0) and (hh==0))
+	  if ((ss==0) && (mm==0) && (hh==0))
 	  {
 		clearDate();
 		printDate();
@@ -6848,6 +6852,40 @@ void file_serial()
   // delay(500);
 	
 }
+
+void resistor(int resist, int valresist)
+{
+	resistance = valresist;
+	switch (resist)
+	{
+	case 1:
+		Wire.beginTransmission(address_AD5252);     // transmit to device
+		Wire.write(byte(control_word1));            // sends instruction byte  
+		Wire.write(resistance);                     // sends potentiometer value byte  
+		Wire.endTransmission();                     // stop transmitting
+		break;
+	case 2:
+		Wire.beginTransmission(address_AD5252);     // transmit to device
+		Wire.write(byte(control_word2));            // sends instruction byte  
+		Wire.write(resistance);                     // sends potentiometer value byte  
+		Wire.endTransmission();                     // stop transmitting
+		break;
+	}
+	//Wire.requestFrom(address_AD5252, 1, true);  // Считать состояние движка резистора 
+	//level_resist = Wire.read();                 // sends potentiometer value byte  
+}
+void setup_resistor()
+{
+	Wire.beginTransmission(address_AD5252);      // transmit to device
+	Wire.write(byte(control_word1));             // sends instruction byte  
+	Wire.write(0);                               // sends potentiometer value byte  
+	Wire.endTransmission();                      // stop transmitting
+	Wire.beginTransmission(address_AD5252);      // transmit to device
+	Wire.write(byte(control_word2));             // sends instruction byte  
+	Wire.write(0);                               // sends potentiometer value byte  
+	Wire.endTransmission();                      // stop transmitting
+}
+
 //------------------------------------------------------------------------------
 void setup(void) 
 {
@@ -6858,6 +6896,7 @@ void setup(void)
 	Serial.begin(115200);
 	Serial.print(F("FreeRam: "));
 	Serial.println(FreeRam());
+	Wire.begin();
 	myGLCD.InitLCD();
 	myGLCD.clrScr();
 	myGLCD.setFont(BigFont);
@@ -6894,10 +6933,6 @@ void setup(void)
 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Настройка звукового генератора  
-	AD9850.reset();                    //reset module
-	delay(1000);
-	AD9850.powerDown();                //set signal output to LOW
-	AD9850.set_frequency(0,0,500);    //set power=UP, phase=0, 1kHz frequency 
 
 	chench_Channel();
 
@@ -6916,6 +6951,9 @@ void setup(void)
 
 //	cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
 	myGLCD.setBackColor(0, 0, 255);
+	setup_resistor();                                // Начальные установки резистора
+	resistor(1, 255);                                // Установить уровень сигнала
+	resistor(2, 255);                                // Установить уровень сигнала
 	preob_num_str();
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
