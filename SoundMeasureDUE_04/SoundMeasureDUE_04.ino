@@ -1,4 +1,10 @@
-/**
+/*
+
+Начало работ 21.08.2017г.
+
+
+
+
  
  */
 
@@ -12,27 +18,10 @@
 #include <UTouch.h>
 #include <UTFT_Buttons.h>
 #include <DueTimer.h>
-//#include <AH_AD9850.h>
 #include "Wire.h"
 #include <rtc_clock.h>
 //#include <SD.h>
 
-
-
-
-
-//+++++++++++++++++++++++ SD info ++++++++++++++++++++++++++
-SdFile file;
-
-File root;
-
-SdFat sd;
-
-SdBaseFile binFile;
-
-Sd2Card card;
-
-// Declare which fonts we will be using
 
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
@@ -41,19 +30,15 @@ extern uint8_t SmallSymbolFont[];
 
 // Настройка монитора
 
-UTFT myGLCD(TFT01_28, 38, 39, 40, 41);
+UTFT myGLCD(TFT01_28, 38, 39, 40, 41);     // Настройка монитора
+UTouch        myTouch(6,5,4,3,2);          // Настройка клавиатуры
 
-UTouch        myTouch(6,5,4,3,2);
-
-//
-//// Finally we set up UTFT_Buttons :)
 UTFT_Buttons  myButtons(&myGLCD, &myTouch);
-
 boolean default_colors = true;
 uint8_t menu_redraw_required = 0;
 
 StdioStream csvStream;
-#define intensityLCD 9            //Порт управления яркостью экрана
+#define intensityLCD 9            // Порт управления яркостью экрана
 
 //----------------------Конец  Настройки дисплея --------------------------------
 
@@ -65,6 +50,15 @@ byte resistance = 0x00;                             // Сопротивление 0x00..0xFF 
 //byte level_resist      = 0;                       // Байт считанных данных величины резистора
 //-----------------------------------------------------------------------------------------------
 
+
+
+
+//+++++++++++++++++++++++ SD info ++++++++++++++++++++++++++
+SdFile file;
+File root;
+SdFat sd;
+SdBaseFile binFile;
+Sd2Card card;
 
 
 //*********************Работа с именем файла ******************************
@@ -88,16 +82,13 @@ char list_files_tab[200][13];
 uint32_t size_files_tab[200] ;
 int set_files = 0;
 
-//**************************  Меню прибора ***************************************
+//**************************  Initialization time ***************************************
 
 const int clockCenterX=119;
 const int clockCenterY=119;
 int oldsec=0;
-char* str[] = {"MON","TUE","WED","THU","FRI","SAT","SUN"};
 char* str_mon[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-
 RTC_clock rtc_clock(XTAL);
-
 char* daynames[]={"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
 //-----------------------------------------------------------------------------------------------
@@ -110,7 +101,6 @@ uint8_t mon1 = 1;
 uint16_t year = 14;
 unsigned long timeF;
 int flag_time = 0;
-
 int hh,mm,ss,dow,dd,mon,yyyy;
 
 
@@ -190,19 +180,19 @@ char  txt_menu1_2[]          = "CAMO\x89\x86""CE\x8C";                          
 char  txt_menu1_3[]          = "PE\x81\x86""CT.+ CAMO\x89.";                                                // "РЕГИСТ. + САМОП."
 char  txt_menu1_4[]          = "PA\x80OTA c SD";                                                            // "РАБОТА с SD"
 
-char  txt_ADC_menu1[]        = "\x85""a\xA3\x9D""c\xAC \x99""a\xA2\xA2\xABx";                                                               //
-char  txt_ADC_menu2[]        = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                                                    //
-char  txt_ADC_menu3[]        = "\x89""epe\x99""a\xA7""a \x97 KOM";                                                            //
-char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                                      //
+char  txt_ADC_menu1[]        = "\x85""a\xA3\x9D""c\xAC \x99""a\xA2\xA2\xABx";                               //
+char  txt_ADC_menu2[]        = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                      //
+char  txt_ADC_menu3[]        = "\x89""epe\x99""a\xA7""a \x97 KOM";                                          //
+char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                               //
 
-char  txt_osc_menu1[]        = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                                              //
-char  txt_osc_menu2[]        = "Oc\xA6\x9D\xA0\xA0.1-18\xA1\x9D\xA2";                                                               //
-char  txt_osc_menu3[]        = "O\xA8\x9d\x96\x9F\x9D";                                                                    //
+char  txt_osc_menu1[]        = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                             //
+char  txt_osc_menu2[]        = "Oc\xA6\x9D\xA0\xA0.1-18\xA1\x9D\xA2";                                       //
+char  txt_osc_menu3[]        = "O\xA8\x9d\x96\x9F\x9D";                                                     //
 char  txt_osc_menu4[]        = "B\x91XO\x82";           
 
-char  txt_SD_menu1[]         = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                                                 //
-char  txt_SD_menu2[]         = "\x86\xA2\xA5o SD";                                                                   //
-char  txt_SD_menu3[]         = "\x8Bop\xA1""a\xA4 SD";                                                                 //
+char  txt_SD_menu1[]         = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                      //
+char  txt_SD_menu2[]         = "\x86\xA2\xA5o SD";                                                          //
+char  txt_SD_menu3[]         = "\x8Bop\xA1""a\xA4 SD";                                                      //
 char  txt_SD_menu4[]         = "B\x91XO\x82";           
 
 char  txt_info6[]             = "Info: ";                                                                   //Info: 
@@ -232,7 +222,37 @@ char  txt_info29[]            = "Stop->PUSH Disp";
 char  txt_info30[]            = "\x89o\x97\xA4op."; 
 
 
-void dateTime(uint16_t* date, uint16_t* time) // Программа записи времени и даты файла
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void dateTime(uint16_t* date, uint16_t* time)                              // Программа записи времени и даты файла
 {
   rtc_clock.get_time(&hh,&mm,&ss);
   rtc_clock.get_date(&dow,&dd,&mon,&yyyy);
@@ -278,7 +298,6 @@ bool Channel2 = false;
 bool Channel3 = false;
 int count_pin = 0;
 int set_strob = 100;
-
 
 const float SAMPLE_RATE = 5000;  // Must be 0.25 or greater.
 
@@ -2191,8 +2210,7 @@ void clock_print_serial()
 }
 void drawDisplay()
 {
-  // Clear screen
-  myGLCD.clrScr();
+  myGLCD.clrScr();  // Clear screen
   
   // Draw Clockface
   myGLCD.setColor(0, 0, 255);
@@ -2396,7 +2414,7 @@ void printDate()
 	myGLCD.setFont(BigFont);
   myGLCD.setColor(0, 0, 0);
   myGLCD.setBackColor(255, 255, 255);
-  myGLCD.print(str[dow-1], 256, 8);
+  myGLCD.print(daynames[dow-1], 256, 8);
   if (dd<10)
 	myGLCD.printNumI(dd, 272, 28);
   else
@@ -2469,6 +2487,9 @@ void AnalogClock()
 
 }
 
+
+// ******************* Главное меню ********************************
+
 void draw_Glav_Menu()
 {
   but1 = myButtons.addButton( 10,  20, 250,  35, txt_menu1_1);
@@ -2535,6 +2556,7 @@ void swichMenu() // Тексты меню в строках "txt....."
 			 } 
 	   }
 }
+
 void waitForIt(int x1, int y1, int x2, int y2)
 {
   myGLCD.setColor(255, 0, 0);
