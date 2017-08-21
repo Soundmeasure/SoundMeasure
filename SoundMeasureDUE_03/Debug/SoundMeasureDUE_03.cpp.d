@@ -136,37 +136,37 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/RingBuffer.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\cores\arduino/Stream.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\libraries\SPI\src/SPI.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdFat.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdSpiCard.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdFatConfig.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdInfo.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdSpi.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdFatConfig.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/FatLib.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/ArduinoFiles.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/FatLibConfig.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/../SdFatConfig.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/FatFile.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/FatApiConstants.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/FatStructs.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/FatVolume.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/ArduinoStream.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/bufstream.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/iostream.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/istream.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/ios.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/ostream.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/FatFileSystem.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/StdioStream.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/utility/fstream.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdFatUtil.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\SdFat/SdFat.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdFat.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdSpiCard.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdFatConfig.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdInfo.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdSpi.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdFatConfig.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/FatLib.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/ArduinoFiles.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/FatLibConfig.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/../SdFatConfig.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/FatFile.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/FatApiConstants.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/FatStructs.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/FatVolume.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/ArduinoStream.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/bufstream.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/iostream.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/istream.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/ios.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/ostream.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/FatFileSystem.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/StdioStream.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/utility/fstream.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdFatUtil.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\SdFat/SdFat.h \
  C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\AnalogBinLogger.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\UTFT/UTFT.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\UTFT/hardware/arm/HW_ARM_defines.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\UTouch/UTouch.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\UTFT_Buttons/UTFT_Buttons.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\DueTimer/DueTimer.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\UTFT/UTFT.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\UTFT/hardware/arm/HW_ARM_defines.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\UTouch/UTouch.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\UTFT_Buttons/UTFT_Buttons.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\DueTimer/DueTimer.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\libraries\Wire\src/Wire.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system/libsam/include/twi.h \
- D:\1\ SVN\ SoundMeasure\trunk\AnalogDataLoggerF1\libraries\ArduinoDueRTCLibrary/rtc_clock.h
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_03\libraries\ArduinoDueRTCLibrary/rtc_clock.h

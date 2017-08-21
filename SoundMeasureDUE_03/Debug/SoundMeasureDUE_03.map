@@ -581,7 +581,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\MinimumSerial.cpp.o
  .debug_line    0x00000000      0x308 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\MinimumSerial.cpp.o
- .debug_str     0x00000000      0x310 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\MinimumSerial.cpp.o
+ .debug_str     0x00000000      0x2d4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\MinimumSerial.cpp.o
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\MinimumSerial.cpp.o
  .ARM.attributes
                 0x00000000       0x33 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\MinimumSerial.cpp.o
@@ -643,7 +643,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x18 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiTeensy3.cpp.o
  .debug_line    0x00000000      0x358 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiTeensy3.cpp.o
- .debug_str     0x00000000      0x359 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiTeensy3.cpp.o
+ .debug_str     0x00000000      0x31d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiTeensy3.cpp.o
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiTeensy3.cpp.o
  .ARM.attributes
                 0x00000000       0x33 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiTeensy3.cpp.o
@@ -769,7 +769,7 @@ Discarded input sections
                 0x00000000       0x58 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\fstream.cpp.o
  .debug_ranges  0x00000000       0xa8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\fstream.cpp.o
  .debug_line    0x00000000      0x69b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\fstream.cpp.o
- .debug_str     0x00000000     0x272d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\fstream.cpp.o
+ .debug_str     0x00000000     0x26f1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\fstream.cpp.o
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\fstream.cpp.o
  .ARM.attributes
                 0x00000000       0x33 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\fstream.cpp.o
@@ -815,7 +815,7 @@ Discarded input sections
                 0x00000000       0x88 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\istream.cpp.o
  .debug_ranges  0x00000000      0x218 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\istream.cpp.o
  .debug_line    0x00000000      0x8b8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\istream.cpp.o
- .debug_str     0x00000000      0xf3e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\istream.cpp.o
+ .debug_str     0x00000000      0xf02 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\istream.cpp.o
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\istream.cpp.o
  .ARM.attributes
                 0x00000000       0x33 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\istream.cpp.o
@@ -1535,7 +1535,7 @@ Discarded input sections
                 0x00000000       0x20 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(dtostrf.c.o)
  .debug_ranges  0x00000000       0x10 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(dtostrf.c.o)
  .debug_line    0x00000000      0x121 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(dtostrf.c.o)
- .debug_str     0x00000000      0x24a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(dtostrf.c.o)
+ .debug_str     0x00000000      0x20e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(dtostrf.c.o)
  .comment       0x00000000       0x71 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(dtostrf.c.o)
  .ARM.attributes
                 0x00000000       0x33 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(dtostrf.c.o)
@@ -5851,93 +5851,93 @@ OUTPUT(C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino
  .debug_line    0x000147b7      0x832 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
  .debug_line    0x00014fe9      0x30b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(PluggableUSB.cpp.o)
 
-.debug_str      0x00000000     0xe01f
- .debug_str     0x00000000     0x85d1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
-                               0x8a98 (size before relaxing)
- .debug_str     0x000085d1      0xc11 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\Wire\Wire.cpp.o
-                               0x2075 (size before relaxing)
- .debug_str     0x000091e2      0x629 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SPI\SPI.cpp.o
-                                0xefd (size before relaxing)
- .debug_str     0x0000980b      0x28d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\ArduinoDueRTCLibrary\rtc_clock.cpp.o
-                                0xefb (size before relaxing)
- .debug_str     0x00009a98      0x1d2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
-                                0xaae (size before relaxing)
- .debug_str     0x00009c6a       0x75 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdFatBase.cpp.o
-                               0x4341 (size before relaxing)
- .debug_str     0x00009cdf       0xa3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdFatUtil.cpp.o
-                               0x379a (size before relaxing)
- .debug_str     0x00009d82       0x9b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiCard.cpp.o
-                               0x11dc (size before relaxing)
- .debug_str     0x00009e1d      0x1d3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiSAM3X.cpp.o
-                                0xb33 (size before relaxing)
- .debug_str     0x00009ff0      0x1d2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFile.cpp.o
-                               0x31cf (size before relaxing)
- .debug_str     0x0000a1c2      0x107 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFileLFN.cpp.o
-                               0x23e0 (size before relaxing)
- .debug_str     0x0000a2c9      0x13d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFilePrint.cpp.o
-                               0x23af (size before relaxing)
- .debug_str     0x0000a406       0x56 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFileSFN.cpp.o
-                               0x2fad (size before relaxing)
- .debug_str     0x0000a45c       0xaf C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatVolume.cpp.o
-                               0x12fa (size before relaxing)
- .debug_str     0x0000a50b      0x111 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FmtNumber.cpp.o
+.debug_str      0x00000000     0xdfe3
+ .debug_str     0x00000000     0x8595 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
+                               0x8a5c (size before relaxing)
+ .debug_str     0x00008595      0xc11 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\Wire\Wire.cpp.o
+                               0x2039 (size before relaxing)
+ .debug_str     0x000091a6      0x629 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SPI\SPI.cpp.o
+                                0xec1 (size before relaxing)
+ .debug_str     0x000097cf      0x28d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\ArduinoDueRTCLibrary\rtc_clock.cpp.o
+                                0xebf (size before relaxing)
+ .debug_str     0x00009a5c      0x1d2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\DueTimer\DueTimer.cpp.o
+                                0xa72 (size before relaxing)
+ .debug_str     0x00009c2e       0x75 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdFatBase.cpp.o
+                               0x4305 (size before relaxing)
+ .debug_str     0x00009ca3       0xa3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdFatUtil.cpp.o
+                               0x375e (size before relaxing)
+ .debug_str     0x00009d46       0x9b C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiCard.cpp.o
+                               0x11a0 (size before relaxing)
+ .debug_str     0x00009de1      0x1d3 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\SdSpiSAM3X.cpp.o
+                                0xaf7 (size before relaxing)
+ .debug_str     0x00009fb4      0x1d2 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFile.cpp.o
+                               0x3193 (size before relaxing)
+ .debug_str     0x0000a186      0x107 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFileLFN.cpp.o
+                               0x23a4 (size before relaxing)
+ .debug_str     0x0000a28d      0x13d C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFilePrint.cpp.o
+                               0x2373 (size before relaxing)
+ .debug_str     0x0000a3ca       0x56 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatFileSFN.cpp.o
+                               0x2f71 (size before relaxing)
+ .debug_str     0x0000a420       0xaf C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FatVolume.cpp.o
+                               0x12be (size before relaxing)
+ .debug_str     0x0000a4cf      0x111 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\FmtNumber.cpp.o
                                 0x37d (size before relaxing)
- .debug_str     0x0000a61c       0x68 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\ostream.cpp.o
-                                0xe07 (size before relaxing)
- .debug_str     0x0000a684       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\StdioStream.cpp.o
-                               0x297f (size before relaxing)
- .debug_str     0x0000a6f4      0x120 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT\DefaultFonts.c.o
+ .debug_str     0x0000a5e0       0x68 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\ostream.cpp.o
+                                0xdcb (size before relaxing)
+ .debug_str     0x0000a648       0x70 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SdFat\utility\StdioStream.cpp.o
+                               0x2943 (size before relaxing)
+ .debug_str     0x0000a6b8      0x120 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT\DefaultFonts.c.o
                                 0x159 (size before relaxing)
- .debug_str     0x0000a814       0xb5 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT\UTFT.cpp.o
-                               0x1a74 (size before relaxing)
- .debug_str     0x0000a8c9       0x4e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT_Buttons\fonts.c.o
+ .debug_str     0x0000a7d8       0xb5 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT\UTFT.cpp.o
+                               0x1a38 (size before relaxing)
+ .debug_str     0x0000a88d       0x4e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT_Buttons\fonts.c.o
                                 0x1c2 (size before relaxing)
- .debug_str     0x0000a917       0xf7 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT_Buttons\UTFT_Buttons.cpp.o
-                               0x1ab8 (size before relaxing)
- .debug_str     0x0000aa0e       0x86 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTouch\UTouch.cpp.o
-                                0x581 (size before relaxing)
- .debug_str     0x0000aa94      0x5b8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
-                               0x1219 (size before relaxing)
- .debug_str     0x0000b04c       0xde C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(cortex_handlers.c.o)
-                                0x31f (size before relaxing)
- .debug_str     0x0000b12a       0x76 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(hooks.c.o)
+ .debug_str     0x0000a8db       0xf7 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTFT_Buttons\UTFT_Buttons.cpp.o
+                               0x1a7c (size before relaxing)
+ .debug_str     0x0000a9d2       0x86 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\UTouch\UTouch.cpp.o
+                                0x545 (size before relaxing)
+ .debug_str     0x0000aa58      0x5b8 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\variant\variant.cpp.o
+                               0x11dd (size before relaxing)
+ .debug_str     0x0000b010       0xde C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(cortex_handlers.c.o)
+                                0x2e3 (size before relaxing)
+ .debug_str     0x0000b0ee       0x76 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(hooks.c.o)
                                 0x140 (size before relaxing)
- .debug_str     0x0000b1a0       0x76 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(itoa.c.o)
+ .debug_str     0x0000b164       0x76 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(itoa.c.o)
                                 0x1f3 (size before relaxing)
- .debug_str     0x0000b216      0x1f7 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(syscalls_sam3.c.o)
-                                0x4f0 (size before relaxing)
- .debug_str     0x0000b40d       0x93 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(wiring.c.o)
-                                0x389 (size before relaxing)
- .debug_str     0x0000b4a0      0x72e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(wiring_analog.c.o)
-                               0x107c (size before relaxing)
- .debug_str     0x0000bbce       0xae C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(wiring_digital.c.o)
-                                0xa2d (size before relaxing)
- .debug_str     0x0000bc7c       0x8f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(abi.cpp.o)
+ .debug_str     0x0000b1da      0x1f7 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(syscalls_sam3.c.o)
+                                0x4b4 (size before relaxing)
+ .debug_str     0x0000b3d1       0x93 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(wiring.c.o)
+                                0x34d (size before relaxing)
+ .debug_str     0x0000b464      0x72e C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(wiring_analog.c.o)
+                               0x1040 (size before relaxing)
+ .debug_str     0x0000bb92       0xae C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(wiring_digital.c.o)
+                                0x9f1 (size before relaxing)
+ .debug_str     0x0000bc40       0x8f C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(abi.cpp.o)
                                 0x238 (size before relaxing)
- .debug_str     0x0000bd0b      0x133 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(main.cpp.o)
-                                0x43f (size before relaxing)
- .debug_str     0x0000be3e      0x2d1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(Print.cpp.o)
-                               0x1062 (size before relaxing)
- .debug_str     0x0000c10f       0xf1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(Reset.cpp.o)
-                                0x400 (size before relaxing)
- .debug_str     0x0000c200       0x81 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(RingBuffer.cpp.o)
+ .debug_str     0x0000bccf      0x133 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(main.cpp.o)
+                                0x403 (size before relaxing)
+ .debug_str     0x0000be02      0x2d1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(Print.cpp.o)
+                               0x1026 (size before relaxing)
+ .debug_str     0x0000c0d3       0xf1 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(Reset.cpp.o)
+                                0x3c4 (size before relaxing)
+ .debug_str     0x0000c1c4       0x81 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(RingBuffer.cpp.o)
                                 0x2a9 (size before relaxing)
- .debug_str     0x0000c281       0xd4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(Stream.cpp.o)
-                               0x1145 (size before relaxing)
- .debug_str     0x0000c355      0x270 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(UARTClass.cpp.o)
-                               0x17e3 (size before relaxing)
- .debug_str     0x0000c5c5      0x259 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USARTClass.cpp.o)
-                                0xa4b (size before relaxing)
- .debug_str     0x0000c81e      0x127 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(watchdog.cpp.o)
+ .debug_str     0x0000c245       0xd4 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(Stream.cpp.o)
+                               0x1109 (size before relaxing)
+ .debug_str     0x0000c319      0x270 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(UARTClass.cpp.o)
+                               0x17a7 (size before relaxing)
+ .debug_str     0x0000c589      0x259 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USARTClass.cpp.o)
+                                0xa0f (size before relaxing)
+ .debug_str     0x0000c7e2      0x127 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(watchdog.cpp.o)
                                 0x31b (size before relaxing)
- .debug_str     0x0000c945      0x389 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(WString.cpp.o)
-                                0xf94 (size before relaxing)
- .debug_str     0x0000ccce      0xdeb C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
-                               0x1361 (size before relaxing)
- .debug_str     0x0000dab9      0x4cc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
-                               0x1d60 (size before relaxing)
- .debug_str     0x0000df85       0x9a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(PluggableUSB.cpp.o)
-                                0x5ff (size before relaxing)
+ .debug_str     0x0000c909      0x389 C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(WString.cpp.o)
+                                0xf58 (size before relaxing)
+ .debug_str     0x0000cc92      0xdeb C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(USBCore.cpp.o)
+                               0x1325 (size before relaxing)
+ .debug_str     0x0000da7d      0x4cc C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(CDC.cpp.o)
+                               0x1d24 (size before relaxing)
+ .debug_str     0x0000df49       0x9a C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug/core.a(PluggableUSB.cpp.o)
+                                0x5c3 (size before relaxing)
 
 .debug_frame    0x00000000     0x6174
  .debug_frame   0x00000000      0xf1c C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_03\arduino_due_x\Debug\SoundMeasureDUE_03.cpp.o
