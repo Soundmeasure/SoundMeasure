@@ -22,7 +22,8 @@ byte resistance = 0x00;                             // Сопротивление 0x00..0xFF 
 
 void ADC_Handler() {     // move DMA pointers to next buffer
 	int f = ADC->ADC_ISR;
-	if (f&(1 << 27)) {
+	if (f&(1 << 27))
+	{
 		bufn = (bufn + 1) & 3;
 		ADC->ADC_RNPR = (uint32_t)buf[bufn];
 		ADC->ADC_RNCR = 256;
