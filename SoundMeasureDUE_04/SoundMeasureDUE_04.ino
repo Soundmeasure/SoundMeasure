@@ -20,6 +20,9 @@
 #include <DueTimer.h>
 #include "Wire.h"
 #include <rtc_clock.h>
+#include "nRF24L01.h"
+#include "RF24.h"
+#include "printf.h"
 //#include <SD.h>
 
 
@@ -1197,7 +1200,7 @@ void error_P(const char* msg)
   delay(2000);
 
 //  sd.errorPrint_P(msg);
- // fatalBlink();
+  fatalBlink();
 }
 //------------------------------------------------------------------------------
 //
@@ -3145,7 +3148,6 @@ void chench_mode(bool mod)
 	myGLCD.print("    ", 262, 22);
 	myGLCD.printNumI(dTime, x_dTime, 22);
 }
-
 void chench_tmode(bool mod)
 {
 	if (mod)
@@ -3164,7 +3166,6 @@ void chench_tmode(bool mod)
 	if (tmode == 3) { Trigger = MaxAnalog - 10; myGLCD.print("100%", 265, 65); }
 	if (tmode == 0)myGLCD.print(" Off ", 265, 65);
 }
-
 void chench_mode1(bool mod)
 {
 	if (mod)
@@ -3186,6 +3187,7 @@ void chench_mode1(bool mod)
 	if (mode1 == 2) { koeff_h = 1.939 * 4; myGLCD.print("0.25", 264, 110); }
 	if (mode1 == 3) { koeff_h = 0.969 * 4; myGLCD.print(" 0.1", 262, 110); }
 }
+
 void oscilloscope_time()   // В файл не пишет 
 {
 	uint32_t bgnBlock, endBlock;
@@ -4377,8 +4379,6 @@ void buttons_right()  //  Правые кнопки  oscilloscope
 	myGLCD.drawRoundRect(245, 90, 318, 130);
 	myGLCD.drawRoundRect(245, 135, 318, 175);
 
-
-
 	myGLCD.setBackColor( 0, 0, 255);
 	myGLCD.setColor (255, 255,255);
 
@@ -4392,20 +4392,9 @@ void buttons_right()  //  Правые кнопки  oscilloscope
 	chench_tmode(0);
 	chench_mode1(0);
 
-
 	myGLCD.print("Delay", 260, 6);
-	//myGLCD.printNumI(dTime, 280, 22);
 	myGLCD.print("Trig.", 265, 50);
-	//if (tmode == 0)myGLCD.print(" Off", 265, 65);
-	//if (tmode == 1)myGLCD.print(" 0% ", 265, 65);
-	//if (tmode == 2)myGLCD.print("50% ", 263, 65);
-	//if (tmode == 3)myGLCD.print("100%", 265, 65);
-
 	myGLCD.print("V/del.", 265, 95);
-	//if (mode1 == 0){ koeff_h = 7.759*4; myGLCD.print(" 1  ", 275, 110);}
-	//if (mode1 == 1){ koeff_h = 3.879*4; myGLCD.print("0.5 ", 275, 110);}
-	//if (mode1 == 2){ koeff_h = 1.939*4; myGLCD.print("0.25", 275, 110);}
-	//if (mode1 == 3){ koeff_h = 0.969*4; myGLCD.print("0.1 ", 275, 110);}
 
 
 	//myGLCD.setBackColor( 0, 0, 255);
@@ -4592,17 +4581,11 @@ void buttons_channel()                   // Нижние кнопки переключения
 void chench_Channel()
 {
 	//Подготовка номера аналогового сигнала, количества каналов и кода настройки АЦП
-		   Channel_x = 0;
-		   ADC_CHER = Channel_x;
-		   count_pin = 0;
-	 
-		if (Channel0 )
-			{
-				Channel_x|=0x80;
-				count_pin++;
-			}
-		 ADC_CHER = Channel_x;
-		 SAMPLES_PER_BLOCK = DATA_DIM16/count_pin;
+	Channel_x = 0;
+	count_pin = 1;
+	Channel_x|=0x80;
+	ADC_CHER = Channel_x;
+	SAMPLES_PER_BLOCK = DATA_DIM16/count_pin;
 }
 void DrawGrid()
 {

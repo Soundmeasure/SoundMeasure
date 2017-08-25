@@ -169,4 +169,8 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\SoundMeasureDUE_04\arduino_due_x\
  D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_04\libraries\DueTimer/DueTimer.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\libraries\Wire\src/Wire.h \
  C:\Users\moseichuk\AppData\Local\arduino15\packages\arduino\hardware\sam\1.6.11\system/libsam/include/twi.h \
- D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_04\libraries\ArduinoDueRTCLibrary/rtc_clock.h
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_04\libraries\ArduinoDueRTCLibrary/rtc_clock.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_04\libraries\RF24/nRF24L01.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_04\libraries\RF24/RF24.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_04\libraries\RF24/RF24_config.h \
+ D:\1\ SVN\ SoundMeasure\trunk\SoundMeasureDUE_04\libraries\RF24/printf.h

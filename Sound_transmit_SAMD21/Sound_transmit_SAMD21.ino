@@ -19,10 +19,10 @@
 
 #include <SPI.h>
 #include "RF24.h"
-#include <LCD5110_Basic.h>    // подключаем библиотеку
+//#include <LCD5110_Basic.h>    // подключаем библиотеку
 
 
-LCD5110 myGLCD(7,6,5,4,3); // объявляем номера пинов LCD
+//LCD5110 myGLCD(7,6,5,4,3); // объявляем номера пинов LCD
 
 extern uint8_t SmallFont[]; // малый шрифт (из библиотеки)
 extern uint8_t MediumNumbers[]; // средний шрифт для цифр (из библиотеки)
@@ -51,6 +51,10 @@ bool role = 0;
 void setup()
 {
 	Serial.begin(115200);
+	while (!Serial);
+	Serial.println(F("Touch Paint!"));
+
+
 	Serial.println(F("RF24/examples/GettingStarted"));
 	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
 
