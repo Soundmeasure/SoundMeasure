@@ -5,7 +5,7 @@
 
 
 
- 
+  
  */
 
 #define __SAM3X8E__
@@ -20,9 +20,9 @@
 #include <DueTimer.h>
 #include "Wire.h"
 #include <rtc_clock.h>
-#include "nRF24L01.h"
-#include "RF24.h"
-#include "printf.h"
+//#include "nRF24L01.h"
+//#include "RF24.h"
+//#include "printf.h"
 //#include <SD.h>
 
 
