@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <WORKSPACE>
  <FRAME activewindow="0">
-  <PLACEMENT>2c00000002000000030000000083ffff0083ffffffffffffffffffff63080000040000009c0e000005040000</PLACEMENT>
+  <PLACEMENT>2c00000002000000030000000083ffff0083ffffffffffffffffffff0e08000021000000470e000022040000</PLACEMENT>
   <WINDOW type="default" module="ARES"/>
   <WINDOW type="default" module="ISIS"/>
   <WINDOW type="default" module="DXP"/>
