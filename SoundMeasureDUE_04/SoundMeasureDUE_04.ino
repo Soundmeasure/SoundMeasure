@@ -20,9 +20,9 @@
 #include <DueTimer.h>
 #include "Wire.h"
 #include <rtc_clock.h>
-//#include "nRF24L01.h"
-//#include "RF24.h"
-//#include "printf.h"
+#include "nRF24L01.h"
+#include "RF24.h"
+#include "printf.h"
 //#include <SD.h>
 
 
@@ -273,21 +273,6 @@ char  txt_info30[]            = "\x89o\x97\xA4op.";
 ¬еличина кванта определ€етс€ как
 q = Uref / 2n,
 где Uref Ц опорное напр€жение ј÷ѕ, n Ц разр€дность преобразовани€ (определ€етс€ полем LOW_RES регистра ADC_MR).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
