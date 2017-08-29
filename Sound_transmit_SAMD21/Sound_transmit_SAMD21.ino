@@ -33,12 +33,23 @@
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
+#include <LCD5110_Basic.h> // подключаем библиотеку
+
+LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
+
+extern uint8_t SmallFont[]; // малый шрифт (из библиотеки)
+extern uint8_t MediumNumbers[]; // средний шрифт для цифр (из библиотеки)
+
+int seconds = 0; // счётчик секунд
+
+
+
+
 
 // Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 
-//RF24 radio(7,8);
-//RF24 radio(5,6);             // SAMD21G18A
+
 RF24 radio(10, 9);             // SAMD21G18A
-							   //RF24 radio(48,49);              // DUE
+		
 							   // Topology
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.
 
@@ -85,7 +96,7 @@ void setup() {
 
 	Serial.begin(115200);
 	delay(1000);
-	while (!Serial);
+	//while (!Serial);
 	// pinMode (ledPin, OUTPUT);
 	Serial.print("FreeRam");
 	Serial.println(FreeRam());
@@ -95,6 +106,8 @@ void setup() {
 	Serial.print(F("\n\rRF24/examples/pingpair_ack/\n\rROLE: "));
 	Serial.println(role_friendly_name[role]);
 	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
+
+	myGLCD.InitLCD(); // инициализация LCD дисплея
 
 	// Setup and configure rf radio
 
@@ -107,6 +120,19 @@ void setup() {
 	radio.openReadingPipe(1, pipes[0]);
 	radio.startListening();                 // Start listening
 	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
+
+	role = role_pong_back;                  // Become the primary receiver (pong back)
+	radio.openWritingPipe(pipes[1]);
+	radio.openReadingPipe(1, pipes[0]);
+	radio.startListening();
+
+
+	myGLCD.clrScr(); // очистка экрана
+	myGLCD.setFont(SmallFont); // задаём размер шрифта
+	//myGLCD.print("Hello,", LEFT, 0); // выводим на строке 0, равнение по левому краю  
+	//myGLCD.print("SolTau.ru :-)", CENTER, 16); // выводим в строке 16
+
+	//myGLCD.setFont(MediumNumbers); // задаём размер шрифта
 }
 
 void loop(void) {
@@ -135,79 +161,21 @@ void loop(void) {
 	//    digitalWrite(ledPin, ledState);
 	//  }
 
-
-
-	if (role == role_ping_out) {
-
-		radio.stopListening();                                  // First, stop listening so we can talk.
-
-																// printf("Now sending %d as payload. ",counter);
-		Serial.print("Now sending ");
-		Serial.print(counter);
-		Serial.println(" as payload.");
-		byte gotByte;
-		unsigned long time = micros();                          // Take the time, and send it.  This will block until complete   
-																//Called when STANDBY-I mode is engaged (User is finished sending)
-		if (!radio.write(&counter, 1)) {
-			Serial.println(F("failed."));
-		}
-		else {
-
-			if (!radio.available()) {
-				Serial.println(F("Blank Payload Received."));
-			}
-			else {
-				while (radio.available()) {
-					unsigned long tim = micros();
-					radio.read(&gotByte, 1);
-					//printf("Got response %d, round-trip delay: %lu microseconds\n\r",gotByte,tim-time);
-					Serial.print("Got response ");
-					Serial.print(gotByte);
-					Serial.print(" round-trip delay: ");
-					Serial.print(tim - time);
-					Serial.print(" microseconds\n\r");
-					counter++;
-				}
-			}
-
-		}
-		// Try again later
-		delay(1000);
-	}
-
 	// Pong back role.  Receive each packet, dump it out, and send it back
 
 	if (role == role_pong_back) {
 		byte pipeNo;
-		byte gotByte;                                       // Dump the payloads until we've gotten everything
+		byte gotByte;                                       // Dump the payloads until we've gotten everything Сбрасывайте полезную нагрузку, пока мы не получим все
 		while (radio.available(&pipeNo)) {
 			radio.read(&gotByte, 1);
 			radio.writeAckPayload(pipeNo, &gotByte, 1);
 		}
+
+		myGLCD.setFont(SmallFont); // задаём размер шрифта
+		myGLCD.print("    ", CENTER, 14); // выводим в строке 34 
+		myGLCD.print("    ", CENTER, 34); // выводим в строке 34 
+
+		//myGLCD.print(String(pipeNo), CENTER, 14); // выводим в строке 34 
+		myGLCD.print(String(gotByte), CENTER, 34); // выводим в строке 34 
 	}
-
-	// Change roles
-
-	if (Serial.available())
-	{
-		char c = toupper(Serial.read());
-		if (c == 'T' && role == role_pong_back)
-		{
-			Serial.println(F("*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK"));
-
-			role = role_ping_out;                  // Become the primary transmitter (ping out)
-			radio.openWritingPipe(pipes[0]);
-			radio.openReadingPipe(1, pipes[1]);
-		}
-		else if (c == 'R' && role == role_ping_out)
-		{
-			Serial.println(F("*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK"));
-
-			role = role_pong_back;                // Become the primary receiver (pong back)
-			radio.openWritingPipe(pipes[1]);
-			radio.openReadingPipe(1, pipes[0]);
-			radio.startListening();
-		}
-	}
-
 }
