@@ -56,20 +56,38 @@ byte resistance = 0x00;                             // Сопротивление 0x00..0xFF 
 //byte level_resist      = 0;                       // Байт считанных данных величины резистора
 //-----------------------------------------------------------------------------------------------
 
-RF24 radio(48, 49);                                                        // 
+RF24 radio(48, 49);                                                        // DUE
 
-													                       // Topology
-const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.
+unsigned long timeoutPeriod = 3000;     // Set a user-defined timeout period. With auto-retransmit set to (15,15) retransmission will take up to 60ms and as little as 7.5ms with it set to (1,15).
+										// With a timeout period of 1000, the radio will retry each payload for up to 1 second before giving up on the transmission and starting over
+
+										/***************************************************************/
+
+const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };   // Radio pipe addresses for the 2 nodes to communicate.
+
+byte data[32];                           //Data buffer
+
+volatile unsigned long counter;
+unsigned long rxTimer, startTime, stopTime, payloads = 0;
+bool TX = 1, RX = 0, role = 0, transferInProgress = 0;
+
+
+																		   
+// Topology
+//const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.
 
 																		   // Role management: Set up role.  This sketch uses the same software for all the nodes
 																		   // in this system.  Doing so greatly simplifies testing.  
 
 typedef enum { role_ping_out = 1, role_pong_back } role_e;                 // The various roles supported by this sketch
-const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back" }; // The debug-friendly names of those roles
-role_e role = role_pong_back;                                              // The role of the current running sketch
+const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back" };  // The debug-friendly names of those roles
+role_e role_test = role_pong_back;                                              // The role of the current running sketch
 
 																		   // A single byte to keep track of the data being sent back and forth
-byte counter = 1;
+byte counter_test = 1;
+
+const char str[] = "My very long string";
+extern "C" char *sbrk(int i);
 
 //+++++++++++++++++++++++ SD info ++++++++++++++++++++++++++
 SdFile file;
@@ -77,7 +95,6 @@ File root;
 SdFat sd;
 SdBaseFile binFile;
 Sd2Card card;
-
 
 //*********************Работа с именем файла ******************************
 char file_name[13] ;
@@ -195,24 +212,30 @@ int hh,mm,ss,dow,dd,mon,yyyy;
  //***************** Назначение переменных для хранения текстов*****************************************************
 
 char  txt_menu1_1[]          = "PE\x81\x86""CTPATOP";                                                       // "РЕГИСТРАТОР"
-char  txt_menu1_2[]          = "CAMO\x89\x86""CE\x8C";                                                      // "САМОПИСЕЦ"
+char  txt_menu1_2[]          = "HACTPO""\x87""KA";                                                      // "САМОПИСЕЦ"
 char  txt_menu1_3[]          = "PE\x81\x86""CT.+ CAMO\x89.";                                                // "РЕГИСТ. + САМОП."
 char  txt_menu1_4[]          = "PA\x80OTA c SD";                                                            // "РАБОТА с SD"
 
 char  txt_ADC_menu1[]        = "\x85""a\xA3\x9D""c\xAC \x99""a\xA2\xA2\xABx";                               //
 char  txt_ADC_menu2[]        = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                      //
 char  txt_ADC_menu3[]        = "\x89""epe\x99""a\xA7""a \x97 KOM";                                          //
-char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                               //
+char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                               // Выход                                                              //
 
 char  txt_osc_menu1[]        = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                             //
 char  txt_osc_menu2[]        = "Oc\xA6\x9D\xA0\xA0.1-18\xA1\x9D\xA2";                                       //
-char  txt_osc_menu3[]        = "O\xA8\x9d\x96\x9F\x9D";                                                     //
-char  txt_osc_menu4[]        = "B\x91XO\x82";           
+char  txt_osc_menu3[]        = "PA""\x82\x86""O";                                                           // Радио
+char  txt_osc_menu4[]        = "B\x91XO\x82";                                                               // Выход          
 
 char  txt_SD_menu1[]         = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                      //
 char  txt_SD_menu2[]         = "\x86\xA2\xA5o SD";                                                          //
 char  txt_SD_menu3[]         = "\x8Bop\xA1""a\xA4 SD";                                                      //
-char  txt_SD_menu4[]         = "B\x91XO\x82";           
+char  txt_SD_menu4[]         = "B\x91XO\x82";                                                              // Выход         
+
+char  txt_radio_menu1[]      = "Test ping";                                                                //
+char  txt_radio_menu2[]      = "Test transfer";                                                                        //
+char  txt_radio_menu3[]      = " ";                                                                        //  
+char  txt_radio_menu4[]      = "B\x91XO\x82";                                                              // Выход
+
 
 char  txt_info6[]             = "Info: ";                                                                   //Info: 
 char  txt_info7[]             = "Writing:"; 
@@ -2533,7 +2556,7 @@ void swichMenu() // Тексты меню в строках "txt....."
 	
 				   //*****************  Меню №1  **************
 
-				   if (pressed_button==but1)
+				   if (pressed_button==but1)      // Регистратор
 					   {
 							 Draw_menu_ADC1();
 							 menu_ADC();
@@ -2541,7 +2564,7 @@ void swichMenu() // Тексты меню в строках "txt....."
 							 myButtons.drawButtons();;
 					   }
 	  
-				   if (pressed_button==but2)
+				   if (pressed_button==but2)     // Настройка
 					   {
 							Draw_menu_Osc();
 							menu_Oscilloscope();
@@ -2549,13 +2572,13 @@ void swichMenu() // Тексты меню в строках "txt....."
 							myButtons.drawButtons();
 					   }
 	  
-				   if (pressed_button==but3)
+				   if (pressed_button==but3)     // Регистратор + самописец
 					   {
 							oscilloscope_file();
 							myGLCD.clrScr();
 							myButtons.drawButtons();
 					   }
-				   if (pressed_button==but4)
+				   if (pressed_button==but4)    // Работа с SD
 					   {
 							Draw_menu_SD();
 							menu_SD();
@@ -2625,7 +2648,7 @@ void menu_Oscilloscope()   // Меню "Осциллоскопа", вызывается из меню "Самописец
 						{
 							waitForIt(30, 120, 290, 160);
 							myGLCD.clrScr();
-							checkOverrun();
+							menu_radio();
 							Draw_menu_Osc();
 						}
 					if ((y>=170) && (y<=220))  // Button: 4 "EXIT" Выход
@@ -6273,84 +6296,373 @@ void setup_resistor()
 }
 
 //------------------------------------------------------------------------------
+  
+
+void Draw_menu_Radio()
+{
+	myGLCD.clrScr();
+	myGLCD.setFont(BigFont);
+	myGLCD.setBackColor(0, 0, 255);
+	for (int x = 0; x<4; x++)
+	{
+		myGLCD.setColor(0, 0, 255);
+		myGLCD.fillRoundRect(30, 20 + (50 * x), 290, 60 + (50 * x));
+		myGLCD.setColor(255, 255, 255);
+		myGLCD.drawRoundRect(30, 20 + (50 * x), 290, 60 + (50 * x));
+	}
+	myGLCD.print(txt_radio_menu1, CENTER, 30);     // 
+	myGLCD.print(txt_radio_menu2, CENTER, 80);
+	myGLCD.print(txt_radio_menu3, CENTER, 130);
+	myGLCD.print(txt_radio_menu4, CENTER, 180);
+}
+
+void menu_radio()   // Меню "Осциллоскопа", вызывается из меню "Самописец"
+{
+	Draw_menu_Radio();
+	while (true)
+	{
+		delay(10);
+		if (myTouch.dataAvailable())
+		{
+			myTouch.read();
+			int	x = myTouch.getX();
+			int	y = myTouch.getY();
+
+			if ((x >= 30) && (x <= 290))       // 
+			{
+				if ((y >= 20) && (y <= 60))    // Button: 1  "Oscilloscope"
+				{
+					waitForIt(30, 20, 290, 60);
+					myGLCD.clrScr();
+					radio_test();
+					Draw_menu_Radio();
+				}
+				if ((y >= 70) && (y <= 110))   // Button: 2 "Oscill_Time"
+				{
+					waitForIt(30, 70, 290, 110);
+					myGLCD.clrScr();
+					radio_transfer();
+					Draw_menu_Radio();
+				}
+				if ((y >= 120) && (y <= 160))  // Button: 3 "checkOverrun"  Проверка ошибок
+				{
+					waitForIt(30, 120, 290, 160);
+					myGLCD.clrScr();
+					//radio_test();
+					Draw_menu_Radio();
+				}
+				if ((y >= 170) && (y <= 220))  // Button: 4 "EXIT" Выход
+				{
+					waitForIt(30, 170, 290, 210);
+					break;
+				}
+			}
+		}
+	}
+
+}
+
+
 
 void radio_test()
 {
+	myGLCD.clrScr();
+	Serial.println(F("Test ping."));
+	myGLCD.setFont(BigFont);
+	myGLCD.setBackColor(0, 0, 0);
+//	myGLCD.setColor(255, 255, 255);
+	myGLCD.setColor(VGA_YELLOW);
+	myGLCD.print("TEST PING", CENTER, 10);
+	myGLCD.print(txt_info11, CENTER, 221);            // Кнопка "ESC -> PUSH"
+	myGLCD.setBackColor(0, 0, 0);
+	while(1)
+	{
+		if (myTouch.dataAvailable())
+		{
+			delay(10);
+			myTouch.read();
+			x_osc = myTouch.getX();
+			y_osc = myTouch.getY();
 
-	if (role == role_ping_out) {
-
-		radio.stopListening();                                  // First, stop listening so we can talk.
-		//printf("Now sending %d as payload. ", counter);
-		Serial.print("Now sending ");
-		Serial.print(counter);
-		Serial.println(" as payload.");
-
-		byte gotByte;
-		unsigned long time = micros();                          // Take the time, and send it.  This will block until complete   
-																//Called when STANDBY-I mode is engaged (User is finished sending)
-		if (!radio.write(&counter, 1)) {
-			Serial.println(F("failed."));
-		}
-		else {
-
-			if (!radio.available()) {
-				Serial.println(F("Blank Payload Received."));
-			}
-			else {
-				while (radio.available()) {
-					unsigned long tim = micros();
-					radio.read(&gotByte, 1);
-					//printf("Got response %d, round-trip delay: %lu microseconds\n\r", gotByte, tim - time);
-					Serial.print("Got response ");
-					Serial.print(gotByte);
-					Serial.print(" round-trip delay: ");
-					Serial.print(tim - time);
-					Serial.print(" microseconds\n\r");
-					counter++;
+			if ((x_osc >= 2) && (x_osc <= 319))               //  Область экрана
+			{
+				if ((y_osc >= 1) && (y_osc <= 239))           // Delay row
+				{
+					break;
 				}
 			}
-
 		}
-		// Try again later
-		delay(1000);
-	}
+		if (role_test == role_ping_out) {
 
-	// Pong back role.  Receive each packet, dump it out, and send it back
+			radio.stopListening();                                  // First, stop listening so we can talk.
+			//printf("Now sending %d as payload. ", counter);
+			Serial.print("Now sending ");
+			Serial.print(counter_test);
+			Serial.println(" as payload.");
+			myGLCD.print("Sending", 1, 40);
+			myGLCD.print("    ", 125, 40);
+			myGLCD.setColor(VGA_LIME);
+			if (counter_test<10)
+			{
+				myGLCD.printNumI(counter_test, 155, 40);
+			}
+			else if (counter_test>9 && counter_test<100)
+			{
+				myGLCD.printNumI(counter_test, 155-16, 40);
+			}
+			else if (counter_test > 99)
+			{
+				myGLCD.printNumI(counter_test, 155 - 32, 40);
+			}
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.print("payload", 178, 40);
 
-	if (role == role_pong_back) {
-		byte pipeNo;
-		byte gotByte;                                       // Dump the payloads until we've gotten everything
-		while (radio.available(&pipeNo)) {
-			radio.read(&gotByte, 1);
-			radio.writeAckPayload(pipeNo, &gotByte, 1);
+			byte gotByte;
+			unsigned long time = micros();                          // Take the time, and send it.  This will block until complete   
+																	//Called when STANDBY-I mode is engaged (User is finished sending)
+			if (!radio.write(&counter_test, 1)) {
+				Serial.println(F("failed."));
+			}
+			else {
+
+				if (!radio.available()) {
+					Serial.println(F("Blank Payload Received."));
+				}
+				else {
+					while (radio.available()) {
+						unsigned long tim = micros();
+						radio.read(&gotByte, 1);
+
+						Serial.print("Got response ");
+						Serial.print(gotByte);
+						Serial.print(" round-trip delay: ");
+						Serial.print(tim - time);
+						Serial.print(" microseconds\n\r");
+
+						myGLCD.print("Respons", 1, 60);
+						myGLCD.print("    ", 125, 60);
+						myGLCD.setColor(VGA_LIME);
+						if (gotByte<10)
+						{
+							myGLCD.printNumI(gotByte, 155, 60);
+						}
+						else if(gotByte>9&& gotByte<100)
+						{
+							myGLCD.printNumI(gotByte, 155-16, 60);
+						}
+						else if (gotByte > 99)
+						{
+							myGLCD.printNumI(gotByte, 155-32, 60);
+						}
+						myGLCD.setColor(255, 255, 255);
+						myGLCD.print("round", 178, 60);
+
+						myGLCD.print("Delay: ", 1, 80);
+						myGLCD.print("     ", 100, 80);
+						myGLCD.setColor(VGA_LIME);
+						if (tim - time<999)
+						{
+							myGLCD.printNumI(tim - time, 155-32, 80);
+						}
+						else 
+						{
+							myGLCD.printNumI(tim - time, 155-48, 80);
+						}
+						myGLCD.setColor(255, 255, 255);
+						myGLCD.print("microsec", 178, 80);
+						counter_test++;
+					}
+				}
+
+			}
+			// Try again later
+			delay(300);
 		}
 	}
-
-	// Change roles
-
-	/*if (Serial.available())
-	{
-		char c = toupper(Serial.read());
-		if (c == 'T' && role == role_pong_back)
-		{
-			Serial.println(F("*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK"));*/
-
-			//role = role_ping_out;                  // Become the primary transmitter (ping out)
-			//radio.openWritingPipe(pipes[0]);
-			//radio.openReadingPipe(1, pipes[1]);
-	//	}
-	//	else if (c == 'R' && role == role_ping_out)
-	//	{
-	//		Serial.println(F("*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK"));
-
-	//		role = role_pong_back;                // Become the primary receiver (pong back)
-	//		radio.openWritingPipe(pipes[1]);
-	//		radio.openReadingPipe(1, pipes[0]);
-	//		radio.startListening();
-	//	}
-	//}
-
+	while(!myTouch.dataAvailable()){}
+	delay(50);
+	while(myTouch.dataAvailable()){}
 }
+
+void radio_transfer()
+{
+
+	myGLCD.clrScr();
+	Serial.println(F("Test transfer."));
+	myGLCD.setFont(BigFont);
+	myGLCD.setBackColor(0, 0, 0);
+	//	myGLCD.setColor(255, 255, 255);
+	myGLCD.setColor(VGA_YELLOW);
+	myGLCD.print("TEST TRANSFER", CENTER, 10);
+	myGLCD.print(txt_info11, CENTER, 221);            // Кнопка "ESC -> PUSH"
+	myGLCD.setBackColor(0, 0, 0);
+
+	while (1)
+	{
+		if (myTouch.dataAvailable())
+		{
+			delay(10);
+			myTouch.read();
+			x_osc = myTouch.getX();
+			y_osc = myTouch.getY();
+
+			if ((x_osc >= 2) && (x_osc <= 319))               //  Область экрана
+			{
+				if ((y_osc >= 1) && (y_osc <= 239))           // Delay row
+				{
+					break;
+				}
+			}
+		}
+
+		if (role == TX) {
+			delay(2000);                                              // Pause for a couple seconds between transfers    
+			//printf("Initiating Extended Timeout Data Transfer\n\r");
+
+			unsigned long cycles = 1000;                              // Change this to a higher or lower number. This is the number of payloads that will be sent.   
+
+			unsigned long transferCMD[] = { 'H','S',cycles };          // Indicate to the other radio that we are starting, and provide the number of payloads that will be sent 
+			radio.writeFast(&transferCMD, 12);                         // Send the transfer command
+			if (radio.txStandBy(timeoutPeriod)) {                       // If transfer initiation was successful, do the following
+
+				startTime = millis();                                 // For calculating transfer rate
+				boolean timedOut = 0;                                 // Boolean for keeping track of failures
+
+				for (int i = 0; i < cycles; i++) {                          // Loop through a number of cycles
+					data[0] = i;                                        // Change the first byte of the payload for identification
+
+					if (!radio.writeBlocking(&data, 32, timeoutPeriod)) {   // If retries are failing and the user defined timeout is exceeded
+						timedOut = 1;                                   // Indicate failure
+						counter = cycles;                               // Set the fail count to maximum
+						break;                                          // Break out of the for loop
+					}
+				}
+
+				stopTime = millis();                                  // Capture the time of completion or failure
+
+																	  //This should be called to wait for completion and put the radio in standby mode after transmission, returns 0 if data still in FIFO (timed out), 1 if success
+				if (timedOut) { radio.txStandBy(); }                     //Partially blocking standby, blocks until success or max retries. FIFO flushed if auto timeout reached
+				else { radio.txStandBy(timeoutPeriod); }            //Standby, block until FIFO empty (sent) or user specified timeout reached. FIFO flushed if user timeout reached.
+
+			}
+			else {
+				Serial.println("Communication not established");       //Связь не установлена If unsuccessful initiating transfer, exit and retry later
+			}
+
+			float rate = cycles * 32 / (stopTime - startTime);         //Display results:
+
+			Serial.print("Transfer complete at "); Serial.print(rate); //printf(" KB/s \n\r");
+			Serial.print(counter);
+			Serial.print(" of ");
+			Serial.print(cycles); Serial.println(" Packets Failed to Send");
+			counter = 0;
+
+		}
+
+/*
+		if (role == RX) {
+
+			if (!transferInProgress) {                       // If a bulk data transfer has not been started
+				if (radio.available()) {
+					radio.read(&data, 32);                    //Read any available payloads for analysis
+
+					if (data[0] == 'H' && data[4] == 'S') {    // If a bulk data transfer command has been received
+						payloads = data[8];                    // Read the first two bytes of the unsigned long. Need to read the 3rd and 4th if sending more than 65535 payloads
+						payloads |= data[9] << 8;              // This is the number of payloads that will be sent
+						counter = 0;                           // Reset the payload counter to 0
+						transferInProgress = 1;                // Indicate it has started
+						startTime = rxTimer = millis();        // Capture the start time to measure transfer rate and calculate timeouts
+					}
+				}
+			}
+			else {
+				if (radio.available()) {                     // If in bulk transfer mode, and a payload is available
+					radio.read(&data, 32);                    // Read the payload
+					rxTimer = millis();                      // Reset the timeout timer
+					counter++;                               // Keep a count of received payloads
+				}
+				else
+					if (millis() - rxTimer > timeoutPeriod) {    // If no data available, check the timeout period
+						Serial.println("Transfer Failed");       // If per-payload timeout exceeeded, end the transfer
+						transferInProgress = 0;
+					}
+					else
+						if (counter >= payloads) {                   // If the specified number of payloads is reached, transfer is completed
+							startTime = millis() - startTime;         // Calculate the total time spent during transfer
+							float numBytes = counter * 32;              // Calculate the number of bytes transferred
+							Serial.print("Rate: ");                   // Print the transfer rate and number of payloads
+							Serial.print(numBytes / startTime);
+							Serial.println(" KB/s");
+							//printf("Payload Count: %d \n\r", counter);
+							transferInProgress = 0;                   // End the transfer as complete
+						}
+			}
+		}
+		*/
+		//
+		// Change roles
+		//
+		/*
+		if (Serial.available())
+		{
+			char c = toupper(Serial.read());
+			if (c == 'T' && role == RX)
+			{
+				//printf("*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK\n\r");
+				radio.openWritingPipe(pipes[1]);
+				radio.openReadingPipe(1, pipes[0]);
+				radio.stopListening();
+				role = TX;                  // Become the primary transmitter (ping out)
+			}
+			else if (c == 'R' && role == TX)
+			{
+				radio.openWritingPipe(pipes[0]);
+				radio.openReadingPipe(1, pipes[1]);
+				radio.startListening();
+				//printf("*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK\n\r");
+				role = RX;                // Become the primary receiver (pong back)
+			}
+		}
+		*/
+	}
+	while (!myTouch.dataAvailable()) {}
+	delay(50);
+	while (myTouch.dataAvailable()) {}
+}
+
+
+void setup_radio()
+{
+	radio.begin();                           // Setup and configure rf radio
+	radio.setChannel(1);                     // Set the channel
+	radio.setPALevel(RF24_PA_LOW);           // Set PA LOW for this demonstration. We want the radio to be as lossy as possible for this example.
+	radio.setDataRate(RF24_1MBPS);           // Raise the data rate to reduce transmission distance and increase lossiness
+	radio.setAutoAck(1);                     // Ensure autoACK is enabled
+	radio.setRetries(2, 15);                 // Optionally, increase the delay between retries. Want the number of auto-retries as high as possible (15)
+	radio.setCRCLength(RF24_CRC_16);         // Set CRC length to 16-bit to ensure quality of data
+	radio.openWritingPipe(pipes[0]);         // Open the default reading and writing pipe
+	radio.openReadingPipe(1, pipes[1]);
+
+	radio.startListening();                 // Start listening
+	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
+
+	//printf("\n\rRF24/examples/Transfer Rates/\n\r");
+	//printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
+
+	radio.openWritingPipe(pipes[1]);
+	radio.openReadingPipe(1, pipes[0]);
+	radio.stopListening();
+	role = TX;                                 // Become the primary transmitter (ping out)
+
+	randomSeed(analogRead(0));              //Seed for random number generation  
+	for (int i = 0; i<32; i++) {
+		data[i] = random(255);               //Load the buffer with random data
+	}
+//	radio.powerUp();                        //Power up the radio
+}
+
+
+
 
 //+++++++++++++++++++++++  Настройки ADC DMA +++++++++++++++++++++++++++++++++++++
 
@@ -6430,25 +6742,30 @@ void setup(void)
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
 
-	Serial.print(F("\n\rRF24/examples/pingpair_ack/\n\rROLE: "));
-	Serial.println(role_friendly_name[role]);
-	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
+
+	setup_radio();
+	//Serial.print(F("\n\rRF24/examples/pingpair_ack/\n\rROLE: "));
+	//Serial.println(role_friendly_name[role]);
+	//Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
 
 	// Setup and configure rf radio
-
+/*
 	radio.begin();
 	radio.setAutoAck(1);                    // Ensure autoACK is enabled
 	radio.enableAckPayload();               // Allow optional ack payloads
 	radio.setRetries(0, 15);                // Smallest time between retries, max no. of retries
 	radio.setPayloadSize(1);                // Here we are sending 1-byte payloads to test the call-response speed
-	radio.openWritingPipe(pipes[1]);        // Both radios listen on the same pipes by default, and switch when writing
-	radio.openReadingPipe(1, pipes[0]);
-	radio.startListening();                 // Start listening
-	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
-
-	role = role_ping_out;                  // Become the primary transmitter (ping out)
+	role = role_ping_out;                   // Become the primary transmitter (ping out)
 	radio.openWritingPipe(pipes[0]);
 	radio.openReadingPipe(1, pipes[1]);
+	//radio.openWritingPipe(pipes[1]);        // Both radios listen on the same pipes by default, and switch when writing
+	//radio.openReadingPipe(1, pipes[0]);
+	radio.startListening();                 // Start listening
+	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
+	*/
+	//role = role_ping_out;                  // Become the primary transmitter (ping out)
+	//radio.openWritingPipe(pipes[0]);
+	//radio.openReadingPipe(1, pipes[1]);
 
 	Serial.println(F("Setup Ok!"));
 }
@@ -6456,11 +6773,8 @@ void setup(void)
 //------------------------------------------------------------------------------
 void loop(void) 
 {
-
-	radio_test();
-
-	//draw_Glav_Menu();
-	//swichMenu();
+	draw_Glav_Menu();
+	swichMenu();
 }
 
 

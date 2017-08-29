@@ -33,7 +33,8 @@
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
-#include <LCD5110_Basic.h> // подключаем библиотеку
+//#include <LCD5110_Basic.h> // подключаем библиотеку
+#include <LCD5110_Graph.h>
 
 LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
 
@@ -171,11 +172,12 @@ void loop(void) {
 			radio.writeAckPayload(pipeNo, &gotByte, 1);
 		}
 
-		myGLCD.setFont(SmallFont); // задаём размер шрифта
-		myGLCD.print("    ", CENTER, 14); // выводим в строке 34 
+		//myGLCD.setFont(SmallFont); // задаём размер шрифта
+		//myGLCD.print("    ", CENTER, 14); // выводим в строке 34 
 		myGLCD.print("    ", CENTER, 34); // выводим в строке 34 
 
 		//myGLCD.print(String(pipeNo), CENTER, 14); // выводим в строке 34 
 		myGLCD.print(String(gotByte), CENTER, 34); // выводим в строке 34 
+		myGLCD.update();
 	}
 }
