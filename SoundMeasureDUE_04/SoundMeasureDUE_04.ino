@@ -233,7 +233,7 @@ char  txt_SD_menu4[]         = "B\x91XO\x82";                                   
 
 char  txt_radio_menu1[]      = "Test ping";                                                                //
 char  txt_radio_menu2[]      = "Test transfer";                                                                        //
-char  txt_radio_menu3[]      = " ";                                                                        //  
+char  txt_radio_menu3[]      = "Radio TX";                                                                        //  
 char  txt_radio_menu4[]      = "B\x91XO\x82";                                                              // Выход
 
 
@@ -6348,7 +6348,7 @@ void menu_radio()   // Меню "Осциллоскопа", вызывается из меню "Самописец"
 				{
 					waitForIt(30, 120, 290, 160);
 					myGLCD.clrScr();
-					//radio_test();
+					radio_TX();
 					Draw_menu_Radio();
 				}
 				if ((y >= 170) && (y <= 220))  // Button: 4 "EXIT" Выход
@@ -6484,9 +6484,8 @@ void radio_test()
 	while(myTouch.dataAvailable()){}
 }
 
-void radio_transfer()
+void radio_transfer()       // test transfer
 {
-
 	myGLCD.clrScr();
 	Serial.println(F("Test transfer."));
 	myGLCD.setFont(BigFont);
@@ -6497,6 +6496,79 @@ void radio_transfer()
 	myGLCD.print(txt_info11, CENTER, 221);            // Кнопка "ESC -> PUSH"
 	myGLCD.setBackColor(0, 0, 0);
 
+	Serial.println(F("Initiating Basic Data Transfer"));
+	unsigned long cycles = 10; //Change this to a higher or lower number. 
+	bool test_exit = false;
+
+	for (int i = 0; i<32; i++) 
+	{
+		data[i] = random(255);               //Load the buffer with random data
+	}
+	Serial.println(F("Random Data save"));
+	while (1)
+	{
+		if (test_exit) break;
+		startTime = millis();
+		unsigned long pauseTime = millis();
+
+		for (int i = 0; i<cycles; i++) 
+		{   
+			
+			if (myTouch.dataAvailable())
+			{
+				test_exit = true;
+				while (myTouch.dataAvailable()) {}
+
+			}
+			//Loop through a number of cycles
+			data[0] = i;                            //Change the first byte of the payload for identification
+			if (!radio.writeFast(&data, 32)) 
+			{      //Write to the FIFO buffers        
+				counter++;                          //Keep count of failed payloads
+			}
+			myGLCD.printNumI(counter, 155, 40);
+			//This is only required when NO ACK ( enableAutoAck(0) ) payloads are used
+			//      if(millis() - pauseTime > 3){
+			//        pauseTime = millis();
+			//        radio.txStandBy();          // Need to drop out of TX mode every 4ms if sending a steady stream of multicast data
+			//        //delayMicroseconds(130);     // This gives the PLL time to sync back up   
+			//      }
+			if (test_exit) return;
+		}
+
+		stopTime = millis();
+		//This should be called to wait for completion and put the radio in standby mode after transmission, returns 0 if data still in FIFO (timed out), 1 if success
+		if (!radio.txStandBy()) { counter += 3; } //Standby, block only until FIFO empty or auto-retry timeout. Flush TX FIFO if failed
+												  //radio.txStandBy(1000);              //Standby, using extended timeout period of 1 second
+
+		float numBytes = cycles * 32;
+		float rate = numBytes / (stopTime - startTime);
+
+		Serial.print("Transfer complete at "); Serial.print(rate); Serial.println(" KB/s");
+		myGLCD.print("Transfer complete ", CENTER, 60);            //  
+		myGLCD.printNumI(rate, CENTER, 80);
+
+		Serial.print(counter); Serial.print(" of "); Serial.print(cycles); Serial.println(" Packets Failed to Send");
+		counter = 0;
+		if(!test_exit) delay(1000); //break;
+	}
+
+	//while (!myTouch.dataAvailable()) {}
+	//delay(50);
+	//while (myTouch.dataAvailable()) {}
+}
+
+void radio_TX()
+{
+	myGLCD.clrScr();
+	Serial.println(F("Test ping."));
+	myGLCD.setFont(BigFont);
+	myGLCD.setBackColor(0, 0, 0);
+	//	myGLCD.setColor(255, 255, 255);
+	myGLCD.setColor(VGA_YELLOW);
+	myGLCD.print("TEST PING", CENTER, 10);
+	myGLCD.print(txt_info11, CENTER, 221);            // Кнопка "ESC -> PUSH"
+	myGLCD.setBackColor(0, 0, 0);
 	while (1)
 	{
 		if (myTouch.dataAvailable())
@@ -6514,116 +6586,93 @@ void radio_transfer()
 				}
 			}
 		}
-
-		if (role == TX) {
-			delay(2000);                                              // Pause for a couple seconds between transfers    
-			//printf("Initiating Extended Timeout Data Transfer\n\r");
-
-			unsigned long cycles = 1000;                              // Change this to a higher or lower number. This is the number of payloads that will be sent.   
-
-			unsigned long transferCMD[] = { 'H','S',cycles };          // Indicate to the other radio that we are starting, and provide the number of payloads that will be sent 
-			radio.writeFast(&transferCMD, 12);                         // Send the transfer command
-			if (radio.txStandBy(timeoutPeriod)) {                       // If transfer initiation was successful, do the following
-
-				startTime = millis();                                 // For calculating transfer rate
-				boolean timedOut = 0;                                 // Boolean for keeping track of failures
-
-				for (int i = 0; i < cycles; i++) {                          // Loop through a number of cycles
-					data[0] = i;                                        // Change the first byte of the payload for identification
-
-					if (!radio.writeBlocking(&data, 32, timeoutPeriod)) {   // If retries are failing and the user defined timeout is exceeded
-						timedOut = 1;                                   // Indicate failure
-						counter = cycles;                               // Set the fail count to maximum
-						break;                                          // Break out of the for loop
-					}
-				}
-
-				stopTime = millis();                                  // Capture the time of completion or failure
-
-																	  //This should be called to wait for completion and put the radio in standby mode after transmission, returns 0 if data still in FIFO (timed out), 1 if success
-				if (timedOut) { radio.txStandBy(); }                     //Partially blocking standby, blocks until success or max retries. FIFO flushed if auto timeout reached
-				else { radio.txStandBy(timeoutPeriod); }            //Standby, block until FIFO empty (sent) or user specified timeout reached. FIFO flushed if user timeout reached.
-
+			radio.stopListening();                                  // First, stop listening so we can talk.
+															
+			Serial.print("Now sending ");
+			Serial.print(counter_test);
+			Serial.println(" as payload.");
+			myGLCD.print("Sending", 1, 40);
+			myGLCD.print("    ", 125, 40);
+			myGLCD.setColor(VGA_LIME);
+			if (counter_test<10)
+			{
+				myGLCD.printNumI(counter_test, 155, 40);
 			}
-			else {
-				Serial.println("Communication not established");       //Связь не установлена If unsuccessful initiating transfer, exit and retry later
+			else if (counter_test>9 && counter_test<100)
+			{
+				myGLCD.printNumI(counter_test, 155 - 16, 40);
 			}
-
-			float rate = cycles * 32 / (stopTime - startTime);         //Display results:
-
-			Serial.print("Transfer complete at "); Serial.print(rate); //printf(" KB/s \n\r");
-			Serial.print(counter);
-			Serial.print(" of ");
-			Serial.print(cycles); Serial.println(" Packets Failed to Send");
-			counter = 0;
-
-		}
-
-/*
-		if (role == RX) {
-
-			if (!transferInProgress) {                       // If a bulk data transfer has not been started
-				if (radio.available()) {
-					radio.read(&data, 32);                    //Read any available payloads for analysis
-
-					if (data[0] == 'H' && data[4] == 'S') {    // If a bulk data transfer command has been received
-						payloads = data[8];                    // Read the first two bytes of the unsigned long. Need to read the 3rd and 4th if sending more than 65535 payloads
-						payloads |= data[9] << 8;              // This is the number of payloads that will be sent
-						counter = 0;                           // Reset the payload counter to 0
-						transferInProgress = 1;                // Indicate it has started
-						startTime = rxTimer = millis();        // Capture the start time to measure transfer rate and calculate timeouts
-					}
-				}
+			else if (counter_test > 99)
+			{
+				myGLCD.printNumI(counter_test, 155 - 32, 40);
 			}
-			else {
-				if (radio.available()) {                     // If in bulk transfer mode, and a payload is available
-					radio.read(&data, 32);                    // Read the payload
-					rxTimer = millis();                      // Reset the timeout timer
-					counter++;                               // Keep a count of received payloads
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.print("payload", 178, 40);
+
+			byte gotByte;
+			unsigned long time = micros();                          // Take the time, and send it.  This will block until complete   
+																	//Called when STANDBY-I mode is engaged (User is finished sending)
+			if (!radio.write(&counter_test, 1))
+			{
+				Serial.println(F("failed."));
+			}
+			else 
+			{
+				if (!radio.available()) 
+				{
+					Serial.println(F("Blank Payload Received."));
 				}
-				else
-					if (millis() - rxTimer > timeoutPeriod) {    // If no data available, check the timeout period
-						Serial.println("Transfer Failed");       // If per-payload timeout exceeeded, end the transfer
-						transferInProgress = 0;
-					}
-					else
-						if (counter >= payloads) {                   // If the specified number of payloads is reached, transfer is completed
-							startTime = millis() - startTime;         // Calculate the total time spent during transfer
-							float numBytes = counter * 32;              // Calculate the number of bytes transferred
-							Serial.print("Rate: ");                   // Print the transfer rate and number of payloads
-							Serial.print(numBytes / startTime);
-							Serial.println(" KB/s");
-							//printf("Payload Count: %d \n\r", counter);
-							transferInProgress = 0;                   // End the transfer as complete
+				else 
+				{
+					while (radio.available()) 
+					{
+						unsigned long tim = micros();
+						radio.read(&gotByte, 1);
+
+						Serial.print("Got response ");
+						Serial.print(gotByte);
+						Serial.print(" round-trip delay: ");
+						Serial.print(tim - time);
+						Serial.print(" microseconds\n\r");
+
+						myGLCD.print("Respons", 1, 60);
+						myGLCD.print("    ", 125, 60);
+						myGLCD.setColor(VGA_LIME);
+						if (gotByte<10)
+						{
+							myGLCD.printNumI(gotByte, 155, 60);
 						}
+						else if (gotByte>9 && gotByte<100)
+						{
+							myGLCD.printNumI(gotByte, 155 - 16, 60);
+						}
+						else if (gotByte > 99)
+						{
+							myGLCD.printNumI(gotByte, 155 - 32, 60);
+						}
+						myGLCD.setColor(255, 255, 255);
+						myGLCD.print("round", 178, 60);
+
+						myGLCD.print("Delay: ", 1, 80);
+						myGLCD.print("     ", 100, 80);
+						myGLCD.setColor(VGA_LIME);
+						if (tim - time<999)
+						{
+							myGLCD.printNumI(tim - time, 155 - 32, 80);
+						}
+						else
+						{
+							myGLCD.printNumI(tim - time, 155 - 48, 80);
+						}
+						myGLCD.setColor(255, 255, 255);
+						myGLCD.print("microsec", 178, 80);
+						counter_test++;
+					}
+				}
+
 			}
-		}
-		*/
-		//
-		// Change roles
-		//
-		/*
-		if (Serial.available())
-		{
-			char c = toupper(Serial.read());
-			if (c == 'T' && role == RX)
-			{
-				//printf("*** CHANGING TO TRANSMIT ROLE -- PRESS 'R' TO SWITCH BACK\n\r");
-				radio.openWritingPipe(pipes[1]);
-				radio.openReadingPipe(1, pipes[0]);
-				radio.stopListening();
-				role = TX;                  // Become the primary transmitter (ping out)
-			}
-			else if (c == 'R' && role == TX)
-			{
-				radio.openWritingPipe(pipes[0]);
-				radio.openReadingPipe(1, pipes[1]);
-				radio.startListening();
-				//printf("*** CHANGING TO RECEIVE ROLE -- PRESS 'T' TO SWITCH BACK\n\r");
-				role = RX;                // Become the primary receiver (pong back)
-			}
-		}
-		*/
+			// Try again later
+			delay(300);
 	}
 	while (!myTouch.dataAvailable()) {}
 	delay(50);
@@ -6631,34 +6680,32 @@ void radio_transfer()
 }
 
 
+
+
 void setup_radio()
 {
 	radio.begin();                           // Setup and configure rf radio
-	radio.setChannel(1);                     // Set the channel
-	radio.setPALevel(RF24_PA_LOW);           // Set PA LOW for this demonstration. We want the radio to be as lossy as possible for this example.
-	radio.setDataRate(RF24_1MBPS);           // Raise the data rate to reduce transmission distance and increase lossiness
+	radio.setChannel(1);
+	radio.setPALevel(RF24_PA_MAX);
+	//radio.setPALevel(RF24_PA_LOW);           // Set PA LOW for this demonstration. We want the radio to be as lossy as possible for this example.
+	radio.setDataRate(RF24_1MBPS);
 	radio.setAutoAck(1);                     // Ensure autoACK is enabled
-	radio.setRetries(2, 15);                 // Optionally, increase the delay between retries. Want the number of auto-retries as high as possible (15)
-	radio.setCRCLength(RF24_CRC_16);         // Set CRC length to 16-bit to ensure quality of data
-	radio.openWritingPipe(pipes[0]);         // Open the default reading and writing pipe
-	radio.openReadingPipe(1, pipes[1]);
+	radio.setRetries(2, 15);                  // Optionally, increase the delay between retries & # of retries
 
-	radio.startListening();                 // Start listening
+	radio.setCRCLength(RF24_CRC_8);          // Use 8-bit CRC for performance
 	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
-
-	//printf("\n\rRF24/examples/Transfer Rates/\n\r");
-	//printf("*** PRESS 'T' to begin transmitting to the other node\n\r");
-
 	radio.openWritingPipe(pipes[1]);
 	radio.openReadingPipe(1, pipes[0]);
 	radio.stopListening();
-	role = TX;                                 // Become the primary transmitter (ping out)
+	Serial.println(F("\n\rRF24/examples/Transfer/"));
+	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
 
-	randomSeed(analogRead(0));              //Seed for random number generation  
+	randomSeed(analogRead(0));              //Seed for random number generation
+
 	for (int i = 0; i<32; i++) {
 		data[i] = random(255);               //Load the buffer with random data
 	}
-//	radio.powerUp();                        //Power up the radio
+	radio.powerUp();                        //Power up the radio
 }
 
 
