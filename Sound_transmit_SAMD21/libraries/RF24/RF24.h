@@ -202,7 +202,7 @@ public:
    * @endcode
    * @return No return value. Use available().
    */
-  void read( void* buf, uint8_t len );
+  bool read( void* buf, uint8_t len );
 
   /**
    * Be sure to call openWritingPipe() first to set the destination

@@ -65,19 +65,13 @@ unsigned long timeoutPeriod = 3000;     // Set a user-defined timeout period. Wi
 
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };   // Radio pipe addresses for the 2 nodes to communicate.
 
-byte data[32];                           //Data buffer
+byte data_in[32];                                                         // Буфер хранения принятых данных
+byte data_out[32];                                                        // Буфер хранения данных для отправки
 
 volatile unsigned long counter;
 unsigned long rxTimer, startTime, stopTime, payloads = 0;
 bool TX = 1, RX = 0, role = 0, transferInProgress = 0;
-
-
-																		   
-// Topology
-//const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.
-
-																		   // Role management: Set up role.  This sketch uses the same software for all the nodes
-																		   // in this system.  Doing so greatly simplifies testing.  
+													   // in this system.  Doing so greatly simplifies testing.  
 
 typedef enum { role_ping_out = 1, role_pong_back } role_e;                 // The various roles supported by this sketch
 const char* role_friendly_name[] = { "invalid", "Ping out", "Pong back" };  // The debug-friendly names of those roles
@@ -88,6 +82,8 @@ byte counter_test = 1;
 
 const char str[] = "My very long string";
 extern "C" char *sbrk(int i);
+uint32_t message;  // Эта переменная для сбора обратного сообщения от приемника;
+
 
 //+++++++++++++++++++++++ SD info ++++++++++++++++++++++++++
 SdFile file;
@@ -6334,7 +6330,7 @@ void menu_radio()   // Меню "Осциллоскопа", вызывается из меню "Самописец"
 				{
 					waitForIt(30, 20, 290, 60);
 					myGLCD.clrScr();
-					radio_test();
+					radio_test_ping();
 					Draw_menu_Radio();
 				}
 				if ((y >= 70) && (y <= 110))   // Button: 2 "Oscill_Time"
@@ -6362,19 +6358,18 @@ void menu_radio()   // Меню "Осциллоскопа", вызывается из меню "Самописец"
 
 }
 
-
-
-void radio_test()
+void radio_test_ping()
 {
 	myGLCD.clrScr();
 	Serial.println(F("Test ping."));
 	myGLCD.setFont(BigFont);
 	myGLCD.setBackColor(0, 0, 0);
-//	myGLCD.setColor(255, 255, 255);
 	myGLCD.setColor(VGA_YELLOW);
 	myGLCD.print("TEST PING", CENTER, 10);
 	myGLCD.print(txt_info11, CENTER, 221);            // Кнопка "ESC -> PUSH"
 	myGLCD.setBackColor(0, 0, 0);
+	setup_radio_ping();
+	role_test = role_ping_out;
 	while(1)
 	{
 		if (myTouch.dataAvailable())
@@ -6392,10 +6387,10 @@ void radio_test()
 				}
 			}
 		}
-		if (role_test == role_ping_out) {
+		if (role_test == role_ping_out) 
+		{
 
-			radio.stopListening();                                  // First, stop listening so we can talk.
-			//printf("Now sending %d as payload. ", counter);
+			radio.stopListening();                                  // Во-первых, перестаньте слушать, чтобы мы могли поговорить.
 			Serial.print("Now sending ");
 			Serial.print(counter_test);
 			Serial.println(" as payload.");
@@ -6417,42 +6412,58 @@ void radio_test()
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.print("payload", 178, 40);
 
-			byte gotByte;
+			//byte gotByte;
+
+
+			//int command = 555;  // Не суть - приемнику надо что-то передать, но это может быть и полезная информация;
+			//radio.write(&command, sizeof(command));  //Отправляем команду;
+			//if (radio.isAckPayloadAvailable())
+			//{  // Ждем получения...
+			//	radio.read(&message, sizeof(message)); //... и имеем переменную message с числом 111 от приемника.
+			//}
+
+			//Serial.println(message);
+			data_out[0] = counter_test;
 			unsigned long time = micros();                          // Take the time, and send it.  This will block until complete   
-																	//Called when STANDBY-I mode is engaged (User is finished sending)
-			if (!radio.write(&counter_test, 1)) {
+
+			if (!radio.write(&data_out, sizeof(data_out))) 
+			{
 				Serial.println(F("failed."));
 			}
-			else {
-
-				if (!radio.available()) {
+			else 
+			{
+				if (!radio.available()) 
+				{
 					Serial.println(F("Blank Payload Received."));
 				}
-				else {
-					while (radio.available()) {
+				else 
+				{
+				//	while (radio.available()) 
+					while (radio.isAckPayloadAvailable())
+					{
 						unsigned long tim = micros();
-						radio.read(&gotByte, 1);
+						radio.read(&data_in, sizeof(data_in));
 
-						Serial.print("Got response ");
-						Serial.print(gotByte);
-						Serial.print(" round-trip delay: ");
-						Serial.print(tim - time);
-						Serial.print(" microseconds\n\r");
+						//Serial.print("Got response ");
+						//Serial.print(data_in[0]);
+						//Serial.print(" round-trip delay: ");
+						//Serial.print(tim - time);
+						//Serial.print(" microseconds\n\r");
 
 						myGLCD.print("Respons", 1, 60);
 						myGLCD.print("    ", 125, 60);
 						myGLCD.setColor(VGA_LIME);
-						if (gotByte<10)
+						if (data_in[0]<10)
 						{
-							myGLCD.printNumI(gotByte, 155, 60);
+							myGLCD.printNumI(data_in[0], 155, 60);
 						}
-						else if(gotByte>9&& gotByte<100)
+						else if(data_in[0]>9&& data_in[0]<100)
 						{
-							myGLCD.printNumI(gotByte, 155-16, 60);
+							myGLCD.printNumI(data_in[0], 155-16, 60);
 						}
-						else if (gotByte > 99)
+						else if (data_in[0] > 99)
 						{
-							myGLCD.printNumI(gotByte, 155-32, 60);
+							myGLCD.printNumI(data_in[0], 155-32, 60);
 						}
 						myGLCD.setColor(255, 255, 255);
 						myGLCD.print("round", 178, 60);
@@ -6470,13 +6481,19 @@ void radio_test()
 						}
 						myGLCD.setColor(255, 255, 255);
 						myGLCD.print("microsec", 178, 80);
+
+
+						for (int i = 0; i<32; i++)
+						{
+							Serial.print(data_in[i]);               //Load the buffer with random data
+							Serial.print(",");
+						}
+						Serial.println();
 						counter_test++;
 					}
 				}
-
 			}
-			// Try again later
-			delay(300);
+			delay(500);
 		}
 	}
 	while(!myTouch.dataAvailable()){}
@@ -6502,7 +6519,7 @@ void radio_transfer()       // test transfer
 
 	for (int i = 0; i<32; i++) 
 	{
-		data[i] = random(255);               //Load the buffer with random data
+		data_out[i] = random(255);               //Load the buffer with random data
 	}
 	Serial.println(F("Random Data save"));
 	while (1)
@@ -6521,8 +6538,8 @@ void radio_transfer()       // test transfer
 
 			}
 			//Loop through a number of cycles
-			data[0] = i;                            //Change the first byte of the payload for identification
-			if (!radio.writeFast(&data, 32)) 
+			data_out[0] = i;                            //Change the first byte of the payload for identification
+			if (!radio.writeFast(&data_out, 32)) 
 			{      //Write to the FIFO buffers        
 				counter++;                          //Keep count of failed payloads
 			}
@@ -6679,9 +6696,6 @@ void radio_TX()
 	while (myTouch.dataAvailable()) {}
 }
 
-
-
-
 void setup_radio()
 {
 	radio.begin();                           // Setup and configure rf radio
@@ -6690,6 +6704,7 @@ void setup_radio()
 	//radio.setPALevel(RF24_PA_LOW);           // Set PA LOW for this demonstration. We want the radio to be as lossy as possible for this example.
 	radio.setDataRate(RF24_1MBPS);
 	radio.setAutoAck(1);                     // Ensure autoACK is enabled
+	radio.setPayloadSize(sizeof(data_out));                // Here we are sending 1-byte payloads to test the call-response speed
 	radio.setRetries(2, 15);                  // Optionally, increase the delay between retries & # of retries
 
 	radio.setCRCLength(RF24_CRC_8);          // Use 8-bit CRC for performance
@@ -6697,17 +6712,40 @@ void setup_radio()
 	radio.openWritingPipe(pipes[1]);
 	radio.openReadingPipe(1, pipes[0]);
 	radio.stopListening();
-	Serial.println(F("\n\rRF24/examples/Transfer/"));
-	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
+	
+	role = role_ping_out;                  // Become the primary transmitter (ping out)
+	radio.openWritingPipe(pipes[0]);
+	radio.openReadingPipe(1, pipes[1]);
 
-	randomSeed(analogRead(0));              //Seed for random number generation
 
 	for (int i = 0; i<32; i++) {
-		data[i] = random(255);               //Load the buffer with random data
+		data_out[i] = random(255);               //Load the buffer with random data
 	}
 	radio.powerUp();                        //Power up the radio
 }
 
+void setup_radio_ping()
+{
+	radio.begin();
+	radio.setAutoAck(1);                    // Ensure autoACK is enabled
+	radio.enableAckPayload();               // Allow optional ack payloads
+	radio.setRetries(0, 15);                 // Smallest time between retries, max no. of retries
+	radio.setPayloadSize(sizeof(data_out));                // Here we are sending 1-byte payloads to test the call-response speed
+	radio.openWritingPipe(pipes[1]);        // Both radios listen on the same pipes by default, and switch when writing
+	radio.openReadingPipe(1, pipes[0]);
+	radio.startListening();                 // Start listening
+	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
+
+
+	role = role_ping_out;                  // Become the primary transmitter (ping out)
+	radio.openWritingPipe(pipes[0]);
+	radio.openReadingPipe(1, pipes[1]);
+
+	for (int i = 0; i<32; i++) {
+		data_out[i] = random(255);               //Load the buffer with random data
+		data_in[i] = 0;
+	}
+}
 
 
 
@@ -6788,31 +6826,6 @@ void setup(void)
 	preob_num_str();
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
-
-
-	setup_radio();
-	//Serial.print(F("\n\rRF24/examples/pingpair_ack/\n\rROLE: "));
-	//Serial.println(role_friendly_name[role]);
-	//Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
-
-	// Setup and configure rf radio
-/*
-	radio.begin();
-	radio.setAutoAck(1);                    // Ensure autoACK is enabled
-	radio.enableAckPayload();               // Allow optional ack payloads
-	radio.setRetries(0, 15);                // Smallest time between retries, max no. of retries
-	radio.setPayloadSize(1);                // Here we are sending 1-byte payloads to test the call-response speed
-	role = role_ping_out;                   // Become the primary transmitter (ping out)
-	radio.openWritingPipe(pipes[0]);
-	radio.openReadingPipe(1, pipes[1]);
-	//radio.openWritingPipe(pipes[1]);        // Both radios listen on the same pipes by default, and switch when writing
-	//radio.openReadingPipe(1, pipes[0]);
-	radio.startListening();                 // Start listening
-	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
-	*/
-	//role = role_ping_out;                  // Become the primary transmitter (ping out)
-	//radio.openWritingPipe(pipes[0]);
-	//radio.openReadingPipe(1, pipes[1]);
 
 	Serial.println(F("Setup Ok!"));
 }

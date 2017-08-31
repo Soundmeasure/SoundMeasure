@@ -1099,7 +1099,7 @@ bool RF24::available(uint8_t* pipe_num)
 
 /****************************************************************************/
 
-void RF24::read( void* buf, uint8_t len ){
+bool RF24::read( void* buf, uint8_t len ){
 
   // Fetch the payload
   read_payload( buf, len );
