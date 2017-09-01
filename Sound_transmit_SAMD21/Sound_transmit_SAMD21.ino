@@ -27,14 +27,14 @@
 * to initiate communication instead of respond to a commmunication.
 */
 
-
-
 #include <SPI.h>
+#include <LCD5110_Graph.h>    
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
+#include <AH_AD9850.h>
+
 //#include <LCD5110_Basic.h> // подключаем библиотеку
-#include <LCD5110_Graph.h>    // 
 
 LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
 
@@ -134,9 +134,9 @@ void setup()
 	//myGLCD.setFont(MediumNumbers); // задаём размер шрифта
 
 
-	for (int i = 0; i<32; i++) {
-		data_out[i] = random(255);               //Load the buffer with random data
-	}
+	//for (int i = 0; i<32; i++) {
+	//	data_out[i] = random(255);               //Load the buffer with random data
+	//}
 
 
 
@@ -144,37 +144,19 @@ void setup()
 
 void loop(void) 
 {
-    //  Dump the payloads until we've gotten everything Сбрасывайте полезную нагрузку, пока мы не получим все
-		//while (radio.available(&pipeNo))                       // 
-		//{
-		//	radio.read(&gotByte, 1);
-		//	radio.writeAckPayload(pipeNo, &gotByte, 1);
-		//}
-		//radio.writeAckPayload(pipeNo, &data_out, sizeof(data_out));
+ 
+	//uint32_t message = 4292967290;
+	//uint32_t message = 1020;
+		data_out[1] = 7;
 	while (radio.available(&pipeNo))                       // 
 	{
 		radio.read(&data_in, sizeof(data_in));
 		//radio.read(&data_in, 1);
 		data_out[0] = data_in[0];
 		//radio.writeAckPayload(pipeNo, &data_out, sizeof(data_out));
-		radio.writeAckPayload(pipeNo, &data_out, 1);
+		//radio.writeAckPayload(1, &message, sizeof(message)); // Грузим сообщение для автоотправки;
+		radio.writeAckPayload(pipeNo, &data_out, 2);
 	}
-	//radio.writeAckPayload(pipeNo, &data_out, sizeof(data_out));
-
-	//int dataIn;  //передатчику приемник протолкнет ему в обратку наше сообщение;
-	//bool done = false;
-	//uint32_t message = 111;  //Вот какой потенциальной длины сообщение - uint32_t!
-	//						 //туда можно затолкать значение температуры от датчика или еще что-то полезное.
-	//radio.writeAckPayload(1, &message, sizeof(message)); // Грузим сообщение для автоотправки;
-	//if (radio.available())
-	//{ //Просто читаем и очищаем буфер - при подтверждении приема
-	//	while (!done) 
-	//	{
-	//		done = radio.read(&dataIn, sizeof(dataIn)); // Значение dataIn в данном случае
-	//													//не важно. Но его можно использовать и как управляющую команду.
-	//	}
-
-	//}
 
 	for (int i = 0; i<32; i++) 
 	{

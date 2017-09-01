@@ -65,7 +65,7 @@ unsigned long timeoutPeriod = 3000;     // Set a user-defined timeout period. Wi
 
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };   // Radio pipe addresses for the 2 nodes to communicate.
 
-byte data_in[32];                                                         // Буфер хранения принятых данных
+byte data_in[2];                                                         // Буфер хранения принятых данных
 byte data_out[32];                                                        // Буфер хранения данных для отправки
 
 volatile unsigned long counter;
@@ -6370,6 +6370,7 @@ void radio_test_ping()
 	myGLCD.setBackColor(0, 0, 0);
 	setup_radio_ping();
 	role_test = role_ping_out;
+	unsigned long tim1 = 0;
 	while(1)
 	{
 		if (myTouch.dataAvailable())
@@ -6389,7 +6390,6 @@ void radio_test_ping()
 		}
 		if (role_test == role_ping_out) 
 		{
-
 			radio.stopListening();                                  // Во-первых, перестаньте слушать, чтобы мы могли поговорить.
 			Serial.print("Now sending ");
 			Serial.print(counter_test);
@@ -6411,18 +6411,6 @@ void radio_test_ping()
 			}
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.print("payload", 178, 40);
-
-			//byte gotByte;
-
-
-			//int command = 555;  // Не суть - приемнику надо что-то передать, но это может быть и полезная информация;
-			//radio.write(&command, sizeof(command));  //Отправляем команду;
-			//if (radio.isAckPayloadAvailable())
-			//{  // Ждем получения...
-			//	radio.read(&message, sizeof(message)); //... и имеем переменную message с числом 111 от приемника.
-			//}
-
-			//Serial.println(message);
 			data_out[0] = counter_test;
 			unsigned long time = micros();                          // Take the time, and send it.  This will block until complete   
 
@@ -6438,18 +6426,11 @@ void radio_test_ping()
 				}
 				else 
 				{
-				//	while (radio.available()) 
 					while (radio.isAckPayloadAvailable())
 					{
 						unsigned long tim = micros();
 						radio.read(&data_in, sizeof(data_in));
-
-						//Serial.print("Got response ");
-						//Serial.print(data_in[0]);
-						//Serial.print(" round-trip delay: ");
-						//Serial.print(tim - time);
-						//Serial.print(" microseconds\n\r");
-
+						tim1 = tim - time;
 						myGLCD.print("Respons", 1, 60);
 						myGLCD.print("    ", 125, 60);
 						myGLCD.setColor(VGA_LIME);
@@ -6467,23 +6448,20 @@ void radio_test_ping()
 						}
 						myGLCD.setColor(255, 255, 255);
 						myGLCD.print("round", 178, 60);
-
 						myGLCD.print("Delay: ", 1, 80);
 						myGLCD.print("     ", 100, 80);
 						myGLCD.setColor(VGA_LIME);
-						if (tim - time<999)
+						if (tim1<999)
 						{
-							myGLCD.printNumI(tim - time, 155-32, 80);
+							myGLCD.printNumI(tim1, 155-32, 80);
 						}
 						else 
 						{
-							myGLCD.printNumI(tim - time, 155-48, 80);
+							myGLCD.printNumI(tim1, 155-48, 80);
 						}
 						myGLCD.setColor(255, 255, 255);
 						myGLCD.print("microsec", 178, 80);
-
-
-						for (int i = 0; i<32; i++)
+						for (int i = 0; i<sizeof(data_in); i++)
 						{
 							Serial.print(data_in[i]);               //Load the buffer with random data
 							Serial.print(",");
