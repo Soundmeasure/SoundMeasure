@@ -26,14 +26,13 @@
 * switch out of Primary Receiver mode to send back a payload, but having the option to if wanting
 * to initiate communication instead of respond to a commmunication.
 */
-
+#include "Wire.h"
 #include <SPI.h>
 #include <LCD5110_Graph.h>    
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
 #include <AH_AD9850.h>
-
 //#include <LCD5110_Basic.h> // подключаем библиотеку
 
 LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
@@ -41,11 +40,15 @@ LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
 extern uint8_t SmallFont[]; // малый шрифт (из библиотеки)
 extern uint8_t MediumNumbers[]; // средний шрифт для цифр (из библиотеки)
 
+#define  ledPin13  13                               // Назначение светодиодов на плате
+#define  sound_En  2                                // Управление звуком, разрешение включения усилителя
+
+
+//AH_AD9850(int CLK, int FQUP, int BitData, int RESET); 
+AH_AD9850 AD9850(A4, A3, A2, A1);
+
+
 int seconds = 0; // счётчик секунд
-
-
-
-
 
 // Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 
 
@@ -87,6 +90,59 @@ const long interval = 200;           // interval at which to blink (milliseconds
 byte pipeNo;                                           // 
 byte gotByte;                                          // Dump the payloads until we've gotten everything Сбрасывайте полезную нагрузку, пока мы не получим все
 
+
+//+++++++++++++++++++++++ Настройка электронного резистора +++++++++++++++++++++++++++++++++++++
+#define address_AD5252   0x2F                       // Адрес микросхемы AD5252  
+#define control_word1    0x07                       // Байт инструкции резистор №1
+#define control_word2    0x87                       // Байт инструкции резистор №2
+byte resistance = 0x00;                             // Сопротивление 0x00..0xFF - 0Ом..100кОм
+//byte level_resist      = 0;                       // Байт считанных данных величины резистора
+//-----------------------------------------------------------------------------------------------
+
+
+
+void resistor(int resist, int valresist)
+{
+	resistance = valresist;
+	switch (resist)
+	{
+	case 1:
+		Wire.beginTransmission(address_AD5252);     // transmit to device
+		Wire.write(byte(control_word1));            // sends instruction byte  
+		Wire.write(resistance);                     // sends potentiometer value byte  
+		Wire.endTransmission();                     // stop transmitting
+		break;
+	case 2:
+		Wire.beginTransmission(address_AD5252);     // transmit to device
+		Wire.write(byte(control_word2));            // sends instruction byte  
+		Wire.write(resistance);                     // sends potentiometer value byte  
+		Wire.endTransmission();                     // stop transmitting
+		break;
+	}
+	//Wire.requestFrom(address_AD5252, 1, true);  // Считать состояние движка резистора 
+	//level_resist = Wire.read();                 // sends potentiometer value byte  
+}
+void setup_resistor()
+{
+	Wire.beginTransmission(address_AD5252);      // transmit to device
+	Wire.write(byte(control_word1));             // sends instruction byte  
+	Wire.write(0);                               // sends potentiometer value byte  
+	Wire.endTransmission();                      // stop transmitting
+	Wire.beginTransmission(address_AD5252);      // transmit to device
+	Wire.write(byte(control_word2));             // sends instruction byte  
+	Wire.write(0);                               // sends potentiometer value byte  
+	Wire.endTransmission();                      // stop transmitting
+}
+
+//------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 int FreeRam() {
 	char stack_dummy = 0;
 	return &stack_dummy - sbrk(0);
@@ -99,8 +155,7 @@ void setup()
 {
 	Serial.begin(115200);
 	delay(1000);
-	//while (!Serial);
-	// pinMode (ledPin, OUTPUT);
+	//while (!Serial){};
 	Serial.print("FreeRam");
 	Serial.println(FreeRam());
 	Serial.print("Address of str $"); Serial.println((int)&str, HEX);
@@ -109,7 +164,7 @@ void setup()
 	Serial.print(F("\n\rRF24/examples/pingpair_ack/\n\rROLE: "));
 	Serial.println(role_friendly_name[role]);
 	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
-
+	Wire.begin();
 	myGLCD.InitLCD();                       // инициализация LCD дисплея
 
 											// Настройка радиочастотного радиоканала
@@ -138,7 +193,19 @@ void setup()
 	//	data_out[i] = random(255);               //Load the buffer with random data
 	//}
 
-
+	AD9850.reset();                                  //reset module
+	delay(500);
+	AD9850.powerDown();                              //set signal output to LOW
+	delay(100);
+	AD9850.set_frequency(0,0,1000);                   //set power=UP, phase=0, 1kHz frequency
+	setup_resistor();                                // Начальные установки резистора
+	resistor(1, 254);                                // Установить уровень сигнала
+	resistor(2, 254);                                // Установить уровень сигнала
+	pinMode(ledPin13, OUTPUT);
+	pinMode(sound_En, OUTPUT);
+	digitalWrite(ledPin13, HIGH);
+	//digitalWrite(sound_En, LOW);
+	digitalWrite(sound_En, HIGH);
 
 }
 
@@ -158,13 +225,12 @@ void loop(void)
 		radio.writeAckPayload(pipeNo, &data_out, 2);
 	}
 
-	for (int i = 0; i<32; i++) 
-	{
-		Serial.print(data_in[i]);               //Load the buffer with random data
-		Serial.print(",");
-	}
-	Serial.println();
-
+	//for (int i = 0; i<32; i++) 
+	//{
+	//	Serial.print(data_in[i]);               //Load the buffer with random data
+	//	Serial.print(",");
+	//}
+	//Serial.println();
 
 		//myGLCD.setFont(SmallFont); // задаём размер шрифта
 		myGLCD.print("    ", CENTER, 14); // выводим в строке 34 
@@ -174,5 +240,7 @@ void loop(void)
 		//myGLCD.print(String(gotByte), CENTER, 34); // выводим в строке 34 
 		myGLCD.print(String(data_in[0]), CENTER, 34); // выводим в строке 34 
 		myGLCD.update();
+
+
 
 }
