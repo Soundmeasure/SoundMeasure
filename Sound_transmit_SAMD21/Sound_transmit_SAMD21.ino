@@ -43,10 +43,14 @@ extern uint8_t MediumNumbers[]; // средний шрифт для цифр (и
 #define  ledPin13  13                               // Назначение светодиодов на плате
 #define  sound_En  2                                // Управление звуком, разрешение включения усилителя
 
-
+int time_sound = 200;
+int freq_sound = 1850;
+byte volume1 = 0;
+byte volume2 = 0;
 //AH_AD9850(int CLK, int FQUP, int BitData, int RESET); 
 AH_AD9850 AD9850(A4, A3, A2, A1);
 
+bool sound_start = false;
 
 int seconds = 0; // счётчик секунд
 
@@ -70,26 +74,26 @@ byte counter = 1;                                                          // О
 const char str[] = "My very long string";
 extern "C" char *sbrk(int i);
 
-byte data_in[32];                                                         // Буфер хранения принятых данных
-byte data_out[32];                                                        // Буфер хранения данных для отправки
+byte data_in[16];                                                         // Буфер хранения принятых данных
+byte data_out[16];                                                        // Буфер хранения данных для отправки
 
 int count = 0;
 // constants won't change. Used here to set a pin number :
 //const int ledPin =  LED_BUILTIN;// the number of the LED pin
 //const int ledPin10 = 10;// the number of the LED pin
 // Variables will change :
-int ledState = LOW;             // ledState used to set the LED
+int ledState = LOW;                                  // ledState used to set the LED
 
-								// Generally, you should use "unsigned long" for variables that hold time
-								// The value will quickly become too large for an int to store
-unsigned long previousMillis = 0;        // will store last time LED was updated
+								                     // Generally, you should use "unsigned long" for variables that hold time
+								                     // The value will quickly become too large for an int to store
+unsigned long previousMillis = 0;                    // will store last time LED was updated
 
-										 // constants won't change :
-const long interval = 200;           // interval at which to blink (milliseconds)
+										             // constants won't change :
+const long interval = 1000;                          // interval at which to blink (milliseconds)
 
-byte pipeNo;                                           // 
-byte gotByte;                                          // Dump the payloads until we've gotten everything Сбрасывайте полезную нагрузку, пока мы не получим все
-
+byte pipeNo;                                         // 
+byte gotByte;                                        // Dump the payloads until we've gotten everything Сбрасывайте полезную нагрузку, пока мы не получим все
+uint32_t message = 1;
 
 //+++++++++++++++++++++++ Настройка электронного резистора +++++++++++++++++++++++++++++++++++++
 #define address_AD5252   0x2F                       // Адрес микросхемы AD5252  
@@ -98,7 +102,6 @@ byte gotByte;                                          // Dump the payloads unti
 byte resistance = 0x00;                             // Сопротивление 0x00..0xFF - 0Ом..100кОм
 //byte level_resist      = 0;                       // Байт считанных данных величины резистора
 //-----------------------------------------------------------------------------------------------
-
 
 
 void resistor(int resist, int valresist)
@@ -134,14 +137,22 @@ void setup_resistor()
 	Wire.endTransmission();                      // stop transmitting
 }
 
+
+void sound_run(unsigned int time, unsigned int frequency)
+{
+	AD9850.powerDown();                              //set signal output to LOW
+	//delay(100);
+	AD9850.set_frequency(0, 0, frequency);                   //set power=UP, phase=0, 1kHz frequency
+	for (int i = 0; i < time; i++)
+	{
+		delay(1);
+	}
+	AD9850.powerDown();
+	sound_start = false;
+}
+
+
 //------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 int FreeRam() {
 	char stack_dummy = 0;
@@ -165,82 +176,139 @@ void setup()
 	Serial.println(role_friendly_name[role]);
 	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
 	Wire.begin();
-	myGLCD.InitLCD();                       // инициализация LCD дисплея
+	myGLCD.InitLCD();                            // инициализация LCD дисплея
 
-											// Настройка радиочастотного радиоканала
-	radio.begin();                          // Старт работы;
-	radio.setAutoAck(1);                    // Убедитесь, что включена функция автозагрузки
-	radio.enableAckPayload();               // Разрешение отправки нетипового ответа передатчику;
-	radio.setRetries(0, 15);                // Самое короткое время между попытками, max no. повторений
-	//radio.setPayloadSize(1);                // Здесь мы отправляем 1-байтовую полезную нагрузку для проверки скорости ответа на вызов
-	radio.setPayloadSize(sizeof(data_out));                // Здесь мы отправляем 32-байтовую полезную нагрузку
-	radio.openWritingPipe(pipes[1]);        // Обе радиостанции прослушиваются по тем же самым каналам по умолчанию и переключаются при записи
-	radio.openReadingPipe(1, pipes[0]);     // Открываем трубу приема
-	radio.startListening();                 // Начать прослушивание
-	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
+											     // Настройка радиочастотного радиоканала
+	radio.begin();                               // Старт работы;
+	radio.setAutoAck(1);                         // Убедитесь, что включена функция автозагрузки
+	radio.enableAckPayload();                    // Разрешение отправки нетипового ответа передатчику;
+	//radio.setPALevel(RF24_PA_MAX);
+	radio.setPALevel(RF24_PA_HIGH);
+	//radio.setPALevel(RF24_PA_LOW);           // Set PA LOW for this demonstration. We want the radio to be as lossy as possible for this example.
+	radio.setDataRate(RF24_1MBPS);
+	//radio.setDataRate(RF24_250KBPS);
+	radio.setRetries(0, 2);                     // Самое короткое время между попытками, max no. повторений
+	//radio.setPayloadSize(1);                   // Здесь мы отправляем 1-байтовую полезную нагрузку для проверки скорости ответа на вызов
+	radio.setPayloadSize(sizeof(data_out));      // Здесь мы отправляем 32-байтовую полезную нагрузку
+	radio.openWritingPipe(pipes[1]);             // Обе радиостанции прослушиваются по тем же самым каналам по умолчанию и переключаются при записи
+	radio.openReadingPipe(1, pipes[0]);          // Открываем трубу приема
+	radio.startListening();                      // Начать прослушивание
+	radio.printDetails();                        // Dump the configuration of the rf unit for debugging
 
-	role = role_pong_back;                  // Станьте основным приемником (pong back)
+	role = role_pong_back;                       // Станьте основным приемником (pong back)
 	radio.openWritingPipe(pipes[1]);
 	radio.openReadingPipe(1, pipes[0]);
 	radio.startListening();
+	radio.powerUp();
+	myGLCD.clrScr();                             // очистка экрана
+	myGLCD.setFont(SmallFont);                   // задаём размер шрифта
+	//myGLCD.setFont(MediumNumbers);             // задаём размер шрифта
 
-	myGLCD.clrScr(); // очистка экрана
-	myGLCD.setFont(SmallFont); // задаём размер шрифта
-	//myGLCD.setFont(MediumNumbers); // задаём размер шрифта
-
-
-	//for (int i = 0; i<32; i++) {
-	//	data_out[i] = random(255);               //Load the buffer with random data
-	//}
-
-	AD9850.reset();                                  //reset module
+	AD9850.reset();                              //reset module
 	delay(500);
-	AD9850.powerDown();                              //set signal output to LOW
+	AD9850.powerDown();                          //set signal output to LOW
 	delay(100);
-	AD9850.set_frequency(0,0,1000);                   //set power=UP, phase=0, 1kHz frequency
-	setup_resistor();                                // Начальные установки резистора
-	resistor(1, 254);                                // Установить уровень сигнала
-	resistor(2, 254);                                // Установить уровень сигнала
+	AD9850.set_frequency(0,0,1850);              //set power=UP, phase=0, 1kHz frequency
+	setup_resistor();                            // Начальные установки резистора
+	resistor(1, volume1);                              // Установить уровень сигнала
+	resistor(2, volume2);                              // Установить уровень сигнала
 	pinMode(ledPin13, OUTPUT);
 	pinMode(sound_En, OUTPUT);
 	digitalWrite(ledPin13, HIGH);
 	//digitalWrite(sound_En, LOW);
 	digitalWrite(sound_En, HIGH);
+	AD9850.powerDown();                          //set signal output to LOW
 
 }
 
 void loop(void) 
 {
- 
-	//uint32_t message = 4292967290;
-	//uint32_t message = 1020;
-		data_out[1] = 7;
+
 	while (radio.available(&pipeNo))                       // 
 	{
 		radio.read(&data_in, sizeof(data_in));
-		//radio.read(&data_in, 1);
 		data_out[0] = data_in[0];
-		//radio.writeAckPayload(pipeNo, &data_out, sizeof(data_out));
-		//radio.writeAckPayload(1, &message, sizeof(message)); // Грузим сообщение для автоотправки;
-		radio.writeAckPayload(pipeNo, &data_out, 2);
+		if (data_in[2]==1)
+		{
+			radio.writeAckPayload(pipeNo, &data_out, 2);   // Грузим сообщение 2 байта для автоотправки;
+			sound_run(time_sound, freq_sound);
+		}
+		else
+		{
+			radio.writeAckPayload(pipeNo, &data_out, 2);  // Грузим сообщение 2 байта для автоотправки;
+		}
+
+		time_sound = (data_in[4] << 8) | data_in[5]; // собираем как "настоящие программеры"
+		freq_sound = (data_in[6] << 8) | data_in[7]; // собираем как "настоящие программеры"
+		volume1 = data_in[8];
+		volume2 = data_in[9];
+		//sound_start = true;
 	}
 
-	//for (int i = 0; i<32; i++) 
+
+
+
+		//int value = 3000;
+		//// разбираем
+		//byte hi = highByte(value);
+		//byte low = lowByte(value);
+
+		//// тут мы эти hi,low можем сохраить, прочитать из eePROM
+
+		//int value2 = (hi << 8) | low; // собираем как "настоящие программеры"
+		//int value3 = word(hi, low); // или собираем как "ардуинщики"
+
+
+
+	//unsigned long currentMillis = millis();
+
+	//if (currentMillis - previousMillis >= interval) 
+	//{
+	//	// save the last time you blinked the LED
+	//	previousMillis = currentMillis;
+	//	sound_start = true;
+	//}
+
+	//if (sound_start == true) sound_run(time_sound, freq_sound);
+
+
+
+	//for (int i = 0; i<sizeof(data_in); i++) 
 	//{
 	//	Serial.print(data_in[i]);               //Load the buffer with random data
 	//	Serial.print(",");
 	//}
 	//Serial.println();
+	//int value2 = (data_in[3] << 8) | data_in[4]; // собираем как "настоящие программеры"
+	//Serial.print(value2);               //Load the buffer with random data
+	//Serial.print(",");
+	//int value3 = (data_in[5] << 8) | data_in[6]; // собираем как "настоящие программеры"
+	//Serial.print(value3);               //Load the buffer with random data
+	//Serial.println();
 
-		//myGLCD.setFont(SmallFont); // задаём размер шрифта
-		myGLCD.print("    ", CENTER, 14); // выводим в строке 34 
-		myGLCD.print("    ", CENTER, 34); // выводим в строке 34 
+	resistor(1, volume1);                              // Установить уровень сигнала
+	resistor(2, volume2);                              // Установить уровень сигнала
+	float y_vol = volume2 / 254.0*100.0;
+	int x_vol = y_vol;
+	//myGLCD.setFont(SmallFont); // задаём размер шрифта
 
-		myGLCD.print(String(pipeNo), CENTER, 14); // выводим в строке 34 
+	myGLCD.print("    ", CENTER, 1); // выводим в строке 34 
+	myGLCD.print("Volume", LEFT, 1); // выводим в строке 34 
+	myGLCD.print(String(x_vol),40, 1); // выводим в строке 34 
+	myGLCD.print(String("%"), 56, 1); // выводим в строке 34 
+	myGLCD.print("    ", CENTER, 10); // выводим в строке 34 
+	myGLCD.print("    ", RIGHT, 20); // выводим в строке 34 
+	myGLCD.print("Time",LEFT, 10); // выводим в строке 34 
+	myGLCD.print(String(time_sound), 40, 10); // выводим в строке 34 
+	myGLCD.print("ms", RIGHT, 10); // выводим в строке 34 
+	myGLCD.print("Frequency", LEFT, 20); // выводим в строке 34 
+	myGLCD.print(String(freq_sound), RIGHT, 20); // выводим в строке 34 
+
+		myGLCD.print("    ", CENTER, 30); // выводим в строке 34 
+		myGLCD.print("    ", CENTER, 40); // выводим в строке 34 
+
+		myGLCD.print(String(data_in[2]), CENTER, 30); // выводим в строке 34 
 		//myGLCD.print(String(gotByte), CENTER, 34); // выводим в строке 34 
-		myGLCD.print(String(data_in[0]), CENTER, 34); // выводим в строке 34 
+		myGLCD.print(String(data_in[0]), CENTER, 40); // выводим в строке 34 
 		myGLCD.update();
-
-
-
 }
