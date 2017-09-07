@@ -56,6 +56,14 @@ byte resistance = 0x00;                             // Сопротивление 0x00..0xFF 
 //byte level_resist      = 0;                       // Байт считанных данных величины резистора
 //-----------------------------------------------------------------------------------------------
 
+#define kn_red           58                         // AD4 Кнопка красная +
+#define kn_blue          60                         // AD6 Кнопка синяя -
+
+
+
+
+byte volume_vriant = 0;                             // Управление переключением настройки эл. резисторов. 
+
 RF24 radio(48, 49);                                                        // DUE
 
 unsigned long timeoutPeriod = 3000;     // Set a user-defined timeout period. With auto-retransmit set to (15,15) retransmission will take up to 60ms and as little as 7.5ms with it set to (1,15).
@@ -6760,9 +6768,16 @@ void setup_radio_ping()
 	//}
 }
 
+void volume_up()
+{
+	Serial.println(F("volume_up"));
+}
 
-
-//+++++++++++++++++++++++  Настройки ADC DMA +++++++++++++++++++++++++++++++++++++
+void volume_down()
+{
+	Serial.println(F("volume_down"));
+}
+//+++++++++++++++++++++++  Настройки +++++++++++++++++++++++++++++++++++++
 
 
 
@@ -6783,6 +6798,8 @@ void setup(void)
 	myGLCD.clrScr();
 	myGLCD.setFont(BigFont);
 	myGLCD.setBackColor(0, 0, 255);
+	pinMode(kn_red, INPUT);
+	pinMode(kn_blue, INPUT);
 	pinMode(intensityLCD, OUTPUT);
 	digitalWrite(intensityLCD, LOW);
 
@@ -6839,7 +6856,9 @@ void setup(void)
 	preob_num_str();
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
-
+	attachInterrupt(7, volume_up, CHANGE);
+	attachInterrupt(8, volume_down, CHANGE);
+	//attachInterrupt(kn_red, volume_down, RISING);
 	Serial.println(F("Setup Ok!"));
 }
 
