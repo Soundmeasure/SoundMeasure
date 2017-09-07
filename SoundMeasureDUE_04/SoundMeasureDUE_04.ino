@@ -59,7 +59,7 @@ byte resistance = 0x00;                             // Сопротивление 0x00..0xFF 
 #define kn_red           58                         // AD4 Кнопка красная +
 #define kn_blue          60                         // AD6 Кнопка синяя -
 
-
+volatile int kn = 0;
 
 
 byte volume_vriant = 0;                             // Управление переключением настройки эл. резисторов. 
@@ -6770,15 +6770,18 @@ void setup_radio_ping()
 
 void volume_up()
 {
-	Serial.println(F("volume_up"));
+	kn = 1;
+	//Serial.println(F("volume_up"));
 }
 
 void volume_down()
 {
-	Serial.println(F("volume_down"));
+	kn = 2;
+	//Serial.println(F("volume_down"));
 }
 //+++++++++++++++++++++++  Настройки +++++++++++++++++++++++++++++++++++++
 
+volatile int state = LOW;
 
 
 //------------------------------------------------------------------------------
@@ -6856,17 +6859,40 @@ void setup(void)
 	preob_num_str();
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
-	attachInterrupt(7, volume_up, CHANGE);
-	attachInterrupt(8, volume_down, CHANGE);
-	//attachInterrupt(kn_red, volume_down, RISING);
+	//attachInterrupt(8, blink, CHANGE);
+	//attachInterrupt(42, volume_up, LOW);
+	//attachInterrupt(43, volume_down, LOW);
+	//
+	attachInterrupt(42, volume_up, FALLING);
+	attachInterrupt(43, volume_down, FALLING);
+	//attachInterrupt(42, volume_down, RISING);
 	Serial.println(F("Setup Ok!"));
+	draw_Glav_Menu();
 }
 
 //------------------------------------------------------------------------------
 void loop(void) 
 {
-	draw_Glav_Menu();
-	swichMenu();
+	//draw_Glav_Menu();
+	//swichMenu();
+	//digitalWrite(ERROR_LED_PIN, state);
+
+	if (kn == 1)
+	{
+		kn = 0;
+		Serial.println(F("volume_up"));
+	}
+	else if (kn == 2)
+	{
+		kn = 0;
+		Serial.println(F("volume_down"));
+	}
+	delay(50);
+}
+
+void blink()
+{
+	state = !state;
 }
 
 
