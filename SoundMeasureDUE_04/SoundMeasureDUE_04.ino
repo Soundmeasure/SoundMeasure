@@ -96,11 +96,12 @@ const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Ra
 byte data_in[16];                                                           // Буфер хранения принятых данных
 byte data_out[16];                                                         // Буфер хранения данных для отправки
 
-int time_sound = 200;
+int time_sound = 50;
 int freq_sound = 1850;
 byte volume1 = 0;
 byte volume2 = 0;
-
+unsigned long tim1 = 0;
+unsigned long tim2 = 1000;
 volatile unsigned long counter;
 unsigned long rxTimer, startTime, stopTime, payloads = 0;
 bool TX = 1, RX = 0, role = 0, transferInProgress = 0;
@@ -2665,7 +2666,9 @@ void menu_Oscilloscope()   // Меню "Осциллоскопа", вызывается из меню "Самописец
 						{
 							waitForIt(30, 20, 290, 60);
 							myGLCD.clrScr();
-							oscilloscopeNew();
+							oscilloscope();
+							//oscilloscopeNew();
+
 							Draw_menu_Osc();
 						}
 					if ((y>=70) && (y<=110))   // Button: 2 "Oscill_Time"  Уровни сигналов
@@ -2694,48 +2697,65 @@ void menu_Oscilloscope()   // Меню "Осциллоскопа", вызывается из меню "Самописец
 }
 void trigger()
 {
-    ADC_CHER = Channel_trig;
+  //  ADC_CHER = Channel_trig;
+	ADC_CHER = 0;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
+	Trigger = 400;
 	for(int tr = 0; tr < 1000; tr++)   // Определение нижней точки амплитуды сигнала
 	{
 		ADC_CR = ADC_START ; 	// Запустить преобразование
 		while (!(ADC_ISR_DRDY));
-				//	Input = ADC->ADC_CDR[7];
-					Input = ADC->ADC_CDR[Analog_pinA0];   // A0
+					Input = ADC->ADC_CDR[7];
+				//	Input = ADC->ADC_CDR[Analog_pinA0];   // A0
 		// if (Input<Trigger) break;
-		 if (Input< 15) break;
+		 if (Input< 50) break;
 	}
 	for(int tr = 0; tr < 1000; tr++)   // Определение  точки срабатывания триггера
 	{
 		 ADC_CR = ADC_START ; 	// Запустить преобразование
 		 while (!(ADC_ISR_DRDY));
-		//Input = ADC->ADC_CDR[7];
-		Input = ADC->ADC_CDR[Analog_pinA0];   // A0
-		if (Input>Trigger) break;
+		Input = ADC->ADC_CDR[7];
+		//Input = ADC->ADC_CDR[Analog_pinA0];   // A0
+		if (Input > Trigger)
+		{
+			myGLCD.setColor(VGA_RED);
+			myGLCD.fillCircle(227,12,10);
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.drawCircle(227, 12, 10);
+			break;
+		}
+		if (tr > 998)
+		{
+			myGLCD.setColor(0, 0, 0);
+			myGLCD.fillCircle(227, 12, 10);
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.drawCircle(227, 12, 10);
+		}
+
 	}
+
 }
-/*
-void oscilloscope()  // просмотр в реальном времени на большой скорости
+
+void oscilloscope()  // просмотр в реальном времени
 {
 	uint32_t bgnBlock, endBlock;
 	block_t block[BUFFER_BLOCK_COUNT];
 	myGLCD.clrScr();
 	myGLCD.setBackColor( 0, 0, 0);
-	//delay(500);
 	myGLCD.clrScr();
 	buttons_right();
-	buttons_channel();
+	buttons_channelNew();                          // Нарисовать кнопки внизу экрана;
 	myGLCD.setBackColor( 0, 0, 0);
 	myGLCD.setFont( BigFont);
 	myGLCD.setColor(VGA_LIME);
-	myGLCD.print(txt_info29,LEFT, 180);
+	myGLCD.print(txt_info29,5, 180);
 	int x_dTime;
 	int xpos;
 	int ypos1;
 	int ypos2;
 
-
 	int ypos_osc1_0;
 	int ypos_osc2_0;
+	setup_radio_ping();                   // Настроить радиоканал
 
 	for( xpos = 0; xpos < 239;	xpos ++) // Стереть старые данные
 
@@ -2745,7 +2765,7 @@ void oscilloscope()  // просмотр в реальном времени на большой скорости
 
 	while(1) 
 	{
-		 DrawGrid();
+		 DrawGrid1();
 		 if (myTouch.dataAvailable())
 			{
 				delay(10);
@@ -2764,117 +2784,61 @@ void oscilloscope()  // просмотр в реальном времени на большой скорости
 				myGLCD.setBackColor( 0, 0, 255);
 				myGLCD.setFont( SmallFont);
 				myGLCD.setColor (255, 255,255);
-				myGLCD.drawRoundRect (250, 1, 318, 40);
-				myGLCD.drawRoundRect (250, 45, 318, 85);
-				myGLCD.drawRoundRect (250, 90, 318, 130);
-				myGLCD.drawRoundRect (250, 135, 318, 175);
+				myGLCD.drawRoundRect (245, 1, 318, 40);
+				myGLCD.drawRoundRect (245, 45, 318, 85);
+				myGLCD.drawRoundRect (245, 90, 318, 130);
+				myGLCD.drawRoundRect (245, 135, 318, 175);
 
-			if ((x_osc>=250) && (x_osc<=284))  // Боковые кнопки
-			  {
-				  if ((y_osc>=1) && (y_osc<=40))  // Первая  период
-				  {
-					waitForIt(250, 1, 318, 40);
-					mode -- ;
-					if (mode < 0) mode = 0;   
-					// Select delay times you can change values to suite your needs
-					if (mode == 0) {dTime = 1;    x_dTime = 282;}
-					if (mode == 1) {dTime = 10;   x_dTime = 278;}
-					if (mode == 2) {dTime = 20;   x_dTime = 278;}
-					if (mode == 3) {dTime = 50;   x_dTime = 278;}
-					if (mode == 4) {dTime = 100;  x_dTime = 274;}
-					if (mode == 5) {dTime = 200;  x_dTime = 274;}
-					if (mode == 6) {dTime = 300;  x_dTime = 274;}
-					if (mode == 7) {dTime = 500;  x_dTime = 274;}
-					if (mode == 8) {dTime = 1000; x_dTime = 270;}
-					if (mode == 9) {dTime = 5000; x_dTime = 270;}
-					myGLCD.print("    ", 270, 22);
-					myGLCD.printNumI(dTime, x_dTime, 22);
-				  }
 
-			 if ((y_osc>=45) && (y_osc<=85))  // Вторая - триггер
-				 {
-					waitForIt(250, 45, 318, 85);
-					tmode --;
-					if (tmode < 0)tmode = 0;
-					if (tmode == 1){ Trigger = MinAnalog+10; myGLCD.print(" 0%  ", 268, 65);}
-					if (tmode == 2){ Trigger = MaxAnalog/2;  myGLCD.print(" 50% ", 266, 65);}
-					if (tmode == 3){ Trigger = MaxAnalog-10; myGLCD.print("100%", 270, 65);}
-					if (tmode == 0)myGLCD.print(" Off ", 268, 65);
 
-				 }
-			 if ((y_osc>=90) && (y_osc<=130))  // Третья - делитель
-				 {
-					waitForIt(250, 90, 318, 130);
-					mode1 -- ;
-					myGLCD.setColor( 0, 0, 0);
-					myGLCD.fillRoundRect (1, 1,239, 159);
-					myGLCD.setColor (255, 255, 255);
-					myGLCD.setBackColor( 0, 0, 255);
-					myGLCD.setFont( SmallFont);
-					if (mode1 < 0) mode1 = 0;   
-					if (mode1 == 0){ koeff_h = 7.759*4; myGLCD.print(" 1  ", 275, 110);}
-					if (mode1 == 1){ koeff_h = 3.879*4; myGLCD.print("0.5 ", 275, 110);}
-					if (mode1 == 2){ koeff_h = 1.939*4; myGLCD.print("0.25", 275, 110);}
-					if (mode1 == 3){ koeff_h = 0.969*4; myGLCD.print("0.1 ", 275, 110);}
-				 }
-			 if ((y_osc>=135) && (y_osc<=175))  // Четвертая разрешение
-				 {
+				if ((x_osc >= 245) && (x_osc <= 280))  // Боковые кнопки
+				{
+					if ((y_osc >= 1) && (y_osc <= 40))  // Первая  период
+					{
+						waitForIt(245, 1, 318, 40);
+						chench_mode(0);                    //
+					}
 
-				 }
-		   }
-		
-			if ((x_osc>=284) && (x_osc<=318))  // Боковые кнопки
-			  {
-				  if ((y_osc>=1) && (y_osc<=40))  // Первая  период
-				  {
-					waitForIt(250, 1, 318, 40);
-					mode ++ ;
-					if (mode > 9) mode = 9;   
-					if (mode == 0) {dTime = 1;    x_dTime = 282;}
-					if (mode == 1) {dTime = 10;   x_dTime = 278;}
-					if (mode == 2) {dTime = 20;   x_dTime = 278;}
-					if (mode == 3) {dTime = 50;   x_dTime = 278;}
-					if (mode == 4) {dTime = 100;  x_dTime = 274;}
-					if (mode == 5) {dTime = 200;  x_dTime = 274;}
-					if (mode == 6) {dTime = 300;  x_dTime = 274;}
-					if (mode == 7) {dTime = 500;  x_dTime = 274;}
-					if (mode == 8) {dTime = 1000; x_dTime = 270;}
-					if (mode == 9) {dTime = 5000; x_dTime = 270;}
-					myGLCD.print("    ", 270, 22);
-					myGLCD.printNumI(dTime, x_dTime, 22);
-				  }
+					if ((y_osc >= 45) && (y_osc <= 85))  // Вторая - триггер
+					{
+						waitForIt(245, 45, 318, 85);
+						chench_tmode(0);
+					}
+					if ((y_osc >= 90) && (y_osc <= 130))  // Третья - делитель
+					{
+						waitForIt(245, 90, 318, 130);
+						chench_mode1(0);
+					}
+					if ((y_osc >= 135) && (y_osc <= 175))  // Четвертая разрешение
+					{
 
-			 if ((y_osc>=45) && (y_osc<=85))  // Вторая - триггер
-				 {
-					waitForIt(250, 45, 318, 85);
-					tmode ++;
-					if (tmode > 3)tmode = 3;
-					if (tmode == 1){ Trigger = MinAnalog+10; myGLCD.print(" 0%  ", 268, 65);}
-					if (tmode == 2){ Trigger = MaxAnalog/2;  myGLCD.print(" 50% ", 266, 65);}
-					if (tmode == 3){ Trigger = MaxAnalog-10; myGLCD.print("100%", 270, 65);}
-					if (tmode == 0)myGLCD.print(" Off ", 268, 65);
-				 }
-			 if ((y_osc>=90) && (y_osc<=130))  // Третья - делитель
-				 {
-					waitForIt(250, 90, 318, 130);
-					mode1 ++ ;
-					myGLCD.setColor( 0, 0, 0);
-					myGLCD.fillRoundRect (1, 1,239, 159);
-					myGLCD.setColor (255, 255, 255);
-					myGLCD.setBackColor( 0, 0, 255);
-					myGLCD.setFont( SmallFont);
-					if (mode1 > 3) mode1 = 3;   
-					if (mode1 == 0){ koeff_h = 7.759*4; myGLCD.print(" 1  ", 275, 110);}
-					if (mode1 == 1){ koeff_h = 3.879*4; myGLCD.print("0.5 ", 275, 110);}
-					if (mode1 == 2){ koeff_h = 1.939*4; myGLCD.print("0.25", 275, 110);}
-					if (mode1 == 3){ koeff_h = 0.969*4; myGLCD.print("0.1 ", 275, 110);}
-				 }
-			 if ((y_osc>=135) && (y_osc<=175))  // Четвертая разрешение
-				 {
-					waitForIt(250, 135, 318, 175);
-				 }
+					}
+				}
 
-		   }
+				if ((x_osc >= 282) && (x_osc <= 318))  // Боковые кнопки
+				{
+					if ((y_osc >= 1) && (y_osc <= 40))  // Первая  период
+					{
+						waitForIt(245, 1, 318, 40);
+						chench_mode(1);                 //  
+					}
+
+					if ((y_osc >= 45) && (y_osc <= 85))  // Вторая - триггер
+					{
+						waitForIt(245, 45, 318, 85);
+						chench_tmode(1);
+					}
+					if ((y_osc >= 90) && (y_osc <= 130))  // Третья - делитель
+					{
+						waitForIt(245, 90, 318, 130);
+						chench_mode1(1);
+					}
+					if ((y_osc >= 135) && (y_osc <= 175))  // Четвертая разрешение
+					{
+						waitForIt(245, 135, 318, 175);
+					}
+
+				}
 
 		if ((x_osc>=250) && (x_osc<=318))  
 
@@ -2897,38 +2861,54 @@ void oscilloscope()  // просмотр в реальном времени на большой скорости
 
 			 if ((y_osc>=205) && (y_osc<=239))  // Нижние кнопки переключения входов
 					{
-						 touch_osc();
+				      touch_down();
 					}
 		}
-		 trig_min_max(t_in_mode);
-		 if (tmode>0) trigger();
-	
+		 StartSample = micros();
+		 radio_transfer();
+		 
+		// delayMicroseconds(2000 - (tim1/2));
+		// delayMicroseconds(tim2);
+
+
+
+	//	 trig_min_max(t_in_mode);
+		// if (tmode>0) trigger();
+		 trigger();
+		 EndSample = micros();       
+		 myGLCD.setColor(255, 255, 255);
+		 myGLCD.print("    ", 200, 165);
+		 myGLCD.printNumI(EndSample-StartSample, 200, 165);
+		 delayMicroseconds(tim2);
+
 		// Записать аналоговый сигнал в блок памяти
-		StartSample = micros();
-			ADC_CHER = Channel_x;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
-		for( xpos = 0;	xpos < 240; xpos ++) 
+		 ADC_CHER = 0;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
+		//	ADC_CHER = Channel_x;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
+		//	StartSample = micros();
+		for( xpos = 0;	xpos < 240; xpos ++)                // Программа чтения данных АЦП
 			{
-			//	ADC_CHER = Channel_x;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
-				ADC_CR = ADC_START ; 	// Запустить преобразование
-				 while (!(ADC_ISR_DRDY));
-				if (Channel0)
-					{
-						Sample_osc[xpos][0] = ADC->ADC_CDR[7];
-						MaxAnalog0 = max(MaxAnalog0, Sample_osc[xpos][0]);
-						MinAnalog0 = min(MinAnalog0, Sample_osc[xpos][0]);
-					}
-				delayMicroseconds(dTime); //dTime
+				ADC_CR = ADC_START ; 	                    // Запустить преобразование
+				while (!(ADC_ISR_DRDY));                    // Ожидание завершения преобразования
+				Sample_osc[xpos][0] = ADC->ADC_CDR[7];      // Получить данные А0
+				MaxAnalog0 = max(MaxAnalog0, Sample_osc[xpos][0]);
+				MinAnalog0 = min(MinAnalog0, Sample_osc[xpos][0]);
+		
+				delayMicroseconds(dTime);                   // dTime  время развертки
 			}
-		EndSample = micros();
-		DrawGrid();
-  
-		// 
-		for( int xpos = 0; xpos < 239;	xpos ++)
+		//EndSample = micros();                               //  
+
+
+
+
+
+
+		osc_line_off0 = true;                               // Разрешить стирание предыдущей линии
+		for( int xpos = 0; xpos < 240;	xpos ++)
 			{
 				//  Стереть предыдущий экран
 				myGLCD.setColor( 0, 0, 0);
 			
-				if (Channel0 | osc_line_off0)
+				if (osc_line_off0)
 					{
 						ypos_osc1_0 = 255-(OldSample_osc[ xpos + 1][0]/koeff_h) - hpos; 
 						ypos_osc2_0 = 255-(OldSample_osc[ xpos + 2][0]/koeff_h) - hpos;
@@ -2939,20 +2919,19 @@ void oscilloscope()  // просмотр в реальном времени на большой скорости
 						myGLCD.drawLine (xpos + 1, ypos_osc1_0, xpos + 2, ypos_osc2_0);
 						myGLCD.drawLine (xpos + 2, ypos_osc1_0+1, xpos + 3, ypos_osc2_0+1);
 
-						if (xpos > 237 & Channel0 == false )
+						if (xpos == 239 )
 							{
 								osc_line_off0 = false;
+								DrawGrid1();
 							}
 					}
-					if (xpos == 0)
+					if (xpos < 2)
 						{
-							myGLCD.drawLine (xpos + 1, 1, xpos + 1, 220);
-							myGLCD.drawLine (xpos + 2, 1, xpos + 2, 220);
+							myGLCD.drawLine(xpos + 1, 1, xpos + 1, 220);
+							myGLCD.drawLine(xpos + 2, 1, xpos + 2, 220);
+							myGLCD.drawLine(xpos + 3, 1, xpos + 3, 220);
 						}
-					
-				if (Channel0)
-					{
-
+                        // Нарисовать линию
 						myGLCD.setColor( 255, 255, 255);
 						ypos_osc1_0 = 255-(Sample_osc[ xpos][0]/koeff_h) - hpos;
 						ypos_osc2_0 = 255-(Sample_osc[ xpos + 1][0]/koeff_h)- hpos;
@@ -2962,9 +2941,12 @@ void oscilloscope()  // просмотр в реальном времени на большой скорости
 						if(ypos_osc2_0 > 220) ypos_osc2_0 = 220;
 						myGLCD.drawLine (xpos, ypos_osc1_0, xpos + 1, ypos_osc2_0);
 						myGLCD.drawLine (xpos+1, ypos_osc1_0+1, xpos + 2, ypos_osc2_0+1);
-					}
+
 					OldSample_osc[xpos][0] = Sample_osc[xpos][0];
 			}
+		attachInterrupt(kn_red, volume_up, FALLING);
+		attachInterrupt(kn_blue, volume_down, FALLING);
+		delay(700);
 	}
 koeff_h = 7.759*4;
 mode1 = 0;
@@ -2973,7 +2955,7 @@ StartSample = millis();
 myGLCD.setFont( BigFont);
 while (myTouch.dataAvailable()){}
 }
-*/
+
 
 void oscilloscopeNew()                             // просмотр в реальном времени на большой скорости
 {
@@ -4600,7 +4582,44 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.drawRoundRect (130, 210, 180, 239);       // Окантовка кнопки N3
 	myGLCD.drawRoundRect (190, 210, 240, 239);       // Окантовка кнопки N4
 }
+void touch_down()  //  Нижнее меню осциллографа
+{
+	delay(10);
+	myTouch.read();
+	x_osc = myTouch.getX();
+	y_osc = myTouch.getY();
+	myGLCD.setFont(SmallFont);
 
+	if ((y_osc >= 210) && (y_osc <= 239))                         //   Нижние кнопки
+	{
+		if ((x_osc >= 10) && (x_osc <= 60))                       //  Кн 1
+		{
+			waitForIt(10, 210, 60, 239);
+			tim2 += 1000;
+			if (tim2 > 90000) tim2 = 90000;
+
+		}
+		if ((x_osc >= 70) && (x_osc <= 120))                       //  Кн 2
+		{
+			waitForIt(70, 210, 120, 239);
+			tim2 -= 1000;
+			if (tim2 < 0) tim2 = 0;
+		}
+		if ((x_osc >= 130) && (x_osc <= 180))                       //  Вход 0
+		{
+			waitForIt(130, 210, 180, 239);
+			tim2 += 100;
+			if (tim2 > 90000) tim2 = 90000;
+
+		}
+		if ((x_osc >= 190) && (x_osc <= 240))                       //  Вход 0
+		{
+			waitForIt(190, 210, 240, 239);
+			tim2 -= 100;
+			if (tim2 < 0) tim2 = 0;
+		}
+	}
+}
 void buttons_channel()                   // Нижние кнопки переключения 
 {
 	myGLCD.setFont(SmallFont);
@@ -4802,7 +4821,6 @@ void menu_SD()
 			}
 	   }
 }
-
 void Draw_menu_formatSD()
 {
 	myGLCD.clrScr();
@@ -4819,7 +4837,6 @@ void Draw_menu_formatSD()
 	myGLCD.print( "      ", CENTER, 130);     
 	myGLCD.print( txt_SD_menu4, CENTER, 180);      
 }
-
 void menu_formatSD()
 {
   if (!card.init(spiSpeed, SD_CS_PIN)) 
@@ -6290,8 +6307,7 @@ void file_serial()
 		myGLCD.printNumI(step_file, 105, 180);  
 	}
    if ((data = root.read()) >= 0)	while (myTouch.dataAvailable()) {};     
-  // delay(500);
-	
+
 }
 
 void resistor(int resist, int valresist)
@@ -6391,7 +6407,6 @@ void menu_radio()   // Меню "Осциллоскопа", вызывается из меню "Самописец"
 			}
 		}
 	}
-
 }
 
 void radio_test_ping()
@@ -6528,12 +6543,6 @@ void radio_test_ping()
 						}
 						myGLCD.setColor(255, 255, 255);
 						myGLCD.print("microsec", 178, 80);
-						//for (int i = 0; i<sizeof(data_in); i++)
-						//{
-						//	Serial.print(data_in[i]);               //Load the buffer with random data
-						//	Serial.print(",");
-						//}
-						//Serial.println();
 						counter_test++;
 					}
 				}
@@ -6541,8 +6550,6 @@ void radio_test_ping()
 			attachInterrupt(kn_red, volume_up, FALLING);
 			attachInterrupt(kn_blue, volume_down, FALLING);
 			delay(1000);
-			//attachInterrupt(kn_red, volume_up, RISING);
-			//attachInterrupt(kn_blue, volume_down, RISING);
 		}
 	}
 	while(!myTouch.dataAvailable()){}
@@ -6552,71 +6559,100 @@ void radio_test_ping()
 
 void radio_transfer()       // test transfer
 {
-	//myGLCD.clrScr();
-	//Serial.println(F("Test transfer."));
-	//myGLCD.setFont(BigFont);
-	//myGLCD.setBackColor(0, 0, 0);
-	////	myGLCD.setColor(255, 255, 255);
-	//myGLCD.setColor(VGA_YELLOW);
-	//myGLCD.print("TEST TRANSFER", CENTER, 10);
-	//myGLCD.print(txt_info11, CENTER, 221);            // Кнопка "ESC -> PUSH"
-	//myGLCD.setBackColor(0, 0, 0);
+//	setup_radio_ping();
+    tim1 = 0;
+	volume_variant = 4;
+	radio.stopListening();                                  // Во-первых, перестаньте слушать, чтобы мы могли поговорить.
 
-	//Serial.println(F("Initiating Basic Data Transfer"));
-	//unsigned long cycles = 10; //Change this to a higher or lower number. 
-	//bool test_exit = false;
-
-
-	//Serial.println(F("Random Data save"));
-	//while (1)
+	//myGLCD.print("Sending", 1, 40);
+	//myGLCD.print("    ", 125, 40);
+	//myGLCD.setColor(VGA_LIME);
+	//if (counter_test<10)
 	//{
-	//	if (test_exit) break;
-	//	startTime = millis();
-	//	unsigned long pauseTime = millis();
-
-	//	for (int i = 0; i<cycles; i++) 
-	//	{   
-	//		if (myTouch.dataAvailable())
-	//		{
-	//			test_exit = true;
-	//			while (myTouch.dataAvailable()) {}
-	//		}
-	//		//Loop through a number of cycles
-	//		data_out[0] = i;                            //Change the first byte of the payload for identification
-	//		if (!radio.writeFast(&data_out, sizeof(data_out)))
-	//		{      //Write to the FIFO buffers        
-	//			counter++;                          //Keep count of failed payloads
-	//		}
-	//		myGLCD.printNumI(counter, 155, 40);
-	//		//This is only required when NO ACK ( enableAutoAck(0) ) payloads are used
-	//		//      if(millis() - pauseTime > 3){
-	//		//        pauseTime = millis();
-	//		//        radio.txStandBy();          // Need to drop out of TX mode every 4ms if sending a steady stream of multicast data
-	//		//        //delayMicroseconds(130);     // This gives the PLL time to sync back up   
-	//		//      }
-	//		if (test_exit) return;
-	//	}
-
-	//	stopTime = millis();
-	//	//This should be called to wait for completion and put the radio in standby mode after transmission, returns 0 if data still in FIFO (timed out), 1 if success
-	//	if (!radio.txStandBy()) { counter += 3; } //Standby, block only until FIFO empty or auto-retry timeout. Flush TX FIFO if failed
-	//											  //radio.txStandBy(1000);              //Standby, using extended timeout period of 1 second
-
-	//	float numBytes = cycles * 32;
-	//	float rate = numBytes / (stopTime - startTime);
-
-	//	Serial.print("Transfer complete at "); Serial.print(rate); Serial.println(" KB/s");
-	//	myGLCD.print("Transfer complete ", CENTER, 60);            //  
-	//	myGLCD.printNumI(rate, CENTER, 80);
-
-	//	Serial.print(counter); Serial.print(" of "); Serial.print(cycles); Serial.println(" Packets Failed to Send");
-	//	counter = 0;
-	//	if(!test_exit) delay(1000); //break;
+	//	myGLCD.printNumI(counter_test, 155, 40);
 	//}
+	//else if (counter_test>9 && counter_test<100)
+	//{
+	//	myGLCD.printNumI(counter_test, 155 - 16, 40);
+	//}
+	//else if (counter_test > 99)
+	//{
+	//	myGLCD.printNumI(counter_test, 155 - 32, 40);
+	//}
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.setBackColor(0, 0, 0);
+	myGLCD.setFont(SmallFont);
+	if (kn != 0) set_volume(volume_variant, kn);
 
-	////while (!myTouch.dataAvailable()) {}
-	////delay(50);
-	////while (myTouch.dataAvailable()) {}
+	data_out[0] = counter_test;
+	data_out[1] = 1;                                       //1= Отправить команду ping звуковую посылку 
+	data_out[2] = 1;                    //
+	data_out[3] = 1;                    //
+	data_out[4] = highByte(time_sound);                     //1= Отправить звуковую посылку 
+	data_out[5] = lowByte(time_sound);                    //1= Отправить звуковую посылку 
+	data_out[6] = highByte(freq_sound);                    //1= Отправить звуковую посылку 
+	data_out[7] = lowByte(freq_sound);                   //1= Отправить звуковую посылку 
+	data_out[8] = volume1;
+	data_out[9] = volume2;
+
+	unsigned long time = micros();                          // Take the time, and send it.  This will block until complete   
+
+	if (!radio.write(&data_out, sizeof(data_out)))
+		//if (!radio.write(&data_out, 2)) 
+	{
+		Serial.println(F("failed."));
+	}
+	else
+	{
+		if (!radio.available())
+		{
+			Serial.println(F("Blank Payload Received."));
+		}
+		else
+		{
+			while (radio.isAckPayloadAvailable())
+			{
+				unsigned long tim = micros();
+				radio.read(&data_in, sizeof(data_in));
+
+				//	radio.read(&data_in, sizeof(data_in));
+				tim1 = tim - time;
+				//myGLCD.print("Respons", 1, 60);
+				//myGLCD.print("    ", 125, 60);
+				//myGLCD.setColor(VGA_LIME);
+				//if (data_in[0] < 10)
+				//{
+				//	myGLCD.printNumI(data_in[0], 155, 60);
+				//}
+				//else if (data_in[0] > 9 && data_in[0] < 100)
+				//{
+				//	myGLCD.printNumI(data_in[0], 155 - 16, 60);
+				//}
+				//else if (data_in[0] > 99)
+				//{
+				//	myGLCD.printNumI(data_in[0], 155 - 32, 60);
+				//}
+			//	myGLCD.setColor(255, 255, 255);
+			//	myGLCD.print("round", 178, 160);
+				myGLCD.print("Delay: ", 5, 165);
+				myGLCD.print("     ", 90-40, 165);
+				myGLCD.setColor(VGA_LIME);
+				if (tim1 < 999)
+				{
+					myGLCD.printNumI(tim1, 90 - 32, 165);
+				}
+				else
+				{
+					myGLCD.printNumI(tim1, 90 - 40, 165);
+				}
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.print("microsec", 90, 165);
+				myGLCD.print("     ", 160, 165);
+				myGLCD.printNumI(tim2, 160, 165);
+				counter_test++;
+			}
+		}
+	}
 }
 
 void radio_TX()
@@ -6787,15 +6823,9 @@ void setup_radio_ping()
 	radio.startListening();                 // Start listening
 	radio.printDetails();                   // Dump the configuration of the rf unit for debugging
 
-
 	role = role_ping_out;                  // Become the primary transmitter (ping out)
 	radio.openWritingPipe(pipes[0]);
 	radio.openReadingPipe(1, pipes[1]);
-
-	//for (int i = 0; i<32; i++) {
-	//	data_out[i] = random(255);               //Load the buffer with random data
-	//	data_in[i] = 0;
-	//}
 }
 
 void sound1()
@@ -6805,31 +6835,26 @@ void sound1()
 	digitalWrite(sounder, LOW);
 	delay(100);
 }
-
 void vibro1()
 {
 	digitalWrite(vibro, HIGH);
 	delay(100);
 	digitalWrite(vibro, LOW);
 	delay(100);
-
 }
 void volume_up()
 {
 	detachInterrupt(kn_red);
 	detachInterrupt(kn_blue);
 	kn = 1;
-	//set_volume(volume_variant, kn);
 }
 void volume_down()
 {
 	detachInterrupt(kn_red);
 	detachInterrupt(kn_blue);
 	kn = 2;
-	//set_volume(volume_variant, kn);
 }
 //+++++++++++++++++++++++  Настройки +++++++++++++++++++++++++++++++++++++
-
  
 void i2c_eeprom_write_byte(int deviceaddress, unsigned int eeaddress, byte data)
 {
@@ -6866,7 +6891,6 @@ if (Wire.available()) buffer[c] = Wire.read();
 }
 void i2c_eeprom_write_page( int deviceaddress, unsigned int eeaddresspage, byte* data, byte length )
 {
-
 Wire.beginTransmission(deviceaddress);
 Wire.write((int)(eeaddresspage >> 8)); // MSB
 Wire.write((int)(eeaddresspage & 0xFF)); // LSB
@@ -6874,6 +6898,33 @@ byte c;
 for ( c = 0; c < length; c++)
 Wire.write(data[c]);
 Wire.endTransmission();
+
+}
+void i2c_test()
+{
+
+	Serial.println("--------  EEPROM Test  ---------");
+	char somedata[] = "this data from the eeprom i2c"; // data to write
+													   //i2c_eeprom_write_page(0x50, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM
+	i2c_eeprom_write_page(deviceaddress, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM
+	delay(100); //add a small delay
+	Serial.println("Written Done");
+	delay(10);
+	Serial.print("Read EERPOM:");
+	byte b = i2c_eeprom_read_byte(0x50, 0); // access the first address from the memory
+	char addr = 0; //first address
+
+	while (b != 0)
+	{
+		Serial.print((char)b); //print content to serial port
+		if (b != somedata[addr])
+		{
+			break;
+		}
+		addr++; //increase address
+		b = i2c_eeprom_read_byte(0x50, addr); //access an address from the memory
+	}
+	Serial.println();
 
 }
 
@@ -6889,11 +6940,9 @@ void set_volume(int reg_module, byte count_vol)
 			if (count_vol == 1)
 			{
 				b = i2c_eeprom_read_byte(deviceaddress, adr_count1_kn);
-				//b = mem_variant;
 				b++;
 				if (b > 9) b = 9;
 				i2c_eeprom_write_byte(deviceaddress, adr_count1_kn, b);
-				//b = mem_variant;
 			}
 			else if (count_vol == 2)
 			{
@@ -6944,25 +6993,21 @@ void set_volume(int reg_module, byte count_vol)
 			if (count_vol == 1)
 			{
 				b = i2c_eeprom_read_byte(deviceaddress, adr_count4_kn);
-				//b = mem_variant;
 				b++;
 				if (b > 9) b = 9;
-				//mem_variant = b;
 				i2c_eeprom_write_byte(deviceaddress, adr_count4_kn, b);
 			}
 			else if (count_vol == 2)
 			{
 				b = i2c_eeprom_read_byte(deviceaddress, adr_count4_kn);
-			//	b = mem_variant;
 				if (b > 0) b --;
 				if (b <= 0) b = 0;
 				i2c_eeprom_write_byte(deviceaddress, adr_count4_kn, b);
-				//mem_variant = b;
 			}
 			volume2 = 16 * koeff_volume[b];
-			Serial.println(b);
-			Serial.println(volume2);
-			Serial.println(koeff_volume[b]);
+			//Serial.println(b);
+			//Serial.println(volume2);
+			//Serial.println(koeff_volume[b]);
 			break;
 		default:
 			break;
@@ -6983,40 +7028,6 @@ void restore_volume()
 	b = i2c_eeprom_read_byte(deviceaddress, adr_count4_kn);
 	volume2 = 16 * koeff_volume[b];
 }
-
-
-
-void i2c_test()
-{
-
-	Serial.println("--------  EEPROM Test  ---------");
-	char somedata[] = "this data from the eeprom i2c"; // data to write
-	//i2c_eeprom_write_page(0x50, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM
-	i2c_eeprom_write_page(deviceaddress, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM
-	delay(100); //add a small delay
-	Serial.println("Written Done");
-	delay(10);
-	Serial.print("Read EERPOM:");
-	byte b = i2c_eeprom_read_byte(0x50, 0); // access the first address from the memory
-	char addr=0; //first address
-
-	while (b!=0)
-	{
-		Serial.print((char)b); //print content to serial port
-		if (b!=somedata[addr])
-		{
-			break;
-		}
-		addr++; //increase address
-		b = i2c_eeprom_read_byte(0x50, addr); //access an address from the memory
-	}
-	Serial.println();
-	
-}
-
-
-//i2c_eeprom_write_byte(0x50, adr_temp_day, day_temp);
-// b = i2c_eeprom_read_byte(0x50, adr_file_name_count);     
 
 //------------------------------------------------------------------------------
 

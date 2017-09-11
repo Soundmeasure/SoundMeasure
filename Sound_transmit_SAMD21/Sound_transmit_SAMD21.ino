@@ -231,6 +231,7 @@ void loop(void)
 		if (data_in[2]==1)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);   // Грузим сообщение 2 байта для автоотправки;
+		//	delayMicroseconds(2000);                        // Задержка, для завершения процессов на Базе
 			sound_run(time_sound, freq_sound);
 		}
 		else
@@ -238,10 +239,10 @@ void loop(void)
 			radio.writeAckPayload(pipeNo, &data_out, 2);  // Грузим сообщение 2 байта для автоотправки;
 		}
 
-		time_sound = (data_in[4] << 8) | data_in[5]; // собираем как "настоящие программеры"
-		freq_sound = (data_in[6] << 8) | data_in[7]; // собираем как "настоящие программеры"
-		volume1 = data_in[8];
-		volume2 = data_in[9];
+		time_sound = (data_in[4] << 8) | data_in[5];      // Длительность посылки. Собираем как "настоящие программеры"
+		freq_sound = (data_in[6] << 8) | data_in[7];      // Частота генератора. Собираем как "настоящие программеры"
+		volume1 = data_in[8];                             // 
+		volume2 = data_in[9];                             // Громкость звучания. 
 		//sound_start = true;
 	}
 
