@@ -56,13 +56,33 @@ byte resistance = 0x00;                             // Сопротивление 0x00..0xFF 
 //byte level_resist      = 0;                       // Байт считанных данных величины резистора
 //-----------------------------------------------------------------------------------------------
 
-#define kn_red           58                         // AD4 Кнопка красная +
-#define kn_blue          60                         // AD6 Кнопка синяя -
+#define kn_red           43                         // AD4 Кнопка красная +
+#define kn_blue          42                         // AD6 Кнопка синяя -
+#define vibro            11                         // Вибромотор
+#define sounder          53                         // Зуммер
 
 volatile int kn = 0;
+byte counter_kn = 0;
+byte Chanal_volume = 0;
+volatile int adr_count1_kn = 0;
+volatile int adr_count2_kn = 2;
+volatile int adr_count3_kn = 4;
+volatile int adr_count4_kn = 6;
+
+volatile byte volume_variant = 0;                             // Управление переключением настройки эл. резисторов. 
+
+volatile byte mem_variant = 0;
+
+float koeff_volume[] = {0.0, 1.0, 1.4, 2.0, 2.8, 4.0, 5.6, 8.0, 11.2, 15.87};
+
+//+++++++++++++++++++++++++++++ Внешняя память +++++++++++++++++++++++++++++++++++++++
+int deviceaddress = 80;                      // Адрес микросхемы памяти
+//unsigned int eeaddress = 0;                  // Адрес ячейки памяти
+byte hi;                                     // Старший байт для преобразования числа
+byte low;                                    // Младший байт для преобразования числа
 
 
-byte volume_vriant = 0;                             // Управление переключением настройки эл. резисторов. 
+
 
 RF24 radio(48, 49);                                                        // DUE
 
@@ -78,8 +98,8 @@ byte data_out[16];                                                         // Бу
 
 int time_sound = 200;
 int freq_sound = 1850;
-byte volume1 = 254;
-byte volume2 = 80;
+byte volume1 = 0;
+byte volume2 = 0;
 
 volatile unsigned long counter;
 unsigned long rxTimer, startTime, stopTime, payloads = 0;
@@ -231,7 +251,7 @@ char  txt_ADC_menu3[]        = "\x89""epe\x99""a\xA7""a \x97 KOM";              
 char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                               // Выход                                                              //
 
 char  txt_osc_menu1[]        = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                             //
-char  txt_osc_menu2[]        = "Oc\xA6\x9D\xA0\xA0.1-18\xA1\x9D\xA2";                                       //
+char  txt_osc_menu2[]        = "\x8A""po""\x97\xA2\x9D"" c""\x9D\x98\xA2""a""\xA0""o""\x97";                // Уровни сигналов
 char  txt_osc_menu3[]        = "PA""\x82\x86""O";                                                           // Радио
 char  txt_osc_menu4[]        = "B\x91XO\x82";                                                               // Выход          
 
@@ -1160,9 +1180,6 @@ volatile bool timerError = false;
 volatile bool timerFlag = false;
 //------------------------------------------------------------------------------
 bool ledOn = false;
-
-
-
 
 
 void firstHandler()
@@ -2505,6 +2522,7 @@ void AnalogClock()
 	  myTouch.read();
 	  x=myTouch.getX();
 	  y=myTouch.getY();
+	  sound1();
 	  if (((y>=200) && (y<=239)) && ((x>=260) && (x<=319))) //установка часов
 	  {
 		myGLCD.setColor (255, 0, 0);
@@ -2554,9 +2572,12 @@ void swichMenu() // Тексты меню в строках "txt....."
 		 measure_power();
 			if (myTouch.dataAvailable() == true)              // Проверить нажатие кнопок
 			  {
+				//sound1();
 				pressed_button = myButtons.checkButtons();    // Если нажата - проверить что нажато
+				sound1();
 					 if (pressed_button==butX)                // Нажата вызов часы
 						  {  
+						    // sound1();
 							 myGLCD.setFont( BigFont);
 							 AnalogClock();
 							 myGLCD.clrScr();
@@ -2603,6 +2624,7 @@ void waitForIt(int x1, int y1, int x2, int y2)
 {
   myGLCD.setColor(255, 0, 0);
   myGLCD.drawRoundRect (x1, y1, x2, y2);
+  sound1();
   while (myTouch.dataAvailable())
   myTouch.read();
   myGLCD.setColor(255, 255, 255);
@@ -2646,11 +2668,11 @@ void menu_Oscilloscope()   // Меню "Осциллоскопа", вызывается из меню "Самописец
 							oscilloscopeNew();
 							Draw_menu_Osc();
 						}
-					if ((y>=70) && (y<=110))   // Button: 2 "Oscill_Time"
+					if ((y>=70) && (y<=110))   // Button: 2 "Oscill_Time"  Уровни сигналов
 						{
 							waitForIt(30, 70, 290, 110);
 							myGLCD.clrScr();
-							oscilloscope_time();
+							//oscilloscope_time();
 							Draw_menu_Osc();
 						}
 					if ((y>=120) && (y<=160))  // Button: 3 "checkOverrun"  Проверка ошибок
@@ -2994,6 +3016,7 @@ void oscilloscopeNew()                             // просмотр в реальном времен
 			{
 				if ((y_osc >= 1) && (y_osc <= 160))           // Delay row
 				{
+					sound1();
 					break;
 				}
 			}
@@ -6381,10 +6404,11 @@ void radio_test_ping()
 	myGLCD.print("TEST PING", CENTER, 10);
 	myGLCD.print(txt_info11, CENTER, 221);            // Кнопка "ESC -> PUSH"
 	myGLCD.setBackColor(0, 0, 0);
-	//setup_radio();
 	setup_radio_ping();
 	role_test = role_ping_out;
 	unsigned long tim1 = 0;
+	volume_variant = 4;
+
 	while(1)
 	{
 		if (myTouch.dataAvailable())
@@ -6398,6 +6422,7 @@ void radio_test_ping()
 			{
 				if ((y_osc >= 1) && (y_osc <= 239))           // Delay row
 				{
+					sound1();
 					break;
 				}
 			}
@@ -6422,6 +6447,7 @@ void radio_test_ping()
 			}
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.print("payload", 178, 40);
+			if(kn!=0) set_volume(volume_variant, kn);
 
 			data_out[0] = counter_test;
 			data_out[1] = 1;                                       //1= Отправить команду ping звуковую посылку 
@@ -6512,7 +6538,11 @@ void radio_test_ping()
 					}
 				}
 			}
+			attachInterrupt(kn_red, volume_up, FALLING);
+			attachInterrupt(kn_blue, volume_down, FALLING);
 			delay(1000);
+			//attachInterrupt(kn_red, volume_up, RISING);
+			//attachInterrupt(kn_blue, volume_down, RISING);
 		}
 	}
 	while(!myTouch.dataAvailable()){}
@@ -6768,21 +6798,225 @@ void setup_radio_ping()
 	//}
 }
 
-void volume_up()
+void sound1()
 {
-	kn = 1;
-	//Serial.println(F("volume_up"));
+	digitalWrite(sounder, HIGH);
+	delay(100);
+	digitalWrite(sounder, LOW);
+	delay(100);
 }
 
+void vibro1()
+{
+	digitalWrite(vibro, HIGH);
+	delay(100);
+	digitalWrite(vibro, LOW);
+	delay(100);
+
+}
+void volume_up()
+{
+	detachInterrupt(kn_red);
+	detachInterrupt(kn_blue);
+	kn = 1;
+	//set_volume(volume_variant, kn);
+}
 void volume_down()
 {
+	detachInterrupt(kn_red);
+	detachInterrupt(kn_blue);
 	kn = 2;
-	//Serial.println(F("volume_down"));
+	//set_volume(volume_variant, kn);
 }
 //+++++++++++++++++++++++  Настройки +++++++++++++++++++++++++++++++++++++
 
-volatile int state = LOW;
+ 
+void i2c_eeprom_write_byte(int deviceaddress, unsigned int eeaddress, byte data)
+{
+	int rdata = data;
+	Wire.beginTransmission(deviceaddress);
+	Wire.write((int)(eeaddress >> 8)); // MSB
+	Wire.write((int)(eeaddress & 0xFF)); // LSB
+	Wire.write(rdata);
+	Wire.endTransmission();
+	delay(10);
+}
+byte i2c_eeprom_read_byte(int deviceaddress, unsigned int eeaddress) {
+	byte rdata = 0xFF;
+	Wire.beginTransmission(deviceaddress);
+	Wire.write((int)(eeaddress >> 8)); // MSB
+	Wire.write((int)(eeaddress & 0xFF)); // LSB
+	Wire.endTransmission();
+	Wire.requestFrom(deviceaddress, 1);
+	if (Wire.available()) rdata = Wire.read();
+	return rdata;
+}
+void i2c_eeprom_read_buffer( int deviceaddress, unsigned int eeaddress, byte *buffer, int length )
+{
 
+Wire.beginTransmission(deviceaddress);
+Wire.write((int)(eeaddress >> 8)); // MSB
+Wire.write((int)(eeaddress & 0xFF)); // LSB
+Wire.endTransmission();
+Wire.requestFrom(deviceaddress,length);
+int c = 0;
+for ( c = 0; c < length; c++ )
+if (Wire.available()) buffer[c] = Wire.read();
+
+}
+void i2c_eeprom_write_page( int deviceaddress, unsigned int eeaddresspage, byte* data, byte length )
+{
+
+Wire.beginTransmission(deviceaddress);
+Wire.write((int)(eeaddresspage >> 8)); // MSB
+Wire.write((int)(eeaddresspage & 0xFF)); // LSB
+byte c;
+for ( c = 0; c < length; c++)
+Wire.write(data[c]);
+Wire.endTransmission();
+
+}
+
+void set_volume(int reg_module, byte count_vol)
+{
+	kn = 0;
+	if (count_vol != 0)
+	{
+		byte b = 0;
+		switch (reg_module)
+		{
+		case 1:
+			if (count_vol == 1)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count1_kn);
+				//b = mem_variant;
+				b++;
+				if (b > 9) b = 9;
+				i2c_eeprom_write_byte(deviceaddress, adr_count1_kn, b);
+				//b = mem_variant;
+			}
+			else if (count_vol == 2)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count1_kn);
+				if (b > 0) b--;
+			    if (b <= 0) b = 0;
+				i2c_eeprom_write_byte(deviceaddress, adr_count1_kn, b);
+			}
+			resistor(1, 16 * koeff_volume[b]);
+
+			break;
+		case 2:
+			if (count_vol == 1)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
+				b++;
+				if (b > 9) b = 9;
+				i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
+			}
+			else if (count_vol == 2)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
+				if (b > 0) b--;
+				if (b <= 0) b = 0;
+				i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
+			}
+			resistor(2, 16 * koeff_volume[b]);
+			break;
+		case 3:
+			if (count_vol == 1)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count3_kn);
+				b++;
+				if (b > 9) b = 9;
+				i2c_eeprom_write_byte(deviceaddress, adr_count3_kn, b);
+			}
+			else if (count_vol == 2)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count3_kn);
+				if (b > 0) b--;
+				if (b <= 0) b = 0;
+				i2c_eeprom_write_byte(deviceaddress, adr_count3_kn, b);
+			}
+			volume1 = 16 * koeff_volume[b];
+			break;
+		case 4:
+
+			if (count_vol == 1)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count4_kn);
+				//b = mem_variant;
+				b++;
+				if (b > 9) b = 9;
+				//mem_variant = b;
+				i2c_eeprom_write_byte(deviceaddress, adr_count4_kn, b);
+			}
+			else if (count_vol == 2)
+			{
+				b = i2c_eeprom_read_byte(deviceaddress, adr_count4_kn);
+			//	b = mem_variant;
+				if (b > 0) b --;
+				if (b <= 0) b = 0;
+				i2c_eeprom_write_byte(deviceaddress, adr_count4_kn, b);
+				//mem_variant = b;
+			}
+			volume2 = 16 * koeff_volume[b];
+			Serial.println(b);
+			Serial.println(volume2);
+			Serial.println(koeff_volume[b]);
+			break;
+		default:
+			break;
+		}
+		kn = 0;
+	}
+	kn = 0;
+}
+
+void restore_volume()
+{
+	int b = i2c_eeprom_read_byte(deviceaddress, adr_count1_kn);
+	resistor(1, 16 * koeff_volume[b]);
+	b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
+	resistor(2, 16 * koeff_volume[b]);
+	b = i2c_eeprom_read_byte(deviceaddress, adr_count3_kn);
+	volume1 = 16 * koeff_volume[b];
+	b = i2c_eeprom_read_byte(deviceaddress, adr_count4_kn);
+	volume2 = 16 * koeff_volume[b];
+}
+
+
+
+void i2c_test()
+{
+
+	Serial.println("--------  EEPROM Test  ---------");
+	char somedata[] = "this data from the eeprom i2c"; // data to write
+	//i2c_eeprom_write_page(0x50, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM
+	i2c_eeprom_write_page(deviceaddress, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM
+	delay(100); //add a small delay
+	Serial.println("Written Done");
+	delay(10);
+	Serial.print("Read EERPOM:");
+	byte b = i2c_eeprom_read_byte(0x50, 0); // access the first address from the memory
+	char addr=0; //first address
+
+	while (b!=0)
+	{
+		Serial.print((char)b); //print content to serial port
+		if (b!=somedata[addr])
+		{
+			break;
+		}
+		addr++; //increase address
+		b = i2c_eeprom_read_byte(0x50, addr); //access an address from the memory
+	}
+	Serial.println();
+	
+}
+
+
+//i2c_eeprom_write_byte(0x50, adr_temp_day, day_temp);
+// b = i2c_eeprom_read_byte(0x50, adr_file_name_count);     
 
 //------------------------------------------------------------------------------
 
@@ -6805,7 +7039,20 @@ void setup(void)
 	pinMode(kn_blue, INPUT);
 	pinMode(intensityLCD, OUTPUT);
 	digitalWrite(intensityLCD, LOW);
+	pinMode(strob_pin, INPUT);
+	digitalWrite(strob_pin, HIGH);
 
+	pinMode(vibro, OUTPUT);
+	pinMode(sounder, OUTPUT);
+	digitalWrite(vibro, LOW);
+	digitalWrite(sounder, LOW);
+
+	pinMode(kn_red, OUTPUT);
+	pinMode(kn_blue, OUTPUT);
+	digitalWrite(kn_red, HIGH);
+	digitalWrite(kn_blue, HIGH);
+	restore_volume();
+	//i2c_test();
 	myTouch.InitTouch();
 	myTouch.setPrecision(PREC_MEDIUM);
 	//myTouch.setPrecision(PREC_HI);
@@ -6854,46 +7101,34 @@ void setup(void)
 //	cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
 	myGLCD.setBackColor(0, 0, 255);
 	setup_resistor();                                // Начальные установки резистора
-	resistor(1, 255);                                // Установить уровень сигнала
-	resistor(2, 255);                                // Установить уровень сигнала
+	resistor(1, volume1);                                // Установить уровень сигнала
+	resistor(2, volume2);                                // Установить уровень сигнала
 	preob_num_str();
-	pinMode(strob_pin, INPUT);
-	digitalWrite(strob_pin, HIGH);
-	//attachInterrupt(8, blink, CHANGE);
-	//attachInterrupt(42, volume_up, LOW);
-	//attachInterrupt(43, volume_down, LOW);
-	//
-	attachInterrupt(42, volume_up, FALLING);
-	attachInterrupt(43, volume_down, FALLING);
-	//attachInterrupt(42, volume_down, RISING);
+
+	attachInterrupt(kn_red, volume_up, FALLING);
+	attachInterrupt(kn_blue, volume_down, FALLING);
+
+	delay(500);
+	kn = 0;
+
 	Serial.println(F("Setup Ok!"));
-	draw_Glav_Menu();
+	sound1();
+	delay(100);
+	sound1();
+	delay(100);
+	vibro1();
+	delay(100);
+	vibro1();
 }
 
 //------------------------------------------------------------------------------
 void loop(void) 
 {
-	//draw_Glav_Menu();
-	//swichMenu();
-	//digitalWrite(ERROR_LED_PIN, state);
+	draw_Glav_Menu();
+	swichMenu();
 
-	if (kn == 1)
-	{
-		kn = 0;
-		Serial.println(F("volume_up"));
-	}
-	else if (kn == 2)
-	{
-		kn = 0;
-		Serial.println(F("volume_down"));
-	}
-	delay(50);
 }
 
-void blink()
-{
-	state = !state;
-}
 
 
 /*

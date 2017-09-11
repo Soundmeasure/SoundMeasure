@@ -583,12 +583,14 @@ void setClockRTC()
       {
         if ((x>=165) && (x<=319))
         {
+		  sound1();
           res=1;
           myGLCD.setColor (255, 0, 0);
           myGLCD.drawRoundRect(165, 200, 319, 239);
         }
         else if ((x>=0) && (x<=154))
         {
+		  sound1();
           res=2;
           myGLCD.setColor (255, 0, 0);
           myGLCD.drawRoundRect(0, 200, 154, 239);
