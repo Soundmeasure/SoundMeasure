@@ -231,7 +231,7 @@ void loop(void)
 		if (data_in[2]==1)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);   // Грузим сообщение 2 байта для автоотправки;
-		//	delayMicroseconds(2000);                        // Задержка, для завершения процессов на Базе
+			delayMicroseconds(2000);                       // Задержка для получения ответа и завершения процессов на Базе
 			sound_run(time_sound, freq_sound);
 		}
 		else
@@ -297,7 +297,7 @@ void loop(void)
 	myGLCD.print("Volume", LEFT, 1); // выводим в строке 34 
 	myGLCD.print(String(x_vol),40, 1); // выводим в строке 34 
 	myGLCD.print(String("%"), 56, 1); // выводим в строке 34 
-	myGLCD.print("    ", CENTER, 10); // выводим в строке 34 
+	myGLCD.print("      ", CENTER, 10); // выводим в строке 34 
 	myGLCD.print("    ", RIGHT, 20); // выводим в строке 34 
 	myGLCD.print("Time",LEFT, 10); // выводим в строке 34 
 	myGLCD.print(String(time_sound), 40, 10); // выводим в строке 34 
