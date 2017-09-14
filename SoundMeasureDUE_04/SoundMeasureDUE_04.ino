@@ -68,6 +68,8 @@ volatile int adr_count1_kn = 0;
 volatile int adr_count2_kn = 2;
 volatile int adr_count3_kn = 4;
 volatile int adr_count4_kn = 6;
+int adr_timePeriod = 10;
+int adr_set_timePeriod = 20;
 
 volatile byte volume_variant = 0;                             // Управление переключением настройки эл. резисторов. 
 
@@ -75,6 +77,9 @@ volatile byte mem_variant = 0;
 
 float koeff_volume[] = {0.0, 1.0, 1.4, 2.0, 2.8, 4.0, 5.6, 8.0, 11.2, 15.87};
 const char* proc_volume[] = {"0%","6%","8%","12%","17%","25%","35%","50%","70%","99%"};
+
+unsigned long timePeriod = 1000000;
+unsigned long set_timePeriod = 0;
 
 //+++++++++++++++++++++++++++++ Внешняя память +++++++++++++++++++++++++++++++++++++++
 int deviceaddress = 80;                      // Адрес микросхемы памяти
@@ -100,7 +105,6 @@ int freq_sound = 1850;
 byte volume1 = 0;
 byte volume2 = 0;
 unsigned long tim1 = 0;
-long tim2 = 0;
 bool start_measure = true;
 bool set_time_delay = false;
 bool trig_sin = false;                            // Есть срабатывание триггера
@@ -2723,10 +2727,10 @@ void trigger()
 			myGLCD.setColor(VGA_RED);
 			myGLCD.fillCircle(227,12,10);
 			myGLCD.setColor(255, 255, 255);
-			myGLCD.print("     ", 250, 210);
-			myGLCD.printNumI(tr, 250, 210);
-			myGLCD.print("     ", 250, 220);
-			myGLCD.printNumI(Trigger, 250, 220);
+			myGLCD.print("     ", 250, 212);
+			myGLCD.printNumI(tr, 250, 212);
+			myGLCD.print("     ", 250, 224);
+			myGLCD.printNumI(Trigger, 250, 224);
 			trig_sin = true;                            // Есть срабатывание триггера
 			break;
 		}
@@ -2735,10 +2739,10 @@ void trigger()
 			myGLCD.setColor(0, 0, 0);
 			myGLCD.fillCircle(227, 12, 10);
 			myGLCD.setColor(255, 255, 255);
-			myGLCD.print("     ", 250, 210);
-			myGLCD.printNumI(tr, 250, 210);
-			myGLCD.print("     ", 250, 220);
-			myGLCD.printNumI(Trigger, 250, 220);
+			myGLCD.print("     ", 250, 212);
+			myGLCD.printNumI(tr, 250, 212);
+			myGLCD.print("     ", 250, 224);
+			myGLCD.printNumI(Trigger, 250, 224);
 			trig_sin = false;                            // Нет срабатывания триггера
 		}
 	}
@@ -2848,11 +2852,7 @@ void oscilloscope()  // просмотр в реальном времени
 				if ((y_osc >= 135) && (y_osc <= 175))  // Четвертая разрешение
 				{
 					waitForIt(245, 135, 318, 175);
-					set_time_delay = !set_time_delay;
-					if (set_time_delay)
-					{
-						tim2 = EndSample - StartSample;
-					}
+					i2c_eeprom_ulong_write(adr_set_timePeriod, EndSample - StartSample);
 				}
 			}
 
@@ -2883,45 +2883,15 @@ void oscilloscope()  // просмотр в реальном времени
 			StartSample = micros();            // Записать время начала измерений
 			radio_transfer();                  //  Отправить синхро
 
-			// delayMicroseconds(tim2);
-
-		//	trigger();                         // Определение начала посылки
 			trig_sin = false;
 			while (!trig_sin)             // Регистрация начала посылки
 			{
 			   trigger();
-			   if (micros() - StartSample > 2000000) break;
+			   if (micros() - StartSample > timePeriod) break; 
 
 			}
 
 			EndSample = micros();              //
-			myGLCD.setBackColor(0, 0, 255);
-			myGLCD.setColor(255, 255, 255);
-			myGLCD.print("       ", 255, 160);
-			myGLCD.printNumI(tim2, 255, 160);
-			myGLCD.print("       ", 255, 150);
-			myGLCD.printNumI(EndSample - StartSample, 255, 150);
-
-			if (set_time_delay && trig_sin)
-			{
-				myGLCD.setBackColor(0, 0, 255);
-				myGLCD.setColor(255, 255, 255);
-				myGLCD.print("       ", 255, 140);
-				myGLCD.printNumI(tim2 - (EndSample - StartSample), 255, 140);
-
-			}
-			else
-			{
-				myGLCD.setBackColor(0, 0, 255);
-				myGLCD.setColor(255, 255, 255);
-				myGLCD.print("       ", 255, 140);
-				myGLCD.printNumI(0, 255, 140);
-			}
-
-			myGLCD.setBackColor(0, 0, 0);
-
-
-			// delayMicroseconds(tim2);
 
 			// Записать аналоговый сигнал в блок памяти
 			ADC_CHER = 0;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
@@ -2932,13 +2902,47 @@ void oscilloscope()  // просмотр в реальном времени
 				ADC_CR = ADC_START; 	                    // Запустить преобразование
 				while (!(ADC_ISR_DRDY));                    // Ожидание завершения преобразования
 				Sample_osc[xpos][0] = ADC->ADC_CDR[7];      // Получить данные А0
-			//	MaxAnalog0 = max(MaxAnalog0, Sample_osc[xpos][0]);
-			//	MinAnalog0 = min(MinAnalog0, Sample_osc[xpos][0]);
-
 				delayMicroseconds(dTime);                   // dTime  время развертки
 			}
 
-			osc_line_off0 = true;                               // Разрешить стирание предыдущей линии
+			// Выводит информацию об измерении
+			myGLCD.setBackColor(0, 0, 255);
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.print("       ", 255, 160);
+			myGLCD.printNumI(set_timePeriod, 255, 160);
+			myGLCD.print("       ", 255, 150);
+			myGLCD.printNumI(EndSample - StartSample, 255, 150);   // Время 
+
+			if (trig_sin)
+			{
+				myGLCD.setColor(255, 0, 0);
+				myGLCD.drawRoundRect(245, 135, 318, 175);
+				myGLCD.setBackColor(0, 0, 255);
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.print("         ", 245, 140);
+				myGLCD.printNumF(((EndSample - StartSample) - set_timePeriod)/1000.00, 3,250, 140);
+
+			}
+			else
+			{
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.drawRoundRect(245, 135, 318, 175);
+				myGLCD.setBackColor(0, 0, 255);
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.print("       ", 255, 140);
+				myGLCD.printNumI(0, 255, 140);
+			}
+
+			myGLCD.setBackColor(0, 0, 0);
+			set_timePeriod = i2c_eeprom_ulong_read(adr_set_timePeriod);
+			timePeriod = i2c_eeprom_ulong_read(adr_timePeriod);
+			myGLCD.printNumF(timePeriod / 1000000.00, 2, 250, 200, ',');
+			myGLCD.print("sec", 285, 200);
+			int b = i2c_eeprom_read_byte(deviceaddress, adr_count4_kn);
+			myGLCD.print("     ", 250, 188);
+			myGLCD.print(proc_volume[b], 250, 188);
+
+			osc_line_off0 = true;                           // Разрешить стирание предыдущей линии
 			for (int xpos = 0; xpos < 240; xpos++)
 			{
 				//  Стереть предыдущий экран
@@ -2993,7 +2997,7 @@ void oscilloscope()  // просмотр в реальном времени
 
 			while (!start_measure)   // Интервал между измерениями
 			{
-				if (micros() - StartSample > 2000000) start_measure = true;
+				if (micros() - StartSample > timePeriod) start_measure = true;
 			}
 			start_measure = false;
 	}
@@ -4591,7 +4595,7 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.fillRoundRect(10, 210, 60, 239);
 	myGLCD.setColor(VGA_WHITE);                // Цвет шрифта
 	myGLCD.print("<-", 28, 214);
-	myGLCD.print("sec", 24, 224);
+	myGLCD.print("sec 1", 17, 224);
 	osc_line_off0 = true;
 
 	// Кнопка № 2
@@ -4600,7 +4604,7 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.fillRoundRect(70, 210, 120, 239);
 	myGLCD.setColor(VGA_WHITE);                // Цвет шрифта
 	myGLCD.print("->", 88, 214);
-	myGLCD.print("sec", 84, 224);
+	myGLCD.print("sec 1", 77, 224);
 
 	// Кнопка № 3
 	myGLCD.setColor(VGA_BLACK);                // Цвет поля кнопки
@@ -4608,7 +4612,7 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.fillRoundRect(130, 210, 180, 239);
 	myGLCD.setColor(VGA_WHITE);                // Цвет шрифта
 	myGLCD.print("<-", 148, 214);
-	myGLCD.print("V/del", 137, 224);
+	myGLCD.print("sec0,1", 134, 224);
 
 
 	// Кнопка № 4
@@ -4617,7 +4621,7 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.fillRoundRect(190, 210, 240, 239);
 	myGLCD.setColor(VGA_WHITE);                // Цвет шрифта
 	myGLCD.print("->", 206, 214);
-	myGLCD.print("V/del", 197, 224);
+	myGLCD.print("sec0,1", 193, 224);
 
 
 	myGLCD.setColor(255, 255, 255);                  // Цвет окантовки кнопки
@@ -4626,6 +4630,26 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.drawRoundRect (130, 210, 180, 239);       // Окантовка кнопки N3
 	myGLCD.drawRoundRect (190, 210, 240, 239);       // Окантовка кнопки N4
 }
+
+
+// чтение
+unsigned long i2c_eeprom_ulong_read(int addr)
+{
+	byte raw[4];
+	for (byte i = 0; i < 4; i++) raw[i] = i2c_eeprom_read_byte(deviceaddress, addr + i);
+	unsigned long &num = (unsigned long&)raw;
+	return num;
+}
+
+// запись
+void i2c_eeprom_ulong_write(int addr, unsigned long num)
+{
+	byte raw[4];
+	(unsigned long&)raw = num;
+	for (byte i = 0; i < 4; i++) i2c_eeprom_write_byte(deviceaddress, addr + i, raw[i]);
+}
+
+
 void touch_down()  //  Нижнее меню осциллографа
 {
 	delay(10);
@@ -4633,34 +4657,42 @@ void touch_down()  //  Нижнее меню осциллографа
 	x_osc = myTouch.getX();
 	y_osc = myTouch.getY();
 	myGLCD.setFont(SmallFont);
+	unsigned long timeP;
 
 	if ((y_osc >= 210) && (y_osc <= 239))                         //   Нижние кнопки
 	{
 		if ((x_osc >= 10) && (x_osc <= 60))                       //  Кн 1
 		{
 			waitForIt(10, 210, 60, 239);
-			tim2 += 1000;
-			if (tim2 > 90000) tim2 = 90000;
+			timeP = i2c_eeprom_ulong_read(adr_timePeriod);
+			timeP += 1000000;
+			if (timeP > 1000000 * 6)  timeP = 1000000 * 6;
+			i2c_eeprom_ulong_write(adr_timePeriod, timeP);
 
 		}
 		if ((x_osc >= 70) && (x_osc <= 120))                       //  Кн 2
 		{
 			waitForIt(70, 210, 120, 239);
-			tim2 -= 1000;
-			if (tim2 < 1000) tim2 = 0;
+			timeP = i2c_eeprom_ulong_read(adr_timePeriod);
+			timeP -=1000000;
+			if (timeP < 1000000) timeP = 1000000;
+			i2c_eeprom_ulong_write(adr_timePeriod, timeP);
 		}
 		if ((x_osc >= 130) && (x_osc <= 180))                       //  Вход 0
 		{
 			waitForIt(130, 210, 180, 239);
-			tim2 += 100;
-			if (tim2 > 90000) tim2 = 90000;
-
+			timeP = i2c_eeprom_ulong_read(adr_timePeriod);
+			timeP += 100000;
+			if (timeP > 1000000 * 6)  timeP = 1000000 * 6;
+			i2c_eeprom_ulong_write(adr_timePeriod, timeP);
 		}
 		if ((x_osc >= 190) && (x_osc <= 240))                       //  Вход 0
 		{
 			waitForIt(190, 210, 240, 239);
-			tim2 -= 100;
-			if (tim2 < 100) tim2 = 0;
+			timeP = i2c_eeprom_ulong_read(adr_timePeriod);
+			timeP -= 100000;
+			if (timeP < 1000000) timeP = 1000000;
+			i2c_eeprom_ulong_write(adr_timePeriod, timeP);
 		}
 	}
 }
@@ -6691,8 +6723,6 @@ void radio_transfer()       // test transfer
 				}
 				myGLCD.setColor(255, 255, 255);
 				myGLCD.print("microsec", 90, 165);
-	/*			myGLCD.print("     ", 160, 165);
-				myGLCD.printNumI(tim2, 160, 165);*/
 				counter_test++;
 			}
 		}
@@ -7049,8 +7079,8 @@ void set_volume(int reg_module, byte count_vol)
 				i2c_eeprom_write_byte(deviceaddress, adr_count4_kn, b);
 			}
 			volume2 = 16 * koeff_volume[b];
-			myGLCD.print("     ", 250, 190);
-			myGLCD.print(proc_volume[b], 250, 190);
+			//myGLCD.print("     ", 250, 188);
+			//myGLCD.print(proc_volume[b], 250, 188);
 
 
 			//Serial.println(b);
@@ -7163,7 +7193,9 @@ void setup(void)
 	resistor(1, volume1);                                // Установить уровень сигнала
 	resistor(2, volume2);                                // Установить уровень сигнала
 	preob_num_str();
-
+	//i2c_eeprom_ulong_write(adr_timePeriod, 1000000);
+	//i2c_eeprom_ulong_write(adr_set_timePeriod, 0);
+	timePeriod = i2c_eeprom_ulong_read(adr_timePeriod);
 	attachInterrupt(kn_red, volume_up, FALLING);
 	attachInterrupt(kn_blue, volume_down, FALLING);
 
