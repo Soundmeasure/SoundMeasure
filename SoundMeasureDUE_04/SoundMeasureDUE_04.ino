@@ -108,7 +108,11 @@ byte data_in[16];                                                           // Б
 byte data_out[16];                                                         // Буфер хранения данных для отправки
 
 int time_sound = 50;
+//int freq_sound = 1100;
 int freq_sound = 1850;
+
+int filterUp = 2550;
+int filterDown = 2150;
 byte volume1 = 0;
 byte volume2 = 0;
 unsigned long tim1 = 0;
@@ -2780,7 +2784,7 @@ void triggerFilter()
 		{
 			timeStopTrig = micros();                  // Записать время обнаружения второго фронта импульса
 
-			if (timeStopTrig - timeStartTrig > 2100 && timeStopTrig - timeStartTrig < 2550)
+			if (timeStopTrig - timeStartTrig > filterDown && timeStopTrig - timeStartTrig < filterUp)
 			{
 				myGLCD.setColor(VGA_LIME);
 				myGLCD.fillCircle(15, 12, 10);
@@ -2937,7 +2941,7 @@ void oscilloscope()  // просмотр в реальном времени
 				}
 		}
 		    digitalWrite(vibro, HIGH);
-			delayMicroseconds(5);
+			delayMicroseconds(500);
 			digitalWrite(vibro, LOW);
 			StartSample = micros();              // Записать время
 			radio_transfer();                  //  Отправить радио синхро сигнал
@@ -2948,9 +2952,16 @@ void oscilloscope()  // просмотр в реальном времени
 			   if (micros() - timeStartRadio > timePeriod-1000) break;   // Завершить измерение уровня порога
 			}
 
-			triggerFilter();
-
-
+			if (Filter_enable)
+			{
+				triggerFilter();
+			}
+			else
+			{
+				myGLCD.setColor(0, 0, 0);
+				myGLCD.fillCircle(15, 12, 10);
+				myGLCD.drawCircle(15, 12, 10);
+			}
 
 			EndSample = micros();              // Записать время срабатывания триггера порога 
 
@@ -2980,7 +2991,27 @@ void oscilloscope()  // просмотр в реальном времени
 				myGLCD.setBackColor(0, 0, 255);
 				myGLCD.setColor(255, 255, 255);
 				myGLCD.print("        ", 255, 140);
-				myGLCD.printNumF(((EndSample - timeStartRadio) - set_timePeriod)/1000.00, 3,255, 140);
+				if (Filter_enable)
+				{
+					if (trig_sinF)
+					{
+						myGLCD.printNumF(((EndSample - timeStartRadio) - set_timePeriod)/1000.00, 3,255, 140);
+					}
+					else
+					{
+						myGLCD.printNumI(0, 255, 140);
+
+					}
+				}
+				else
+				{
+					//myGLCD.setColor(255, 0, 0);
+					//myGLCD.drawRoundRect(245, 135, 318, 175);
+					//myGLCD.setBackColor(0, 0, 255);
+					//myGLCD.setColor(255, 255, 255);
+					//myGLCD.print("        ", 255, 140);
+					myGLCD.printNumF(((EndSample - timeStartRadio) - set_timePeriod) / 1000.00, 3, 255, 140);
+				}
 
 			}
 			else
@@ -4671,8 +4702,12 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.setBackColor(VGA_BLACK);
 	myGLCD.fillRoundRect(130, 210, 180, 239);
 	myGLCD.setColor(VGA_WHITE);                // Цвет шрифта
-	myGLCD.print("<-", 148, 214);
-	myGLCD.print("sec0,1", 134, 224);
+
+	myGLCD.print("On", 148, 214);
+	myGLCD.print("filter", 133, 224);
+
+	//myGLCD.print("<-", 148, 214);
+	//myGLCD.print("sec0,1", 134, 224);
 
 
 	// Кнопка № 4
@@ -4680,8 +4715,10 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.setBackColor(VGA_BLACK);
 	myGLCD.fillRoundRect(190, 210, 240, 239);
 	myGLCD.setColor(VGA_WHITE);                // Цвет шрифта
-	myGLCD.print("->", 206, 214);
-	myGLCD.print("sec0,1", 193, 224);
+	myGLCD.print("Off", 206, 214);
+	myGLCD.print("filter", 192, 224);
+	//myGLCD.print("->", 206, 214);
+	//myGLCD.print("sec0,1", 193, 224);
 
 
 	myGLCD.setColor(255, 255, 255);                  // Цвет окантовки кнопки
@@ -4741,18 +4778,22 @@ void touch_down()  //  Нижнее меню осциллографа
 		if ((x_osc >= 130) && (x_osc <= 180))                       //  Вход 0
 		{
 			waitForIt(130, 210, 180, 239);
-			timeP = i2c_eeprom_ulong_read(adr_timePeriod);
-			timeP += 100000;
-			if (timeP > 1000000 * 6)  timeP = 1000000 * 6;
-			i2c_eeprom_ulong_write(adr_timePeriod, timeP);
+			Filter_enable = true;                       // Разрешение применения фильтра
+
+			//timeP = i2c_eeprom_ulong_read(adr_timePeriod);
+			//timeP += 100000;
+			//if (timeP > 1000000 * 6)  timeP = 1000000 * 6;
+			//i2c_eeprom_ulong_write(adr_timePeriod, timeP);
 		}
 		if ((x_osc >= 190) && (x_osc <= 240))                       //  Вход 0
 		{
 			waitForIt(190, 210, 240, 239);
-			timeP = i2c_eeprom_ulong_read(adr_timePeriod);
-			timeP -= 100000;
-			if (timeP < 1000000) timeP = 1000000;
-			i2c_eeprom_ulong_write(adr_timePeriod, timeP);
+
+			Filter_enable = false;                       // Разрешение применения фильтра
+			//timeP = i2c_eeprom_ulong_read(adr_timePeriod);
+			//timeP -= 100000;
+			//if (timeP < 1000000) timeP = 1000000;
+			//i2c_eeprom_ulong_write(adr_timePeriod, timeP);
 		}
 	}
 }
