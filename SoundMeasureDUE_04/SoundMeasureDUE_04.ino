@@ -2798,7 +2798,6 @@ void oscilloscope()  // просмотр в реальном времени
 						break;
 					} 
 				}
-
 			myGLCD.setBackColor( 0, 0, 255);
 			myGLCD.setFont( SmallFont);
 			myGLCD.setColor (255, 255,255);
@@ -2855,7 +2854,6 @@ void oscilloscope()  // просмотр в реальном времени
 					i2c_eeprom_ulong_write(adr_set_timePeriod, EndSample - StartSample);
 				}
 			}
-
 		if ((x_osc>=250) && (x_osc<=318))  
 		{
 		if ((y_osc>=200) && (y_osc<=239))  //   Нижние кнопки  
@@ -2882,9 +2880,8 @@ void oscilloscope()  // просмотр в реальном времени
 
 			StartSample = micros();            // Записать время начала измерений
 			radio_transfer();                  //  Отправить синхро
-
 			trig_sin = false;
-			while (!trig_sin)             // Регистрация начала посылки
+			while (!trig_sin)                  // Регистрация начала посылки
 			{
 			   trigger();
 			   if (micros() - StartSample > timePeriod) break; 
