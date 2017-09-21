@@ -261,8 +261,9 @@ int hh,mm,ss,dow,dd,mon,yyyy;
 
  //***************** Назначение переменных для хранения текстов*****************************************************
 
-char  txt_menu1_1[]          = "PE\x81\x86""CTPATOP";                                                       // "РЕГИСТРАТОР"
-char  txt_menu1_2[]          = "HACTPO""\x87""KA";                                                      // "САМОПИСЕЦ"
+//char  txt_menu1_1[]          = "PE\x81\x86""CTPATOP";                                                     // "РЕГИСТРАТОР"
+char  txt_menu1_1[]          = "\x86\x9C\xA1""ep.""\x9C""a""\x99""ep""\x9B\x9F\x9D";                        // Измерение задержки
+char  txt_menu1_2[]          = "HACTPO""\x87""KA";                                                          // "САМОПИСЕЦ"
 char  txt_menu1_3[]          = "PE\x81\x86""CT.+ CAMO\x89.";                                                // "РЕГИСТ. + САМОП."
 char  txt_menu1_4[]          = "PA\x80OTA c SD";                                                            // "РАБОТА с SD"
 
@@ -2609,8 +2610,10 @@ void swichMenu() // Тексты меню в строках "txt....."
 
 				   if (pressed_button==but1)      // Регистратор
 					   {
-							 Draw_menu_ADC1();
-							 menu_ADC();
+							 //Draw_menu_ADC1();
+							 //menu_ADC();
+							 myGLCD.clrScr();
+							 oscilloscope();
 							 myGLCD.clrScr();
 							 myButtons.drawButtons();;
 					   }
@@ -2813,7 +2816,7 @@ void triggerFilter()
 	myGLCD.drawCircle(227, 12, 10);
 	myGLCD.drawCircle(15, 12, 10);
 }
-void oscilloscope()  // просмотр в реальном времени
+void oscilloscope()                                     // просмотр в реальном времени
 {
 	uint32_t bgnBlock, endBlock;
 	block_t block[BUFFER_BLOCK_COUNT];
@@ -2821,7 +2824,7 @@ void oscilloscope()  // просмотр в реальном времени
 	myGLCD.setBackColor( 0, 0, 0);
 	myGLCD.clrScr();
 	buttons_right();
-	buttons_channelNew();                          // Нарисовать кнопки внизу экрана;
+	buttons_channelNew();                               // Нарисовать кнопки внизу экрана;
 	myGLCD.setBackColor( 0, 0, 0);
 	myGLCD.setFont( BigFont);
 	myGLCD.setColor(VGA_LIME);
