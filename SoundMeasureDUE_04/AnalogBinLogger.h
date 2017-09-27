@@ -9,7 +9,7 @@ struct metadata_t
   unsigned long  sampleInterval;   // Sample interval in CPU cycles.
   unsigned long  recordEightBits;  // Size of ADC values, nonzero for 8-bits.
   unsigned long  pinCount;         // Number of analog pins in a sample.
-  unsigned long  pinNumber[4];   // List of pin numbers in a sample.
+  unsigned long  pinNumber[4];     // List of pin numbers in a sample.
 };
 //------------------------------------------------------------------------------
 // Data block for 8-bit ADC mode.
@@ -22,12 +22,13 @@ struct block8_t
 };
 //------------------------------------------------------------------------------
 // Data block for 10-bit ADC mode.
-const size_t DATA_DIM16 = 254;
+const size_t DATA_DIM16 = 240;
 struct block16_t 
 {
-  unsigned short count;               // count of data bytes
-  unsigned short overrun;             // count of overruns since last block счетчик перерасхода, начиная с последнего блока
-  unsigned short data[DATA_DIM16];    //
+  unsigned short count;                   // количество байтов данных
+  unsigned short overrun;                 // счетчик перерасхода, начиная с последнего блока
+  unsigned short data[DATA_DIM16];        // Буфер данных max 65535
+  unsigned short data_ms[DATA_DIM16];     // Буфер временных меток max 65535
 };
 //------------------------------------------------------------------------------
 // Data block for PC use
