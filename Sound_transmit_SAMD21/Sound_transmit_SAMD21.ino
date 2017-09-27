@@ -274,7 +274,8 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);   // Грузим сообщение 2 байта для автоотправки;
 			stopMillis = micros();
-			delayMicroseconds(2000);                       // Задержка для получения ответа и завершения процессов на Базе
+			delayMicroseconds(50000);                       // Задержка для получения ответа и завершения процессов на Базе
+		//	delay(5);
 			sound_run(time_sound, freq_sound);
 			info();
 			//info_view = false;
