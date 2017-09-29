@@ -111,8 +111,7 @@ byte data_in[16];                                                           // Б
 byte data_out[16];                                                         // Буфер хранения данных для отправки
 
 int time_sound = 50;
-//int freq_sound = 1100;
-int freq_sound = 1850;
+int freq_sound = 1800;
 
 int filterUp = 2550;
 int filterDown = 2150;
@@ -251,7 +250,7 @@ int hh,mm,ss,dow,dd,mon,yyyy;
 	int mode1 = 0;             //Переключение чувствительности
 	int dTime = 2;
 	int x_dTime = 276;
-	int tmode = 3;
+	int tmode = 5;
 	int t_in_mode = 0;
 	int Trigger = 0;
 	int SampleSize = 0;
@@ -302,7 +301,7 @@ char  txt_info14[]            = "Erasing all data";
 //char  txt_info15[]            = "Stop->PUSH Display"; 
 char  txt_info16[]            = "File: "; 
 char  txt_info17[]            = "Max block :"; 
-char  txt_info18[]            = "Record time: "; 
+char  txt_info18[]            = "Rec time ms: "; 
 char  txt_info19[]            = "Sam count:"; 
 char  txt_info20[]            = "Samples/sec: "; 
 char  txt_info21[]            = "O\xA8\x9D\x96\x9F\x9D:"; 
@@ -405,6 +404,14 @@ const float SAMPLE_RATE = 5000;  // Must be 0.25 or greater.
 // constant instead of being calculated from SAMPLE_RATE.  SAMPLE_RATE is not
 // used in the code below.  For example, setting SAMPLE_INTERVAL = 2.0e-4
 // will result in a 200 microsecond sample interval.
+
+// Интервал между выборками в секундах, SAMPLE_INTERVAL, может быть установлен на
+// константа вместо вычисления SAMPLE_RATE. SAMPLE_RATE не
+// используется в приведенном ниже коде. Например, установка SAMPLE_INTERVAL = 2.0e-4
+// приведет к интервалу выборки 200 микросекунд.
+
+
+
 const float SAMPLE_INTERVAL = 1.0/SAMPLE_RATE;
 
 // Setting ROUND_SAMPLE_INTERVAL non-zero will cause the sample interval to
@@ -440,6 +447,7 @@ const uint32_t FILE_BLOCK_COUNT = 256000;
 
 #define FILE_BASE_NAME_TIME "TIMESa"
 // Set RECORD_EIGHT_BITS non-zero to record only the high 8-bits of the ADC.
+//Установите RECORD_EIGHT_BITS ненулевое значение для записи только высоких 8 бит бита АЦП??
 #define RECORD_EIGHT_BITS 0
 //------------------------------------------------------------------------------
 // Pin definitions.
@@ -1202,49 +1210,36 @@ bool ledOn = false;
 
 void firstHandler()
 {
-//	 int time_start = micros();
 	//ADC_CHER = Channel_x;    // this is (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3    
-	ADC_CR = ADC_START ; 	   // Запустить преобразование
-
-  while (!(ADC_ISR & ADC_ISR_DRDY));
-
-  if (isrBufNeeded && emptyHead == emptyTail)   //  Необходим новый  буфер, если true 
-	  {
-		// no buffers - count overrun нет буферов - рассчитывайте перерасход
-		if (isrOver < 0XFFFF) isrOver++;
-	
-		// Avoid missed timer error. Избежать пропущенных ошибку таймера.
-		timerFlag = false;
+	ADC_CR = ADC_START ; 	                                // Запустить преобразование
+	if (isrBufNeeded && emptyHead == emptyTail)             //  Необходим новый  буфер, если true 
+	{
+		if (isrOver < 0XFFFF) isrOver++;                    // no buffers - count overrun нет буферов - рассчитывайте перерасход
+		timerFlag = false;		                            // Avoid missed timer error. Избежать пропущенных ошибку таймера.
 		return;
-	  }
+	}
 
-  if (isrBufNeeded)    // Необходимо проверить состояние буфера
-	  {   
-		//  Удалить буфер из пустого очереди.
+	if (isrBufNeeded)                                       // Необходимо проверить состояние буфера
+		{   
+                                                   		    //  Удалить буфер из пустого очереди.
 		isrBuf = emptyQueue[emptyTail];
 		emptyTail = queueNext(emptyTail);
-		isrBuf->count = 0;                    // Счетчик в 0
-		isrBuf->overrun = isrOver;            // 
+		isrBuf->count = 0;                                  // Счетчик в 0
+		isrBuf->overrun = isrOver;                          // 
 		isrBufNeeded = false;    
-	  }
-  // Store ADC data.
-   //while (!(ADC_ISR & ADC_ISR_DRDY));
-  //while (!(ADC_ISR_DRDY));
-	  //  int time_period = micros() - time_start;
-	 //   isrBuf->data[isrBuf->count++] = time_period;
-		//if (Channel0) isrBuf->data[isrBuf->count++] = ADC->ADC_CDR[7];
-		isrBuf->data[isrBuf->count++] = ADC->ADC_CDR[7];              // Записать результат измерения
- 
-  if (isrBuf->count >= count_pin*SAMPLES_PER_BLOCK)                   //  SAMPLES_PER_BLOCK -количество памяти выделенное на  один вход 
- // SAMPLES_PER_BLOCK = DATA_DIM16/PIN_COUNT; // 254 разделить на количество входов
-	  {
-		// Put buffer isrIn full queue.  Положите буфер isrIn полной очереди.
-		uint8_t tmp = fullHead;                              // Avoid extra fetch of volatile fullHead.  Избегайте дополнительной выборки volatile fullHead.
+		}
+	// Store ADC data.                                      // Сохранить данные АЦП.   
+	while (!(ADC_ISR & ADC_ISR_DRDY));                             
+	isrBuf->data[isrBuf->count++] = ADC->ADC_CDR[7];        // Записать результат измерения
+	if (isrBuf->count >= count_pin*SAMPLES_PER_BLOCK)       //  SAMPLES_PER_BLOCK -количество памяти выделенное на  один вход 
+ 		{
+															// Put buffer isrIn full queue.  Положите буфер isrIn полной очереди.
+		uint8_t tmp = fullHead;                             // Avoid extra fetch of volatile fullHead.  Избегайте дополнительной выборки volatile fullHead.
 		fullQueue[tmp] = (block_t*)isrBuf;
 		fullHead = queueNext(tmp);
 		isrBufNeeded = true;                                // Установите необходимый буфер и очистите переполнения.
 		isrOver = 0;
-	  }
+		}
  }
 void secondHandler()
 {
@@ -1346,21 +1341,21 @@ void adcInit(metadata_t* meta)
 	  meta->cpuFrequency = F_CPU;
   
 	  float sampleRate = (float)meta->cpuFrequency/meta->sampleInterval;
-	//  Serial.print(F("Sample pins:"));
-	/*  for (int i = 0; i < meta->pinCount; i++) 
-	  {
-		Serial.print(' ');
-		Serial.print(meta->pinNumber[i], DEC);
-	  }
+	 // Serial.print(F("Sample pins:"));
+	 // for (int i = 0; i < meta->pinCount; i++) 
+	 // {
+		//Serial.print(' ');
+		//Serial.print(meta->pinNumber[i], DEC);
+	 // }
  
-	  Serial.println(); 
-	  Serial.println(F("ADC bits: 12 "));
-	  Serial.print(F("ADC interval usec: "));
-	  Serial.println(set_strob);*/
-	  //Serial.print(F("Sample Rate: "));
-	  //Serial.println(sampleRate);  
-	  //Serial.print(F("Sample interval usec: "));
-	  //Serial.println(1000000.0/sampleRate, 4); 
+	 // Serial.println(); 
+	 // Serial.println(F("ADC bits: 12 "));
+	 // Serial.print(F("ADC interval usec: "));
+	 // Serial.println(set_strob);
+	 // Serial.print(F("Sample Rate: "));
+	 // Serial.println(sampleRate);  
+	 // Serial.print(F("Sample interval usec: "));
+	 // Serial.println(1000000.0/sampleRate, 4); 
 }
 
 void adcStart()
@@ -2336,6 +2331,7 @@ void logDataRF()
 	DrawGrid();                                 // Отобразить сетку и нарисовать окантовку кнопок справа
 
 	myGLCD.setColor(255, 255, 255);
+	
 	myGLCD.drawLine(250, 45, 318, 85);
 	myGLCD.drawLine(250, 85, 318, 45);
 
@@ -2344,9 +2340,6 @@ void logDataRF()
 
 	myGLCD.drawLine(250, 135, 318, 175);
 	myGLCD.drawLine(250, 175, 318, 135);
-
-	myGLCD.drawLine(250, 200, 318, 239);
-	myGLCD.drawLine(250, 239, 318, 200);
 
 
 	myGLCD.setColor(VGA_LIME);
@@ -2358,14 +2351,14 @@ void logDataRF()
 	myGLCD.setColor(255, 255, 255);
 	myGLCD.drawRoundRect(1, 1, 60, 35);
 	myGLCD.setColor(VGA_YELLOW);
-	myGLCD.fillRoundRect(40, 40, 200, 120);
+	myGLCD.fillRoundRect(40, 40, 200, 120);    // Заполнение надписи "СТАРТ"
 	myGLCD.setBackColor(VGA_YELLOW);
 	myGLCD.setColor(255, 0, 0);
 	myGLCD.setFont(BigFont);
 	myGLCD.print("CTAPT", 80, 72);
 	myGLCD.setBackColor(0, 0, 255);
 	myGLCD.setColor(255, 255, 255);
-	myGLCD.drawRoundRect(40, 40, 200, 120);
+	myGLCD.drawRoundRect(40, 40, 200, 120);    // Белая окантовка надписи "СТАРТ"
 
 	StartSample = millis();                    // Подготовка мигания надписи "СТАРТ"
 
@@ -2413,9 +2406,9 @@ void logDataRF()
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.setFont(SmallFont);
 
-			if ((x_osc >= 1) && (x_osc <= 60))          //  Выход из программы
+			if ((x_osc >= 1) && (x_osc <= 60))          //  Выход из программы без измерения, Завершить выполнение программы
 			{
-				if ((y_osc >= 1) && (y_osc <= 35))  //
+				if ((y_osc >= 1) && (y_osc <= 35))      //
 				{
 					waitForIt(1, 1, 60, 35);
 					Draw_menu_ADC_RF();
@@ -2423,9 +2416,9 @@ void logDataRF()
 				}
 			}
 
-			if ((x_osc >= 40) && (x_osc <= 200))        //  Выход из ожидания, Старт
+			if ((x_osc >= 40) && (x_osc <= 200))        //  Выход из ожидания, продолжить выполнение измерения
 			{
-				if ((y_osc >= 40) && (y_osc <= 120))  //
+				if ((y_osc >= 40) && (y_osc <= 120))    //
 				{
 					waitForIt(40, 40, 200, 120);
 					break;
@@ -2433,10 +2426,10 @@ void logDataRF()
 			}
 
 
-			if ((x_osc >= 250) && (x_osc <= 284))  // Боковые кнопки
+			if ((x_osc >= 250) && (x_osc <= 284))                // Боковые кнопки. Установки времени развертки
 			{
 
-				if ((y_osc >= 1) && (y_osc <= 40))  // Первая  период -
+				if ((y_osc >= 1) && (y_osc <= 40))               // Первая,  период уменьшить
 				{
 					waitForIt(250, 1, 318, 40);
 					mode_strob--;
@@ -2451,9 +2444,9 @@ void logDataRF()
 					myGLCD.printNumI(set_strob, 270, 20);
 				}
 			}
-			if ((x_osc >= 284) && (x_osc <= 318))  // Боковые кнопки
+			if ((x_osc >= 284) && (x_osc <= 318))              // Боковые кнопки
 			{
-				if ((y_osc >= 1) && (y_osc <= 40))  // Первая  период  +
+				if ((y_osc >= 1) && (y_osc <= 40))             // Первая  период  увеличить
 				{
 					waitForIt(250, 1, 318, 40);
 					mode_strob++;
@@ -2469,7 +2462,7 @@ void logDataRF()
 				}
 			}
 
-			if ((y_osc >= 205) && (y_osc <= 239))  // Нижние кнопки переключения входов
+			if ((y_osc >= 205) && (y_osc <= 239))                   // Нижние кнопки переключения входов. Не используется!!
 			{
 				//touch_osc();      
 			}
@@ -2482,8 +2475,8 @@ void logDataRF()
 	myGLCD.clrScr();
 	myGLCD.setBackColor(0, 0, 0);
 	myGLCD.setFont(BigFont);
-	adcInit((metadata_t*)&block[0]);
-	preob_num_str();                       // Сформировать имя файла
+	adcInit((metadata_t*)&block[0]);                                // 
+	preob_num_str();                                                // Сформировать имя файла
 	// Find unused file name.
 	if (BASE_NAME_SIZE > 6)
 	{
@@ -2516,7 +2509,6 @@ void logDataRF()
 		}
 	}
 	// Create new file.
-	// Serial.println(F("Creating new file"));
 	myGLCD.print(txt_info27, LEFT, 155);                                              // "Creating new file";
 	binFile.close();                                                                  //
 	if (!binFile.createContiguous(sd.vwd(), TMP_FILE_NAME, 512 * FILE_BLOCK_COUNT))   //
@@ -2574,9 +2566,7 @@ void logDataRF()
 	delay(1000);
 	myGLCD.setColor(VGA_LIME);
 	myGLCD.print(txt_info11, CENTER, 200);                          // "ESC->PUSH Display";
-	//// Wait for Serial Idle.
-	//Serial.flush();
-	//delay(10);
+
 	uint32_t bn = 1;
 	uint32_t t0 = 0;
 	uint32_t t1 = t0;
@@ -2587,12 +2577,15 @@ void logDataRF()
 	myGLCD.setColor(255, 150, 50);
 	myGLCD.print("                    ", CENTER, 100);
 	myGLCD.print(txt_info28, CENTER, 100);
-	setup_radio_ping();                      // Настроить радиоканал
+	setup_radio_ping();                              // Настроить радиоканал
 	// Start logging interrupts.
-
-	adcStart();
-
+	data_out[8] = 254;                               // Установить максимальную громкость сигнала
+	data_out[9] = 254;                               // Установить максимальную громкость сигнала
 	radio_transfer();                                //  Отправить радио синхро сигнал
+	delay(200);
+	adcStart();                                      // Разрешение на измерение
+
+	radio_transfer();                                // Отправить радио синхро сигнал
 	count_ms = 0;
 	t0 = millis();
 	t1 = t0;
@@ -2640,17 +2633,17 @@ void logDataRF()
 			bn++;
 			myGLCD.drawLine(0, 70, proc_step*2, 70);
 			proc_step++;
-			if (proc_step > 50)                         // Время записи
+			if (proc_step > 60)                         // Время записи
 			{
 				proc_step = 0;
 				t1 = millis();
 				Timer3.stop();
 				Timer4.stop();
-			//	Serial.println(t1-t0);
+
 				break;
 			}
 
-			if (bn == FILE_BLOCK_COUNT)
+			if (bn == FILE_BLOCK_COUNT)  
 			{
 				t1 = millis();
 				Timer3.stop();
@@ -2663,26 +2656,6 @@ void logDataRF()
 		{
 			error("Missed timer event - rate too high");
 		}
-		//if (!strob_start)
-		//{
-		//	strob_start = digitalRead(strob_pin);                      // Проверка входа внешнего запуска 
-		//	if (strob_start)
-		//	{
-		//		repeat = false;
-		//		if (!strob_start)
-		//		{
-		//			myGLCD.setColor(VGA_RED);
-		//			myGLCD.fillCircle(227, 12, 10);
-		//		}
-		//		else
-		//		{
-		//			myGLCD.setColor(255, 255, 255);
-		//			myGLCD.drawCircle(227, 12, 10);
-		//		}
-		//		myGLCD.setColor(255, 255, 255);
-		//		break;
-		//	}
-		//}
 
 		if (myTouch.dataAvailable())
 		{
@@ -2741,7 +2714,8 @@ void logDataRF()
 	myGLCD.setColor(255, 255, 255);
 	myGLCD.print(txt_info18, LEFT, 65);                 // "Record time: "
 	myGLCD.setColor(VGA_YELLOW);
-	myGLCD.printNumF(0.001*(t1 - t0), 2, RIGHT, 65);// 
+//	myGLCD.printNumF(0.001*(t1 - t0), 2, RIGHT, 65);// 
+	myGLCD.printNumF((t1 - t0), 2, RIGHT, 65);// 
 	myGLCD.setColor(255, 255, 255);
 	myGLCD.print(txt_info19, LEFT, 85);//
 	myGLCD.setColor(VGA_YELLOW);
@@ -3132,7 +3106,7 @@ void swichMenu() // Тексты меню в строках "txt....."
 							 myButtons.drawButtons();
 					   }
 	  
-				   if (pressed_button==but2)     // Настройка
+				   if (pressed_button==but2)     //Меню Настройка
 					   {
 							Draw_menu_Osc();
 							menu_Oscilloscope();
@@ -3436,28 +3410,6 @@ void oscilloscope()                                     // просмотр в реальном в
 					i2c_eeprom_ulong_write(adr_set_timePeriod, EndSample - timeStartRadio);
 				}
 			}
-		if ((x_osc>=250) && (x_osc<=318))  
-		{
-		if ((y_osc>=200) && (y_osc<=239))  //   Нижние кнопки  
-			{
-				waitForIt(250, 200, 318, 238);
-				Channel_trig = 0;
-				t_in_mode ++;
-					if (t_in_mode > 3)
-						{
-							t_in_mode = 0;
-						}
-					switch_trig(t_in_mode);
-					myGLCD.setBackColor( 0, 0, 255);
-					myGLCD.setColor (255, 255,255);
-					myGLCD.printNumI(t_in_mode, 282, 214);
-			}
-		}
-
-			if ((y_osc>=205) && (y_osc<=239))  // Нижние кнопки переключения входов
-				{
-					touch_down();
-				}
 		}
 		    digitalWrite(vibro, HIGH);
 			delayMicroseconds(500);
@@ -3502,7 +3454,13 @@ void oscilloscope()                                     // просмотр в реальном в
 			myGLCD.printNumI(set_timePeriod, 255, 160);
 			myGLCD.print("        ", 255, 150);
 			myGLCD.printNumI(EndSample - timeStartRadio, 255, 150);   // Время получения ответа 
-
+			myGLCD.setBackColor(0, 0, 0);
+			myGLCD.setFont(BigFont);
+			myGLCD.print("\x85""a""\x99""ep""\x9B\x9F""a", LEFT + 2, 8);   // "Задержка"
+			myGLCD.print("c""\x9D\x98\xA2""a""\xA0""a", LEFT + 2, 25);     // "сигнала"
+			myGLCD.print("      ", LEFT, 44);
+			myGLCD.setFont(SmallFont);
+			myGLCD.setBackColor(0, 0, 255);
 			if (trig_sin)
 			{
 				myGLCD.setColor(255, 0, 0);
@@ -3515,21 +3473,34 @@ void oscilloscope()                                     // просмотр в реальном в
 					if (trig_sinF)
 					{
 						myGLCD.printNumF(((EndSample - timeStartRadio) - set_timePeriod)/1000.00, 3,255, 140);
+						myGLCD.setFont(BigFont);
+						myGLCD.setBackColor(0, 0, 0);
+						myGLCD.printNumF(((EndSample - timeStartRadio) - set_timePeriod) / 1000.00, 3, LEFT+5, 44);
+						myGLCD.print(" ms", 88, 44);
+						myGLCD.setFont(SmallFont);
+						myGLCD.setBackColor(0, 0, 255);
 					}
 					else
 					{
 						myGLCD.printNumI(0, 255, 140);
+						myGLCD.setFont(BigFont);
+						myGLCD.setBackColor(0, 0, 0);
+						myGLCD.printNumI(0, LEFT+5, 44);
+						myGLCD.print(" ms", 88, 44);
+						myGLCD.setFont(SmallFont);
+						myGLCD.setBackColor(0, 0, 255);
 
 					}
 				}
 				else
 				{
-					//myGLCD.setColor(255, 0, 0);
-					//myGLCD.drawRoundRect(245, 135, 318, 175);
-					//myGLCD.setBackColor(0, 0, 255);
-					//myGLCD.setColor(255, 255, 255);
-					//myGLCD.print("        ", 255, 140);
 					myGLCD.printNumF(((EndSample - timeStartRadio) - set_timePeriod) / 1000.00, 3, 255, 140);
+					myGLCD.setFont(BigFont);
+					myGLCD.setBackColor(0, 0, 0);
+					myGLCD.printNumF(((EndSample - timeStartRadio) - set_timePeriod) / 1000.00, 3, LEFT+5, 44);
+					myGLCD.print(" ms", 88, 44);
+					myGLCD.setFont(SmallFont);
+					myGLCD.setBackColor(0, 0, 255);
 				}
 
 			}
@@ -3541,6 +3512,12 @@ void oscilloscope()                                     // просмотр в реальном в
 				myGLCD.setColor(255, 255, 255);
 				myGLCD.print("        ", 255, 140);
 				myGLCD.printNumI(0, 255, 140);
+				myGLCD.setFont(BigFont);
+				myGLCD.setBackColor(0, 0, 0);
+				myGLCD.printNumI(0, LEFT + 5, 44);
+				myGLCD.print(" ms", 88, 44);
+				myGLCD.setFont(SmallFont);
+				myGLCD.setBackColor(0, 0, 255);
 			}
 
 			myGLCD.setBackColor(0, 0, 0);
@@ -3614,7 +3591,7 @@ void oscilloscope()                                     // просмотр в реальном в
 koeff_h = 7.759*4;
 mode1 = 0;             // в/дел
 mode = 3;              // Время развертки  
-tmode = 3;
+tmode = 5;             // Уровень триггера порога
 //StartSample = millis();
 myGLCD.setFont( BigFont);
 while (myTouch.dataAvailable()){}
@@ -3861,13 +3838,15 @@ void chench_tmode(bool mod)  // Уровень порога
 		tmode--;
 	}
 	if (tmode < 0)tmode = 0;
-	if (tmode > 5)tmode = 5;
+	if (tmode > 7)tmode = 7;
 
 	if (tmode == 1) { Trigger = 512; myGLCD.print(" 10% ", 264, 65);}
-	if (tmode == 2) { Trigger = 1024;  myGLCD.print(" 25% ", 264, 65); }
-	if (tmode == 3) { Trigger = 2047;  myGLCD.print(" 50% ", 264, 65); }
-	if (tmode == 4) { Trigger = 3071;  myGLCD.print(" 75% ", 264, 65); }
-	if (tmode == 5) { Trigger = 4080; myGLCD.print("100%", 265, 65); }
+	if (tmode == 2) { Trigger = 768;  myGLCD.print(" 18% ", 264, 65); }
+	if (tmode == 3) { Trigger = 1024;  myGLCD.print(" 25% ", 264, 65); }
+	if (tmode == 4) { Trigger = 1536;  myGLCD.print(" 38% ", 264, 65); }
+	if (tmode == 5) { Trigger = 2047;  myGLCD.print(" 50% ", 264, 65); }
+	if (tmode == 6) { Trigger = 3071;  myGLCD.print(" 75% ", 264, 65); }
+	if (tmode == 7) { Trigger = 4080; myGLCD.print("100%", 265, 65); }
 	if (tmode == 0) { Trigger = 0; myGLCD.print(" Off ", 265, 65); }
 }
 void chench_mode1(bool mod)  // Разрешение экрана
@@ -5380,11 +5359,11 @@ void DrawGrid()
 	    myGLCD.drawLine(0, dgvh * 40, 239, dgvh * 40);
       }
   }
-	//myGLCD.setColor(255, 255, 255);           // Белая окантовка
-	//myGLCD.drawRoundRect (250, 1, 318, 40);
-	//myGLCD.drawRoundRect (250, 45, 318, 85);
-	//myGLCD.drawRoundRect (250, 90, 318, 130);
-	//myGLCD.drawRoundRect (250, 135, 318, 175);
+	myGLCD.setColor(255, 255, 255);           // Белая окантовка
+	myGLCD.drawRoundRect (250, 1, 318, 40);
+	myGLCD.drawRoundRect (250, 45, 318, 85);
+	myGLCD.drawRoundRect (250, 90, 318, 130);
+	myGLCD.drawRoundRect (250, 135, 318, 175);
 
 	//myGLCD.drawRoundRect (10, 210, 60, 239);
 	//myGLCD.drawRoundRect (70, 210, 120, 239);
@@ -6139,21 +6118,21 @@ void printDirectory_RF(File dir, int numTabs)
 {
 	char* par;
 	char ext_files[3];
-	char ext_bin[] = "BIN";
-	bool view_on = true;
-	int count_files = 1;
-	int max_count_files = 1;
+	char ext_bin[]       = "BIN";
+	bool view_on         = true;
+	int count_files      = 1;
+	int max_count_files  = 1;
 	int max_count_files1 = 1;
-	int min_count_files = 1;
-	int count_page = 1;
-	int max_count_page = 1;
-	int max_count_page1 = 1;
-	int count_string = 0;
-	int icount = 1;
-	int icount_end = 1;
-	int y_fcount_start = 1;
-	int y_fcount_stop = 12;
-	int y_fcount_step = 1;
+	int min_count_files  = 1;
+	int count_page       = 1;
+	int max_count_page   = 1;
+	int max_count_page1  = 1;
+	int count_string     = 0;
+	int icount           = 1;
+	int icount_end       = 1;
+	int y_fcount_start   = 1;
+	int y_fcount_stop    = 12;
+	int y_fcount_step    = 1;
 	int old_fcount_start = 5;
 	myGLCD.clrScr();
 	myGLCD.setBackColor(0, 0, 0);
@@ -6164,7 +6143,7 @@ void printDirectory_RF(File dir, int numTabs)
 	{
 		for (int i = 0; i < 13; i++)
 		{
-			list_files_tab[icount][i] = ' ';
+			list_files_tab[icount][i]   = ' ';
 			size_files_tab[count_files] = 0;
 		}
 	}
@@ -6210,7 +6189,7 @@ void printDirectory_RF(File dir, int numTabs)
 	myGLCD.print("\xA5""a\x9E\xA0""a", 185, 90);      // Кнопка "файла"
 	myGLCD.setFont(SmallFont);
 	int count_str = 1;
-	count_string = 0;
+	count_string  = 0;
 
 	for (icount = 1; icount < count_files; icount++)  //Вывод списка файдов на экран
 	{
@@ -6228,15 +6207,15 @@ void printDirectory_RF(File dir, int numTabs)
 				myGLCD.setColor(0, 0, 0);
 				myGLCD.fillRoundRect(3, 3, 140, 185);
 				count_string = 0;
-				count_str = 1;
+				count_str    = 1;
 				count_page++;
 			}
 		}
 	}
-	max_count_files = count_files;
-	max_count_page = count_page;
+	max_count_files  = count_files;
+	max_count_page   = count_page;
 	max_count_files1 = count_files;
-	max_count_page1 = count_page;
+	max_count_page1  = count_page;
 	myGLCD.setColor(VGA_YELLOW);
 	myGLCD.setBackColor(0, 0, 255);
 	// Вывод количества страниц списка файлов
@@ -6260,18 +6239,18 @@ void printDirectory_RF(File dir, int numTabs)
 			int	x = myTouch.getX();
 			int	y = myTouch.getY();
 
-			if ((y >= 214) && (y <= 239))            // 
+			if ((y >= 214) && (y <= 239))                // 
 			{
-				if ((x >= 95) && (x <= 315))         // Выход
+				if ((x >= 95) && (x <= 315))             // Выход
 				{
 					waitForIt(5, 214, 315, 239);
 					break;
 				}
 			}
 
-			if ((y >= 189) && (y <= 209))            // 
+			if ((y >= 189) && (y <= 209))               // 
 			{
-				if ((x >= 90) && (x <= 130))        // Кнопки перелистывания страниц "<<"
+				if ((x >= 90) && (x <= 130))            // Кнопки перелистывания страниц "<<"
 				{
 					waitForIt(90, 189, 130, 209);
 					myGLCD.setColor(VGA_YELLOW);
@@ -6373,24 +6352,26 @@ void printDirectory_RF(File dir, int numTabs)
 						old_fcount_start = y_fcount_start;
 						set_files = ((count_page - 1) * 12) + y_fcount_step + 1;
 						myGLCD.setColor(VGA_YELLOW);
-						myGLCD.print(list_files_tab[set_files], 170, 30);     // номер файла в позиции "set_files"
+						myGLCD.print(list_files_tab[set_files], 170, 30);                       // номер файла в позиции "set_files"
 
-						ext_files[0] = list_files_tab[set_files][9];         // Исключить просмотр BIN файлов
+						ext_files[0] = list_files_tab[set_files][9];                            // Исключить просмотр BIN файлов
 						ext_files[1] = list_files_tab[set_files][10];
 						ext_files[2] = list_files_tab[set_files][11];
 
-						if (ext_files[0] == 'B' && ext_files[1] == 'I' && ext_files[2] == 'N')
+						if (ext_files[0] == 'C' && ext_files[1] == 'S' && ext_files[2] == 'V')
 						{
-							view_on = false;
+							view_on = true;
 							myGLCD.setFont(BigFont);
-							myGLCD.print("He\x97o\x9C\xA1o\x9B""e\xA2", 146, 130);     //  "Невозможен"
+							myGLCD.print("           ", 156, 130);                                        // Очистить предупреждение
+							myGLCD.print("           ", 140, 150);                                        // Очистить предупреждение
 							myGLCD.setFont(SmallFont);
 						}
 						else
 						{
-							view_on = true;
+							view_on = false;
 							myGLCD.setFont(BigFont);
-							myGLCD.print("          ", 146, 130);     // номер файла в позиции "set_files"
+							myGLCD.print("\x89""poc""\xA1""o""\xA4""p", 156, 130);                         //  Просмотр
+							myGLCD.print("\xA2""e""\x97""o""\x9C\xA1""o""\x9B""e""\xA2""!", 140, 150);     //  "Невозможен"
 							myGLCD.setFont(SmallFont);
 						}
 					}
@@ -6400,28 +6381,28 @@ void printDirectory_RF(File dir, int numTabs)
 
 			if ((x >= 150) && (x <= 300))                                 //  
 			{
-				if ((y >= 60) && (y <= 120))                            //  Выбор
+				if ((y >= 60) && (y <= 120))                              //  Выбор
 				{
 					waitForIt(150, 60, 300, 120);
 					myGLCD.clrScr();
-					if (view_on) readFile_RF();                        // Просмотр файла
+					if (view_on) readFile_RF();                           // Просмотр файла
 					myGLCD.clrScr();
 					myGLCD.setFont(SmallFont);
-					myGLCD.setColor(0, 0, 255);
-					myGLCD.fillRoundRect(5, 214, 315, 239);       // Кнопка "ESC -> PUSH"
+					myGLCD.setColor(0, 0, 255);                   // Заполнить нижнее меню  
+					myGLCD.fillRoundRect(5, 214, 315, 239);       // Нижняя кнопка "ESC -> PUSH"
 					myGLCD.fillRoundRect(90, 189, 130, 209);      // Кнопка "<<"
 					myGLCD.fillRoundRect(140, 189, 180, 209);     // Вывод номера страницы
 					myGLCD.fillRoundRect(190, 189, 230, 209);     // Кнопка ">>"
 					myGLCD.fillRoundRect(150, 60, 300, 120);      // Кнопка "Просмотр файла"
 					myGLCD.setColor(255, 255, 255);
-					myGLCD.drawRoundRect(5, 214, 315, 239);
-					myGLCD.drawRoundRect(90, 189, 130, 209);
-					myGLCD.drawRoundRect(140, 189, 180, 209);
-					myGLCD.drawRoundRect(190, 189, 230, 209);
-					myGLCD.drawRoundRect(2, 2, 318, 186);
+					myGLCD.drawRoundRect(5, 214, 315, 239);       // Обрамление Нижняя кнопка "ESC -> PUSH"
+					myGLCD.drawRoundRect(90, 189, 130, 209);      // Обрамление Кнопка "<<"
+					myGLCD.drawRoundRect(140, 189, 180, 209);     // Обрамление Вывод номера страницы
+					myGLCD.drawRoundRect(190, 189, 230, 209);     // Обрамление Кнопка ">>"
+					myGLCD.drawRoundRect(2, 2, 318, 186);         // Обрамление Кнопка "Просмотр файла"
 					myGLCD.drawRoundRect(150, 60, 300, 120);      // Кнопка "Просмотр файла"
 					myGLCD.setBackColor(0, 0, 0);
-					myGLCD.print("Page N ", 30, 193);
+					myGLCD.print("Page N ", 30, 193);             // Вывод номера страницы
 					myGLCD.setBackColor(0, 0, 255);
 					myGLCD.print(txt_info11, CENTER, 221);          // Кнопка "ESC -> PUSH"
 					myGLCD.setColor(VGA_YELLOW);
@@ -6880,31 +6861,30 @@ void readFile()
 void readFile_RF()
 {
 	// Программа чтения данных из файла и отображения на дисплее
-	int data;                    // Дата для сиволов
-	int data1;                   // Дата1 для цифровой информации
-	uint32_t step_file = 0;      // Не применяется
-	int pin_fcount = 0;          // Обход (переключение) используемых входов
-	int max_pin_fcount = 0;      // Максимальное количество применяемых входов 
-	bool start_pin = false;      // Признак разрешения определения используемых входов
-	bool start_mod = false;      //
-	bool stop_mod = false;       //
-	bool stop_view = true;       //
-	bool stop_return = false;    // Признак завершения программы
-	uint32_t  File_size;         // переменная хранения размера файла 
-	Page_count = 0;              // Счетчик страниц (по 240 точек)
-	int Page_count_temp = 0;     // Счетчик страниц (по 240 точек) (Временный)
-	x_pos_count = 0;             // Счетчик позиции по оси Х
-	Channel0 = false;            // Сбросить признак включения канала 
-	DrawGrid();                  // Отобразить сетку
-	char chanel_base[4];         // База для хранения применяемых входов
+	int data;                          // Дата для сиволов
+	int data1;                         // Дата1 для цифровой информации
+	uint32_t step_file  = 0;           // Не применяется
+	int pin_fcount      = 0;           // Обход (переключение) используемых входов
+	int max_pin_fcount  = 0;           // Максимальное количество применяемых входов 
+	bool start_pin      = false;       // Признак разрешения определения используемых входов
+	bool start_mod      = false;       //
+	bool stop_mod       = false;       //
+	bool stop_view      = true;        //
+	bool stop_return    = false;       // Признак завершения программы
+	Page_count          = 0;           // Счетчик страниц (по 240 точек)
+	int Page_count_temp = 0;           // Счетчик страниц (по 240 точек) (Временный)
+	x_pos_count         = 0;           // Счетчик позиции по оси Х
+	Channel0            = false;       // Сбросить признак включения канала 
+	uint32_t  File_size;               // переменная хранения размера файла 
+	DrawGrid();                        // Отобразить сетку
+	char chanel_base[4];               // База для хранения применяемых входов
 
-	for (int p = 0; p < 50; p++)  // Очистить память хранения страниц 
+	for (int p = 0; p < 50; p++)       // Очистить память хранения страниц 
 	{
 		for (int x = 0; x < 240; x++)
 		{
 			PageSample_osc[x][p] = 0;
 		}
-
 		PageSample_Num[p] = 0;
 	}
 
@@ -6916,21 +6896,20 @@ void readFile_RF()
 	}
 
 	myGLCD.setFont(BigFont);                                                                       // Подписать кнопки управления просмотром 
-	myGLCD.print("ESC", 260, 13);                                                                 // Выход из просмотра
-	myGLCD.print("<=", 265, 56);                                                                  // Уменьшить номер страницы
-	myGLCD.print("\x89\x8A""CK", 253, 102);                                                       // "Пуск" Старт просмотра
-	myGLCD.print("=>", 268, 147);                                                                 // Увеличить номер страницы
-																								  //	myGLCD.print("CTO\x89", 253 , 211);                                                            // "Стоп" остановить просмотр
+	myGLCD.print("ESC", 260, 13);                                                                  // Выход из просмотра
+	myGLCD.print("<=", 265, 56);                                                                   // Уменьшить номер страницы
+	myGLCD.print("\x89\x8A""CK", 253, 102);                                                        // "Пуск" Старт просмотра
+	myGLCD.print("=>", 268, 147);                                                                  // Увеличить номер страницы
 
 	root.rewind();                                                                                 // Установить в начало
 	File_size = root.fileSize();                                                                   // Получить размер файла 
 
 	myGLCD.setFont(SmallFont);
-	myGLCD.print("Pa\x9C\xA1""ep \xA5""a\x9E\xA0""a", 5, 168+20);                                     // "Размер файла"
-	myGLCD.print("\x89o\x9C. \x97 \xA5""a\x9E\xA0""e             ", 5, 183+20);                       // "Поз. в файле"
+	myGLCD.print("Pa\x9C\xA1""ep \xA5""a\x9E\xA0""a", 5, 168+20);                                  // "Размер файла"
+	myGLCD.print("\x89o\x9C. \x97 \xA5""a\x9E\xA0""e             ", 5, 183+20);                    // "Поз. в файле"
 	myGLCD.setFont(BigFont);
 	myGLCD.printNumI(File_size, 105, 185);                                                         //  Отобразить размер файла
-	myGLCD.print("C\xA4p", 270, 180+20);                                                              // "Стр"
+	myGLCD.print("C\xA4p", 270, 180+20);                                                           // "Стр"
 
 	while ((data = root.read()) >= 0)                                                              //
 	{
@@ -6950,7 +6929,6 @@ void readFile_RF()
 		{
 			start_mod = true;                                                                 // Разрешить получение цифровых данных из файла
 			start_pin = false;                                                                // Запретить определение используемых входов 
-			//buttons_channel();                                                                // Отобразить кнопки переключения входов
 		}
 
 		if (stop_return == true) break;
@@ -6959,96 +6937,90 @@ void readFile_RF()
 			data1 = root.parseInt();                                                          // Получить цифровые данные 
 			if (data1 != 5555)                                                                //  Поиск окончания данных, признак окончания данных (5555) не обнаружен
 			{
-				PageSample_osc[x_pos_count][Page_count] = data1;                              // Записать данные в буфер страниц 
-
-				pin_fcount++;                                                                  // Переключить на следующий канал
-				if (pin_fcount>max_pin_fcount - 1)                                             // Проверка на достижение последнего канала
+				PageSample_osc[x_pos_count][Page_count] = data1;     // Записать данные в буфер страниц (один канал)
+				x_pos_count++;                                                             // Установить следующую позицию по оси Х
+				PageSample_Num[Page_count] = step_file;                                    // Координаты страницы в файле
+				if (x_pos_count > 239)                                                     // Достигнута последняя позиция, Все данные записаны, Можно отобразить страницу
 				{
-					pin_fcount = 0;                                                            // Установить  в начало первый по очереди канал
-					x_pos_count++;                                                             // Установить следующую позицию по оси Х
-					PageSample_Num[Page_count] = step_file;                                    // Координаты страницы в файле
-					if (x_pos_count > 239)                                                     // Достигнута последняя позиция, Все данные записаны, Можно отобразить страницу
-					{
-						x_pos_count = 0;                                                       // Установить в начало 
-						Page_count_temp = Page_count;
+					x_pos_count = 0;                                                       // Установить в начало 
+					Page_count_temp = Page_count;
 
-						do {
-							if (myTouch.dataAvailable())                                       // Проверить нажатие клавиши
+					do {
+						if (myTouch.dataAvailable())                                       // Проверить нажатие клавиши
+						{
+							delay(10);
+							myTouch.read();
+							x_osc = myTouch.getX();
+							y_osc = myTouch.getY();
+							if ((x_osc >= 250) && (x_osc <= 318))                                   // Боковые кнопки
 							{
-								delay(10);
-								myTouch.read();
-								x_osc = myTouch.getX();
-								y_osc = myTouch.getY();
-								if ((x_osc >= 250) && (x_osc <= 318))                                  // Боковые кнопки
+								if ((y_osc >= 1) && (y_osc <= 40))                                  // Первая  "Выход"
 								{
-									if ((y_osc >= 1) && (y_osc <= 40))                                 // Первая  "Выход"
-									{
-										waitForIt(250, 1, 318, 40);
-										stop_return = true;                                            // Подготовить выход из первого цикла
-										break;                                                         // Выйти из второго цикла
-									}
-									if ((y_osc >= 45) && (y_osc <= 85))                                // Вторая - "<="
-									{
-										waitForIt(250, 45, 318, 85);
-										Page_count_temp--;
-										if (Page_count_temp < 0) Page_count_temp = 0;
-										myGLCD.setColor(0, 0, 0);
-										myGLCD.fillRoundRect(1, 165, 245, 180);                                 // Очистить зону вывода
-										myGLCD.fillRoundRect(105, 200, 250, 195+20);                         // Очистить зону вывода
-										myGLCD.setColor(255, 255, 255);
-										myGLCD.printNumI(Page_count_temp, 210, 200);                         // Отобразить № страницы
-										myGLCD.printNumI(PageSample_Num[Page_count_temp], 105, 200);         // 
-										view_read_file_RF(Page_count_temp);                                     // Вызвать программу отображения информации ??
-									}
-									if ((y_osc >= 90) && (y_osc <= 130))                                        // Третья - "Пуск"
-									{
-										waitForIt(250, 90, 318, 130);
-										stop_view = true;
-									}
-									if ((y_osc >= 135) && (y_osc <= 175))                                       // Четвертая "=>"
-									{
-										waitForIt(250, 135, 318, 175);
-										Page_count_temp++;
-										if (Page_count_temp > 254) Page_count_temp = 254;
-										myGLCD.setColor(0, 0, 0);
-										myGLCD.fillRoundRect(1, 165, 245, 180);                                 // Очистить зону вывода
-										myGLCD.fillRoundRect(105, 200, 250, 195+20);                         // Очистить зону вывода
-										myGLCD.setColor(255, 255, 255);
-										myGLCD.printNumI(Page_count_temp, 210, 200);                         // Отобразить № страницы
-										myGLCD.printNumI(PageSample_Num[Page_count_temp], 105, 200);
-										view_read_file_RF(Page_count_temp);                                     // Вызвать программу отображения информации ??
-									}
+									waitForIt(250, 1, 318, 40);
+									stop_return = true;                                             // Подготовить выход из первого цикла
+									break;                                                          // Выйти из второго цикла
 								}
-								if ((x_osc >= 2) && (x_osc <= 240))                                             //  Область экрана кнопки  "Стоп"
+								if ((y_osc >= 45) && (y_osc <= 85))                                 // Вторая - "<="
 								{
-									if ((y_osc >= 1) && (y_osc <= 160))                                         // 
-									{
-										stop_view = false;
-									}
+									waitForIt(250, 45, 318, 85);
+									Page_count_temp--;
+									if (Page_count_temp < 0) Page_count_temp = 0;
+									myGLCD.setColor(0, 0, 0);
+									myGLCD.fillRoundRect(1, 165, 245, 180);                         // Очистить зону вывода
+									myGLCD.fillRoundRect(105, 200, 250, 195+20);                    // Очистить зону вывода
+									myGLCD.setColor(255, 255, 255);
+									myGLCD.printNumI(Page_count_temp, 210, 200);                    // Отобразить № страницы
+									myGLCD.printNumI(PageSample_Num[Page_count_temp], 105, 200);    // 
+									view_read_file_RF(Page_count_temp);                             // Вызвать программу отображения информации ??
+								}
+								if ((y_osc >= 90) && (y_osc <= 130))                                // Третья - "Пуск"
+								{
+									waitForIt(250, 90, 318, 130);
+									stop_view = true;
+								}
+								if ((y_osc >= 135) && (y_osc <= 175))                               // Четвертая "=>"
+								{
+									waitForIt(250, 135, 318, 175);
+									Page_count_temp++;
+									if (Page_count_temp > 254) Page_count_temp = 254;
+									myGLCD.setColor(0, 0, 0);
+									myGLCD.fillRoundRect(1, 165, 245, 180);                         // Очистить зону вывода
+									myGLCD.fillRoundRect(105, 200, 250, 195+20);                    // Очистить зону вывода
+									myGLCD.setColor(255, 255, 255);
+									myGLCD.printNumI(Page_count_temp, 210, 200);                    // Отобразить № страницы
+									myGLCD.printNumI(PageSample_Num[Page_count_temp], 105, 200);
+									view_read_file_RF(Page_count_temp);                             // Вызвать программу отображения информации ??
 								}
 							}
-						} while (!stop_view);
-
-						//----------------------------------------
-						if (stop_view == true)                                                             // Если просмотр разрешен, начать росмотр страницы
-						{
-							myGLCD.setFont(BigFont);
-							myGLCD.setBackColor(0, 0, 0);
-							myGLCD.setColor(255, 255, 255);
-							myGLCD.setColor(0, 0, 0);
-							myGLCD.fillRoundRect(1, 165, 245, 180);                                        // Очистить зону вывода
-							myGLCD.fillRoundRect(105, 200, 250, 216);                                // Очистить зону вывода
-							myGLCD.setColor(255, 255, 255);
-							myGLCD.printNumI(Page_count, 210, 200);                                     // Номер страницы
-							myGLCD.printNumI(PageSample_Num[Page_count], 105, 200);                     // 
-							view_read_file_RF(Page_count);                                                 // Вызвать программу отображения информации ??
+							if ((x_osc >= 2) && (x_osc <= 240))                                     //  Область экрана кнопки  "Стоп"
+							{
+								if ((y_osc >= 1) && (y_osc <= 160))                                 // 
+								{
+									stop_view = false;
+								}
+							}
 						}
+					} while (!stop_view);
 
-						Page_count++;                                                                      // Установить следующую страницу
-						if (Page_count>60) Page_count = 60;                                                // Не больше 254 страниц
+					//----------------------------------------
+					if (stop_view == true)                                                          // Если просмотр разрешен, начать росмотр страницы
+					{
+						myGLCD.setFont(BigFont);
+						myGLCD.setBackColor(0, 0, 0);
+						myGLCD.setColor(255, 255, 255);
+						myGLCD.setColor(0, 0, 0);
+						myGLCD.fillRoundRect(1, 165, 245, 180);                                     // Очистить зону вывода
+						myGLCD.fillRoundRect(105, 200, 250, 216);                                   // Очистить зону вывода
+						myGLCD.setColor(255, 255, 255);
+						myGLCD.printNumI(Page_count, 210, 200);                                     // Номер страницы
+						myGLCD.printNumI(PageSample_Num[Page_count], 105, 200);                     // 
+						view_read_file_RF(Page_count);                                              // Вызвать программу отображения информации ??
 					}
+
+					Page_count++;                                                                   // Установить следующую страницу
+					if (Page_count>60) Page_count = 60;                                             // Не больше 60 страниц
 				}
-			}                                          // Завершение программы поиска.  Признак окончания данных (5555)  обнаружен
+			}                                                                                       // Завершение программы поиска.  Признак окончания данных (5555)  обнаружен
 			else
 			{
 				start_mod = false;
@@ -7059,7 +7031,7 @@ void readFile_RF()
 	myGLCD.setBackColor(0, 0, 0);
 	myGLCD.setColor(0, 0, 0);                                     // Стереть надписи неиспользованных кнопок
 	myGLCD.print("\x89\x8A""CK", 253, 102);                       // "Пуск" Старт просмотра
-	myGLCD.print("CTO\x89", 253, 211);                            // "Стоп" остановить просмотр
+	//myGLCD.print("CTO\x89", 253, 211);                            // "Стоп" остановить просмотр
 
 	myGLCD.setColor(255, 255, 255);
 
@@ -7927,10 +7899,10 @@ void radio_transfer()       // test transfer
 	data_out[1] = 1;                                       //1= Отправить команду ping звуковую посылку 
 	data_out[2] = 1;                    //
 	data_out[3] = 1;                    //
-	data_out[4] = highByte(time_sound);                     //1= Отправить звуковую посылку 
-	data_out[5] = lowByte(time_sound);                    //1= Отправить звуковую посылку 
-	data_out[6] = highByte(freq_sound);                    //1= Отправить звуковую посылку 
-	data_out[7] = lowByte(freq_sound);                   //1= Отправить звуковую посылку 
+	data_out[4] = highByte(time_sound);                     //1= Отправить длительность звуковуй посылки
+	data_out[5] = lowByte(time_sound);                      //1= Отправить длительность звуковуй посылки
+	data_out[6] = highByte(freq_sound);                     //1= Отправить звуковую посылку 
+	data_out[7] = lowByte(freq_sound);                      //1= Отправить звуковую посылку 
 	data_out[8] = volume1;
 	data_out[9] = volume2;
 
@@ -8434,21 +8406,20 @@ void setup(void)
 	cout << uppercase << showbase << endl;
 	// pstr stores strings in flash to save RAM
 
-//	cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
+	cout << pstr("SdFat version: ") << SD_FAT_VERSION << endl;
 	myGLCD.setBackColor(0, 0, 255);
-	setup_resistor();                                // Начальные установки резистора
+	setup_resistor();                                    // Начальные установки резистора
 	resistor(1, volume1);                                // Установить уровень сигнала
 	resistor(2, volume2);                                // Установить уровень сигнала
 	preob_num_str();
-	//i2c_eeprom_ulong_write(adr_timePeriod, 1000000);
-	//i2c_eeprom_ulong_write(adr_set_timePeriod, 0);
+
 	timePeriod = i2c_eeprom_ulong_read(adr_timePeriod);
 	attachInterrupt(kn_red, volume_up, FALLING);
 	attachInterrupt(kn_blue, volume_down, FALLING);
 
 	delay(500);
 	kn = 0;
-
+	setup_radio_ping();
 	Serial.println(F("Setup Ok!"));
 	sound1();
 	delay(100);
