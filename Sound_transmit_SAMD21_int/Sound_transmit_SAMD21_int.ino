@@ -46,14 +46,22 @@ extern uint8_t MediumNumbers[]; // средний шрифт для цифр (и
 #define  ledPin  13                                 // Назначение светодиодов на плате
 #define  sound_En  2                                // Управление звуком, разрешение включения усилителя
 
-int time_sound = 200;
-int freq_sound = 1850;
-byte volume1 = 0;
-byte volume2 = 0;
+int time_sound = 50;
+int freq_sound = 1800;
+byte volume1 = 254;
+byte volume2 = 254;
+
+
+int pin_ovf_led = 13; // debug pin for overflow led 
+//int pin_mc0_led = 28;  // debug pin for compare led 
+unsigned int loop_count = 0;
+unsigned int irq_ovf_count = 0;
+
+
 //AH_AD9850(int CLK, int FQUP, int BitData, int RESET); 
 AH_AD9850 AD9850(A4, A3, A2, A1);
 
-bool sound_start = false;
+volatile bool sound_start = false;
 
 int seconds = 0; // счётчик секунд
 
@@ -92,9 +100,10 @@ int ledState = LOW;                                  // ledState used to set the
 unsigned long previousMillis = 0;                    // will store last time LED was updated
 
 										             // constants won't change :
-const long interval = 1000;                          // interval at which to blink (milliseconds)
+const long interval = 50;                           // interval at which to blink (milliseconds)
 
 volatile unsigned long startMillis = 0;              //  
+volatile unsigned long startMillis1 = 0;
 unsigned long stopMillis           = 0;              //  
 volatile bool info_view = false;
 byte pipeNo;                                         // 
@@ -168,11 +177,11 @@ int FreeRam() {
 //#define Serial SerialUSB                        // Native DUE
 #define Serial SERIAL_PORT_USBVIRTUAL             // USB SAMD21G18A
 
-void blink()
-{
-	startMillis = micros();
-	info_view = true;
-}
+//void blink()
+//{
+//	startMillis = micros();
+//	info_view = true;
+//}
 
 
 void info()
@@ -205,6 +214,46 @@ void info()
 }
 
 
+void TCC0_Handler()
+{
+	Tcc* TC = (Tcc*)TCC0;                               // get timer struct
+	if (TC->INTFLAG.bit.OVF == 1)
+	{    
+		sound_start = true;
+		startMillis = millis();
+		if (irq_ovf_count % 2 == 0)
+		{
+			AD9850.set_frequency(0, 0, freq_sound);          //set power=UP, phase=0, 1kHz frequency
+			Serial.println(millis() - startMillis1);
+			startMillis1 = millis();
+		}
+		digitalWrite(pin_ovf_led, irq_ovf_count % 2);    // for debug leds
+		//digitalWrite(pin_mc0_led, HIGH);               // for debug leds
+		TC->INTFLAG.bit.OVF = 1;                         // writing a one clears the flag ovf flag
+		irq_ovf_count++;                                 // for debug leds
+	}
+
+	if (TC->INTFLAG.bit.MC0 == 1) 
+	{  // A compare to cc0 caused the interrupt
+		//digitalWrite(pin_mc0_led, LOW);                 // for debug leds
+		TC->INTFLAG.bit.MC0 = 1;                        // writing a one clears the flag ovf flag
+	}
+}
+
+void setTimer(long period) 
+{
+	Tcc* TC = (Tcc*)TCC0; // get timer struct
+
+	TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;                 // Disable TC
+	while (TC->SYNCBUSY.bit.ENABLE == 1);               // wait for sync 
+
+	TC->PER.reg = period;                               // Set counter Top using the PER register  
+	while (TC->SYNCBUSY.bit.PER == 1);                  // wait for sync 
+
+	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;                  // Enable TC
+	while (TC->SYNCBUSY.bit.ENABLE == 1);               // wait for sync 
+}
+
 
 void setup() 
 {
@@ -216,9 +265,7 @@ void setup()
 	Serial.print("Address of str $"); Serial.println((int)&str, HEX);
 	Serial.println("\r\n==================");
 	printf_begin();
-	Serial.print(F("\n\rRF24/examples/pingpair_ack/\n\rROLE: "));
-	Serial.println(role_friendly_name[role]);
-	Serial.println(F("*** PRESS 'T' to begin transmitting to the other node"));
+
 	Wire.begin();
 	myGLCD.InitLCD();                                // инициализация LCD дисплея
 
@@ -270,10 +317,66 @@ void setup()
 	AD9850.powerDown();                              //set signal output to LOW
 	//attachInterrupt(2, blink, HIGH);
 	info();
+
+	pinMode(pin_ovf_led, OUTPUT);   // for debug leds
+	digitalWrite(pin_ovf_led, LOW); // for debug leds
+	//pinMode(pin_mc0_led, OUTPUT);   // for debug leds
+	//digitalWrite(pin_mc0_led, LOW); // for debug leds
+
+
+									// Enable clock for TC  Включить часы для TC
+	REG_GCLK_CLKCTRL = (uint16_t)(GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID_TCC0_TCC1);
+	while (GCLK->STATUS.bit.SYNCBUSY == 1); // wait for sync ждать синхронизацию
+
+
+											// The type cast must fit with the selected timer Данный тип должен соответствовать выбранному таймеру
+	Tcc* TC = (Tcc*)TCC0;                    // get timer struct  получить структуру таймера
+
+	TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
+	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+
+
+	TC->CTRLA.reg |= TCC_CTRLA_PRESCALER_DIV256;   // Set perscaler
+
+
+	TC->WAVE.reg |= TCC_WAVE_WAVEGEN_NFRQ;   // Set wave form configuration 
+	while (TC->SYNCBUSY.bit.WAVE == 1); // wait for sync 
+
+	TC->PER.reg = 0xFFFF;              // Set counter Top using the PER register  Установить счетчик сверху с использованием регистра PER
+	while (TC->SYNCBUSY.bit.PER == 1); // wait for sync 
+
+	TC->CC[0].reg = 0xFFF;
+	while (TC->SYNCBUSY.bit.CC0 == 1); // wait for sync 
+
+									   // Interrupts 
+	TC->INTENSET.reg = 0;                 // disable all interrupts
+	TC->INTENSET.bit.OVF = 1;             // enable overfollow включить переполнение
+	TC->INTENSET.bit.MC0 = 1;             // enable compare match to CC0 включить сравнение соответствия с CC0
+//	setTimer(300000);
+	setTimer(281250);
+	// Enable InterruptVector
+	NVIC_EnableIRQ(TCC0_IRQn);
+
+	// Enable TC
+	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
+	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+
 }
 
 void loop(void) 
 {
+	unsigned long currentMillis = millis();
+	if (sound_start)
+	{
+		if (currentMillis - startMillis >= interval)
+		{
+			Serial.println(currentMillis - startMillis);
+			//previousMillis = currentMillis;
+			AD9850.powerDown();                                 //set signal output to LOW
+			sound_start = false;
+		}
+	}
+
 	while (radio.available(&pipeNo))                       // 
 	{
 		radio.read(&data_in, sizeof(data_in));
