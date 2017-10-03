@@ -61,6 +61,9 @@ byte resistance = 0x00;                             // Сопротивление 0x00..0xFF 
 #define vibro            11                         // Вибромотор
 #define sounder          53                         // Зуммер
 
+#define LED_PIN13        13                         // Индикация
+
+
 volatile int kn = 0;
 byte counter_kn = 0;
 byte Chanal_volume = 0;
@@ -123,6 +126,8 @@ bool set_time_delay = false;
 bool trig_sin = false;                            // Есть срабатывание триггера
 bool trig_sinF = false;                           // Есть срабатывание триггера фильтра
 bool Filter_enable = false;                       // Разрешение применения фильтра
+
+bool start_led = true;
 
 volatile unsigned long counter;
 unsigned long rxTimer, startTime, stopTime, payloads = 0;
@@ -273,10 +278,16 @@ char  txt_ADC_menu2[]        = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";          
 char  txt_ADC_menu3[]        = "\x89""epe\x99""a\xA7""a \x97 KOM";                                          //
 char  txt_ADC_menu4[]        = "B\x91XO\x82";                                                               // Выход                                                              //
 
-char  txt_osc_menu1[]        = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                             // "Осциллограф"
-char  txt_osc_menu2[]        = "\x8A""po""\x97\xA2\x9D"" c""\x9D\x98\xA2""a""\xA0""o""\x97";                // "Уровни сигналов"
-char  txt_osc_menu3[]        = "PA""\x82\x86""O";                                                           // Радио
-char  txt_osc_menu4[]        = "B\x91XO\x82";                                                               // Выход          
+char  txt_tuning_menu1[]     = "Oc\xA6\x9D\xA0\xA0o\x98pa\xA5";                                             // "Осциллограф"
+char  txt_tuning_menu2[]     = "C""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\xAF"" ";                        // "Синхронизация"
+char  txt_tuning_menu3[]     = "PA""\x82\x86""O";                                                           // Радио
+char  txt_tuning_menu4[]     = "B\x91XO\x82";                                                               // Выход     
+
+char  txt_synhro_menu1[]     = "C""\xA4""ap""\xA4"" c""\x9D\xA2""xpo.";                                     // "Старт синхро"
+char  txt_synhro_menu2[]     = "C""\xA4""o""\xA3"" c""\x9D\xA2""xpo.";                                      // "Стоп синхро."
+char  txt_synhro_menu3[]     = " ";                                                                         // 
+char  txt_synhro_menu4[]     = "B\x91XO\x82";                                                               // Выход          
+
 
 char  txt_SD_menu1[]         = "\x89poc\xA1o\xA4p \xA5""a\x9E\xA0""a";                                      //
 char  txt_SD_menu2[]         = "\x86\xA2\xA5o SD";                                                          //
@@ -1249,6 +1260,17 @@ void secondHandler()
 	isrBuf->data[isrBuf->count++] = 4095;                     // Записать временные метки
 	isrBuf->data[isrBuf->count++] = count_ms;                 // Записать временные метки
 }
+
+void synhroHandler()
+{
+	//digitalWrite(LED_PIN13, HIGH);
+//	delayMicroseconds(100);
+	//digitalWrite(LED_PIN13, LOW);
+}
+
+
+
+
 //==============================================================================
 // Error messages stored in flash.
 #define error(msg) error_P(PSTR(msg))
@@ -3096,7 +3118,7 @@ void swichMenu() // Тексты меню в строках "txt....."
 	
 				   //*****************  Меню №1  **************
 
-				   if (pressed_button==but1)      // Регистратор
+				   if (pressed_button==but1)              // Регистратор
 					   {
 							 //Draw_menu_ADC1();
 							 //menu_ADC();
@@ -3106,10 +3128,10 @@ void swichMenu() // Тексты меню в строках "txt....."
 							 myButtons.drawButtons();
 					   }
 	  
-				   if (pressed_button==but2)     //Меню Настройка
+				   if (pressed_button==but2)              //Меню Настройка
 					   {
-							Draw_menu_Osc();
-							menu_Oscilloscope();
+							Draw_menu_tuning();
+							menu_tuning();
 							myGLCD.clrScr();
 							myButtons.drawButtons();
 					   }
@@ -3118,7 +3140,6 @@ void swichMenu() // Тексты меню в строках "txt....."
 					   {
 					        Draw_menu_ADC_RF();          // Нарисовать меню регистратора
 							menu_ADC_RF();               // Перейти в меню регистратора с синхро RF
-						//	oscilloscope_file();         // Регистратор + самописец
 							myGLCD.clrScr();
 							myButtons.drawButtons();
 					   }
@@ -3145,7 +3166,7 @@ void waitForIt(int x1, int y1, int x2, int y2)
   myGLCD.drawRoundRect (x1, y1, x2, y2);
 }
 //++++++++++++++++++++++++++ Конец меню прибора ++++++++++++++++++++++++
-void Draw_menu_Osc()
+void Draw_menu_tuning()
 {
 	myGLCD.clrScr();
 	myGLCD.setFont( BigFont);
@@ -3157,12 +3178,12 @@ void Draw_menu_Osc()
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.drawRoundRect (30, 20+(50*x), 290,60+(50*x));
 		}
-	myGLCD.print( txt_osc_menu1, CENTER, 30);     // 
-	myGLCD.print( txt_osc_menu2, CENTER, 80);   
-	myGLCD.print( txt_osc_menu3, CENTER, 130);   
-	myGLCD.print( txt_osc_menu4, CENTER, 180);      
+	myGLCD.print( txt_tuning_menu1, CENTER, 30);     // 
+	myGLCD.print( txt_tuning_menu2, CENTER, 80);
+	myGLCD.print( txt_tuning_menu3, CENTER, 130);
+	myGLCD.print( txt_tuning_menu4, CENTER, 180);
 }
-void menu_Oscilloscope()   // Меню "Осциллоскопа", вызывается из меню "Самописец"
+void menu_tuning()   // Меню "Настройка", вызывается из главного меню 
 {
 	while (true)
 		{
@@ -3180,23 +3201,22 @@ void menu_Oscilloscope()   // Меню "Осциллоскопа", вызывается из меню "Самописец
 							waitForIt(30, 20, 290, 60);
 							myGLCD.clrScr();
 							oscilloscope();
-							//oscilloscopeNew();
-
-							Draw_menu_Osc();
+							Draw_menu_tuning();
 						}
-					if ((y>=70) && (y<=110))   // Button: 2 "Oscill_Time"  Уровни сигналов
+					if ((y>=70) && (y<=110))   // Button: 2 "Синхронизация мод."
 						{
 							waitForIt(30, 70, 290, 110);
 							myGLCD.clrScr();
-							//oscilloscope_time();
-							Draw_menu_Osc();
+							Draw_menu_synhro();
+							menu_synhro();
+							Draw_menu_tuning();
 						}
-					if ((y>=120) && (y<=160))  // Button: 3 "checkOverrun"  Проверка ошибок
+					if ((y>=120) && (y<=160))  // Button: 3  
 						{
 							waitForIt(30, 120, 290, 160);
 							myGLCD.clrScr();
 							menu_radio();
-							Draw_menu_Osc();
+							Draw_menu_tuning();
 						}
 					if ((y>=170) && (y<=220))  // Button: 4 "EXIT" Выход
 						{
@@ -3206,6 +3226,73 @@ void menu_Oscilloscope()   // Меню "Осциллоскопа", вызывается из меню "Самописец
 				}
 			}
 	   }
+
+}
+
+void Draw_menu_synhro()
+{
+	myGLCD.clrScr();
+	myGLCD.setFont(BigFont);
+	myGLCD.setBackColor(0, 0, 255);
+	for (int x = 0; x<4; x++)
+	{
+		myGLCD.setColor(0, 0, 255);
+		myGLCD.fillRoundRect(30, 20 + (50 * x), 290, 60 + (50 * x));
+		myGLCD.setColor(255, 255, 255);
+		myGLCD.drawRoundRect(30, 20 + (50 * x), 290, 60 + (50 * x));
+	}
+	myGLCD.print(txt_synhro_menu1, CENTER, 30);     // 
+	myGLCD.print(txt_synhro_menu2, CENTER, 80);
+	myGLCD.print(txt_synhro_menu3, CENTER, 130);
+	myGLCD.print(txt_synhro_menu4, CENTER, 180);
+}
+void menu_synhro()   // Меню "Настройка", вызывается из главного меню 
+{
+	while (true)
+	{
+		delay(10);
+		if (myTouch.dataAvailable())
+		{
+			myTouch.read();
+			int	x = myTouch.getX();
+			int	y = myTouch.getY();
+
+			if ((x >= 30) && (x <= 290))       // 
+			{
+				if ((y >= 20) && (y <= 60))    // Button: 1  "Oscilloscope"
+				{
+					waitForIt(30, 20, 290, 60);
+					myGLCD.clrScr();
+					data_out[2] = 2;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
+					tuning_mod();
+					Draw_menu_synhro();
+				}
+				if ((y >= 70) && (y <= 110))   // Button: 2 "Синхронизация мод."
+				{
+					waitForIt(30, 70, 290, 110);
+					myGLCD.clrScr();
+					data_out[2] = 3;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
+					setup_radio_ping();                      // Настроить радиоканал
+					delayMicroseconds(500);
+					radio_synchro();                         //  Отправить радио синхро сигнал
+					Timer5.stop();
+					Draw_menu_synhro();
+				}
+				if ((y >= 120) && (y <= 160))  // Button: 3  
+				{
+					waitForIt(30, 120, 290, 160);
+					myGLCD.clrScr();
+
+					Draw_menu_synhro();
+				}
+				if ((y >= 170) && (y <= 220))  // Button: 4 "EXIT" Выход
+				{
+					waitForIt(30, 170, 290, 210);
+					break;
+				}
+			}
+		}
+	}
 
 }
 void trigger()
@@ -3415,9 +3502,9 @@ void oscilloscope()                                     // просмотр в реальном в
 			delayMicroseconds(500);
 			digitalWrite(vibro, LOW);
 			StartSample = micros();              // Записать время
-			radio_transfer();                  //  Отправить радио синхро сигнал
+			radio_transfer();                    //  Отправить радио синхро сигнал
 			trig_sin = false;
-			while (!trig_sin)                  // Регистрация начала посылки
+			while (!trig_sin)                    // Регистрация начала посылки
 			{
 			   trigger();
 			   if (micros() - timeStartRadio > timePeriod-1000) break;   // Завершить измерение уровня порога
@@ -3596,8 +3683,6 @@ tmode = 5;             // Уровень триггера порога
 myGLCD.setFont( BigFont);
 while (myTouch.dataAvailable()){}
 }
-
-
 void oscilloscopeNew()                             // просмотр в реальном времени на большой скорости
 {
 	uint32_t bgnBlock, endBlock;
@@ -5045,6 +5130,8 @@ void oscilloscope_file()  // Пишет в файл
 	delay(50);
 }
 
+
+
 void buttons_right()  //  Правые кнопки  oscilloscope
 {
 	myGLCD.setColor(0, 0, 255);
@@ -5226,7 +5313,68 @@ void buttons_channelNew()                   // Нижние кнопки переключения
 	myGLCD.drawRoundRect (190, 210, 240, 239);       // Окантовка кнопки N4
 }
 
+void tuning_mod()
+{
+	myGLCD.clrScr();
+	myGLCD.setBackColor(0, 0, 0);
+	myGLCD.setFont(BigFont);
+	myGLCD.setColor(0, 0, 255);
+	myGLCD.fillRoundRect(30, 20 + (50 * 3), 290, 60 + (50 * 3));
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.drawRoundRect(30, 20 + (50 * 3), 290, 60 + (50 * 3));
+	myGLCD.setBackColor(0, 0, 255);
+	myGLCD.print(txt_tuning_menu4, CENTER, 180);
+	myGLCD.setBackColor(0, 0, 0);
+	setup_radio_ping();                           // Настроить радиоканал
+	delayMicroseconds(500);
+	myGLCD.setFont(BigFont);
+	radio_synchro();                              //  Отправить радио синхро сигнал
+	//digitalWrite(LED_PIN13, HIGH);
+	//delay(100);
+	//digitalWrite(LED_PIN13, LOW);
+//	delayMicroseconds(250);
+	if (tim1 >= 730 && tim1 <= 745)
+	{
+		myGLCD.print("Synhro START!", CENTER, 80);
+	//	Timer5.start();
+		StartSample = micros();                  // Записать время
+		while (true)
+		{
+			if (micros() - StartSample >= 3000000) 
+			{
+				start_led = !start_led;
+				digitalWrite(LED_PIN13, HIGH);
+				StartSample = micros();
+			}
+			if (micros() - StartSample >= 50000)
+			{
+				start_led = !start_led;
+				digitalWrite(LED_PIN13, LOW);
+			}
+		//	delay(20);
+			//digitalWrite(LED_PIN13, LOW);
+			if (myTouch.dataAvailable())
+			{
+				myTouch.read();
+				int	x = myTouch.getX();
+				int	y = myTouch.getY();
 
+				if ((x >= 30) && (x <= 290))       // 
+				{
+
+					if ((y >= 170) && (y <= 220))  // Button: 4 "EXIT" Выход
+					{
+						waitForIt(30, 170, 290, 210);
+						break;
+					}
+				}
+			}
+		}
+	}
+	//while (!myTouch.dataAvailable()) {}
+	//while (myTouch.dataAvailable()) {}
+
+}
 // чтение
 unsigned long i2c_eeprom_ulong_read(int addr)
 {
@@ -7896,13 +8044,13 @@ void radio_transfer()       // test transfer
 	myGLCD.setFont(SmallFont);
 	if (kn != 0) set_volume(volume_variant, kn);
 	data_out[0] = counter_test;
-	data_out[1] = 1;                                       //1= Отправить команду ping звуковую посылку 
-	data_out[2] = 1;                    //
-	data_out[3] = 1;                    //
-	data_out[4] = highByte(time_sound);                     //1= Отправить длительность звуковуй посылки
-	data_out[5] = lowByte(time_sound);                      //1= Отправить длительность звуковуй посылки
-	data_out[6] = highByte(freq_sound);                     //1= Отправить звуковую посылку 
-	data_out[7] = lowByte(freq_sound);                      //1= Отправить звуковую посылку 
+	data_out[1] = 1;                                        //  
+	data_out[2] = 1;                                        // Отправить команду ping звуковую посылку 
+	data_out[3] = 1;                                        //
+	data_out[4] = highByte(time_sound);                     // Старший байт Отправить длительность звуковуй посылки
+	data_out[5] = lowByte(time_sound);                      // Младший байт Отправить длительность звуковуй посылки
+	data_out[6] = highByte(freq_sound);                     // Старший байт Отправить звуковую посылку 
+	data_out[7] = lowByte(freq_sound);                      // Младший байт Отправить звуковую посылку 
 	data_out[8] = volume1;
 	data_out[9] = volume2;
 
@@ -7942,6 +8090,66 @@ void radio_transfer()       // test transfer
 				}
 				myGLCD.setColor(255, 255, 255);
 				myGLCD.print("microsec", 90, 165);            // Вывести на дисплей время ответа синхроимпульса
+				counter_test++;
+			}
+		}
+	}
+}
+void radio_synchro()       // Синронизация модулей
+{
+	tim1 = 0;
+	volume_variant = 4;
+	radio.stopListening();                                  // Во-первых, перестаньте слушать, чтобы мы могли поговорить.
+	myGLCD.setBackColor(0, 0, 0);
+	myGLCD.setFont(SmallFont);
+	if (kn != 0) set_volume(volume_variant, kn);
+	data_out[0] = counter_test;
+	data_out[1] = 1;                                        //  
+	//data_out[2] = 2;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
+	data_out[3] = 1;                                        //
+	data_out[4] = highByte(time_sound);                     // Старший байт Отправить длительность звуковуй посылки
+	data_out[5] = lowByte(time_sound);                      // Младший байт Отправить длительность звуковуй посылки
+	data_out[6] = highByte(freq_sound);                     // Старший байт Отправить звуковую посылку 
+	data_out[7] = lowByte(freq_sound);                      // Младший байт Отправить звуковую посылку 
+	data_out[8] = volume1;
+	data_out[9] = volume2;
+
+	timeStartRadio = micros();                          // Записать время старта радио синхро импульса
+
+	if (!radio.write(&data_out, sizeof(data_out)))
+	{
+		//	Serial.println(F("failed."));
+		myGLCD.setColor(VGA_LIME);                    // Вывести на дисплей время ответа синхроимпульса
+		myGLCD.print("     ", 90 - 40, 120);          // Вывести на дисплей время ответа синхроимпульса
+		myGLCD.printNumI(0, 90 - 32, 120);            // Вывести на дисплей время ответа синхроимпульса
+		myGLCD.setColor(255, 255, 255);
+	}
+	else
+	{
+		if (!radio.available())
+		{
+			//	Serial.println(F("Blank Payload Received."));
+		}
+		else
+		{
+			while (radio.isAckPayloadAvailable())
+			{
+				timeStopRadio = micros();                     // Записать время получения ответа.  
+				radio.read(&data_in, sizeof(data_in));
+				tim1 = timeStopRadio - timeStartRadio;        // Получить время ответа синхро импульса
+				myGLCD.print("Delay: ", 5, 120);              // Вывести на дисплей время ответа синхроимпульса
+				myGLCD.print("     ", 90 - 40, 120);            // Вывести на дисплей время ответа синхроимпульса
+				myGLCD.setColor(VGA_LIME);                    // Вывести на дисплей время ответа синхроимпульса
+				if (tim1 < 999)                               // Подравнять вывод чисел на дисплей 
+				{
+					myGLCD.printNumI(tim1, 90 - 32, 120);     // Вывести на дисплей время ответа синхроимпульса
+				}
+				else
+				{
+					myGLCD.printNumI(tim1, 90 - 40, 120);     // Вывести на дисплей время ответа синхроимпульса
+				}
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.print("microsec", 90, 120);            // Вывести на дисплей время ответа синхроимпульса
 				counter_test++;
 			}
 		}
@@ -8346,6 +8554,8 @@ void setup(void)
 	pinMode(kn_red, INPUT);
 	pinMode(kn_blue, INPUT);
 	pinMode(intensityLCD, OUTPUT);
+	pinMode(LED_PIN13, OUTPUT);
+	digitalWrite(LED_PIN13, LOW);
 	digitalWrite(intensityLCD, LOW);
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
@@ -8396,6 +8606,9 @@ void setup(void)
 	//adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
 	Timer3.attachInterrupt(firstHandler); // Every 50us
 	Timer4.attachInterrupt(secondHandler);
+	Timer5.setPeriod(3000000);
+	Timer5.attachInterrupt(synhroHandler);
+
 	rtc_clock.init();
 	rtc_clock.set_time(__TIME__);
 	rtc_clock.set_date(__DATE__);

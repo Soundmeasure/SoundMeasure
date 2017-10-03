@@ -221,7 +221,7 @@ void TCC0_Handler()
 	{    
 		sound_start = true;
 		startMillis = millis();
-		if (irq_ovf_count % 2 == 0)
+		if (irq_ovf_count % 2 == 1)
 		{
 			AD9850.set_frequency(0, 0, freq_sound);          //set power=UP, phase=0, 1kHz frequency
 			Serial.println(millis() - startMillis1);
@@ -360,6 +360,7 @@ void setup()
 	// Enable TC
 	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
 	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+	NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
 
 }
 
@@ -373,6 +374,7 @@ void loop(void)
 			Serial.println(currentMillis - startMillis);
 			//previousMillis = currentMillis;
 			AD9850.powerDown();                                 //set signal output to LOW
+			digitalWrite(pin_ovf_led, LOW);    // for debug leds
 			sound_start = false;
 		}
 	}
@@ -385,7 +387,7 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);   // Грузим сообщение 2 байта для автоотправки;
 			stopMillis = micros();
-			delayMicroseconds(50000);                       // Задержка для получения ответа и завершения процессов на Базе
+			delayMicroseconds(1000);                       // Задержка для получения ответа и завершения процессов на Базе
 			sound_run(time_sound, freq_sound);
 			info();
 			//info_view = false;
@@ -393,12 +395,14 @@ void loop(void)
 		else if (data_in[2] == 2)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
-
+			delayMicroseconds(500);
+			NVIC_EnableIRQ(TCC0_IRQn);                      // Включаем прерывание
 		}
 		else if (data_in[2] == 3)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
-
+			delayMicroseconds(500);
+			NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
 		}
 		else
 		{
@@ -409,7 +413,6 @@ void loop(void)
 		freq_sound = (data_in[6] << 8) | data_in[7];        // Частота генератора. Собираем как "настоящие программеры"
 		volume1 = data_in[8];                               // 
 		volume2 = data_in[9];                               // Громкость звучания. 
-		//sound_start = true;
 	}
 }
 
