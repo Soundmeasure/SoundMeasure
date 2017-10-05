@@ -110,4 +110,5 @@ C:\Users\moseichuk\AppData\Local\Temp\VMBuilds\Sound_transmit_SAMD21_int\arduino
  D:\1\ SVN\ SoundMeasure\trunk\Sound_transmit_SAMD21_int\libraries\RF24/RF24.h \
  D:\1\ SVN\ SoundMeasure\trunk\Sound_transmit_SAMD21_int\libraries\RF24/RF24_config.h \
  D:\1\ SVN\ SoundMeasure\trunk\Sound_transmit_SAMD21_int\libraries\RF24/printf.h \
- D:\1\ SVN\ SoundMeasure\trunk\Sound_transmit_SAMD21_int\libraries\AH_AD9850/AH_AD9850.h
+ D:\1\ SVN\ SoundMeasure\trunk\Sound_transmit_SAMD21_int\libraries\AH_AD9850/AH_AD9850.h \
+ D:\1\ SVN\ SoundMeasure\trunk\Sound_transmit_SAMD21_int\libraries\RTCZero\src/RTCZero.h

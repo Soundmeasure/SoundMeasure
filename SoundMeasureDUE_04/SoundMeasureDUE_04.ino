@@ -45,6 +45,8 @@ uint8_t menu_redraw_required = 0;
 
 StdioStream csvStream;
 #define intensityLCD 9            // Порт управления яркостью экрана
+#define synhro_pin 66              // Порт синхронизации модулей
+
 
 //----------------------Конец  Настройки дисплея --------------------------------
 
@@ -283,9 +285,9 @@ char  txt_tuning_menu2[]     = "C""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\xAF"
 char  txt_tuning_menu3[]     = "PA""\x82\x86""O";                                                           // Радио
 char  txt_tuning_menu4[]     = "B\x91XO\x82";                                                               // Выход     
 
-char  txt_synhro_menu1[]     = "C""\xA4""ap""\xA4"" c""\x9D\xA2""xpo.";                                     // "Старт синхро"
-char  txt_synhro_menu2[]     = "C""\xA4""o""\xA3"" c""\x9D\xA2""xpo.";                                      // "Стоп синхро."
-char  txt_synhro_menu3[]     = " ";                                                                         // 
+char  txt_synhro_menu1[]     = "C""\x9D\xA2""xpo pa""\x99\x9D""o";                                          // "Синхро радио"
+char  txt_synhro_menu2[]     = "C""\x9D\xA2""xpo ""\xA3""po""\x97""o""\x99";                                // "Синхро провод"
+char  txt_synhro_menu3[]     = "C""\xA4""o""\xA3"" c""\x9D\xA2""xpo.";                                      // "Стоп синхро."
 char  txt_synhro_menu4[]     = "B\x91XO\x82";                                                               // Выход          
 
 
@@ -3259,7 +3261,7 @@ void menu_synhro()   // Меню "Настройка", вызывается из главного меню
 
 			if ((x >= 30) && (x <= 290))       // 
 			{
-				if ((y >= 20) && (y <= 60))    // Button: 1  "Oscilloscope"
+				if ((y >= 20) && (y <= 60))                                 // Button: 1  "Синхронизация по радио"
 				{
 					waitForIt(30, 20, 290, 60);
 					myGLCD.clrScr();
@@ -3267,22 +3269,25 @@ void menu_synhro()   // Меню "Настройка", вызывается из главного меню
 					tuning_mod();
 					Draw_menu_synhro();
 				}
-				if ((y >= 70) && (y <= 110))   // Button: 2 "Синхронизация мод."
+				if ((y >= 70) && (y <= 110))                               // Button: 2 "Синхронизация проводная"
 				{
 					waitForIt(30, 70, 290, 110);
 					myGLCD.clrScr();
-					data_out[2] = 3;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
-					setup_radio_ping();                      // Настроить радиоканал
+					data_out[2] = 4;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
+					setup_radio_ping();                                     // Настроить радиоканал
 					delayMicroseconds(500);
-					radio_synchro();                         //  Отправить радио синхро сигнал
-					Timer5.stop();
+					synhro_ware();
 					Draw_menu_synhro();
 				}
 				if ((y >= 120) && (y <= 160))  // Button: 3  
 				{
 					waitForIt(30, 120, 290, 160);
 					myGLCD.clrScr();
-
+					data_out[2] = 3;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
+					setup_radio_ping();                                     // Настроить радиоканал
+					delayMicroseconds(500);
+					radio_synchro();                                        //  Отправить радио синхро сигнал
+					Timer5.stop();
 					Draw_menu_synhro();
 				}
 				if ((y >= 170) && (y <= 220))  // Button: 4 "EXIT" Выход
@@ -5375,6 +5380,20 @@ void tuning_mod()
 	//while (myTouch.dataAvailable()) {}
 
 }
+void synhro_ware()
+{
+	for (int i = 0; i < 100; i++) 
+	{
+		digitalWrite(synhro_pin, HIGH);
+		delay(100);
+		digitalWrite(synhro_pin, LOW);
+		delay(100);
+	}
+}
+
+
+
+
 // чтение
 unsigned long i2c_eeprom_ulong_read(int addr)
 {
@@ -7377,48 +7396,47 @@ void measure_power()
 											 // Установить резистивный делитель +15к общ 10к на разъем питания
 		uint32_t logTime1 = 0;
 		logTime1 = millis();
-		if(logTime1 - StartSample > 500)  //  индикация 
+		if(logTime1 - StartSample > 500)              //  индикация 
 		  {
 			StartSample = millis();
 			int m_power = 0;
 			float ind_power = 0;
-			//ADC_CHER = 0x04;                         // Подключить канал А5, разрядность 12
-			ADC_CHER = (0x1u << 3);                   // Подключить канал А3, разрядность 12
-			ADC_CR = ADC_START ; 	                 // Запустить преобразование
-			while (!(ADC_ISR_DRDY));                 // Ожидание конца преобразования
-			m_power =  ADC->ADC_CDR[2];              // Считать данные с канала А5
-			ind_power = m_power * 0.0008056*2;       // Получить напряжение в вольтах
+			ADC_CHER = Analog_pinA3;                  // Подключить канал А3, разрядность 12
+			ADC_CR = ADC_START ; 	                  // Запустить преобразование
+			while (!(ADC_ISR_DRDY));                  // Ожидание конца преобразования
+			m_power =  ADC->ADC_CDR[4];               // Считать данные с канала A3
+			ind_power = m_power *(3.2 / 4096 * 2);    // Получить напряжение в вольтах
 			myGLCD.setBackColor(0, 0, 0);
 			myGLCD.setFont(SmallSymbolFont);
-			if (ind_power > 8 )
+			if (ind_power > 4.1 )
 				{
 					myGLCD.setColor(VGA_LIME);
 					myGLCD.drawRoundRect (279,149, 319, 189);
 					myGLCD.setColor(VGA_WHITE);
 					myGLCD.print( "\x20", 295, 155);  
 				}
-			else if (ind_power > 7 && ind_power < 8 ) 
+			else if (ind_power > 4.0 && ind_power < 4.1 ) 
 				{
 					myGLCD.setColor(VGA_LIME);
 					myGLCD.drawRoundRect (279,149, 319, 189);
 					myGLCD.setColor(VGA_WHITE);
 					myGLCD.print( "\x21", 295, 155);  
 				}
-			else if (ind_power > 6 && ind_power < 7 )
+			else if (ind_power > 3.9 && ind_power < 4.0 )
 				{
 					myGLCD.setColor(VGA_WHITE);
 					myGLCD.drawRoundRect (279,149, 319, 189);
 					myGLCD.setColor(VGA_WHITE);
 					myGLCD.print( "\x22", 295, 155);  
 				}
-			else if (ind_power > 5 && ind_power < 6 )
+			else if (ind_power > 3.8 && ind_power < 3.9 )
 				{
 					myGLCD.setColor(VGA_YELLOW);
 					myGLCD.drawRoundRect (279,149, 319, 189);
 					myGLCD.setColor(VGA_WHITE);
 					myGLCD.print( "\x23", 295, 155); 
 				}
-			else if (ind_power < 5 )
+			else if (ind_power < 3.8 )
 				{
 					myGLCD.setColor(VGA_RED);
 					myGLCD.drawRoundRect (279,149, 319, 189);
@@ -7428,6 +7446,7 @@ void measure_power()
 			myGLCD.setFont( SmallFont);
 			myGLCD.setColor(VGA_WHITE);
 			myGLCD.printNumF(ind_power,1, 289, 172); 
+			//Serial.println(ind_power);
 		}
 }
 
@@ -8554,11 +8573,14 @@ void setup(void)
 	pinMode(kn_red, INPUT);
 	pinMode(kn_blue, INPUT);
 	pinMode(intensityLCD, OUTPUT);
+	pinMode(synhro_pin, OUTPUT);
 	pinMode(LED_PIN13, OUTPUT);
 	digitalWrite(LED_PIN13, LOW);
 	digitalWrite(intensityLCD, LOW);
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
+	digitalWrite(synhro_pin, LOW);
+
 
 	pinMode(vibro, OUTPUT);
 	pinMode(sounder, OUTPUT);

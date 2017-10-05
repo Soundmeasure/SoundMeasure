@@ -33,6 +33,8 @@
 #include "RF24.h"
 #include "printf.h"
 #include <AH_AD9850.h>
+#include <RTCZero.h>
+
 //#include <LCD5110_Basic.h> // подключаем библиотеку
 
 LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
@@ -43,14 +45,31 @@ extern uint8_t MediumNumbers[]; // средний шрифт для цифр (и
 //const int ledPin =  LED_BUILTIN;// the number of the LED pin
 //const int ledPin = 28;// the number of the LED pin
 
+
+/* Create an rtc object */
+RTCZero rtc;
+
+/* Change these values to set the current initial time */
+const byte seconds = 0;
+const byte minutes = 17;
+const byte hours = 13;
+
+/* Change these values to set the current initial date */
+const byte day = 4;
+const byte month = 10;
+const byte year = 17;
+
+
 #define  ledPin  13                                 // Назначение светодиодов на плате
 #define  sound_En  2                                // Управление звуком, разрешение включения усилителя
+#define  ledLCD    8                                // Назначение led LCD
+
 
 int time_sound = 50;
 int freq_sound = 1800;
 byte volume1 = 254;
 byte volume2 = 254;
-
+float volume_Power = 0;
 
 int pin_ovf_led = 13; // debug pin for overflow led 
 //int pin_mc0_led = 28;  // debug pin for compare led 
@@ -62,8 +81,9 @@ unsigned int irq_ovf_count = 0;
 AH_AD9850 AD9850(A4, A3, A2, A1);
 
 volatile bool sound_start = false;
-
-int seconds = 0; // счётчик секунд
+unsigned long PowerMillis = 0;
+unsigned int Power_Interval = 1000;
+//int seconds = 0; // счётчик секунд
 
 // Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 
 
@@ -170,12 +190,13 @@ void sound_run(unsigned int time, unsigned int frequency)
 //------------------------------------------------------------------------------
 
 int FreeRam() {
-	char stack_dummy = 0;
+	char stack_dummy = 0; 
 	return &stack_dummy - sbrk(0);
 }
 
 //#define Serial SerialUSB                        // Native DUE
 #define Serial SERIAL_PORT_USBVIRTUAL             // USB SAMD21G18A
+//#define Serial SERIAL_PORT_USBVIRTUAL             // Подключаем USB порт в качестве COM порта
 
 //void blink()
 //{
@@ -194,7 +215,7 @@ void info()
 
 	myGLCD.print("    ", CENTER, 1);                      // Очистить строку 1
 	myGLCD.print("Volume", LEFT, 1);                      // выводим в строке 1 
-	myGLCD.print(String(x_vol), 40, 1);                    // выводим в строке1
+	myGLCD.print(String(x_vol), 35, 1);                    // выводим в строке1
 	myGLCD.print(String("%"), 56, 1);                     // выводим в строке 1 
 	myGLCD.print("      ", CENTER, 10);                   // Очистить строку 2
 	myGLCD.print("    ", RIGHT, 20);                      // Очистить строку 3
@@ -204,12 +225,12 @@ void info()
 	myGLCD.print("Frequency", LEFT, 20);                  // выводим в строке 3 
 	myGLCD.print(String(freq_sound), RIGHT, 20);          // выводим в строке 3 
 	myGLCD.print("              ", CENTER, 30);           // Очистить строку 4
-	myGLCD.print("    ", CENTER, 40);                     // Очистить строку 5
+	myGLCD.print("    ", 20, 40);                     // Очистить строку 5
 	//if (info_view)
 	//{
 	//	myGLCD.print(String(stopMillis - startMillis), CENTER, 30);         // выводим в строке 4
 	//}
-	myGLCD.print(String(data_in[0]), CENTER, 40);         // выводим в строке 5 
+	myGLCD.print(String(data_in[0]), 20, 40);         // выводим в строке 5 
 	myGLCD.update();
 }
 
@@ -304,6 +325,9 @@ void setup()
 	resistor(1, volume1);                            // Установить уровень сигнала
 	resistor(2, volume2);                            // Установить уровень сигнала
 	pinMode(ledPin, OUTPUT);
+	pinMode(ledLCD, OUTPUT);
+	//digitalWrite(ledLCD, HIGH);
+	digitalWrite(ledLCD, LOW);
 	pinMode(sound_En, OUTPUT);
 	digitalWrite(ledPin, HIGH);
 	delay(100);
@@ -316,6 +340,21 @@ void setup()
 	digitalWrite(sound_En, HIGH);
 	AD9850.powerDown();                              //set signal output to LOW
 	//attachInterrupt(2, blink, HIGH);
+	rtc.begin(); // initialize RTC
+
+				 // Set the time
+				 //  rtc.setHours(hours);
+				 //  rtc.setMinutes(minutes);
+				 //  rtc.setSeconds(seconds);
+				 //
+				 //  // Set the date
+				 //  rtc.setDay(day);
+				 //  rtc.setMonth(month);
+				 //  rtc.setYear(year);
+
+				 // you can use also
+				// rtc.setTime(hours, minutes, seconds);
+				// rtc.setDate(day, month, year);
 	info();
 
 	pinMode(pin_ovf_led, OUTPUT);   // for debug leds
@@ -361,7 +400,10 @@ void setup()
 	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
 	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
 	NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
+	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
 
+	PowerMillis = millis();
 }
 
 void loop(void) 
@@ -369,7 +411,7 @@ void loop(void)
 	unsigned long currentMillis = millis();
 	if (sound_start)
 	{
-		if (currentMillis - startMillis >= interval)
+		if (millis() - startMillis >= interval)
 		{
 			Serial.println(currentMillis - startMillis);
 			//previousMillis = currentMillis;
@@ -378,6 +420,23 @@ void loop(void)
 			sound_start = false;
 		}
 	}
+
+	if (millis() - PowerMillis >= Power_Interval)
+	{
+		volume_Power = analogRead(0)*(3.2 / 1024 * 2);
+		myGLCD.printNumF(volume_Power,1, RIGHT, 1);          // выводим в строке 1
+		//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
+		myGLCD.print(String("       "), RIGHT, 40);          // выводим в строке 1
+		myGLCD.print(String(rtc.getHours()), 35, 40);          // выводим в строке 1
+		myGLCD.print(String("/"), 48, 40);          // выводим в строке 1
+		myGLCD.print(String(rtc.getMinutes()), 55, 40);          // выводим в строке 1
+		myGLCD.print(String(":"), 67, 40);          // выводим в строке 1
+		myGLCD.print(String(rtc.getSeconds()), RIGHT, 40);          // выводим в строке 1
+		myGLCD.update();
+		PowerMillis = millis();
+	
+	}
+
 
 	while (radio.available(&pipeNo))                       // 
 	{
@@ -395,13 +454,13 @@ void loop(void)
 		else if (data_in[2] == 2)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
-			delayMicroseconds(500);
+			delayMicroseconds(1000);
 			NVIC_EnableIRQ(TCC0_IRQn);                      // Включаем прерывание
 		}
 		else if (data_in[2] == 3)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
-			delayMicroseconds(500);
+			delayMicroseconds(1000);
 			NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
 		}
 		else
