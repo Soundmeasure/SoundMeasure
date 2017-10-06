@@ -35,6 +35,24 @@
 #include <AH_AD9850.h>
 #include <RTCZero.h>
 
+
+
+//#  define CONF_CLOCK_XOSC_ENABLE                  true
+//#  define CONF_CLOCK_XOSC_EXTERNAL_CRYSTAL        SYSTEM_CLOCK_EXTERNAL_CRYSTAL
+//#  define CONF_CLOCK_XOSC_EXTERNAL_FREQUENCY      12000000UL
+
+
+// SYSTEM_CLOCK_SOURCE_XOSC configuration - External clock/oscillator 
+//#  define CONF_CLOCK_XOSC_ENABLE                  true
+//#  define CONF_CLOCK_XOSC_EXTERNAL_CRYSTAL        SYSTEM_CLOCK_EXTERNAL_CRYSTAL
+//#  define CONF_CLOCK_XOSC_EXTERNAL_FREQUENCY      16000000UL
+//#  define CONF_CLOCK_XOSC_STARTUP_TIME            SYSTEM_XOSC_STARTUP_32768
+//#  define CONF_CLOCK_XOSC_AUTO_GAIN_CONTROL       true
+//#  define CONF_CLOCK_XOSC_ON_DEMAND               true
+//#  define CONF_CLOCK_XOSC_RUN_IN_STANDBY          false
+//
+
+
 //#include <LCD5110_Basic.h> // подключаем библиотеку
 
 LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
@@ -44,6 +62,11 @@ extern uint8_t MediumNumbers[]; // средний шрифт для цифр (и
 
 //const int ledPin =  LED_BUILTIN;// the number of the LED pin
 //const int ledPin = 28;// the number of the LED pin
+
+
+// The type cast must fit with the selected timer Данный тип должен соответствовать выбранному таймеру
+Tcc* TC = (Tcc*)TCC0;                    // get timer struct  получить структуру таймера
+
 
 
 /* Create an rtc object */
@@ -63,7 +86,8 @@ const byte year = 17;
 #define  ledPin  13                                 // Назначение светодиодов на плате
 #define  sound_En  2                                // Управление звуком, разрешение включения усилителя
 #define  ledLCD    8                                // Назначение led LCD
-
+#define  synhro_pin 27                              // Назначение pin синхро
+bool start_led = true;
 
 int time_sound = 50;
 int freq_sound = 1800;
@@ -82,6 +106,7 @@ AH_AD9850 AD9850(A4, A3, A2, A1);
 
 volatile bool sound_start = false;
 unsigned long PowerMillis = 0;
+unsigned long StartSample = 0;
 unsigned int Power_Interval = 1000;
 //int seconds = 0; // счётчик секунд
 
@@ -237,16 +262,16 @@ void info()
 
 void TCC0_Handler()
 {
-	Tcc* TC = (Tcc*)TCC0;                               // get timer struct
+//	Tcc* TC = (Tcc*)TCC0;                               // get timer struct
 	if (TC->INTFLAG.bit.OVF == 1)
 	{    
 		sound_start = true;
 		startMillis = millis();
 		if (irq_ovf_count % 2 == 1)
 		{
-			AD9850.set_frequency(0, 0, freq_sound);          //set power=UP, phase=0, 1kHz frequency
-			Serial.println(millis() - startMillis1);
-			startMillis1 = millis();
+			//AD9850.set_frequency(0, 0, freq_sound);          //set power=UP, phase=0, 1kHz frequency
+			//Serial.println(millis() - startMillis1);
+			//startMillis1 = millis();
 		}
 		digitalWrite(pin_ovf_led, irq_ovf_count % 2);    // for debug leds
 		//digitalWrite(pin_mc0_led, HIGH);               // for debug leds
@@ -263,7 +288,7 @@ void TCC0_Handler()
 
 void setTimer(long period) 
 {
-	Tcc* TC = (Tcc*)TCC0; // get timer struct
+	//Tcc* TC = (Tcc*)TCC0; // get timer struct
 
 	TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;                 // Disable TC
 	while (TC->SYNCBUSY.bit.ENABLE == 1);               // wait for sync 
@@ -326,7 +351,8 @@ void setup()
 	resistor(2, volume2);                            // Установить уровень сигнала
 	pinMode(ledPin, OUTPUT);
 	pinMode(ledLCD, OUTPUT);
-	//digitalWrite(ledLCD, HIGH);
+	pinMode(synhro_pin, OUTPUT);
+	digitalWrite(synhro_pin, LOW);
 	digitalWrite(ledLCD, LOW);
 	pinMode(sound_En, OUTPUT);
 	digitalWrite(ledPin, HIGH);
@@ -362,7 +388,7 @@ void setup()
 	//pinMode(pin_mc0_led, OUTPUT);   // for debug leds
 	//digitalWrite(pin_mc0_led, LOW); // for debug leds
 
-
+	
 									// Enable clock for TC  Включить часы для TC
 	REG_GCLK_CLKCTRL = (uint16_t)(GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID_TCC0_TCC1);
 	while (GCLK->STATUS.bit.SYNCBUSY == 1); // wait for sync ждать синхронизацию
@@ -393,21 +419,29 @@ void setup()
 	TC->INTENSET.bit.MC0 = 1;             // enable compare match to CC0 включить сравнение соответствия с CC0
 //	setTimer(300000);
 	setTimer(281250);
+
+	
+
+		/*
 	// Enable InterruptVector
 	NVIC_EnableIRQ(TCC0_IRQn);
 
 	// Enable TC
 	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
 	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+
 	NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+
+	*/
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
-
+	//setTimer(300000);
 	PowerMillis = millis();
 }
 
 void loop(void) 
 {
+	
 	unsigned long currentMillis = millis();
 	if (sound_start)
 	{
@@ -455,24 +489,106 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(1000);
-			NVIC_EnableIRQ(TCC0_IRQn);                      // Включаем прерывание
+			//NVIC_EnableIRQ(TCC0_IRQn);                      // Включаем прерывание
 		}
 		else if (data_in[2] == 3)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(1000);
-			NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+			//NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+		}
+		else if (data_in[2] == 4)
+		{
+			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
+			delayMicroseconds(20000);
+			digitalWrite(synhro_pin, HIGH);
+			delayMicroseconds(500);
+			digitalWrite(synhro_pin, LOW);
+			delayMicroseconds(20000);
+			StartSample = micros();                         // Записать время
+			/*
+															// Enable clock for TC  Включить часы для TC
+			REG_GCLK_CLKCTRL = (uint16_t)(GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID_TCC0_TCC1);
+			while (GCLK->STATUS.bit.SYNCBUSY == 1); // wait for sync ждать синхронизацию
+
+
+			//										// The type cast must fit with the selected timer Данный тип должен соответствовать выбранному таймеру
+			//Tcc* TC = (Tcc*)TCC0;                    // get timer struct  получить структуру таймера
+
+			TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
+			while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+
+
+			TC->CTRLA.reg |= TCC_CTRLA_PRESCALER_DIV256;   // Set perscaler
+
+
+			TC->WAVE.reg |= TCC_WAVE_WAVEGEN_NFRQ;   // Set wave form configuration 
+			while (TC->SYNCBUSY.bit.WAVE == 1); // wait for sync 
+
+			TC->PER.reg = 0xFFFF;              // Set counter Top using the PER register  Установить счетчик сверху с использованием регистра PER
+			while (TC->SYNCBUSY.bit.PER == 1); // wait for sync 
+
+			TC->CC[0].reg = 0xFFF;
+			while (TC->SYNCBUSY.bit.CC0 == 1); // wait for sync 
+
+											   // Interrupts 
+			TC->INTENSET.reg = 0;                 // disable all interrupts
+			TC->INTENSET.bit.OVF = 1;             // enable overfollow включить переполнение
+			TC->INTENSET.bit.MC0 = 1;             // enable compare match to CC0 включить сравнение соответствия с CC0
+												  //	setTimer(300000);
+		//	setTimer(281250);
+
+		
+			// Enable InterruptVector
+			NVIC_EnableIRQ(TCC0_IRQn);
+
+			// Enable TC
+			TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
+			while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+	//		NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+
+			*/
+
+	
+			
+			while (true)
+			{
+				if (micros() - StartSample >= 3000000-990)
+				{
+					digitalWrite(ledPin, HIGH);
+					StartSample = micros();
+				}
+				if (micros() - StartSample >= 20000)
+				{
+					digitalWrite(ledPin, LOW);
+				}
+
+				//while (radio.available(&pipeNo))                       // 
+				//{
+					radio.read(&data_in, sizeof(data_in));
+				//	data_out[0] = data_in[0];
+					if (data_in[2] == 3)
+					{
+						//radio.writeAckPayload(pipeNo, &data_out, 2);   // Грузим сообщение 2 байта для автоотправки;
+						break;
+					}
+				//}
+
+			}
 		}
 		else
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
 		}
 
+		digitalWrite(synhro_pin, LOW);
 		time_sound = (data_in[4] << 8) | data_in[5];        // Длительность посылки. Собираем как "настоящие программеры"
 		freq_sound = (data_in[6] << 8) | data_in[7];        // Частота генератора. Собираем как "настоящие программеры"
 		volume1 = data_in[8];                               // 
 		volume2 = data_in[9];                               // Громкость звучания. 
+
 	}
+
 }
 
 

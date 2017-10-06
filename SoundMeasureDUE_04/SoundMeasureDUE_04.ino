@@ -1265,9 +1265,9 @@ void secondHandler()
 
 void synhroHandler()
 {
-	//digitalWrite(LED_PIN13, HIGH);
-//	delayMicroseconds(100);
-	//digitalWrite(LED_PIN13, LOW);
+	digitalWrite(LED_PIN13, HIGH);
+	delayMicroseconds(10000);
+	digitalWrite(LED_PIN13, LOW);
 }
 
 
@@ -3250,6 +3250,7 @@ void Draw_menu_synhro()
 }
 void menu_synhro()   // Меню "Настройка", вызывается из главного меню 
 {
+	setup_radio_ping();                                     // Настроить радиоканал
 	while (true)
 	{
 		delay(10);
@@ -3274,8 +3275,8 @@ void menu_synhro()   // Меню "Настройка", вызывается из главного меню
 					waitForIt(30, 70, 290, 110);
 					myGLCD.clrScr();
 					data_out[2] = 4;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
-					setup_radio_ping();                                     // Настроить радиоканал
-					delayMicroseconds(500);
+					radio_synchro();
+				//	delayMicroseconds(500);
 					synhro_ware();
 					Draw_menu_synhro();
 				}
@@ -5382,16 +5383,159 @@ void tuning_mod()
 }
 void synhro_ware()
 {
-	for (int i = 0; i < 100; i++) 
+	myGLCD.setFont(BigFont);
+	//Timer5.stop();
+	//delay(100);
+	if (digitalRead(synhro_pin) == LOW)
 	{
-		digitalWrite(synhro_pin, HIGH);
-		delay(100);
-		digitalWrite(synhro_pin, LOW);
-		delay(100);
+		StartSample = micros();                  // Записать время
+		while (true)
+		{
+			if (micros() - StartSample >= 3000000)
+			{
+				myGLCD.print("He""\xA4"" c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", CENTER, 80);   // "Нет синхронизации"
+				delay(2000);
+				//Timer5.stop();
+				break;
+			}
+
+			if (digitalRead(synhro_pin) == HIGH)
+			{
+				myGLCD.clrScr();
+				myGLCD.setBackColor(0, 0, 0);
+				myGLCD.setFont(BigFont);
+				myGLCD.setColor(0, 0, 255);
+				myGLCD.fillRoundRect(30, 20 + (50 * 3), 290, 60 + (50 * 3));
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.drawRoundRect(30, 20 + (50 * 3), 290, 60 + (50 * 3));
+				myGLCD.setBackColor(0, 0, 255);
+				myGLCD.print(txt_tuning_menu4, CENTER, 180);
+				myGLCD.setBackColor(0, 0, 0);
+				while (true)
+				{
+					if (digitalRead(synhro_pin) == LOW)
+					{
+
+						//myGLCD.print("Synhro START!", CENTER, 80);
+							Timer5.start();
+							myGLCD.print("Synhro START!", CENTER, 80);
+							delay(2000);
+
+						/*
+						StartSample = micros();                  // Записать время
+						while (true)
+						{
+							if (micros() - StartSample >= 3000200)
+							{
+								start_led = !start_led;
+								digitalWrite(LED_PIN13, HIGH);
+								StartSample = micros();
+							}
+							if (micros() - StartSample >= 20000)
+							{
+								start_led = !start_led;
+								digitalWrite(LED_PIN13, LOW);
+							}
+							if (myTouch.dataAvailable())
+							{
+								myTouch.read();
+								int	x = myTouch.getX();
+								int	y = myTouch.getY();
+
+								if ((x >= 30) && (x <= 290))       // 
+								{
+
+									if ((y >= 170) && (y <= 220))  // Button: 4 "EXIT" Выход
+									{
+										waitForIt(30, 170, 290, 210);
+										break;
+									}
+								}
+							}
+						}
+						*/
+
+
+
+	//					Timer5.start();
+						//myGLCD.print("Synhro START!", CENTER, 80);
+						//delay(2000);
+						break;
+					}
+				}
+				break;
+			}
+		}
+    }
+	else
+	{
+		myGLCD.print("No connect", CENTER, 80);
+		myGLCD.print("cabel synhro", CENTER, 100);
+		delay(2000);
 	}
+
+
+
+
+
+/*
+	myGLCD.print("Synhro START!", CENTER, 80);
+	//	Timer5.start();
+	StartSample = micros();                  // Записать время
+	while (true)
+	{
+		if (micros() - StartSample >= 3000000)
+		{
+			start_led = !start_led;
+			digitalWrite(LED_PIN13, HIGH);
+			StartSample = micros();
+		}
+		if (micros() - StartSample >= 50000)
+		{
+			start_led = !start_led;
+			digitalWrite(LED_PIN13, LOW);
+		}
+		//	delay(20);
+		//digitalWrite(LED_PIN13, LOW);
+		if (myTouch.dataAvailable())
+		{
+			myTouch.read();
+			int	x = myTouch.getX();
+			int	y = myTouch.getY();
+
+			if ((x >= 30) && (x <= 290))       // 
+			{
+
+				if ((y >= 170) && (y <= 220))  // Button: 4 "EXIT" Выход
+				{
+					waitForIt(30, 170, 290, 210);
+					break;
+				}
+			}
+		}
+	}
+
+	*/
+
+
+
+
+
+	//for (int i = 0; i < 100; i++) 
+	//{
+	//	digitalWrite(synhro_pin, HIGH);
+	//	delay(100);
+	//	digitalWrite(synhro_pin, LOW);
+	//	delay(100);
+	//}
+
+
+
+
+	myGLCD.setFont(SmallFont);
 }
 
-
+ 
 
 
 // чтение
@@ -8573,13 +8717,13 @@ void setup(void)
 	pinMode(kn_red, INPUT);
 	pinMode(kn_blue, INPUT);
 	pinMode(intensityLCD, OUTPUT);
-	pinMode(synhro_pin, OUTPUT);
+	pinMode(synhro_pin, INPUT);
 	pinMode(LED_PIN13, OUTPUT);
 	digitalWrite(LED_PIN13, LOW);
 	digitalWrite(intensityLCD, LOW);
 	pinMode(strob_pin, INPUT);
 	digitalWrite(strob_pin, HIGH);
-	digitalWrite(synhro_pin, LOW);
+	digitalWrite(synhro_pin, HIGH);
 
 
 	pinMode(vibro, OUTPUT);
