@@ -108,6 +108,8 @@ volatile bool sound_start = false;
 unsigned long PowerMillis = 0;
 unsigned long StartSample = 0;
 unsigned int Power_Interval = 1000;
+
+bool intterrupt_enable = false;
 //int seconds = 0; // счётчик секунд
 
 // Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 
@@ -267,16 +269,29 @@ void TCC0_Handler()
 	{    
 		sound_start = true;
 		startMillis = millis();
+		digitalWrite(pin_ovf_led, HIGH);    // for debug leds
+
+		if (millis()- startMillis >= 10000)
+		{
+			digitalWrite(pin_ovf_led, LOW);    // for debug leds
+			startMillis = millis();
+		}
+
+
+
+		/*
 		if (irq_ovf_count % 2 == 1)
 		{
+			digitalWrite(pin_ovf_led, irq_ovf_count % 2);    // for debug leds
 			//AD9850.set_frequency(0, 0, freq_sound);          //set power=UP, phase=0, 1kHz frequency
 			//Serial.println(millis() - startMillis1);
 			//startMillis1 = millis();
 		}
-		digitalWrite(pin_ovf_led, irq_ovf_count % 2);    // for debug leds
+	//	digitalWrite(pin_ovf_led, irq_ovf_count % 2);    // for debug leds
 		//digitalWrite(pin_mc0_led, HIGH);               // for debug leds
 		TC->INTFLAG.bit.OVF = 1;                         // writing a one clears the flag ovf flag
 		irq_ovf_count++;                                 // for debug leds
+		*/
 	}
 
 	if (TC->INTFLAG.bit.MC0 == 1) 
@@ -298,6 +313,49 @@ void setTimer(long period)
 
 	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;                  // Enable TC
 	while (TC->SYNCBUSY.bit.ENABLE == 1);               // wait for sync 
+}
+
+void interrupts_start()
+{
+	// Enable clock for TC  Включить часы для TC
+	REG_GCLK_CLKCTRL = (uint16_t)(GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID_TCC0_TCC1);
+	while (GCLK->STATUS.bit.SYNCBUSY == 1);         // wait for sync ждать синхронизацию
+
+
+													//										         // The type cast must fit with the selected timer Данный тип должен соответствовать выбранному таймеру
+	Tcc* TC = (Tcc*)TCC0;                            // get timer struct  получить структуру таймера
+
+	TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;              // Disable TC
+	while (TC->SYNCBUSY.bit.ENABLE == 1);            // wait for sync 
+
+
+	TC->CTRLA.reg |= TCC_CTRLA_PRESCALER_DIV256;     // Set perscaler
+
+
+	TC->WAVE.reg |= TCC_WAVE_WAVEGEN_NFRQ;           // Set wave form configuration 
+	while (TC->SYNCBUSY.bit.WAVE == 1);              // wait for sync 
+
+	TC->PER.reg = 0xFFFF;              // Set counter Top using the PER register  Установить счетчик сверху с использованием регистра PER
+	while (TC->SYNCBUSY.bit.PER == 1); // wait for sync 
+
+	TC->CC[0].reg = 0xFFF;
+	while (TC->SYNCBUSY.bit.CC0 == 1); // wait for sync 
+
+									   // Interrupts 
+	TC->INTENSET.reg = 0;                 // disable all interrupts
+	TC->INTENSET.bit.OVF = 1;             // enable overfollow включить переполнение
+	TC->INTENSET.bit.MC0 = 1;             // enable compare match to CC0 включить сравнение соответствия с CC0
+										  //	setTimer(300000);
+	//setTimer(281250-120);
+	setTimer(562380);
+
+	// Enable InterruptVector
+	NVIC_EnableIRQ(TCC0_IRQn);
+
+	// Enable TC
+	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
+	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
+
 }
 
 
@@ -351,8 +409,8 @@ void setup()
 	resistor(2, volume2);                            // Установить уровень сигнала
 	pinMode(ledPin, OUTPUT);
 	pinMode(ledLCD, OUTPUT);
-	pinMode(synhro_pin, OUTPUT);
-	digitalWrite(synhro_pin, LOW);
+	pinMode(synhro_pin, INPUT);
+	digitalWrite(synhro_pin, HIGH);
 	digitalWrite(ledLCD, LOW);
 	pinMode(sound_En, OUTPUT);
 	digitalWrite(ledPin, HIGH);
@@ -388,51 +446,8 @@ void setup()
 	//pinMode(pin_mc0_led, OUTPUT);   // for debug leds
 	//digitalWrite(pin_mc0_led, LOW); // for debug leds
 
-	
-									// Enable clock for TC  Включить часы для TC
-	REG_GCLK_CLKCTRL = (uint16_t)(GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID_TCC0_TCC1);
-	while (GCLK->STATUS.bit.SYNCBUSY == 1); // wait for sync ждать синхронизацию
 
 
-											// The type cast must fit with the selected timer Данный тип должен соответствовать выбранному таймеру
-	Tcc* TC = (Tcc*)TCC0;                    // get timer struct  получить структуру таймера
-
-	TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
-	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
-
-
-	TC->CTRLA.reg |= TCC_CTRLA_PRESCALER_DIV256;   // Set perscaler
-
-
-	TC->WAVE.reg |= TCC_WAVE_WAVEGEN_NFRQ;   // Set wave form configuration 
-	while (TC->SYNCBUSY.bit.WAVE == 1); // wait for sync 
-
-	TC->PER.reg = 0xFFFF;              // Set counter Top using the PER register  Установить счетчик сверху с использованием регистра PER
-	while (TC->SYNCBUSY.bit.PER == 1); // wait for sync 
-
-	TC->CC[0].reg = 0xFFF;
-	while (TC->SYNCBUSY.bit.CC0 == 1); // wait for sync 
-
-									   // Interrupts 
-	TC->INTENSET.reg = 0;                 // disable all interrupts
-	TC->INTENSET.bit.OVF = 1;             // enable overfollow включить переполнение
-	TC->INTENSET.bit.MC0 = 1;             // enable compare match to CC0 включить сравнение соответствия с CC0
-//	setTimer(300000);
-	setTimer(281250);
-
-	
-
-		/*
-	// Enable InterruptVector
-	NVIC_EnableIRQ(TCC0_IRQn);
-
-	// Enable TC
-	TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
-	while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
-
-	NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
-
-	*/
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
 	//setTimer(300000);
@@ -495,62 +510,82 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(1000);
-			//NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+		//	NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+			TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;             // Disable TC
+			while (TC->SYNCBUSY.bit.ENABLE == 1);           // wait for sync 
+			NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
+			intterrupt_enable = false;
 		}
 		else if (data_in[2] == 4)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
-			delayMicroseconds(20000);
+
+			if (digitalRead(synhro_pin) == LOW)
+			{
+				StartSample = micros();                     // Записать время
+				while (true)
+				{
+					if (micros() - StartSample >= 3000000)
+					{
+						//myGLCD.setFont(BigFont);
+						//myGLCD.print("He""\xA4"" c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", CENTER, 80);   // "Нет синхронизации"
+						delay(2000);
+						break;
+					}
+
+					if (digitalRead(synhro_pin) == HIGH)
+					{
+						while (true)
+						{
+							if (digitalRead(synhro_pin) == LOW)
+							{
+								StartSample = micros();
+								while (true)
+								{
+									if (micros() - StartSample >= 3000000-966)
+									{
+										digitalWrite(ledPin, HIGH);
+										StartSample = micros();
+									}
+									if (micros() - StartSample >= 10000)
+									{
+										digitalWrite(ledPin, LOW);
+									}
+								}
+
+
+
+								//if (!intterrupt_enable)
+								//{
+								//	interrupts_start();
+								//	intterrupt_enable = true;
+								//}
+								//break;
+							}
+						}
+						break;
+					}
+				}
+			}
+
+
+			//delayMicroseconds(20000);
+/*
 			digitalWrite(synhro_pin, HIGH);
-			delayMicroseconds(500);
+			delayMicroseconds(1000);
 			digitalWrite(synhro_pin, LOW);
 			delayMicroseconds(20000);
 			StartSample = micros();                         // Записать время
-			/*
-															// Enable clock for TC  Включить часы для TC
-			REG_GCLK_CLKCTRL = (uint16_t)(GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID_TCC0_TCC1);
-			while (GCLK->STATUS.bit.SYNCBUSY == 1); // wait for sync ждать синхронизацию
-
-
-			//										// The type cast must fit with the selected timer Данный тип должен соответствовать выбранному таймеру
-			//Tcc* TC = (Tcc*)TCC0;                    // get timer struct  получить структуру таймера
-
-			TC->CTRLA.reg &= ~TCC_CTRLA_ENABLE;   // Disable TC
-			while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
-
-
-			TC->CTRLA.reg |= TCC_CTRLA_PRESCALER_DIV256;   // Set perscaler
-
-
-			TC->WAVE.reg |= TCC_WAVE_WAVEGEN_NFRQ;   // Set wave form configuration 
-			while (TC->SYNCBUSY.bit.WAVE == 1); // wait for sync 
-
-			TC->PER.reg = 0xFFFF;              // Set counter Top using the PER register  Установить счетчик сверху с использованием регистра PER
-			while (TC->SYNCBUSY.bit.PER == 1); // wait for sync 
-
-			TC->CC[0].reg = 0xFFF;
-			while (TC->SYNCBUSY.bit.CC0 == 1); // wait for sync 
-
-											   // Interrupts 
-			TC->INTENSET.reg = 0;                 // disable all interrupts
-			TC->INTENSET.bit.OVF = 1;             // enable overfollow включить переполнение
-			TC->INTENSET.bit.MC0 = 1;             // enable compare match to CC0 включить сравнение соответствия с CC0
-												  //	setTimer(300000);
-		//	setTimer(281250);
-
-		
-			// Enable InterruptVector
-			NVIC_EnableIRQ(TCC0_IRQn);
-
-			// Enable TC
-			TC->CTRLA.reg |= TCC_CTRLA_ENABLE;
-			while (TC->SYNCBUSY.bit.ENABLE == 1); // wait for sync 
-	//		NVIC_DisableIRQ(TCC0_IRQn);                     // Отключаем прерывание
-
-			*/
-
+*/
+	/*		if (!intterrupt_enable)
+			{
+				interrupts_start();
+				intterrupt_enable = true;
+				
+			}*/
 	
-			
+	
+			/*
 			while (true)
 			{
 				if (micros() - StartSample >= 3000000-990)
@@ -575,13 +610,14 @@ void loop(void)
 				//}
 
 			}
+			*/
 		}
 		else
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
 		}
 
-		digitalWrite(synhro_pin, LOW);
+	//	digitalWrite(synhro_pin, LOW);
 		time_sound = (data_in[4] << 8) | data_in[5];        // Длительность посылки. Собираем как "настоящие программеры"
 		freq_sound = (data_in[6] << 8) | data_in[7];        // Частота генератора. Собираем как "настоящие программеры"
 		volume1 = data_in[8];                               // 
