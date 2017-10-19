@@ -40,6 +40,7 @@ extern uint8_t SmallSymbolFont[];
 // Настройка монитора
 
 UTFT myGLCD(TFT01_28, 38, 39, 40, 41);     // Настройка монитора
+//UTFT myGLCD(ITDB28, 38, 39, 40, 41);     // Настройка монитора
 UTouch        myTouch(6,5,4,3,2);          // Настройка клавиатуры
 
 UTFT_Buttons  myButtons(&myGLCD, &myTouch);
@@ -8510,9 +8511,13 @@ void setup_radio_ping()
 void sound1()
 {
 	digitalWrite(sounder, HIGH);
-	delay(100);
+	delay(200);
 	digitalWrite(sounder, LOW);
-	delay(100);
+	delay(200);
+	digitalWrite(vibro, HIGH);
+	delay(200);
+	digitalWrite(vibro, LOW);
+	delay(200);
 }
 void vibro1()
 {
@@ -8729,6 +8734,9 @@ void timer_handle_interrupts(int timer)
 }
 */
 
+
+
+
 //------------------------------------------------------------------------------
 
 void setup(void) 
@@ -8841,11 +8849,31 @@ void setup(void)
 	vibro1();
 	delay(100);
 	vibro1();
+	//for (int i = 22; i < 42; i++)
+	//{
+	//	pinMode(i, OUTPUT);
+	//	digitalWrite(i, LOW);
+
+	//}
+
 }
 
 //------------------------------------------------------------------------------
 void loop(void) 
 {
+	/*
+	for (int i = 22; i < 42; i++)
+	{
+		digitalWrite(i, HIGH);
+		delay(50);
+
+		digitalWrite(i, LOW);
+		delay(50);
+
+	}
+
+	delay(1000);
+	*/
 	draw_Glav_Menu();
 	swichMenu();
 
