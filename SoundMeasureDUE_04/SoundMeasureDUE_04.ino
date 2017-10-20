@@ -25,11 +25,7 @@
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
-//#include"timer-api.h"
 
-
-
-//#include <SD.h>
 
 
 extern uint8_t SmallFont[];
