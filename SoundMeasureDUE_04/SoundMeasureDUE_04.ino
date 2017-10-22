@@ -35,8 +35,9 @@ extern uint8_t SmallSymbolFont[];
 
 // Настройка монитора
 
+//UTFT myGLCD(CTE28, 38, 39, 40, 41);     // Настройка монитора
 UTFT myGLCD(TFT01_28, 38, 39, 40, 41);     // Настройка монитора
-//UTFT myGLCD(ITDB28, 38, 39, 40, 41);     // Настройка монитора
+
 UTouch        myTouch(6,5,4,3,2);          // Настройка клавиатуры
 
 UTFT_Buttons  myButtons(&myGLCD, &myTouch);
