@@ -382,7 +382,7 @@ void setup()
 
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
-	Timer6.setPeriod(3000000-14);
+	Timer6.setPeriod(3000000-11);
 	Timer6.attachInterrupt(firstHandler); // Every 3 sec.
 	//Timer4.attachInterrupt(secondHandler).setFrequency(1).start();
 	//Timer5.attachInterrupt(thirdHandler).setFrequency(10);
