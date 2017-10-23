@@ -3274,7 +3274,7 @@ void menu_synhro()   // Меню "Настройка", вызывается из главного меню
 				{
 					waitForIt(30, 70, 290, 110);
 					myGLCD.clrScr();
-					data_out[2] = 4;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
+					data_out[2] = 3;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
 					radio_synchro();
 				//	delayMicroseconds(500);
 					synhro_ware();
@@ -3284,7 +3284,7 @@ void menu_synhro()   // Меню "Настройка", вызывается из главного меню
 				{
 					waitForIt(30, 120, 290, 160);
 					myGLCD.clrScr();
-					data_out[2] = 3;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
+					data_out[2] = 4;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
 					setup_radio_ping();                                     // Настроить радиоканал
 					delayMicroseconds(500);
 					radio_synchro();                                        //  Отправить радио синхро сигнал
@@ -7625,33 +7625,33 @@ void radio_transfer()       // test transfer
 		}
 	}
 }
-void radio_synchro()       // Синронизация модулей
+void radio_synchro()                                   // Синронизация модулей
 {
 	tim1 = 0;
 	volume_variant = 4;
-	radio.stopListening();                                  // Во-первых, перестаньте слушать, чтобы мы могли поговорить.
+	radio.stopListening();                             // Во-первых, перестаньте слушать, чтобы мы могли поговорить.
 	myGLCD.setBackColor(0, 0, 0);
 	myGLCD.setFont(SmallFont);
 	if (kn != 0) set_volume(volume_variant, kn);
 	data_out[0] = counter_test;
-	data_out[1] = 1;                                        //  
-	//data_out[2] = 2;                                        // Отправить команду синхронизации модулей(включить таймер прерываний)
-	data_out[3] = 1;                                        //
-	data_out[4] = highByte(time_sound);                     // Старший байт Отправить длительность звуковуй посылки
-	data_out[5] = lowByte(time_sound);                      // Младший байт Отправить длительность звуковуй посылки
-	data_out[6] = highByte(freq_sound);                     // Старший байт Отправить звуковую посылку 
-	data_out[7] = lowByte(freq_sound);                      // Младший байт Отправить звуковую посылку 
+	data_out[1] = 1;                                    //  
+	//data_out[2] = 2;                                  // Отправить команду синхронизации модулей(включить таймер прерываний)
+	data_out[3] = 1;                                    //
+	data_out[4] = highByte(time_sound);                 // Старший байт Отправить длительность звуковуй посылки
+	data_out[5] = lowByte(time_sound);                  // Младший байт Отправить длительность звуковуй посылки
+	data_out[6] = highByte(freq_sound);                 // Старший байт Отправить звуковую посылку 
+	data_out[7] = lowByte(freq_sound);                  // Младший байт Отправить звуковую посылку 
 	data_out[8] = volume1;
 	data_out[9] = volume2;
 
-	timeStartRadio = micros();                          // Записать время старта радио синхро импульса
+	timeStartRadio = micros();                            // Записать время старта радио синхро импульса
 
 	if (!radio.write(&data_out, sizeof(data_out)))
 	{
 		//	Serial.println(F("failed."));
-		myGLCD.setColor(VGA_LIME);                    // Вывести на дисплей время ответа синхроимпульса
-		myGLCD.print("     ", 90 - 40, 120);          // Вывести на дисплей время ответа синхроимпульса
-		myGLCD.printNumI(0, 90 - 32, 120);            // Вывести на дисплей время ответа синхроимпульса
+		myGLCD.setColor(VGA_LIME);                        // Вывести на дисплей время ответа синхроимпульса
+		myGLCD.print("     ", 90 - 40, 120);              // Вывести на дисплей время ответа синхроимпульса
+		myGLCD.printNumI(0, 90 - 32, 120);                // Вывести на дисплей время ответа синхроимпульса
 		myGLCD.setColor(255, 255, 255);
 	}
 	else
