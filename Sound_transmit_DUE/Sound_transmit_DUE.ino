@@ -160,13 +160,13 @@ uint32_t message = 1;
 
 void firstHandler() 
 {
-
-	//digitalWrite(ledPin13, HIGH);
-	//AD9850.set_frequency(0, 0, 1850);                  //set power=UP, phase=0, 1kHz frequency
-	//delayMicroseconds(500);
-	//digitalWrite(ledPin13, LOW);
-	//delayMicroseconds(50000-500);
-	//AD9850.powerDown();
+	digitalWrite(ledPin13, HIGH);
+	delayMicroseconds(5000);
+	AD9850.set_frequency(0, 0, 1850);                  //set power=UP, phase=0, 1kHz frequency
+	delayMicroseconds(500);
+	digitalWrite(ledPin13, LOW);
+	delayMicroseconds(50000-500);
+	AD9850.powerDown();
 }
 
 void secondHandler() {
@@ -384,11 +384,10 @@ void setup()
 
 	info();
 
-
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
-	//Timer6.setPeriod(3000000-1);
-	//Timer6.attachInterrupt(firstHandler); // Every 3 sec.
+	Timer6.setPeriod(2000000-1);
+	Timer6.attachInterrupt(firstHandler);                    // Every 3 sec.
 	//Timer4.attachInterrupt(secondHandler).setFrequency(1).start();
 	//Timer5.attachInterrupt(thirdHandler).setFrequency(10);
 
@@ -430,24 +429,23 @@ void loop(void)
 	{
 		radio.read(&data_in, sizeof(data_in));
 		data_out[0] = data_in[0];
-		if (data_in[2]==1)
+		if (data_in[2]==1)                                         // Прием синхроимпульса по радио и генерирование одиночного сигнала.
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 			stopMillis = micros();
 			delayMicroseconds(1000);                               // Задержка для получения ответа и завершения процессов на Базе
 			sound_run(time_sound, freq_sound);
 			info();
-			//info_view = false;
 		}
 		else if (data_in[2] == 2)
 		{
-			radio.writeAckPayload(pipeNo, &data_out, 2);          // Грузим сообщение 2 байта для автоотправки;
+			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(1000);
-			////NVIC_EnableIRQ(TCC0_IRQn);                      // Включаем прерывание
+
 		}
-		else if (data_in[2] == 3)
+		else if (data_in[2] == 3)                                  // Выполнить синхронизацию по проводу
 		{
-			radio.writeAckPayload(pipeNo, &data_out, 2);       // Грузим сообщение 2 байта для автоотправки;
+			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 
 			if (digitalRead(synhro_pin) == LOW)
 			{
@@ -484,7 +482,7 @@ void loop(void)
 
 								if (!intterrupt_enable)
 								{
-									//Timer6.start();
+									Timer6.start();
 									//start_synhro();
 									//attachInterrupt(11, start_synhro, HIGH);
 									intterrupt_enable = true;
@@ -497,7 +495,7 @@ void loop(void)
 				}
 			}
 		}
-		else if (data_in[2] == 4)
+		else if (data_in[2] == 4)                               // Остановить синхронизацию модулей
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(1000);
