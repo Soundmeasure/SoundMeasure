@@ -8015,6 +8015,8 @@ void volume_down()
 }
 void set_volume(int reg_module, byte count_vol)
 {
+	// если reg_module =1 это регулировка кнопками на передней панели
+
 	kn = 0;
 	if (count_vol != 0)
 	{
@@ -8041,22 +8043,22 @@ void set_volume(int reg_module, byte count_vol)
 
 			break;
 		case 2:
-			if (count_vol == 1)
-			{
-				b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
-				b++;
-				if (b > 9) b = 9;
-				i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
-			}
-			else if (count_vol == 2)
-			{
-				b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
-				if (b > 0) b--;
-				if (b <= 0) b = 0;
-				i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
-			}
-			resistor(2, 16 * koeff_volume[b]);
-			volume2 = 16 * koeff_volume[b];
+			//if (count_vol == 1)
+			//{
+			//	b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
+			//	b++;
+			//	if (b > 9) b = 9;
+			//	i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
+			//}
+			//else if (count_vol == 2)
+			//{
+			//	b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
+			//	if (b > 0) b--;
+			//	if (b <= 0) b = 0;
+			//	i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
+			//}
+			//resistor(2, 16 * koeff_volume[b]);
+			//volume2 = 16 * koeff_volume[b];
 			break;
 		default:
 			break;
