@@ -152,7 +152,7 @@ uint32_t message = 1;
 #define address_AD5252   0x2F                       // Адрес микросхемы AD5252  
 #define control_word1    0x07                       // Байт инструкции резистор №1
 #define control_word2    0x87                       // Байт инструкции резистор №2
-//byte resistance = 0x00;                             // Сопротивление 0x00..0xFF - 0Ом..100кОм
+//byte resistance = 0x00;                           // Сопротивление 0x00..0xFF - 0Ом..100кОм
 //byte level_resist      = 0;                       // Байт считанных данных величины резистора
 //-----------------------------------------------------------------------------------------------
 
@@ -161,25 +161,15 @@ uint32_t message = 1;
 void firstHandler() 
 {
 	digitalWrite(ledPin13, HIGH);
-	delayMicroseconds(5000);
+	delayMicroseconds(2000);
 	AD9850.set_frequency(0, 0, 1850);                  //set power=UP, phase=0, 1kHz frequency
-	delayMicroseconds(500);
-	digitalWrite(ledPin13, LOW);
-	delayMicroseconds(50000-500);
+	delayMicroseconds(50000);
 	AD9850.powerDown();
+	digitalWrite(synhro_pin, HIGH);
+	delayMicroseconds(1000);
+	digitalWrite(synhro_pin, LOW);
+	digitalWrite(ledPin13, LOW);
 }
-
-void secondHandler() {
-	Serial.println("[ - ] Second Handler!");
-}
-
-void thirdHandler() {
-	Serial.println("[  -] Third Handler!");
-}
-
-
-
-
 
 
 
@@ -231,61 +221,6 @@ void sound_run(unsigned int time, unsigned int frequency)
 }
 
 
-//------------------------------------------------------------------------------
-void start_synhro()
-{
-	//detachInterrupt(11);
-	/*
-	if (digitalRead(synhro_pin) == LOW)
-	{
-		StartSample = micros();                       // Записать время
-		while (true)
-		{
-			if (micros() - StartSample >= 3000000)
-			{
-				//myGLCD.setFont(BigFont);
-				//myGLCD.print("He""\xA4"" c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", CENTER, 80);   // "Нет синхронизации"
-				delay(2000);
-				break;
-			}
-
-			if (digitalRead(synhro_pin) == HIGH)
-			{
-				while (true)
-				{
-					if (digitalRead(synhro_pin) == LOW)
-					{
-						StartSample = micros();
-						while (true)
-						{
-							if (micros() - StartSample >= 3000000 - 966)
-							{
-								digitalWrite(ledPin13, HIGH);
-								StartSample = micros();
-							}
-							if (micros() - StartSample >= 10000)
-							{
-								digitalWrite(ledPin13, LOW);
-							}
-						}
-
-						if (!intterrupt_enable)
-						{
-							Timer6.start();
-							intterrupt_enable = true;
-						}
-						break;
-					}
-				}
-				break;
-			}
-		}
-	}
-	*/
-}
-
-
-
 void info()
 {
 	byte _volume1 = volume1;
@@ -297,11 +232,11 @@ void info()
 
 	myGLCD.print("    ", CENTER, 1);                      // Очистить строку 1
 	myGLCD.print("Volume", LEFT, 1);                      // выводим в строке 1 
-	myGLCD.print(String(x_vol), 38, 1);                    // выводим в строке1
+	myGLCD.print(String(x_vol), 38, 1);                   // выводим в строке1
 	myGLCD.print(String("%"), 56, 1);                     // выводим в строке 1 
 	myGLCD.print("      ", CENTER, 10);                   // Очистить строку 2
 	myGLCD.print("    ", RIGHT, 20);                      // Очистить строку 3
-	myGLCD.print("Time", LEFT, 10);                        // выводим в строке 2 
+	myGLCD.print("Time", LEFT, 10);                       // выводим в строке 2 
 	myGLCD.print(String(time_sound), 40, 10);             // выводим в строке 2 
 	myGLCD.print("ms", RIGHT, 10);                        // выводим в строке 2 
 	myGLCD.print("Frequency", LEFT, 20);                  // выводим в строке 3 
@@ -367,8 +302,8 @@ void setup()
 	pinMode(ledPin13, OUTPUT);
 	pinMode(ledLCD, OUTPUT);
 	analogWrite(ledLCD, 80);
-	pinMode(synhro_pin, INPUT);
-	digitalWrite(synhro_pin, HIGH);
+	pinMode(synhro_pin, OUTPUT);
+	digitalWrite(synhro_pin,LOW);
 	//digitalWrite(ledLCD, LOW);
 	digitalWrite(ledPin13, HIGH);
 	delay(100);
@@ -377,21 +312,16 @@ void setup()
 	digitalWrite(ledPin13, HIGH);
 	delay(100);
 	digitalWrite(ledPin13, LOW);
-	//digitalWrite(sound_En, LOW);
 	AD9850.powerDown();                                       //set signal output to LOW
-//	attachInterrupt(11, start_synhro, HIGH);
+
 	//analogReference(AR_DEFAULT);
 
 	info();
 
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
-	Timer6.setPeriod(2000000-1);
+	Timer6.setPeriod(2000000);
 	Timer6.attachInterrupt(firstHandler);                    // Every 3 sec.
-	//Timer4.attachInterrupt(secondHandler).setFrequency(1).start();
-	//Timer5.attachInterrupt(thirdHandler).setFrequency(10);
-
-
 	PowerMillis = millis();
 }
 
@@ -446,54 +376,12 @@ void loop(void)
 		else if (data_in[2] == 3)                                  // Выполнить синхронизацию по проводу
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
+			delayMicroseconds(20000);
+			digitalWrite(synhro_pin, HIGH);
+			delayMicroseconds(1000);
+			digitalWrite(synhro_pin, LOW);
+			Timer6.start();
 
-			if (digitalRead(synhro_pin) == LOW)
-			{
-				StartSample = micros();                       // Записать время
-				while (true)
-				{
-					if (micros() - StartSample >= 3000000)
-					{
-						//myGLCD.setFont(BigFont);
-						//myGLCD.print("He""\xA4"" c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", CENTER, 80);   // "Нет синхронизации"
-						delay(2000);
-						break;
-					}
-
-					if (digitalRead(synhro_pin) == HIGH)
-					{
-						while (true)
-						{
-							if (digitalRead(synhro_pin) == LOW)
-							{
-						/*		StartSample = micros();
-								while (true)
-								{
-									if (micros() - StartSample >= 3000000 - 966)
-									{
-										digitalWrite(ledPin13, HIGH);
-										StartSample = micros();
-									}
-									if (micros() - StartSample >= 10000)
-									{
-										digitalWrite(ledPin13, LOW);
-									}
-								}*/
-
-								if (!intterrupt_enable)
-								{
-									Timer6.start();
-									//start_synhro();
-									//attachInterrupt(11, start_synhro, HIGH);
-									intterrupt_enable = true;
-								}
-								break;
-							}
-						}
-						break;
-					}
-				}
-			}
 		}
 		else if (data_in[2] == 4)                               // Остановить синхронизацию модулей
 		{
@@ -507,11 +395,16 @@ void loop(void)
 			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
 
 		}
+		else if (data_in[2] == 6)
+		{
+			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
+			volume1 = data_in[8];                               // 
+			volume2 = data_in[9];                               // Громкость звучания. 
+		}
 		else
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);    // Грузим сообщение 2 байта для автоотправки;
 		}
-
 
 		time_sound = (data_in[4] << 8) | data_in[5];        // Длительность посылки. Собираем как "настоящие программеры"
 		freq_sound = (data_in[6] << 8) | data_in[7];        // Частота генератора. Собираем как "настоящие программеры"
@@ -519,8 +412,8 @@ void loop(void)
 		volume2 = data_in[9];                               // Громкость звучания. 
     	resistor(1, volume1);                               // Установить уровень сигнала
 	    resistor(2, volume2);                               // Установить уровень сигнала
+		info();
 	}
-	
 }
 
 
