@@ -99,6 +99,7 @@ volatile bool sound_start = false;
 unsigned long PowerMillis = 0;
 unsigned long StartSample = 0;
 unsigned int Power_Interval = 1000;
+unsigned long TimePeriod = 3000000;
 
 bool intterrupt_enable = false;
 //int seconds = 0; // счётчик секунд
@@ -156,19 +157,25 @@ uint32_t message = 1;
 //byte level_resist      = 0;                       // Байт считанных данных величины резистора
 //-----------------------------------------------------------------------------------------------
 
+//+++++++++++++++++++++++++++++ Внешняя память +++++++++++++++++++++++++++++++++++++++
+int deviceaddress = 80;                             // Адрес микросхемы памяти
+byte hi;                                            // Старший байт для преобразования числа
+byte low;                                           // Младший байт для преобразования числа
+
+int adr_time_period = 10;
 
 
 void firstHandler() 
 {
-	digitalWrite(ledPin13, HIGH);
-	delayMicroseconds(2000);
-	AD9850.set_frequency(0, 0, 1850);                  //set power=UP, phase=0, 1kHz frequency
-	delayMicroseconds(50000);
-	AD9850.powerDown();
+	delayMicroseconds(5000);
+	//digitalWrite(synhro_pin, HIGH);
+	AD9850.set_frequency(0, 0, freq_sound);                  //set power=UP, phase=0, 1kHz frequency
+	delayMicroseconds(25000);
 	digitalWrite(synhro_pin, HIGH);
 	delayMicroseconds(1000);
 	digitalWrite(synhro_pin, LOW);
-	digitalWrite(ledPin13, LOW);
+	delayMicroseconds(30000);
+	AD9850.powerDown();
 }
 
 
@@ -248,6 +255,7 @@ void info()
 	//	myGLCD.print(String(stopMillis - startMillis), CENTER, 30);         // выводим в строке 4
 	//}
 	myGLCD.print(String(data_in[0]), 20, 40);         // выводим в строке 5 
+//	myGLCD.drawCircle(5, 42, 4);
 	myGLCD.update();
 }
 
@@ -320,7 +328,7 @@ void setup()
 
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
-	Timer6.setPeriod(2000000);
+	Timer6.setPeriod(TimePeriod);
 	Timer6.attachInterrupt(firstHandler);                    // Every 3 sec.
 	PowerMillis = millis();
 }
@@ -363,25 +371,24 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 			stopMillis = micros();
-			delayMicroseconds(1000);                               // Задержка для получения ответа и завершения процессов на Базе
+			delayMicroseconds(10000);                               // Задержка для получения ответа и завершения процессов на Базе
 			sound_run(time_sound, freq_sound);
 			info();
 		}
 		else if (data_in[2] == 2)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
-			delayMicroseconds(1000);
-
+			delayMicroseconds(10000);
+			Timer6.start(TimePeriod);
 		}
 		else if (data_in[2] == 3)                                  // Выполнить синхронизацию по проводу
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
-			delayMicroseconds(20000);
+			delayMicroseconds(10000);
 			digitalWrite(synhro_pin, HIGH);
 			delayMicroseconds(1000);
 			digitalWrite(synhro_pin, LOW);
-			Timer6.start();
-
+			Timer6.start(TimePeriod);
 		}
 		else if (data_in[2] == 4)                               // Остановить синхронизацию модулей
 		{
@@ -400,6 +407,11 @@ void loop(void)
 			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
 			volume1 = data_in[8];                               // 
 			volume2 = data_in[9];                               // Громкость звучания. 
+		}
+		else if (data_in[2] == 7)
+		{
+			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
+			TimePeriod = (data_in[10] << 8) | data_in[11];        // Длительность посылки. Собираем как "настоящие программеры"
 		}
 		else
 		{
