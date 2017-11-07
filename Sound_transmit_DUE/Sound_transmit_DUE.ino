@@ -219,10 +219,8 @@ void sound_run(unsigned int time, unsigned int frequency)
 	AD9850.powerDown();                              //set signal output to LOW
 	//delay(100);
 	AD9850.set_frequency(0, 0, frequency);                   //set power=UP, phase=0, 1kHz frequency
-	for (int i = 0; i < time; i++)
-	{
-		delay(1);
-	}
+
+	delay(time);
 	AD9850.powerDown();
 	sound_start = false;
 }
@@ -371,7 +369,7 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 			stopMillis = micros();
-			delayMicroseconds(10000);                               // Задержка для получения ответа и завершения процессов на Базе
+			delayMicroseconds(20000);                               // Задержка для получения ответа и завершения процессов на Базе
 			sound_run(time_sound, freq_sound);
 			info();
 		}
