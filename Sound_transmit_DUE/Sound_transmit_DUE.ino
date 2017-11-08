@@ -167,14 +167,13 @@ int adr_time_period = 10;
 
 void firstHandler() 
 {
-	//delayMicroseconds(5000);
-	//digitalWrite(synhro_pin, HIGH);
+	delayMicroseconds(5000);
 	AD9850.set_frequency(0, 0, freq_sound);                  //set power=UP, phase=0, 1kHz frequency
-	delayMicroseconds(5400);
+	delayMicroseconds(850);
 	digitalWrite(synhro_pin, HIGH);
-	delayMicroseconds(50);
+	delayMicroseconds(100);
 	digitalWrite(synhro_pin, LOW);
-	delayMicroseconds(40000);
+	delayMicroseconds(44150);
 	AD9850.powerDown();
 }
 
@@ -369,14 +368,14 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 			stopMillis = micros();
-			delayMicroseconds(20000);                               // Задержка для получения ответа и завершения процессов на Базе
+			delayMicroseconds(17000);                               // Задержка для получения ответа и завершения процессов на Базе
 			sound_run(time_sound, freq_sound);
 			info();
 		}
-		else if (data_in[2] == 2)
+		else if (data_in[2] == 2)                                  // Синхронизация по таймеру 
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
-			delayMicroseconds(10000);
+			delayMicroseconds(130000);
 			Timer6.start(TimePeriod);
 		}
 		else if (data_in[2] == 3)                                  // Выполнить синхронизацию по проводу
