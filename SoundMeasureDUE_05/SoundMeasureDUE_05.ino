@@ -116,7 +116,7 @@ unsigned long timeStopTrig      = 0;                    // Время окончания радио
 int deviceaddress = 80;                      // Адрес микросхемы памяти
 byte hi;                                     // Старший байт для преобразования числа
 byte low;                                    // Младший байт для преобразования числа
-int mem_start = 20;                          // признак первого включения прибора после сборки. Очистить память  
+int mem_start = 21;                          // признак первого включения прибора после сборки. Очистить память  
 
 RF24 radio(48, 49);                                                        // DUE
 
@@ -8589,16 +8589,21 @@ void i2c_test()
 
 void clean_mem()
 {
-	byte b = i2c_eeprom_read_byte(deviceaddress, 1023); // access the first address from the memory
+
+	byte b = i2c_eeprom_read_byte(deviceaddress, 1023);                      // access the first address from the memory
 	if (b != mem_start)
 	{
+		myGLCD.setBackColor(0, 0, 0);
+		myGLCD.print("O""\xA7\x9D""c""\xA4\x9F""a ""\xA3""a""\xA1\xAF\xA4\x9D", CENTER, 60);             // "Очистка памяти"
 		for (int i = 0; i < 1024; i++)
 		{
 			i2c_eeprom_write_byte(deviceaddress, i, 0);
 			delay(10);
 		}
 		i2c_eeprom_write_byte(deviceaddress,1023, mem_start);
-		i2c_eeprom_ulong_write(adr_set_timeSynhro, set_timeSynhro);     // Записать  время 
+		i2c_eeprom_ulong_write(adr_set_timeSynhro, set_timeSynhro);         // Записать  время 
+		myGLCD.print("                 ", CENTER, 60);             // "Очистка памяти"
+		myGLCD.setBackColor(0, 0, 255);
 	}
 }
 
