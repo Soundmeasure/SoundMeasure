@@ -116,7 +116,7 @@ unsigned long timeStopTrig      = 0;                    // Время окончания радио
 int deviceaddress = 80;                      // Адрес микросхемы памяти
 byte hi;                                     // Старший байт для преобразования числа
 byte low;                                    // Младший байт для преобразования числа
-
+int mem_start = 20;                          // признак первого включения прибора после сборки. Очистить память  
 
 RF24 radio(48, 49);                                                        // DUE
 
@@ -3593,7 +3593,7 @@ void synhro_by_timer()                                    // просмотр в реальном
 					while (!(ADC_ISR_DRDY));                                         // Ожидание завершения преобразования
 					Sample_osc[xpos][page] = ADC->ADC_CDR[7];                        // Получить данные А0 и записать в массив
 					Synhro_osc[xpos][page] = 0;                                      // Стереть старые данные временных меток
-					if ((Sample_osc[xpos][page] > Trigger) && (trig_sin == false))   // Поиск превышения уровня порога
+					if ((Sample_osc[xpos][page] > Trigger) && (trig_sin == false)&&(xpos > 4))   // Поиск превышения уровня порога
 					{
 						EndSample = micros();                                        // Записать время срабатывания триггера порога
 						trig_sin = true;                                             // установить флаг срабатывания триггера порога
@@ -3911,7 +3911,7 @@ void synhro_by_radio()                                     // просмотр в реально
 		}
 	}
 	Timer5.start(set_timeSynhro);                        //  
-	Serial.println(set_timeSynhro);
+//	Serial.println(set_timeSynhro);
 	while (1)                                            //                
 	{
 		if (start_enable)                                           // Время начала синхроимпульса пришло. 
@@ -8590,14 +8590,14 @@ void i2c_test()
 void clean_mem()
 {
 	byte b = i2c_eeprom_read_byte(deviceaddress, 1023); // access the first address from the memory
-	if (b != 57)
+	if (b != mem_start)
 	{
 		for (int i = 0; i < 1024; i++)
 		{
 			i2c_eeprom_write_byte(deviceaddress, i, 0);
 			delay(10);
 		}
-		i2c_eeprom_write_byte(deviceaddress,1023, 57);
+		i2c_eeprom_write_byte(deviceaddress,1023, mem_start);
 		i2c_eeprom_ulong_write(adr_set_timeSynhro, set_timeSynhro);     // Записать  время 
 	}
 }
@@ -8720,6 +8720,7 @@ void setup(void)
 	timePeriod = i2c_eeprom_ulong_read(adr_timePeriod);
 	corr_time = i2c_eeprom_ulong_read(adr_set_corr_time);                   // Точная подстройка синхро
 	set_timeSynhro = i2c_eeprom_ulong_read(adr_set_timeSynhro);             // Грубая подстройка синхро
+	Serial.println(set_timeSynhro);
 
 	delay(500);
 	kn = 0;
