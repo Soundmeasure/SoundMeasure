@@ -143,6 +143,7 @@ const long interval = 50;                           // interval at which to blin
 
 volatile unsigned long startMillis = 0;              //  
 volatile unsigned long startMillis1 = 0;
+volatile unsigned long synhro_count = 0;              //  
 unsigned long stopMillis           = 0;              //  
 volatile bool info_view = false;
 byte pipeNo;                                         // 
@@ -168,12 +169,15 @@ int adr_time_period = 10;
 void firstHandler() 
 {
 	delayMicroseconds(5000);
+	synhro_count++;
 	AD9850.set_frequency(0, 0, freq_sound);                  //set power=UP, phase=0, 1kHz frequency
-	delayMicroseconds(850);
+	delayMicroseconds(890);
 	digitalWrite(synhro_pin, HIGH);
 	delayMicroseconds(100);
 	digitalWrite(synhro_pin, LOW);
-	delayMicroseconds(44150);
+	delayMicroseconds(43000);
+	myGLCD.print(String(synhro_count), 1, 30);         // выводим в строке 5 
+	myGLCD.update();
 	AD9850.powerDown();
 }
 
@@ -245,7 +249,7 @@ void info()
 	myGLCD.print("ms", RIGHT, 10);                        // выводим в строке 2 
 	myGLCD.print("Frequency", LEFT, 20);                  // выводим в строке 3 
 	myGLCD.print(String(freq_sound), RIGHT, 20);          // выводим в строке 3 
-	myGLCD.print("              ", CENTER, 30);           // Очистить строку 4
+//	myGLCD.print("              ", CENTER, 30);           // Очистить строку 4
 	myGLCD.print("    ", 20, 40);                         // Очистить строку 5
 	//if (info_view)
 	//{
@@ -321,8 +325,6 @@ void setup()
 
 	//analogReference(AR_DEFAULT);
 
-	info();
-
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
 	Timer6.setPeriod(TimePeriod);
@@ -355,7 +357,8 @@ void loop(void)
 		//myGLCD.print(String(rtc.getMinutes()), 55, 40);          // выводим в строке 1
 		//myGLCD.print(String(":"), 67, 40);          // выводим в строке 1
 		//myGLCD.print(String(rtc.getSeconds()), RIGHT, 40);          // выводим в строке 1
-		myGLCD.update();
+		info();
+	//	myGLCD.update();
 		PowerMillis = millis();
 	}
 
@@ -376,6 +379,7 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(130000);
+			synhro_count = 0;
 			Timer6.start(TimePeriod);
 		}
 		else if (data_in[2] == 3)                                  // Выполнить синхронизацию по проводу
