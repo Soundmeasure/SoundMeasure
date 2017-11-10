@@ -1300,7 +1300,6 @@ void synhroHandler()                                        // Timer6 -   формир
 	delayMicroseconds(500);
 	digitalWrite(LED_PIN13, LOW);
 }
-
 void sevenHandler()                                         // Timer7 -  запись временных меток  в массив для вывода на экран
 {
 	count_ms += scale_strob;
@@ -3603,7 +3602,16 @@ void synhro_by_timer()                                    // просмотр в реальном
 				//if (trig_sin == true) break;                                       // Завершить сканирование на блоке в котором сработал порог
 			}
 			Timer7.stop();                                                           // Завершить формирование временных меток
-
+			//if (!strob_start)                                         // Нарисовать круг - индикатор синхронизации
+			//{
+			//	myGLCD.setColor(VGA_RED);
+			//	myGLCD.fillCircle(227, 12, 10);
+			//}
+			//else
+			//{
+			//	myGLCD.setColor(255, 255, 255);
+			//	myGLCD.drawCircle(227, 12, 10);
+			//}
 
 			myGLCD.printNumI(page, 255, 177);                                        // Вывести на экран общее количество страниц
 			myGLCD.printNumI(page_trig, 300, 177);                                   // Вывести на экран страницу срабатывания триггера порога
@@ -6460,16 +6468,16 @@ void DrawGrid1()
 	}
 	myGLCD.setColor(255, 255, 255);                           // Белая окантовка
 
-	if (!strob_start)                                         // Нарисовать круг - индикатор синхронизации
-		{
-			myGLCD.setColor(VGA_RED);
-			myGLCD.fillCircle(227,12,10);
-		}
-	else
-		{
-			myGLCD.setColor(255,255,255);
-			myGLCD.drawCircle(227,12,10);
-		}
+	//if (!strob_start)                                         // Нарисовать круг - индикатор синхронизации
+	//	{
+	//		myGLCD.setColor(VGA_RED);
+	//		myGLCD.fillCircle(227,12,10);
+	//	}
+	//else
+	//	{
+	//		myGLCD.setColor(255,255,255);
+	//		myGLCD.drawCircle(227,12,10);
+	//	}
 	myGLCD.setColor(255,255,255);
 }
 
