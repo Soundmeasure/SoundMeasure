@@ -9198,8 +9198,8 @@ void setup(void)
 	attachInterrupt(kn_red, volume_up, FALLING);
 	attachInterrupt(kn_blue, volume_down, FALLING);
 	Interrupt_enable = true;
-
-	Serial.print("");
+	Serial.println();
+	Serial.print("Pulse repetition period  = ");
 	Serial.println(set_timeSynhro);
 	Serial.println();
 	Serial.println(F("Setup Ok!"));
