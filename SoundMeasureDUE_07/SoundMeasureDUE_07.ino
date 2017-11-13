@@ -3614,15 +3614,15 @@ void synhro_by_timer()                                    // просмотр в реальном
 	bool start_info = false;
 	unsigned long StartTime = 0;                          // Ограничение времени измерения сигнала (2 секунды )
 	set_volume(5, 1);                                     // Отобразить уровень громкости  каналов усилителя на Базе
-	for (page = 0; page < page_max; page++)               // Стереть старые данные отображения и временных меток
-	{
-		for (xpos = 0; xpos < 240; xpos++)                // Стереть старые данные отображения и временных меток
-		{
-			OldSample_osc[xpos][page] = 0;                // Стереть старые данные отображения
-			Synhro_osc[xpos][page][new_info] = 0;         // Стереть новые данные временных меток
-		//	Synhro_osc[xpos][page][old_info] = 0;         // Стереть новые данные временных меток
-		}
-	}
+	//for (page = 0; page < page_max; page++)               // Стереть старые данные отображения и временных меток
+	//{
+	//	for (xpos = 0; xpos < 240; xpos++)                // Стереть старые данные отображения и временных меток
+	//	{
+	//		OldSample_osc[xpos][page] = 0;                // Стереть старые данные отображения
+	//		Synhro_osc[xpos][page][new_info] = 0;         // Стереть новые данные временных меток
+	//	//	Synhro_osc[xpos][page][old_info] = 0;         // Стереть новые данные временных меток
+	//	}
+	//}
 	myGLCD.setColor(255, 255, 255);
 	myGLCD.drawCircle(200, 10, 10);
 
@@ -3653,7 +3653,6 @@ void synhro_by_timer()                                    // просмотр в реальном
 					if ((y_osc >= 1) && (y_osc <= 160))           // 
 					{
 						Timer7.stop();                            //  Остановить вывода на экран временных меток
-						//break;                                    //
 						return;
 					}                                             //
 				}
@@ -3661,10 +3660,6 @@ void synhro_by_timer()                                    // просмотр в реальном
 				myGLCD.setBackColor(0, 0, 255);                   // Синий фон кнопок
 				myGLCD.setColor(255, 255, 255);
 				myGLCD.setFont(SmallFont);
-				//myGLCD.drawRoundRect(245, 1, 318, 40);             // Нарисовать обрамление кнопок белым цветом
-				//myGLCD.drawRoundRect(245, 45, 318, 85);
-				//myGLCD.drawRoundRect(245, 90, 318, 130);
-				//myGLCD.drawRoundRect(245, 135, 318, 175);
 
 				if ((x_osc >= 245) && (x_osc <= 280))               // Боковые кнопки
 				{
@@ -3762,13 +3757,15 @@ void synhro_by_timer()                                    // просмотр в реальном
 			start_enable = false;                                                    // Время начала синхроимпульса пришло. Выставляем флаг старта в исходное для ожидания следующего синхро импульса
 			Timer7.start(scale_strob * 1000);                                        // Включить формирование  временных меток на экране
 			page = 0;
-				                                                                     //  Программа чтения данных АЦП. Записать аналоговый сигнал в блок памяти
+			StartTime = micros();                                                                     //  Программа чтения данных АЦП. Записать аналоговый сигнал в блок памяти
 			ADC_CHER = 0;                                                            // Включить аналоговый вход "0"          (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3
+		
 			while (!trig_sin)                                                        // Ожидание времени начала синхроимпульса.  Сигнал формируется таймером Timer5
 			{
-				StartTime = micros();
 				if (micros() - StartTime > 2000000)                                    // Ожидаем синхроимпульс в течении 1 секунд
 				{
+					EndSample = micros();                                        // Записать время срабатывания триггера порога
+					trig_sin = true;                                             // установить флаг срабатывания триггера порога
 					break;                                                               // Завершить ожидание синхроимпульса
 				}
 				for (xpos = 0; xpos < 240; xpos++)                                   // Блоки по 240 байтов
@@ -3894,28 +3891,6 @@ void synhro_by_timer()                                    // просмотр в реальном
 			myGLCD.fillRoundRect(0, 162, 242, 176);                                    // Очистить область экрана вывода меток
 			for (int xpos = 0; xpos < 239; xpos++)                                     // вывод на экран
 			{
-				//   Стереть предыдущий экран
-
-				//myGLCD.setColor(0, 0, 0);
-				//ypos_osc1_0 = 255 - (OldSample_osc[xpos][page_trig] / koeff_h) - hpos;
-				//ypos_osc2_0 = 255 - (OldSample_osc[xpos + 1][page_trig] / koeff_h) - hpos;
-				//if (ypos_osc1_0 < 0) ypos_osc1_0 = 0;
-				//if (ypos_osc2_0 < 0) ypos_osc2_0 = 0;
-				//if (ypos_osc1_0 > 220) ypos_osc1_0 = 220;
-				//if (ypos_osc2_0 > 220) ypos_osc2_0 = 220;
-				//myGLCD.drawLine(xpos, ypos_osc1_0, xpos + 1, ypos_osc2_0);
-
-				//if (Synhro_osc[xpos][page_trig][old_info] > 0)
-				//{
-				//	if (Synhro_osc[xpos][page_trig][old_info] != Synhro_osc[xpos][page_trig][new_info])
-				//	{
-				//		if (Synhro_osc[xpos][page_trig][old_info] == 4095)
-				//		{
-				//			myGLCD.drawLine(xpos, 60, xpos, 160);
-				//		}
-				//	}
-				//}
-
 				// Нарисовать линию  осциллограммы
 				myGLCD.setColor(255, 255, 255);
 				ypos_osc1_0 = 255 - (Sample_osc[xpos][page_trig] / koeff_h) - hpos;
@@ -3949,8 +3924,6 @@ void synhro_by_timer()                                    // просмотр в реальном
 					myGLCD.setColor(255, 255, 255);
 					Synhro_osc[xpos][page_trig][new_info] = 0;
 				}
-		//		Synhro_osc[xpos][page_trig][old_info] = Synhro_osc[xpos][page_trig][new_info];
-			//	OldSample_osc[xpos][page_trig] = Sample_osc[xpos][page_trig];
 				myGLCD.setColor(0, 0, 0);
 				myGLCD.fillCircle(200, 10, 10);
 				myGLCD.setColor(255, 255, 255);
@@ -4090,15 +4063,15 @@ void synhro_by_radio()                                     // просмотр в реально
 	unsigned long StartTime = 0;                          // Ограничение времени измерения сигнала (2 секунды )
 	long time_temp = 0;                                  // Для правильного отображения результатов измерения
 	set_volume(5, 1);                                    // Отобразить уровень громкости  каналов усилителя на Базе
-	for (page = 0; page < page_max; page++)              // Стереть старые данные отображения и временных меток
-	{
-		for (xpos = 0; xpos < 240; xpos++)               // Стереть старые данные отображения и временных меток
-		{
-			OldSample_osc[xpos][page] = 0;               // Стереть старые данные отображения
-			Synhro_osc[xpos][page][new_info] = 0;        // Стереть новые данные временных меток
-		//	Synhro_osc[xpos][page][old_info] = 0;        // Стереть новые данные временных меток
-		}
-	}
+	//for (page = 0; page < page_max; page++)              // Стереть старые данные отображения и временных меток
+	//{
+	//	for (xpos = 0; xpos < 240; xpos++)               // Стереть старые данные отображения и временных меток
+	//	{
+	//		OldSample_osc[xpos][page] = 0;               // Стереть старые данные отображения
+	//		Synhro_osc[xpos][page][new_info] = 0;        // Стереть новые данные временных меток
+	//	//	Synhro_osc[xpos][page][old_info] = 0;        // Стереть новые данные временных меток
+	//	}
+	//}
 	myGLCD.setColor(255, 255, 255);
 	myGLCD.drawCircle(200, 10, 10);
 
@@ -4113,9 +4086,382 @@ void synhro_by_radio()                                     // просмотр в реально
 			StartSample = micros();                                 // Записать время
 			radio_transfer();                                       // Отправить радио синхро сигнал
 			// Все нормально. Измеряем !!
-			Timer7.start(scale_strob * 1000);                       // Включить формирование  временных меток на экране
+			// Проверка кнопок меню
+			//if (myTouch.dataAvailable())
+			//{
+			//	delay(10);
+			//	myTouch.read();
+			//	x_osc = myTouch.getX();
+			//	y_osc = myTouch.getY();
+
+			//	if ((x_osc >= 2) && (x_osc <= 240))               // Выход из программы. Нажать на область экрана
+			//	{
+			//		if ((y_osc >= 1) && (y_osc <= 160))           // 
+			//		{
+			//			Timer7.stop();                            //  Остановить вывода на экран временных меток
+			//			return;
+			//		}                                             //
+			//	}
+
+			//	myGLCD.setBackColor(0, 0, 255);                   // Синий фон кнопок
+			//	myGLCD.setColor(255, 255, 255);
+			//	myGLCD.setFont(SmallFont);
+
+			//	if ((x_osc >= 245) && (x_osc <= 280))               // Боковые кнопки
+			//	{
+			//		if ((y_osc >= 1) && (y_osc <= 40))              // Первая  период
+			//		{
+			//			waitForIt(245, 1, 318, 40);
+			//			//chench_mode(0);                             //
+			//		}
+
+			//		if ((y_osc >= 45) && (y_osc <= 85))             // Вторая - триггер
+			//		{
+			//			waitForIt(245, 45, 318, 85);
+			//			chench_tmode(0);
+			//		}
+			//		if ((y_osc >= 90) && (y_osc <= 130))           // Третья - делитель
+			//		{
+			//			waitForIt(245, 90, 318, 130);
+			//			chench_mode1(0);
+			//		}
+			//	}
+
+			//	if ((x_osc >= 282) && (x_osc <= 318))              // Боковые кнопки
+			//	{
+			//		if ((y_osc >= 1) && (y_osc <= 40))             // Первая  период
+			//		{
+			//			waitForIt(245, 1, 318, 40);
+			//			//chench_mode(1);                            //  
+			//		}
+
+			//		if ((y_osc >= 45) && (y_osc <= 85))            // Вторая - триггер
+			//		{
+			//			waitForIt(245, 45, 318, 85);
+			//			chench_tmode(1);
+			//		}
+			//		if ((y_osc >= 90) && (y_osc <= 130))          // Третья - делитель
+			//		{
+			//			waitForIt(245, 90, 318, 130);
+			//			chench_mode1(1);
+			//		}
+			//	}
+
+			//	if ((x_osc >= 245) && (x_osc <= 318))                  // Боковые кнопки
+			//	{
+			//		if ((y_osc >= 135) && (y_osc <= 175))              // Четвертая разрешение
+			//		{
+			//			waitForIt(245, 135, 318, 175);
+			//			i2c_eeprom_ulong_write(adr_set_timePeriod_RF, EndSample - StartSample);  // Записать контрольное время 
+			//		}
+			//	}
+
+			//	if ((y_osc >= 205) && (y_osc <= 239))                 // Нижние кнопки переключения 
+			//	{
+			//		if ((x_osc >= 10) && (x_osc <= 60))               //  Кнопка №1
+			//		{
+			//			waitForIt(10, 210, 60, 239);
+			//			set_volume(1, 1);                             // Регулировка "+" усилителя №1
+
+			//		}
+			//		if ((x_osc >= 70) && (x_osc <= 120))              //  Кнопка №2
+			//		{
+			//			waitForIt(70, 210, 120, 239);
+			//			set_volume(1, 2);                            // Регулировка "-" усилителя №1
+
+			//		}
+			//		if ((x_osc >= 130) && (x_osc <= 180))            //  Кнопка №3
+			//		{
+			//			waitForIt(130, 210, 180, 239);
+			//			set_volume(2, 1);                            // Регулировка "+" усилителя №2
+
+			//		}
+			//		if ((x_osc >= 190) && (x_osc <= 240))            //  Кнопка №4
+			//		{
+			//			waitForIt(190, 210, 240, 239);
+			//			set_volume(2, 2);                            // Регулировка "-" усилителя №1
+
+			//		}
+			//	}
+			//}
+			// Закончили проверку кнопок  меню
+		//}
+
+			Timer7.start(scale_strob * 1000);                                        // Включить формирование  временных меток на экране
 			page = 0;
-																	// Программа чтения данных АЦП. Записать аналоговый сигнал в блок памяти
+			StartTime = micros();
+			//  Программа чтения данных АЦП. Записать аналоговый сигнал в блок памяти
+			ADC_CHER = 0;                                                            // Включить аналоговый вход "0"          (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3
+			while (!trig_sin)                                                        // Ожидание времени начала синхроимпульса.  Сигнал формируется таймером Timer5
+			{
+				if (micros() - StartTime > 2000000)                                    // Ожидаем синхроимпульс в течении 1 секунд
+				{
+					break;                                                               // Завершить ожидание синхроимпульса
+				}
+				for (xpos = 0; xpos < 240; xpos++)                                   // Блоки по 240 байтов
+				{
+					ADC_CR = ADC_START; 	                                         // Запустить преобразование
+					while (!(ADC_ISR_DRDY));                                         // Ожидание завершения преобразования
+					Sample_osc[xpos][0] = ADC->ADC_CDR[7];                        // Получить данные А0 и записать в массив
+					Synhro_osc[xpos][0][new_info] = 0;                                      // Стереть старые данные временных меток
+					if ((Sample_osc[xpos][page] > Trigger) && (trig_sin == false) && (xpos > 2))   // Поиск превышения уровня порога
+					{
+						EndSample = micros();                                        // Записать время срабатывания триггера порога
+						trig_sin = true;                                             // установить флаг срабатывания триггера порога
+						page_trig = page;                                            // Записываем номер блока в котором сработал триггер
+					}
+					delayMicroseconds(dTime);                                        // dTime временной интервал (задержка) развертки 
+				}
+				if (trig_sin == true) break;                                       // Завершить сканирование на блоке в котором сработал порог
+			}
+			Timer7.stop();                                                           // Завершить формирование временных меток
+
+			count_ms = 0;                                                            // Шкалу отсчета мс в начальное состояние
+			myGLCD.printNumI(page, 255, 177);                                        // Вывести на экран общее количество страниц
+			myGLCD.printNumI(page_trig, 300, 177);                                   // Вывести на экран страницу срабатывания триггера порога
+																					 // Выводит информацию об измерении
+			myGLCD.setColor(0, 0, 0);
+			myGLCD.fillRoundRect(0, 0, 240, 176);                                    // Очистить область экрана для вывода временных меток. 
+			DrawGrid1();
+			myGLCD.setBackColor(0, 0, 255);                                          // Фон экрана синий
+			myGLCD.setColor(255, 255, 255);                                          // Цвет текста белый
+			myGLCD.print("        ", 255, 160);                                      // Очистить область вывода информации 
+			myGLCD.printNumI(set_timePeriod_RF, 255, 160);
+			myGLCD.print("        ", 255, 150);
+			time_temp = EndSample - StartSample;
+			myGLCD.printNumI(time_temp / 1000, 255, 150);                            // Время получения ответа
+			myGLCD.setBackColor(0, 0, 0);                                            // Фон экрана черный
+			myGLCD.setFont(BigFont);
+			myGLCD.print("\x85""a""\x99""ep""\x9B\x9F""a", LEFT + 2, 8);             // "Задержка"
+			myGLCD.print("c""\x9D\x98\xA2""a""\xA0""a", LEFT + 2, 25);               // "сигнала"
+			myGLCD.print("      ", LEFT, 44);
+
+			myGLCD.setFont(SmallFont);
+			myGLCD.setBackColor(0, 0, 255);
+			if (trig_sin)
+			{
+				myGLCD.setColor(255, 0, 0);
+				myGLCD.drawRoundRect(245, 135, 318, 175);
+				myGLCD.setBackColor(0, 0, 255);
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.print("        ", 255, 140);
+
+				//
+				//Рачет задержки сигнала:
+				//timeStartTrig - время срабатывания триггера
+				//StartSynhro - время начала измерений
+				//EndSample - время завершения измерений
+				//set_timePeriod - время задержки выполнения программы
+				//
+
+				time_temp = EndSample - StartSample - set_timePeriod_RF;
+				myGLCD.printNumF(time_temp / 1000.00, 2, 255, 140);  // вывод контрольной информации
+				myGLCD.setFont(BigFont);
+				myGLCD.setBackColor(0, 0, 0);
+				myGLCD.printNumF(time_temp / 1000.00, 2, 5, 44); // вывод основной информации
+				myGLCD.print(" ms", 88, 44);
+				myGLCD.setFont(SmallFont);
+				myGLCD.setBackColor(0, 0, 255);
+				myGLCD.setColor(VGA_RED);                                                       // Вывести индикатор срабатывания триггера порога
+				myGLCD.fillCircle(227, 10, 10);                                                 // Вывести индикатор срабатывания триггера порога
+			}
+			else
+			{
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.drawRoundRect(245, 135, 318, 175);
+				myGLCD.setBackColor(0, 0, 255);
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.print("        ", 255, 140);
+				myGLCD.printNumI(0, 255, 140);
+				myGLCD.setFont(BigFont);
+				myGLCD.setBackColor(0, 0, 0);
+				myGLCD.printNumI(0, 5, 44);
+				myGLCD.print(" ms", 88, 44);
+				myGLCD.setFont(SmallFont);
+				myGLCD.setBackColor(0, 0, 255);
+				myGLCD.setColor(0, 0, 0);
+				myGLCD.fillCircle(227, 10, 10);
+			}
+			myGLCD.setBackColor(0, 0, 0);
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.print("     ", 250, 212);
+			myGLCD.printNumI(i_trig_syn, 250, 212);
+			myGLCD.print("     ", 250, 224);
+			myGLCD.printNumI(Trigger, 250, 224);
+			myGLCD.drawCircle(227, 10, 10);
+
+			myGLCD.setBackColor(0, 0, 0);
+			set_timePeriod_RF = i2c_eeprom_ulong_read(adr_set_timePeriod_RF);
+			timePeriod = i2c_eeprom_ulong_read(adr_timePeriod);
+			myGLCD.printNumF(set_timeSynhro / 1000000.00, 2, 250, 200, ',');
+			myGLCD.print("sec", 285, 200);
+			int b = i2c_eeprom_read_byte(deviceaddress, adr_count3_kn);                // Отобразить  уровень громкости 1 канала усилителя Трансмиттера
+			myGLCD.print("     ", 250, 188);                                           // Отобразить  уровень громкости 1 канала усилителя Трансмиттера
+			myGLCD.print(proc_volume[b], 250, 188);                                    // Отобразить  уровень громкости 1 канала усилителя Трансмиттера
+
+			ypos_trig = 255 - (Trigger / koeff_h) - hpos;                              // Получить уровень порога
+			if (ypos_trig != ypos_trig_old)                                            // Стереть старый уровень порога при изменении
+			{
+				myGLCD.setColor(0, 0, 0);
+				myGLCD.drawLine(1, ypos_trig_old, 240, ypos_trig_old);
+				ypos_trig_old = ypos_trig;
+			}
+			myGLCD.setColor(255, 0, 0);
+			myGLCD.drawLine(1, ypos_trig, 240, ypos_trig);                             // Нарисовать новую линию уровня порога
+			myGLCD.setColor(0, 0, 0);
+			myGLCD.fillRoundRect(0, 162, 242, 176);                                    // Очистить область экрана вывода меток
+			for (int xpos = 0; xpos < 239; xpos++)                                     // вывод на экран
+			{
+				// Нарисовать линию  осциллограммы
+				myGLCD.setColor(255, 255, 255);
+				ypos_osc1_0 = 255 - (Sample_osc[xpos][page_trig] / koeff_h) - hpos;
+				ypos_osc2_0 = 255 - (Sample_osc[xpos + 1][page_trig] / koeff_h) - hpos;
+				if (ypos_osc1_0 < 0) ypos_osc1_0 = 0;
+				if (ypos_osc2_0 < 0) ypos_osc2_0 = 0;
+				if (ypos_osc1_0 > 220) ypos_osc1_0 = 220;
+				if (ypos_osc2_0 > 220) ypos_osc2_0 = 220;
+				myGLCD.drawLine(xpos, ypos_osc1_0, xpos + 1, ypos_osc2_0);
+
+				if (Synhro_osc[xpos][page_trig][new_info] > 0)
+				{
+					myGLCD.setColor(VGA_YELLOW);
+					if (Synhro_osc[xpos][page_trig][new_info] == 4095)
+					{
+						myGLCD.drawLine(xpos, 60, xpos, 160);
+					}
+					else
+					{
+						myGLCD.setColor(255, 255, 255);
+						if (xpos > 230)
+						{
+							myGLCD.printNumI(Synhro_osc[xpos][page_trig][new_info], xpos - 12, 165);
+						}
+						else
+						{
+							myGLCD.printNumI(Synhro_osc[xpos][page_trig][new_info], xpos, 165);
+
+						}
+					}
+					myGLCD.setColor(255, 255, 255);
+					Synhro_osc[xpos][page_trig][new_info] = 0;
+				}
+				myGLCD.setColor(0, 0, 0);
+				myGLCD.fillCircle(200, 10, 10);
+				myGLCD.setColor(255, 255, 255);
+				myGLCD.drawCircle(200, 10, 10);
+			}
+
+			myGLCD.setColor(0, 0, 0);
+			myGLCD.fillCircle(200, 10, 10);
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.drawCircle(200, 10, 10);
+		}
+
+		// Проверка кнопок меню
+		if (myTouch.dataAvailable())
+		{
+			delay(10);
+			myTouch.read();
+			x_osc = myTouch.getX();
+			y_osc = myTouch.getY();
+
+			if ((x_osc >= 2) && (x_osc <= 240))               // Выход из программы. Нажать на область экрана
+			{
+				if ((y_osc >= 1) && (y_osc <= 160))           // 
+				{
+					Timer7.stop();                            //  Остановить вывода на экран временных меток
+					break;                                    //
+				}                                             //
+			}
+
+			myGLCD.setBackColor(0, 0, 255);                   // Синий фон кнопок
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.setFont(SmallFont);
+
+			if ((x_osc >= 245) && (x_osc <= 280))               // Боковые кнопки
+			{
+				if ((y_osc >= 1) && (y_osc <= 40))              // Первая  период
+				{
+					waitForIt(245, 1, 318, 40);
+					//chench_mode(0);                             //
+				}
+
+				if ((y_osc >= 45) && (y_osc <= 85))             // Вторая - триггер
+				{
+					waitForIt(245, 45, 318, 85);
+					chench_tmode(0);
+				}
+				if ((y_osc >= 90) && (y_osc <= 130))           // Третья - делитель
+				{
+					waitForIt(245, 90, 318, 130);
+					chench_mode1(0);
+				}
+			}
+
+			if ((x_osc >= 282) && (x_osc <= 318))              // Боковые кнопки
+			{
+				if ((y_osc >= 1) && (y_osc <= 40))             // Первая  период
+				{
+					waitForIt(245, 1, 318, 40);
+					//chench_mode(1);                            //  
+				}
+
+				if ((y_osc >= 45) && (y_osc <= 85))            // Вторая - триггер
+				{
+					waitForIt(245, 45, 318, 85);
+					chench_tmode(1);
+				}
+				if ((y_osc >= 90) && (y_osc <= 130))          // Третья - делитель
+				{
+					waitForIt(245, 90, 318, 130);
+					chench_mode1(1);
+				}
+			}
+
+			if ((x_osc >= 245) && (x_osc <= 318))                  // Боковые кнопки
+			{
+				if ((y_osc >= 135) && (y_osc <= 175))              // Четвертая разрешение
+				{
+					waitForIt(245, 135, 318, 175);
+					i2c_eeprom_ulong_write(adr_set_timePeriod_RF, EndSample - StartSample);  // Записать контрольное время 
+				}
+			}
+
+			if ((y_osc >= 205) && (y_osc <= 239))                 // Нижние кнопки переключения 
+			{
+				if ((x_osc >= 10) && (x_osc <= 60))               //  Кнопка №1
+				{
+					waitForIt(10, 210, 60, 239);
+					set_volume(1, 1);                             // Регулировка "+" усилителя №1
+
+				}
+				if ((x_osc >= 70) && (x_osc <= 120))              //  Кнопка №2
+				{
+					waitForIt(70, 210, 120, 239);
+					set_volume(1, 2);                            // Регулировка "-" усилителя №1
+
+				}
+				if ((x_osc >= 130) && (x_osc <= 180))            //  Кнопка №3
+				{
+					waitForIt(130, 210, 180, 239);
+					set_volume(2, 1);                            // Регулировка "+" усилителя №2
+
+				}
+				if ((x_osc >= 190) && (x_osc <= 240))            //  Кнопка №4
+				{
+					waitForIt(190, 210, 240, 239);
+					set_volume(2, 2);                            // Регулировка "-" усилителя №1
+
+				}
+			}
+
+
+
+
+
+
+
+		/*															// Программа чтения данных АЦП. Записать аналоговый сигнал в блок памяти
 			ADC_CHER = 0;                                           // Включить аналоговый вход "0"          (1<<7) | (1<<6) for adc 7= A0, 6=A1 , 5=A2, 4 = A3
 
 			while (!trig_sin)                                                       // Ожидание времени начала синхроимпульса.  Сигнал формируется таймером Timer5
@@ -4176,14 +4522,14 @@ void synhro_by_radio()                                     // просмотр в реально
 				myGLCD.setBackColor(0, 0, 255);
 				myGLCD.setColor(255, 255, 255);
 				myGLCD.print("        ", 255, 140);
+				
+				
+				//Рачет задержки сигнала:
+				//timeStartTrig - время срабатывания триггера
+				//StartSample - время начала измерений
+				//EndSample - время завершения измерений
+				//set_timePeriod - время задержки выполнения программы
 
-				/*
-				Рачет задержки сигнала:
-				timeStartTrig - время срабатывания триггера
-				StartSample - время начала измерений
-				EndSample - время завершения измерений
-				set_timePeriod - время задержки выполнения программы
-				*/
 
 				time_temp = EndSample - StartSample - set_timePeriod_RF;
 				myGLCD.printNumF((time_temp)/ 1000.00, 2, 255, 140);      // вывод контрольной информации
@@ -4409,6 +4755,8 @@ void synhro_by_radio()                                     // просмотр в реально
 
 				}
 			}
+			*/
+
 		}
 		// Закончили проверку кнопок меню
 
@@ -4416,6 +4764,7 @@ void synhro_by_radio()                                     // просмотр в реально
 		attachInterrupt(kn_blue, volume_down, FALLING);
 		data_out[2] = 6;                                               //
 		if (kn != 0) radio_send_command();                             //  Отправить радио сигнал изменения уровня громкости;
+		
 	}
 	koeff_h = 7.759 * 4;
 	mode1 = 0;                                                         // в/дел
