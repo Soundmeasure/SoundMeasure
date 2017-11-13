@@ -1,3 +1,0 @@
-UTFT_tinyFAT	KEYWORD1
-
-loadBitmap	KEYWORD2
