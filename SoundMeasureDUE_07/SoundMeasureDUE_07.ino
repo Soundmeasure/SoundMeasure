@@ -5,6 +5,7 @@
 
 Восстановление 11.11.2017г.
 
+Изменение 14.11.2017г.
   
  */
 
@@ -3242,8 +3243,8 @@ void Start_Menu() // Тексты меню в строках "txt....."
 			//}
 			if (pressed_button == but4)             // Работа с SD
 			{
-				draw_Glav_Menu();
-				swichMenu();
+			//	draw_Glav_Menu();
+				Swich_Glav_Menu();
 				myGLCD.clrScr();
 				myButtons.drawButtons();
 			}
@@ -3251,109 +3252,110 @@ void Start_Menu() // Тексты меню в строках "txt....."
 	}
 }
 
-
-
-
-void draw_Glav_Menu()
-{
-  but1 = myButtons.addButton( 10,  20, 250,  35, txt_menu1_1);
-  but2 = myButtons.addButton( 10,  65, 250,  35, txt_menu1_2);
-  but3 = myButtons.addButton( 10, 110, 250,  35, txt_menu1_3);
-  but4 = myButtons.addButton( 10, 155, 250,  35, txt_menu1_4);
-  but5 = myButtons.addButton( 10, 200, 250,  35, txt_menu1_5);
-  butX = myButtons.addButton( 279, 199,  40,  40, "W", BUTTON_SYMBOL); // кнопка Часы 
-  myGLCD.setColor(VGA_BLACK);
-  myGLCD.setBackColor(VGA_WHITE);
-  myGLCD.setColor(0, 255, 0);
-  myGLCD.setBackColor(0, 0, 0);
-  myButtons.drawButtons();
-}
-void swichMenu() // Тексты меню в строках "txt....."
-{
-	while(1) 
-	{
-		myButtons.setTextFont(BigFont);                      // Установить Большой шрифт кнопок  
-		measure_power();
-		if (myTouch.dataAvailable() == true)              // Проверить нажатие кнопок
-		{
-		//sound1();
-		pressed_button = myButtons.checkButtons();        // Если нажата - проверить что нажато
-		sound1();
-				if (pressed_button==butX)                // Нажата вызов часы
-				{  
-				// sound1();
-					myGLCD.setFont( BigFont);
-					AnalogClock();
-					myGLCD.clrScr();
-					myButtons.drawButtons();         // Восстановить кнопки
-				}
-	
-			//*****************  Меню №1  **************
-
-			if (pressed_button==but1)              // Измерение задержки
-			{
-					myGLCD.clrScr();
-					menu_delay_measure();
-					myGLCD.clrScr();
-					myButtons.drawButtons();
-			}
-	  
-			if (pressed_button==but2)              //Меню Настройка
-			{
-				Draw_menu_tuning();
-				menu_tuning();
-				myGLCD.clrScr();
-				myButtons.drawButtons();
-			}
-	  
-			if (pressed_button==but3)             // 
-			{
-				if (SD_enable)
-				{
-					Draw_menu_ADC_RF();          // Нарисовать меню регистратора
-					menu_ADC_RF();               // Перейти в меню регистратора 
-				}
-				else
-				{
-					myGLCD.setFont(BigFont);
-					myGLCD.clrScr();
-					myGLCD.print("\x89""po""\x96\xA0""e""\xA1""a c SD", CENTER, 40);    //  Проблема с SD
-					myGLCD.print("\x9F""ap""\xA4""o""\x9E""?", CENTER, 70);             //  картой?
-					delay(2000);
-				}
-				myGLCD.clrScr();
-				myButtons.drawButtons();
-			}
-			if (pressed_button==but4)             // Работа с SD
-			{
-				if (SD_enable)
-				{
-					Draw_menu_SD();
-					menu_SD();
-				}
-				else
-				{
-					myGLCD.setFont(BigFont);
-					myGLCD.clrScr();
-					myGLCD.print("\x89""po""\x96\xA0""e""\xA1""a c SD", CENTER, 40);    //  Проблема с SD
-					myGLCD.print("\x9F""ap""\xA4""o""\x9E""?", CENTER, 70);             //  картой?
-					delay(2000);
-				}
-				myGLCD.clrScr();
-				myButtons.drawButtons();
-			}
-			if (pressed_button == but5)             // Выход
-			{
-				//draw_Start_Menu();
-
-				////myButtons.drawButtons();
-				myButtons.deleteAllButtons();
-				draw_Start_Menu();
-				//return;
-			}
-		} 
-	}
-}
+//
+//
+//
+//void draw_Glav_Menu()
+//{
+//  but1 = myButtons.addButton( 10,  20, 250,  35, txt_menu1_1);
+//  but2 = myButtons.addButton( 10,  65, 250,  35, txt_menu1_2);
+//  but3 = myButtons.addButton( 10, 110, 250,  35, txt_menu1_3);
+//  but4 = myButtons.addButton( 10, 155, 250,  35, txt_menu1_4);
+//  but5 = myButtons.addButton( 10, 200, 250,  35, txt_menu1_5);
+//  butX = myButtons.addButton( 279, 199,  40,  40, "W", BUTTON_SYMBOL); // кнопка Часы 
+//  myGLCD.setColor(VGA_BLACK);
+//  myGLCD.setBackColor(VGA_WHITE);
+//  myGLCD.setColor(0, 255, 0);
+//  myGLCD.setBackColor(0, 0, 0);
+//  myButtons.drawButtons();
+//}
+//void swichMenu() // Тексты меню в строках "txt....."
+//{
+//	draw_Glav_Menu();
+//	while(1) 
+//	{
+//		myButtons.setTextFont(BigFont);                      // Установить Большой шрифт кнопок  
+//		measure_power();
+//		if (myTouch.dataAvailable() == true)              // Проверить нажатие кнопок
+//		{
+//		//sound1();
+//		pressed_button = myButtons.checkButtons();        // Если нажата - проверить что нажато
+//		sound1();
+//				if (pressed_button==butX)                // Нажата вызов часы
+//				{  
+//				// sound1();
+//					myGLCD.setFont( BigFont);
+//					AnalogClock();
+//					myGLCD.clrScr();
+//					myButtons.drawButtons();         // Восстановить кнопки
+//				}
+//	
+//			//*****************  Меню №1  **************
+//
+//			if (pressed_button==but1)              // Измерение задержки
+//			{
+//					myGLCD.clrScr();
+//					menu_delay_measure();
+//					myGLCD.clrScr();
+//					myButtons.drawButtons();
+//			}
+//	  
+//			if (pressed_button==but2)              //Меню Настройка
+//			{
+//				Draw_menu_tuning();
+//				menu_tuning();
+//				myGLCD.clrScr();
+//				myButtons.drawButtons();
+//			}
+//	  
+//			if (pressed_button==but3)             // 
+//			{
+//				if (SD_enable)
+//				{
+//					Draw_menu_ADC_RF();          // Нарисовать меню регистратора
+//					menu_ADC_RF();               // Перейти в меню регистратора 
+//				}
+//				else
+//				{
+//					myGLCD.setFont(BigFont);
+//					myGLCD.clrScr();
+//					myGLCD.print("\x89""po""\x96\xA0""e""\xA1""a c SD", CENTER, 40);    //  Проблема с SD
+//					myGLCD.print("\x9F""ap""\xA4""o""\x9E""?", CENTER, 70);             //  картой?
+//					delay(2000);
+//				}
+//				myGLCD.clrScr();
+//				myButtons.drawButtons();
+//			}
+//			if (pressed_button==but4)             // Работа с SD
+//			{
+//				if (SD_enable)
+//				{
+//					Draw_menu_SD();
+//					menu_SD();
+//				}
+//				else
+//				{
+//					myGLCD.setFont(BigFont);
+//					myGLCD.clrScr();
+//					myGLCD.print("\x89""po""\x96\xA0""e""\xA1""a c SD", CENTER, 40);    //  Проблема с SD
+//					myGLCD.print("\x9F""ap""\xA4""o""\x9E""?", CENTER, 70);             //  картой?
+//					delay(2000);
+//				}
+//				myGLCD.clrScr();
+//				myButtons.drawButtons();
+//			}
+//			if (pressed_button == but5)             // Выход
+//			{
+//				//draw_Start_Menu();
+//
+//				////myButtons.drawButtons();
+//				myButtons.deleteAllButtons();
+//				draw_Start_Menu();
+//				//return;
+//			}
+//		} 
+//	}
+//}
 
 void Draw_Glav_Menu()
 {
@@ -3382,14 +3384,93 @@ void Draw_Glav_Menu()
 	myGLCD.print("\xC3", 283, 205);
 
 }
-
-void swichGlav_Menu()
+void Swich_Glav_Menu()
 {
+	Draw_Glav_Menu();
+	while (true)
+	{
+		delay(10);
+		if (myTouch.dataAvailable())
+		{
+			myTouch.read();
+			int	x = myTouch.getX();
+			int	y = myTouch.getY();
 
 
+			if ((x >= 279) && (x <= 319))       // 
+			{
+				if ((y >= 199) && (y <= 239))    // Button: 1   
+				{
+					waitForIt(279, 199, 319, 239);
+					myGLCD.clrScr();
+					myGLCD.setFont(BigFont);
+					AnalogClock();
+					Draw_Glav_Menu();
+				}
+			}
 
-
-
+			if ((x >= 10) && (x <= 250))       // 
+			{
+				if ((y >= 10) && (y <= 50))    // Button: 1   
+				{
+					waitForIt(10, 10, 250, 50);
+					myGLCD.clrScr();
+					menu_delay_measure();
+					Draw_Glav_Menu();
+				}
+				if ((y >= 55) && (y <= 95))   // Button: 2  
+				{
+					waitForIt(10, 55, 250, 95);
+					Draw_menu_tuning();
+					menu_tuning();
+					Draw_Glav_Menu();
+				}
+				if ((y >= 100) && (y <= 140))  // Button: 3  
+				{
+					waitForIt(10, 100, 250, 140);
+					if (SD_enable)
+					{
+						Draw_menu_ADC_RF();          // Нарисовать меню регистратора
+						menu_ADC_RF();               // Перейти в меню регистратора 
+					}
+					else
+					{
+						myGLCD.setFont(BigFont);
+						myGLCD.setBackColor(0, 0, 0);
+						myGLCD.clrScr();
+						myGLCD.print("\x89""po""\x96\xA0""e""\xA1""a c SD", CENTER, 40);    //  Проблема с SD
+						myGLCD.print("\x9F""ap""\xA4""o""\x9E""?", CENTER, 70);             //  картой?
+						delay(2000);
+					}
+					Draw_Glav_Menu();
+				}
+				if ((y >= 145) && (y <= 185))  // Button: 4  
+				{
+					waitForIt(10, 145, 250, 185);
+					if (SD_enable)
+					{
+						Draw_menu_SD();
+						menu_SD();
+					}
+					else
+					{
+						myGLCD.setFont(BigFont);
+						myGLCD.setBackColor(0, 0, 0);
+						myGLCD.clrScr();
+						myGLCD.print("\x89""po""\x96\xA0""e""\xA1""a c SD", CENTER, 40);    //  Проблема с SD
+						myGLCD.print("\x9F""ap""\xA4""o""\x9E""?", CENTER, 70);             //  картой?
+						delay(2000);
+					}
+					Draw_Glav_Menu();
+				}
+				if ((y >= 190) && (y <= 230))  // Button: 5 "EXIT" Выход
+				{
+					waitForIt(10, 190, 250, 230);
+					break;
+				}
+			}
+		}
+	}
 }
 
 
@@ -10214,7 +10295,7 @@ void setup(void)
 //------------------------------------------------------------------------------
 void loop(void) 
 {
-	//draw_Start_Menu();
-	//Start_Menu();
+	draw_Start_Menu();
+	Start_Menu();
 }
 
