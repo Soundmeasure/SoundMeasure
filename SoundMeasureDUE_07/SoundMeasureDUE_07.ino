@@ -3363,18 +3363,34 @@ void Draw_Glav_Menu()
 	for (int x = 0; x<5; x++)
 	{
 		myGLCD.setColor(0, 0, 255);
-		myGLCD.fillRoundRect(10, 10 + (50 * x), 250, 50 + (50 * x));
+		myGLCD.fillRoundRect(10, 10 + (45 * x), 250, 50 + (45 * x));
 		myGLCD.setColor(255, 255, 255);
-		myGLCD.drawRoundRect(10, 10 + (50 * x), 250, 50 + (50 * x));
+		myGLCD.drawRoundRect(10, 10 + (45 * x), 250, 50 + (45 * x));
 	}
-	myGLCD.print(txt_menu1_1, 50, 30);     // 
-	myGLCD.print(txt_menu1_2, 50, 80);
-	myGLCD.print(txt_menu1_3, 50, 130);
-	myGLCD.print(txt_menu1_4, 50, 180);
-	myGLCD.print(txt_menu1_5, 50, 180);
+	myGLCD.setColor(0, 0, 255);
+	myGLCD.fillRoundRect(279, 199, 319, 239);
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.drawRoundRect(279, 199, 319, 239);
+
+	myGLCD.print(txt_menu1_1, 20, 22);        // 
+	myGLCD.print(txt_menu1_2, 55, 67);
+	myGLCD.print(txt_menu1_3, 45, 112);
+	myGLCD.print(txt_menu1_4, 45, 157);
+	myGLCD.print(txt_menu1_5, 90, 202);
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.setFont(SmallFont);
+	myGLCD.print("\xC3", 283, 205);
+
 }
 
+void swichGlav_Menu()
+{
 
+
+
+
+
+}
 
 
 
