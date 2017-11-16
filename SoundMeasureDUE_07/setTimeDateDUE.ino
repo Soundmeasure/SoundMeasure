@@ -197,15 +197,17 @@ void setClockRTC()
   // Print current time and date
   myGLCD.setColor(255, 255, 255);
   // clock_read();
-    rtc_clock.get_time(&hh,&mm,&ss);
-    rtc_clock.get_date(&dow,&dd,&mon,&yyyy);
-    t_temp_date=dd;
-    t_temp_mon=mon;
-    t_temp_year=yyyy;
-    t_temp_dow=dow;
-    t_temp_hour=hh;
-    t_temp_min=mm;
-    t_temp_sec=ss;
+    //rtc_clock.get_time(&hh,&mm,&ss);
+    //rtc_clock.get_date(&dow,&dd,&mon,&yyyy);
+	dt = rtc_clock.getDateTime();
+
+    t_temp_date= dt.day;
+    t_temp_mon= dt.month;
+    t_temp_year= dt.year;
+    t_temp_dow= dt.dayOfWeek;
+    t_temp_hour= dt.hour;
+    t_temp_min= dt.minute;
+    t_temp_sec= dt.second;
 
 
 //  t_temp = rtc.getTime();
@@ -606,9 +608,13 @@ void setClockRTC()
     if (ct|cd)
 	{
 
-	  t_temp_year = t_temp_year-2000;
-	  rtc_clock.set_time(t_temp_hour, t_temp_min,t_temp_sec);
-      rtc_clock.set_date(t_temp_date, t_temp_mon, t_temp_year);
+	//  t_temp_year = t_temp_year-2000;
+
+	  // Manual (YYYY, MM, DD, HH, II, SS
+	   rtc_clock.setDateTime(t_temp_year, t_temp_mon, t_temp_date,t_temp_hour, t_temp_min, t_temp_sec);
+
+	  //rtc_clock.set_time(t_temp_hour, t_temp_min,t_temp_sec);
+   //   rtc_clock.set_date(t_temp_date, t_temp_mon, t_temp_year);
 
 	 
 	}
