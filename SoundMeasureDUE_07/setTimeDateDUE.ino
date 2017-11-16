@@ -197,9 +197,9 @@ void setClockRTC()
   // Print current time and date
   myGLCD.setColor(255, 255, 255);
   // clock_read();
-    //rtc_clock.get_time(&hh,&mm,&ss);
-    //rtc_clock.get_date(&dow,&dd,&mon,&yyyy);
-	dt = rtc_clock.getDateTime();
+    //DS3131_clock.get_time(&hh,&mm,&ss);
+    //DS3131_clock.get_date(&dow,&dd,&mon,&yyyy);
+	dt = DS3231_clock.getDateTime();
 
     t_temp_date= dt.day;
     t_temp_mon= dt.month;
@@ -210,7 +210,7 @@ void setClockRTC()
     t_temp_sec= dt.second;
 
 
-//  t_temp = rtc.getTime();
+//  t_temp = DS3231_clock.getTime();
   if (t_temp_date==0)
   {
     t_temp_date=1;
@@ -611,7 +611,7 @@ void setClockRTC()
 	//  t_temp_year = t_temp_year-2000;
 
 	  // Manual (YYYY, MM, DD, HH, II, SS
-	   rtc_clock.setDateTime(t_temp_year, t_temp_mon, t_temp_date,t_temp_hour, t_temp_min, t_temp_sec);
+		DS3231_clock.setDateTime(t_temp_year, t_temp_mon, t_temp_date,t_temp_hour, t_temp_min, t_temp_sec);
 
 	  //rtc_clock.set_time(t_temp_hour, t_temp_min,t_temp_sec);
    //   rtc_clock.set_date(t_temp_date, t_temp_mon, t_temp_year);

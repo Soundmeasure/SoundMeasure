@@ -27,7 +27,6 @@
 #include "printf.h"
 
 
-
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
 extern uint8_t Dingbats1_XL[];
@@ -116,7 +115,7 @@ unsigned long timeStopTrig      = 0;                    // Время окончания радио
 int deviceaddress = 80;                      // Адрес микросхемы памяти
 byte hi;                                     // Старший байт для преобразования числа
 byte low;                                    // Младший байт для преобразования числа
-int mem_start = 21;                          // признак первого включения прибора после сборки. Очистить память  
+int mem_start = 23;                          // признак первого включения прибора после сборки. Очистить память  
 
 RF24 radio(48, 49);                                                        // DUE
 
@@ -127,8 +126,8 @@ unsigned long timeoutPeriod = 3000;     // Set a user-defined timeout period. Wi
 
 const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.
 
-byte data_in[16];                                                          // Буфер хранения принятых данных
-byte data_out[16];                                                         // Буфер хранения данных для отправки
+byte data_in[24];                                                          // Буфер хранения принятых данных
+byte data_out[24];                                                         // Буфер хранения данных для отправки
 
 int time_sound = 50;
 int freq_sound = 1800;
@@ -165,8 +164,8 @@ const int clockCenterX=119;
 const int clockCenterY=119;
 int oldsec=0;
 char* str_mon[] = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-//RTC_clock rtc_clock(XTAL);
-DS3231 rtc_clock;
+
+DS3231 DS3231_clock;
 RTCDateTime dt;
 char* daynames[]={"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 
@@ -218,14 +217,8 @@ unsigned long alarm_count = 0;
 	float koeff_h = 7.759*4;
 	int MaxAnalog = 0;
 	int MaxAnalog0 = 0;
-	//int MaxAnalog1 = 0;
-	//int MaxAnalog2 = 0;
-	//int MaxAnalog3 = 0;
 	unsigned long SrednAnalog = 0;
 	unsigned long SrednAnalog0 = 0;
-	//unsigned long SrednAnalog1 = 0;
-	//unsigned long SrednAnalog2 = 0;
-	//unsigned long SrednAnalog3 = 0;
 	unsigned long SrednCount = 0;
 	bool Set_x = false;
 	bool osc_line_off0 = false;
@@ -251,7 +244,6 @@ unsigned long alarm_count = 0;
 	bool strob_start = true;
 	int page = 0;
 	int page_trig = 0;
-
 
 
  //***************** Назначение переменных для хранения текстов*****************************************************
@@ -761,7 +753,7 @@ void adcStart()
 //	csvStream.println(F(" volt"));
 //	csvStream.print(F("Data : "));
 //
-//	dt   = rtc_clock.getDateTime();
+//	dt   = DS3231_clock.getDateTime();
 //	dow1 = dt.dayOfWeek;
 //	sec  = dt.second;       //Initialization time
 //	min  = dt.minute;
@@ -770,8 +762,8 @@ void adcStart()
 //	mon1 = dt.month;
 //	year = dt.year;
 //
-//	//rtc_clock.get_time(&hh,&mm,&ss);
-//	//rtc_clock.get_date(&dow,&dd,&mon,&yyyy);
+//	//DS3231_clock.get_time(&hh,&mm,&ss);
+//	//DS3231_clock.get_date(&dow,&dd,&mon,&yyyy);
 //	//dow1=dow;
 //	//sec = ss;       //Initialization time
 //	//min = mm;
@@ -849,7 +841,7 @@ void adcStart()
 //	csvStream.println(); 
 //	csvStream.print("Time measure = ");
 //
-//	dt = rtc_clock.getDateTime();
+//	dt = DS3231_clock.getDateTime();
 //	dow1 = dt.dayOfWeek;
 //	sec = dt.second;       //Initialization time
 //	min = dt.minute;
@@ -860,8 +852,8 @@ void adcStart()
 //
 //
 //
-//	//rtc_clock.get_time(&hh,&mm,&ss);
-//	//rtc_clock.get_date(&dow,&dd,&mon,&yyyy);
+//	//DS3231_clock.get_time(&hh,&mm,&ss);
+//	//DS3231_clock.get_date(&dow,&dd,&mon,&yyyy);
 //	//dow1=dow;
 //	//sec = ss;       //Initialization time
 //	//min = mm;
@@ -2164,7 +2156,7 @@ void drawDisplay()
   }  
 
 
-  dt = rtc_clock.getDateTime();
+  dt = DS3231_clock.getDateTime();
  
    drawMin(dt.minute);
    drawHour(dt.hour, dt.minute);
@@ -2362,7 +2354,7 @@ void AnalogClock()
   
   while (true)
   {
-	 // dt = rtc_clock.getDateTime();
+	 // dt = DS3231_clock.getDateTime();
 	  if (isAlarm)
 	  {
 		  if (oldsec != dt.second)
@@ -2441,24 +2433,24 @@ void count_time()
 {
 
 	Serial.print("Long number format:          ");
-	Serial.println(rtc_clock.dateFormat("d-m-Y H:i:s", dt));
+	Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s", dt));
 
 	Serial.print("Long format with month name: ");
-	Serial.println(rtc_clock.dateFormat("d F Y H:i:s", dt));
+	Serial.println(DS3231_clock.dateFormat("d F Y H:i:s", dt));
 
 	Serial.print("Short format witch 12h mode: ");
-	Serial.println(rtc_clock.dateFormat("jS M y, h:ia", dt));
+	Serial.println(DS3231_clock.dateFormat("jS M y, h:ia", dt));
 
 	Serial.print("Today is:                    ");
-	Serial.print(rtc_clock.dateFormat("l, z", dt));
+	Serial.print(DS3231_clock.dateFormat("l, z", dt));
 	Serial.println(" days of the year.");
 
 	Serial.print("Actual month has:            ");
-	Serial.print(rtc_clock.dateFormat("t", dt));
+	Serial.print(DS3231_clock.dateFormat("t", dt));
 	Serial.println(" days.");
 
 	Serial.print("Unixtime:                    ");
-	Serial.println(rtc_clock.dateFormat("U", dt));
+	Serial.println(DS3231_clock.dateFormat("U", dt));
 
 	Serial.println();
 
@@ -2467,23 +2459,23 @@ void count_time()
 
 
 	//Serial.print("Unixtime: ");
-	//Serial.println(rtc_clock.dateFormat("U", dt));
+	//Serial.println(DS3231_clock.dateFormat("U", dt));
 	//Serial.println("And in plain for everyone");
 	//Serial.print("Time: ");
-	//digitprint(rtc_clock.get_hours(), 2);
+	//digitprint(DS3231_clock.get_hours(), 2);
 	//Serial.print(":");
-	//digitprint(rtc_clock.get_minutes(), 2);
+	//digitprint(DS3231_clock.get_minutes(), 2);
 	//Serial.print(":");
-	//digitprint(rtc_clock.get_seconds(), 2);
+	//digitprint(DS3231_clock.get_seconds(), 2);
 	//Serial.println("");
 	//Serial.print("Date: ");
-	//Serial.print(daynames[rtc_clock.get_day_of_week() - 1]);
+	//Serial.print(daynames[DS3231_clock.get_day_of_week() - 1]);
 	//Serial.print(" ");
-	//digitprint(rtc_clock.get_days(), 2);
+	//digitprint(DS3231_clock.get_days(), 2);
 	//Serial.print(".");
-	//digitprint(rtc_clock.get_months(), 2);
+	//digitprint(DS3231_clock.get_months(), 2);
 	//Serial.print(".");
-	//Serial.println(rtc_clock.get_years());
+	//Serial.println(DS3231_clock.get_years());
 	//Serial.println("");
 
 
@@ -2621,7 +2613,7 @@ void Swich_Glav_Menu()
 				if ((y >= 105) && (y <= 145))  // Button: 3  
 				{
 					waitForIt(10, 105, 250, 145);
-	
+					synhro_DS3231_clock();
 					Draw_Glav_Menu();
 				}
 				if ((y >= 150) && (y <= 190))  // Button: 4  
@@ -3761,6 +3753,7 @@ void synhro_by_radio()                                     // просмотр в реально
 	myGLCD.setFont(BigFont);
 	while (myTouch.dataAvailable()) {}
 }
+
 void oscilloscope()                                     // просмотр в реальном времени. Синхронизация по радиоимпульсу
 {
 	myGLCD.clrScr();
@@ -4930,7 +4923,7 @@ void wiev_synhro()
 
 	myGLCD.print("Start", 250, 10);                       //  
 
-	dt = rtc_clock.getDateTime();
+	dt = DS3231_clock.getDateTime();
 	myGLCD.print("H:", 250, 25);                          //  
 	myGLCD.printNumI(dt.hour, 280, 25,2);                      // Вывести на экран время час
 	myGLCD.print("M:", 250, 40);                          //  
@@ -5047,7 +5040,7 @@ void wiev_synhro()
 
 			myGLCD.setFont(SmallFont);
 			myGLCD.print("Current", 250, 80);                      //  
-			dt = rtc_clock.getDateTime();
+			dt = DS3231_clock.getDateTime();
 
 			myGLCD.print("H:", 250, 95);                           //  
 			myGLCD.printNumI(dt.hour, 280, 95, 2);                      // Вывести на экран время час
@@ -5170,6 +5163,19 @@ void wiev_synhro()
 	}
 	while (myTouch.dataAvailable()) {}
  }
+void synhro_DS3231_clock()
+{
+	DS3231_clock.clearAlarm1();
+	data_out[2] = 8;                                    // Отправить команду синхронизации часов
+	data_out[12] = dt.year-2000;                        // 
+	data_out[13] = dt.month;                            // 
+	data_out[14] = dt.day;                              // 
+	data_out[15] = dt.hour;                             //
+	data_out[16] = dt.minute;                           // 
+	radio_send_command();
+	DS3231_clock.setDateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 00);
+}
+
 
 // чтение
 unsigned long i2c_eeprom_ulong_read(int addr)
@@ -6140,7 +6146,7 @@ void clean_mem()
 		myGLCD.print("O""\xA7\x9D""c""\xA4\x9F""a ""\xA3""a""\xA1\xAF\xA4\x9D", CENTER, 60);             // "Очистка памяти"
 		for (int i = 0; i < 1024; i++)
 		{
-			i2c_eeprom_write_byte(deviceaddress, i, 0);
+			i2c_eeprom_write_byte(deviceaddress, i, 0x00);
 			delay(10);
 		}
 		i2c_eeprom_write_byte(deviceaddress,1023, mem_start);
@@ -6162,26 +6168,25 @@ void test_resistor()
 
 
 }
-
-void alarmFunction()
-{
-	isAlarm = false;
-	rtc_clock.clearAlarm1();
-	dt = rtc_clock.getDateTime();
-	myGLCD.setBackColor(0, 0, 0);                   // Синий фон кнопок
-	myGLCD.setColor(255, 255, 255);
-	myGLCD.setFont(SmallFont);
-	myGLCD.print(rtc_clock.dateFormat("d-m-Y H:i:s - ", dt), 10, 0);
-	alarm_synhro++;
-	if (alarm_synhro >4)
-	{
-		alarm_synhro = 0;
-		alarm_count++;
-		myGLCD.print(rtc_clock.dateFormat("s", dt), 190, 0);
-	}
-	//myGLCD.print(rtc_clock.dateFormat("d-m-Y H:i:s - ", dt), CENTER, 0);
-	isAlarm = true;
-}
+//
+//void alarmFunction()
+//{
+//	isAlarm = false;
+//	DS3231_clock.clearAlarm1();
+//	dt = DS3231_clock.getDateTime();
+//	myGLCD.setBackColor(0, 0, 0);                   // Синий фон кнопок
+//	myGLCD.setColor(255, 255, 255);
+//	myGLCD.setFont(SmallFont);
+//	myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s - ", dt), 10, 0);
+//	alarm_synhro++;
+//	if (alarm_synhro >4)
+//	{
+//		alarm_synhro = 0;
+//		alarm_count++;
+//		myGLCD.print(DS3231_clock.dateFormat("s", dt), 190, 0);
+//	}
+//	isAlarm = true;
+//}
 boolean state;
 //------------------------------------------------------------------------------
 
@@ -6200,7 +6205,7 @@ void setup(void)
 	myGLCD.clrScr();
 	myGLCD.setBackColor(0, 0, 0);                   // Синий фон кнопок
 	myGLCD.setColor(255, 255, 255);
-	myGLCD.setFont(SmallFont);
+	myGLCD.setFont(BigFont);
 	pinMode(kn_red, INPUT);
 	pinMode(kn_blue, INPUT);
 	pinMode(intensityLCD, OUTPUT);
@@ -6229,19 +6234,17 @@ void setup(void)
 	//myTouch.setPrecision(PREC_HI);
 	myButtons.setTextFont(BigFont);
 	myButtons.setSymbolFont(Dingbats1_XL);
-	rtc_clock.begin();
-
 	ADC_MR |= 0x00000100 ; // ADC full speed
 
 
-	chench_Channel();
+	//chench_Channel();
 
-	//adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
-	Timer3.attachInterrupt(firstHandler);             // Timer3 - запись результатов измерения  в файл 
-	Timer4.attachInterrupt(secondHandler);            // Timer4 - запись временных меток в файл
-	Timer5.attachInterrupt(send_synhro);              // Timer5 - формирование временных меток синхронизации измерения
-	Timer6.attachInterrupt(synhroHandler);            // Timer6 - формирование импульсов синхронизации измерения. Настройка
-	Timer7.attachInterrupt(sevenHandler);             // Timer7 - запись временных меток  в массив для вывода на экран
+	////adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
+	//Timer3.attachInterrupt(firstHandler);             // Timer3 - запись результатов измерения  в файл 
+	//Timer4.attachInterrupt(secondHandler);            // Timer4 - запись временных меток в файл
+	//Timer5.attachInterrupt(send_synhro);              // Timer5 - формирование временных меток синхронизации измерения
+	//Timer6.attachInterrupt(synhroHandler);            // Timer6 - формирование импульсов синхронизации измерения. Настройка
+	//Timer7.attachInterrupt(sevenHandler);             // Timer7 - запись временных меток  в массив для вывода на экран
 
 	myGLCD.setBackColor(0, 0, 255);
 
@@ -6255,10 +6258,9 @@ void setup(void)
 	//resistor(2, volume2);                                // Установить уровень сигнала
 
 	
-	//i2c_eeprom_ulong_write(adr_set_timeSynhro, set_timeSynhro);             // Записать  время 
-	timePeriod = i2c_eeprom_ulong_read(adr_timePeriod);
-	corr_time = i2c_eeprom_ulong_read(adr_set_corr_time);                     // Точная подстройка синхро
-	set_timeSynhro = i2c_eeprom_ulong_read(adr_set_timeSynhro);               // Грубая подстройка синхро
+//	i2c_eeprom_ulong_write(adr_set_timeSynhro, set_timeSynhro);             // Записать  время 
+	//timePeriod = i2c_eeprom_ulong_read(adr_timePeriod);
+	//set_timeSynhro = i2c_eeprom_ulong_read(adr_set_timeSynhro);               // Грубая подстройка синхро
 
 	delay(500);
 	kn = 0;
@@ -6277,71 +6279,78 @@ void setup(void)
 	Serial.println(set_timeSynhro);
 	Serial.println();
 
+	//DS3231_clock.begin();
 	// Disarm alarms and clear alarms for this example, because alarms is battery backed.
 	// Under normal conditions, the settings should be reset after power and restart microcontroller.
-	rtc_clock.armAlarm1(false);
-	rtc_clock.armAlarm2(false);
-	rtc_clock.clearAlarm1();
-	rtc_clock.clearAlarm2();
+	/*DS3231_clock.armAlarm1(false);
+	DS3231_clock.armAlarm2(false);
+	DS3231_clock.clearAlarm1();
+	DS3231_clock.clearAlarm2();*/
 
-	//rtc_clock.setDateTime(__DATE__, __TIME__);
-	//rtc_clock.setDateTime(2017, 11, 15, 0, 0, 0);
+	//DS3231_clock.setDateTime(__DATE__, __TIME__);
+	//DS3231_clock.setDateTime(2017, 11, 15, 0, 0, 0);
 	//	 disable 32kHz 
-	//rtc_clock.enable32kHz(false);
+	//DS3231_clock.enable32kHz(false);
 
 
 	//// Select output as rate to 1Hz
-	//rtc_clock.setOutput(DS3231_1HZ);
+	//DS3231_clock.setOutput(DS3231_1HZ);
 
 	//// Enable output
-	//rtc_clock.enableOutput(false);
+	//DS3231_clock.enableOutput(false);
 
 
 	// Check config
 
-	if (rtc_clock.isOutput())
-	{
-		Serial.println("Oscilator is enabled");
-	}
-	else
-	{
-		Serial.println("Oscilator is disabled");
-	}
+	//if (DS3231_clock.isOutput())
+	//{
+	//	Serial.println("Oscilator is enabled");
+	//}
+	//else
+	//{
+	//	Serial.println("Oscilator is disabled");
+	//}
 
-	switch (rtc_clock.getOutput())
-	{
-	case DS3231_1HZ:     Serial.println("SQW = 1Hz"); break;
-	case DS3231_4096HZ:  Serial.println("SQW = 4096Hz"); break;
-	case DS3231_8192HZ:  Serial.println("SQW = 8192Hz"); break;
-	case DS3231_32768HZ: Serial.println("SQW = 32768Hz"); break;
-	default: Serial.println("SQW = Unknown"); break;
-	}
+	//switch (DS3231_clock.getOutput())
+	//{
+	//case DS3231_1HZ:     Serial.println("SQW = 1Hz"); break;
+	//case DS3231_4096HZ:  Serial.println("SQW = 4096Hz"); break;
+	//case DS3231_8192HZ:  Serial.println("SQW = 8192Hz"); break;
+	//case DS3231_32768HZ: Serial.println("SQW = 32768Hz"); break;
+	//default: Serial.println("SQW = Unknown"); break;
+	//}
 
 
 
-	rtc_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);   //DS3231_EVERY_SECOND //Каждую секунду
-	//rtc_clock.setAlarm1(0, 0, 0, 5, DS3231_MATCH_S);  // СОВПАДЕНИЕ 
-	myGLCD.setBackColor(0, 0, 0);                   // Синий фон кнопок
-	myGLCD.setColor(255, 255, 255);
-	myGLCD.setFont(SmallFont);
-	while (true)
-	{
-		dt = rtc_clock.getDateTime();
-		myGLCD.print(rtc_clock.dateFormat("d-m-Y H:i:s", dt), 10, 0);
-		if (dt.second == 0|| dt.second == 10 || dt.second == 20 || dt.second == 30 || dt.second == 40 || dt.second == 50)
-		{
-			break;
-		}
-	}
+	//DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);   //DS3231_EVERY_SECOND //Каждую секунду
+	//DS3231_clock.setAlarm1(0, 0, 0, 5, DS3231_MATCH_S);  // СОВПАДЕНИЕ 
 
-	attachInterrupt(alarm_pin, alarmFunction, FALLING);
-
-	attachInterrupt(kn_red, volume_up, FALLING);
-	attachInterrupt(kn_blue, volume_down, FALLING);
-	Interrupt_enable = true;
 
 	Serial.println(F("Setup Ok!"));
 
+	myGLCD.setBackColor(0, 0, 0);                   // 
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.setFont(SmallFont);
+	//while (true)
+	//{
+	//	dt = DS3231_clock.getDateTime();
+	//	if (oldsec != dt.second)
+	//	{
+	//		myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 0);
+	//		oldsec = dt.second;
+	//	}
+
+	//	if (dt.second == 0|| dt.second == 10 || dt.second == 20 || dt.second == 30 || dt.second == 40 || dt.second == 50)
+	//	{
+	//		break;
+	//	}
+	//}
+
+
+	//attachInterrupt(alarm_pin, alarmFunction, FALLING);
+	attachInterrupt(kn_red, volume_up, FALLING);
+	attachInterrupt(kn_blue, volume_down, FALLING);
+	Interrupt_enable = true;
 	draw_Start_Menu();
 }
 
@@ -6352,14 +6361,14 @@ void loop(void)
 	//draw_Start_Menu();
 	Start_Menu();
 	//AnalogClock();
-	//dt = rtc_clock.getDateTime();
-	//Serial.println(rtc_clock.dateFormat("d-m-Y H:i:s - l", dt));
+	//dt = DS3231_clock.getDateTime();
+	//Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s - l", dt));
 
 	//if (isAlarm)
 	//{
 	//	//digitalWrite(alarmLED, alarmState);
 	//	alarmState = !alarmState;
-	//	rtc_clock.clearAlarm1();
+	//	DS3231_clock.clearAlarm1();
 	//}
 
 	//delay(1000);
