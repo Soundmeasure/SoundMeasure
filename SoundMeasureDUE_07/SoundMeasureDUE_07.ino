@@ -13,8 +13,6 @@
 
 
 #include <SPI.h>
-#include <SdFat.h>
-#include <SdFatUtil.h>
 #include "AnalogBinLogger.h"
 #include <UTFT.h>
 #include <UTouch.h>
@@ -42,7 +40,7 @@ UTFT_Buttons  myButtons(&myGLCD, &myTouch);
 boolean default_colors = true;
 uint8_t menu_redraw_required = 0;
 
-StdioStream csvStream;
+
 #define intensityLCD 9             // Порт управления яркостью экрана
 #define synhro_pin 66              // Порт синхронизации модулей
 #define alarm_pin 7                // Порт прерывания по таймеру
@@ -481,7 +479,6 @@ const uint16_t ISR_TIMER0 = 160;
 //==============================================================================
 
 // serial output steam
-ArduinoOutStream cout(Serial);
 
 size_t SAMPLES_PER_BLOCK ;                         //= DATA_DIM16/PIN_COUNT; // 254 разделить на количество входов
 typedef block16_t block_t;
@@ -6198,8 +6195,6 @@ void setup(void)
 		}
 	Serial.begin(115200);
 	printf_begin();
-	Serial.print(F("FreeRam: "));
-	Serial.println(FreeRam());
 	Wire.begin();
 	myGLCD.InitLCD();
 	myGLCD.clrScr();
@@ -6237,14 +6232,14 @@ void setup(void)
 	ADC_MR |= 0x00000100 ; // ADC full speed
 
 
-	//chench_Channel();
+	chench_Channel();
 
-	////adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
-	//Timer3.attachInterrupt(firstHandler);             // Timer3 - запись результатов измерения  в файл 
-	//Timer4.attachInterrupt(secondHandler);            // Timer4 - запись временных меток в файл
-	//Timer5.attachInterrupt(send_synhro);              // Timer5 - формирование временных меток синхронизации измерения
-	//Timer6.attachInterrupt(synhroHandler);            // Timer6 - формирование импульсов синхронизации измерения. Настройка
-	//Timer7.attachInterrupt(sevenHandler);             // Timer7 - запись временных меток  в массив для вывода на экран
+	//adc_init(ADC, SystemCoreClock, ADC_FREQ_MAX, ADC_STARTUP_FAST);
+	Timer3.attachInterrupt(firstHandler);             // Timer3 - запись результатов измерения  в файл 
+	Timer4.attachInterrupt(secondHandler);            // Timer4 - запись временных меток в файл
+	Timer5.attachInterrupt(send_synhro);              // Timer5 - формирование временных меток синхронизации измерения
+	Timer6.attachInterrupt(synhroHandler);            // Timer6 - формирование импульсов синхронизации измерения. Настройка
+	Timer7.attachInterrupt(sevenHandler);             // Timer7 - запись временных меток  в массив для вывода на экран
 
 	myGLCD.setBackColor(0, 0, 255);
 
@@ -6279,15 +6274,15 @@ void setup(void)
 	Serial.println(set_timeSynhro);
 	Serial.println();
 
-	//DS3231_clock.begin();
+	DS3231_clock.begin();
 	// Disarm alarms and clear alarms for this example, because alarms is battery backed.
 	// Under normal conditions, the settings should be reset after power and restart microcontroller.
-	/*DS3231_clock.armAlarm1(false);
+	DS3231_clock.armAlarm1(false);
 	DS3231_clock.armAlarm2(false);
 	DS3231_clock.clearAlarm1();
-	DS3231_clock.clearAlarm2();*/
+	DS3231_clock.clearAlarm2();
 
-	//DS3231_clock.setDateTime(__DATE__, __TIME__);
+	DS3231_clock.setDateTime(__DATE__, __TIME__);
 	//DS3231_clock.setDateTime(2017, 11, 15, 0, 0, 0);
 	//	 disable 32kHz 
 	//DS3231_clock.enable32kHz(false);
