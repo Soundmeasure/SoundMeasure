@@ -50,7 +50,7 @@ LCD5110 myGLCD(7, 6, 5, 4, 3); // объявляем номера пинов LCD
 extern uint8_t SmallFont[]; // малый шрифт (из библиотеки)
 extern uint8_t MediumNumbers[]; // средний шрифт для цифр (из библиотеки)
 
-DS3231 rtc_clock;
+DS3231 DS3231_clock;
 RTCDateTime dt;
 boolean isAlarm = false;
 boolean alarmState = false;
@@ -84,6 +84,8 @@ unsigned long PowerMillis = 0;
 unsigned long StartSample = 0;
 unsigned int Power_Interval = 1000;
 unsigned long TimePeriod = 3000000;
+
+
 
 bool intterrupt_enable = false;
 //int seconds = 0; // счётчик секунд
@@ -243,17 +245,20 @@ void info()
 void alarmFunction()
 {
 	isAlarm = false;
-	rtc_clock.clearAlarm1();
-	dt = rtc_clock.getDateTime();
+	DS3231_clock.clearAlarm1();
+	dt = DS3231_clock.getDateTime();
 //	myGLCD.setFont(SmallFont);
-	myGLCD.print(rtc_clock.dateFormat("H:i:s - ", dt), 0, 0);
+	myGLCD.print(DS3231_clock.dateFormat("H:i:s - ", dt), 0, 0);
 	myGLCD.update();
 	alarm_synhro++;
 	if (alarm_synhro > 4)
 	{
 		alarm_synhro = 0;
+		digitalWrite(synhro_pin, HIGH);
+		delayMicroseconds(50);
+		digitalWrite(synhro_pin, LOW);
 		alarm_count++;
-		myGLCD.print(rtc_clock.dateFormat("s", dt), 67, 0);
+		myGLCD.print(DS3231_clock.dateFormat("s", dt), 67, 0);
 		myGLCD.update();
 	}
 	isAlarm = true;
@@ -271,7 +276,7 @@ void setup()
 
 	Wire.begin();
 	myGLCD.InitLCD();                                // инициализация LCD дисплея
-	rtc_clock.begin();
+	DS3231_clock.begin();
 											         // Настройка радиочастотного радиоканала
 	radio.begin();                                   // Старт работы;
 	radio.setAutoAck(1);                             // Убедитесь, что включена функция автозагрузки
@@ -323,12 +328,12 @@ void setup()
 
 															  // Disarm alarms and clear alarms for this example, because alarms is battery backed.
 															  // Under normal conditions, the settings should be reset after power and restart microcontroller.
-	rtc_clock.armAlarm1(false);
-	rtc_clock.armAlarm2(false);
-	rtc_clock.clearAlarm1();
-	rtc_clock.clearAlarm2();
+	DS3231_clock.armAlarm1(false);
+	DS3231_clock.armAlarm2(false);
+	DS3231_clock.clearAlarm1();
+	DS3231_clock.clearAlarm2();
 
-	rtc_clock.setDateTime(__DATE__, __TIME__);
+	DS3231_clock.setDateTime(__DATE__, __TIME__);
 	//analogReference(AR_DEFAULT);
 
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
@@ -336,10 +341,10 @@ void setup()
 
 	while (true)
 	{
-		dt = rtc_clock.getDateTime();
+		dt = DS3231_clock.getDateTime();
 		if (oldsec != dt.second)
 		{
-			myGLCD.print(rtc_clock.dateFormat("H:i:s", dt), 0, 0);
+			myGLCD.print(DS3231_clock.dateFormat("H:i:s", dt), 0, 0);
 			myGLCD.update();
 			oldsec = dt.second;
 	    }
@@ -441,15 +446,32 @@ void loop(void)
 		else if (data_in[2] == 8)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
-
-			//data_out[12] = dt.year - 2000;                      // 
-			//data_out[13] = dt.month;                            // 
-			//data_out[14] = dt.day;                              // 
-			//data_out[15] = dt.hour;                             //
-			//data_out[16] = dt.minute;                           // 
-			delayMicroseconds(800);
-			rtc_clock.setDateTime(data_out[12] +2000, data_out[13], data_out[14], data_out[15], data_out[16], 00);
-
+			detachInterrupt(alarm_pin);
+			DS3231_clock.clearAlarm1();
+			DS3231_clock.clearAlarm2();
+			alarm_count = 0;
+			delayMicroseconds(10000);
+			digitalWrite(synhro_pin, HIGH);
+			delayMicroseconds(100000);
+			digitalWrite(synhro_pin, LOW);
+			DS3231_clock.setDateTime(data_in[12]+2000, data_in[13], data_in[14], data_in[15], data_in[16], 00);
+			DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
+			while (true)
+			{
+				dt = DS3231_clock.getDateTime();
+				if (oldsec != dt.second)
+				{
+					myGLCD.print(DS3231_clock.dateFormat("H:i:s", dt), 0, 0);
+					myGLCD.update();
+					oldsec = dt.second;
+				}
+				if (dt.second == 5)
+				{
+					break;
+				}
+				delayMicroseconds(50);
+			}
+			attachInterrupt(alarm_pin, alarmFunction, FALLING);
 		}
 		else
 		{
