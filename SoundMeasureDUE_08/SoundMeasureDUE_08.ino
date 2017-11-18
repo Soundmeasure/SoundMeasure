@@ -657,34 +657,28 @@ void waitForIt(int x1, int y1, int x2, int y2)
 
 void alarmFunction()
 {
-	//if(isAlarm == true)
-	//{
-		isAlarm = false;
-		DS3231_clock.clearAlarm1();
-		myGLCD.setBackColor(0, 0, 0);                   // Синий фон кнопок
-		myGLCD.setColor(255, 255, 255);
-		myGLCD.setFont(SmallFont);
-		dt = DS3231_clock.getDateTime();
-		alarm_synhro++;
-		if (alarm_synhro > 2)
-		{
-			digitalWrite(LED_PIN13, HIGH);
-			alarm_synhro = 0;
-			//delayMicroseconds(800);
-		//	digitalWrite(LED_PIN13, HIGH);
-			delayMicroseconds(10000);
-			//digitalWrite(LED_PIN13, LOW);
-			alarm_count++;
-			myGLCD.print(DS3231_clock.dateFormat("s", dt), 190, 0);
-			wiev_Start_Menu = true;
-			start_enable = false;
-			digitalWrite(LED_PIN13, LOW);
-		}
-
-		myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s - ", dt), 5, 0);
-		myGLCD.printNumI(alarm_synhro, 300, 0);
-		myGLCD.setFont(BigFont);
-	//}
+	DS3231_clock.clearAlarm1();
+	detachInterrupt(alarm_pin);
+	dt = DS3231_clock.getDateTime();
+	myGLCD.setBackColor(0, 0, 0);                   // Синий фон кнопок
+	myGLCD.setColor(255, 255, 255);
+	myGLCD.setFont(SmallFont);
+	alarm_synhro++;
+	if (alarm_synhro > 2)
+	{
+		digitalWrite(LED_PIN13, HIGH);
+		delayMicroseconds(9500);
+		digitalWrite(LED_PIN13, LOW);
+		alarm_synhro = 0;
+		alarm_count++;
+		myGLCD.print(DS3231_clock.dateFormat("s", dt), 190, 0);
+		wiev_Start_Menu = true;
+		start_enable = true;
+	}
+	myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s - ", dt), 5, 0);
+	myGLCD.printNumI(alarm_synhro, 300, 0);
+	myGLCD.setFont(BigFont);
+	attachInterrupt(alarm_pin, alarmFunction, FALLING);
 }
 
 void synhro_DS3231_clock()
@@ -741,28 +735,15 @@ void synhro_DS3231_clock()
 					if (digitalRead(synhro_pin) == LOW)
 					{
 						DS3231_clock.setDateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, 00);
-						alarm_count = 0;
-						DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);                     //DS3231_EVERY_SECOND //Каждую секунду
-	/*					while (true)
-						{
-							dt = DS3231_clock.getDateTime();
-							if (oldsec != dt.second)
-							{
-								myGLCD.print(DS3231_clock.dateFormat("H:i:s", dt), 0, 0);
-								oldsec = dt.second;
-							}
-							if (dt.second == 3 )
-							{
-								break;
-							}
-							delayMicroseconds(50);
-						}*/
-
+					//	DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);                     //DS3231_EVERY_SECOND //Каждую секунду
+						dt = DS3231_clock.getDateTime();
+						Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s - l", dt)); 
 						attachInterrupt(alarm_pin, alarmFunction, FALLING);
 						myGLCD.setFont(BigFont);
 						myGLCD.setColor(VGA_LIME);
 						myGLCD.print("C""\x9D\xA2""xpo OK!", CENTER, 80);                            // Синхро ОК!
 						myGLCD.setColor(255, 255, 255);
+						alarm_count = 0;
 						delay(1000);
 						synhro_enable = true;
 						break;
@@ -1191,10 +1172,11 @@ void setup()
 	DS3231_clock.clearAlarm1();
 	DS3231_clock.clearAlarm2();
 
-	DS3231_clock.setDateTime(__DATE__, __TIME__);
+	//DS3231_clock.setDateTime(__DATE__, __TIME__);
 	// Enable output
-	DS3231_clock.enableOutput(false);
 
+	DS3231_clock.setOutput(DS3231_1HZ);
+	DS3231_clock.enableOutput(true);
 	// Check config
 
 	if (DS3231_clock.isOutput())
@@ -1231,7 +1213,6 @@ void setup()
 	myGLCD.setFont(SmallFont);
 
 	DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
-	//DS3231_clock.setAlarm1(0, 0, 0, 5, DS3231_MATCH_S);
 	while (true)
 	{
 		dt = DS3231_clock.getDateTime();
@@ -1240,20 +1221,19 @@ void setup()
 			myGLCD.print(DS3231_clock.dateFormat("H:i:s", dt), 5, 0);
 			oldsec = dt.second;
 		}
-	//	if (dt.second == 0 || dt.second == 10 || dt.second == 20 || dt.second == 30 || dt.second == 40 || dt.second == 50)
-		if (dt.second == 1 || dt.second == 11 || dt.second == 21 || dt.second == 31 || dt.second == 41 || dt.second == 51)
+		if (dt.second == 0 || dt.second == 10 || dt.second == 20 || dt.second == 30 || dt.second == 40 || dt.second == 50)
 		{
 			break;
 		}
-		delay(100);
-	}
-
-	//while (digitalRead(alarm_pin) == HIGH)
-	//{
-	//}
-	attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
-	//attachInterrupt(alarm_pin, alarmFunction, RISING);     // ппрерывание вызывается только при смене значения на порту с HIGH на LOW
-	//myGLCD.setFont(SmallFont);
+		//delayMicroseconds(10000);
+	} 
+//	isAlarm = true;
+	alarm_synhro = 0;
+	myGLCD.printNumI(alarm_synhro, 270, 0);
+	//delayMicroseconds(100000);
+	attachInterrupt(alarm_pin, alarmFunction, FALLING);      // прерывание вызывается только при смене значения на порту с LOW на HIGH
+	
+  //  attachInterrupt(alarm_pin, alarmFunction, RISING);     // прерывание вызывается только при смене значения на порту с HIGH на LOW
 	Serial.println(F("Setup Ok!"));
 }
 
@@ -1263,8 +1243,8 @@ void loop()
 	//dt = DS3231_clock.getDateTime();
 	//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s - ", dt), 10, 0);
 	//delay(1000);
-	//if (wiev_Start_Menu)
-	//{
+	if (wiev_Start_Menu)
+	{
 		Start_Menu();
-	//}
+	}
 }

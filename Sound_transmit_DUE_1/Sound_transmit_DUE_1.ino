@@ -246,27 +246,24 @@ void alarmFunction()
 {
 	isAlarm = false;
 	DS3231_clock.clearAlarm1();
+	detachInterrupt(alarm_pin);
 	dt = DS3231_clock.getDateTime();
-//	myGLCD.setFont(SmallFont);
 	myGLCD.print(DS3231_clock.dateFormat("H:i:s -", dt), 0, 0);
-	//myGLCD.update();
 	alarm_synhro++;
 	if (alarm_synhro > 2)
 	{
-		//digitalWrite(synhro_pin, HIGH);
 		alarm_synhro = 0;
 		//delayMicroseconds(11800);
 		digitalWrite(synhro_pin, HIGH);
 		delayMicroseconds(10000);
-		//digitalWrite(synhro_pin, LOW);
 		alarm_count++;
 		myGLCD.print(DS3231_clock.dateFormat("s", dt), 63, 0);
-		//myGLCD.update();
 		digitalWrite(synhro_pin, LOW);
 	}
 	myGLCD.print(String(alarm_synhro), 78, 0);
 	myGLCD.update();
 	isAlarm = true;
+	attachInterrupt(alarm_pin, alarmFunction, FALLING);
 }
 
 
@@ -339,18 +336,20 @@ void setup()
 	DS3231_clock.clearAlarm1();
 	DS3231_clock.clearAlarm2();
 
-	DS3231_clock.setDateTime(__DATE__, __TIME__);
+	//DS3231_clock.enableOutput(false);
+	//DS3231_clock.setDateTime(__DATE__, __TIME__);
 	//analogReference(AR_DEFAULT);
 
 	//volume_Power = analogRead(0)*(3.2 / 1024 * 2);
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
-
+	DS3231_clock.setOutput(DS3231_1HZ);
+	DS3231_clock.enableOutput(true);
 	while (true)
 	{
 		dt = DS3231_clock.getDateTime();
 		if (oldsec != dt.second)
 		{
-			myGLCD.print(DS3231_clock.dateFormat("H:i:s", dt), 0, 0);
+			myGLCD.print(DS3231_clock.dateFormat("H:i:s",  dt), 0, 0);
 			myGLCD.update();
 			oldsec = dt.second;
 	    }
@@ -360,9 +359,7 @@ void setup()
 		}
 
 	}
-	while (digitalRead(alarm_pin) == HIGH)
-	{
-	}
+
 	attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
 //	attachInterrupt(alarm_pin, alarmFunction, RISING);     // ппрерывание вызывается только при смене значения на порту с HIGH на LOW
 	//attachInterrupt(alarm_pin, alarmFunction, RISING);
@@ -464,6 +461,7 @@ void loop(void)
 			digitalWrite(synhro_pin, HIGH);
 			delayMicroseconds(100000);
 			digitalWrite(synhro_pin, LOW);
+			delayMicroseconds(400);
 			DS3231_clock.setDateTime(data_in[12]+2000, data_in[13], data_in[14], data_in[15], data_in[16], 00);
 			DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
 			dt = DS3231_clock.getDateTime();
