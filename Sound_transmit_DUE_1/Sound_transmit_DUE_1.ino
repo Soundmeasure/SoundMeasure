@@ -52,8 +52,8 @@ extern uint8_t MediumNumbers[]; // средний шрифт для цифр (и
 
 DS3231 DS3231_clock;
 RTCDateTime dt;
-boolean isAlarm = false;
-boolean alarmState = false;
+volatile boolean isAlarm = false;
+volatile boolean alarmState = false;
 int alarm_synhro = 0;
 unsigned long alarm_count = 0;
 #define alarm_pin 47                                // Порт прерывания по таймеру
@@ -248,19 +248,24 @@ void alarmFunction()
 	DS3231_clock.clearAlarm1();
 	dt = DS3231_clock.getDateTime();
 //	myGLCD.setFont(SmallFont);
-	myGLCD.print(DS3231_clock.dateFormat("H:i:s - ", dt), 0, 0);
-	myGLCD.update();
+	myGLCD.print(DS3231_clock.dateFormat("H:i:s -", dt), 0, 0);
+	//myGLCD.update();
 	alarm_synhro++;
-	if (alarm_synhro > 4)
+	if (alarm_synhro > 2)
 	{
+		//digitalWrite(synhro_pin, HIGH);
 		alarm_synhro = 0;
+		//delayMicroseconds(11800);
 		digitalWrite(synhro_pin, HIGH);
-		delayMicroseconds(50);
-		digitalWrite(synhro_pin, LOW);
+		delayMicroseconds(10000);
+		//digitalWrite(synhro_pin, LOW);
 		alarm_count++;
-		myGLCD.print(DS3231_clock.dateFormat("s", dt), 67, 0);
-		myGLCD.update();
+		myGLCD.print(DS3231_clock.dateFormat("s", dt), 63, 0);
+		//myGLCD.update();
+		digitalWrite(synhro_pin, LOW);
 	}
+	myGLCD.print(String(alarm_synhro), 78, 0);
+	myGLCD.update();
 	isAlarm = true;
 }
 
@@ -315,15 +320,16 @@ void setup()
 	pinMode(ledLCD, OUTPUT);
 	analogWrite(ledLCD, 80);
 	pinMode(synhro_pin, OUTPUT);
-	digitalWrite(synhro_pin,LOW);
-	//digitalWrite(ledLCD, LOW);
+	//pinMode(alarm_pin, HIGH);
+	digitalWrite(synhro_pin, LOW);
+	//digitalWrite(alarm_pin, HIGH);
+	
 	digitalWrite(ledPin13, HIGH);
 	delay(100);
 	digitalWrite(ledPin13, LOW);
 	delay(100);
-	digitalWrite(ledPin13, HIGH);
-	delay(100);
-	digitalWrite(ledPin13, LOW);
+	Timer6.setPeriod(TimePeriod);
+	Timer6.attachInterrupt(firstHandler);                    // Every 3 sec.
 	AD9850.powerDown();                                       //set signal output to LOW
 
 															  // Disarm alarms and clear alarms for this example, because alarms is battery backed.
@@ -354,11 +360,15 @@ void setup()
 		}
 
 	}
-
-	delay(500);
-	attachInterrupt(alarm_pin, alarmFunction, FALLING);
-	Timer6.setPeriod(TimePeriod);
-	Timer6.attachInterrupt(firstHandler);                    // Every 3 sec.
+	while (digitalRead(alarm_pin) == HIGH)
+	{
+	}
+	attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
+//	attachInterrupt(alarm_pin, alarmFunction, RISING);     // ппрерывание вызывается только при смене значения на порту с HIGH на LOW
+	//attachInterrupt(alarm_pin, alarmFunction, RISING);
+	//attachInterrupt(alarm_pin, alarmFunction, FALLING);
+	//Timer6.setPeriod(TimePeriod);
+	//Timer6.attachInterrupt(firstHandler);                    // Every 3 sec.
 	PowerMillis = millis();
 }
 
@@ -456,22 +466,10 @@ void loop(void)
 			digitalWrite(synhro_pin, LOW);
 			DS3231_clock.setDateTime(data_in[12]+2000, data_in[13], data_in[14], data_in[15], data_in[16], 00);
 			DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
-			while (true)
-			{
-				dt = DS3231_clock.getDateTime();
-				if (oldsec != dt.second)
-				{
-					myGLCD.print(DS3231_clock.dateFormat("H:i:s", dt), 0, 0);
-					myGLCD.update();
-					oldsec = dt.second;
-				}
-				if (dt.second == 5)
-				{
-					break;
-				}
-				delayMicroseconds(50);
-			}
-			attachInterrupt(alarm_pin, alarmFunction, FALLING);
+			dt = DS3231_clock.getDateTime();
+			Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s - l", dt));
+			attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
+		//	attachInterrupt(alarm_pin, alarmFunction, RISING);     // прерывание вызывается только при смене значения на порту с HIGH на LOW
 		}
 		else
 		{

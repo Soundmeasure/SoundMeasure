@@ -6267,22 +6267,22 @@ void setup(void)
 	vibro1();
 	delay(100);
 	vibro1();
-	clean_mem();
+	//clean_mem();
 
 	Serial.println();
 	Serial.print("Pulse repetition period  = ");
 	Serial.println(set_timeSynhro);
 	Serial.println();
 
-	DS3231_clock.begin();
-	// Disarm alarms and clear alarms for this example, because alarms is battery backed.
-	// Under normal conditions, the settings should be reset after power and restart microcontroller.
-	DS3231_clock.armAlarm1(false);
-	DS3231_clock.armAlarm2(false);
-	DS3231_clock.clearAlarm1();
-	DS3231_clock.clearAlarm2();
+	//DS3231_clock.begin();
+	//// Disarm alarms and clear alarms for this example, because alarms is battery backed.
+	//// Under normal conditions, the settings should be reset after power and restart microcontroller.
+	//DS3231_clock.armAlarm1(false);
+	//DS3231_clock.armAlarm2(false);
+	//DS3231_clock.clearAlarm1();
+	//DS3231_clock.clearAlarm2();
 
-	DS3231_clock.setDateTime(__DATE__, __TIME__);
+	//DS3231_clock.setDateTime(__DATE__, __TIME__);
 	//DS3231_clock.setDateTime(2017, 11, 15, 0, 0, 0);
 	//	 disable 32kHz 
 	//DS3231_clock.enable32kHz(false);
