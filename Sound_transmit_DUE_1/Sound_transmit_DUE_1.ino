@@ -244,13 +244,12 @@ void info()
 
 void alarmFunction()
 {
-	isAlarm = false;
+//	isAlarm = false;
 	DS3231_clock.clearAlarm1();
-	detachInterrupt(alarm_pin);
+//	detachInterrupt(alarm_pin);
 	dt = DS3231_clock.getDateTime();
 	myGLCD.print(DS3231_clock.dateFormat("H:i:s -", dt), 0, 0);
-	alarm_synhro++;
-	if (alarm_synhro > 2)
+	if (alarm_synhro > 4)
 	{
 		alarm_synhro = 0;
 		//delayMicroseconds(11800);
@@ -260,10 +259,11 @@ void alarmFunction()
 		myGLCD.print(DS3231_clock.dateFormat("s", dt), 63, 0);
 		digitalWrite(synhro_pin, LOW);
 	}
+	alarm_synhro++;
 	myGLCD.print(String(alarm_synhro), 78, 0);
 	myGLCD.update();
-	isAlarm = true;
-	attachInterrupt(alarm_pin, alarmFunction, FALLING);
+//	isAlarm = true;
+//	attachInterrupt(alarm_pin, alarmFunction, FALLING);
 }
 
 
@@ -317,9 +317,9 @@ void setup()
 	pinMode(ledLCD, OUTPUT);
 	analogWrite(ledLCD, 80);
 	pinMode(synhro_pin, OUTPUT);
-	//pinMode(alarm_pin, HIGH);
 	digitalWrite(synhro_pin, LOW);
-	//digitalWrite(alarm_pin, HIGH);
+	pinMode(alarm_pin, INPUT);
+	digitalWrite(alarm_pin, HIGH);
 	
 	digitalWrite(ledPin13, HIGH);
 	delay(100);
@@ -336,7 +336,6 @@ void setup()
 	DS3231_clock.clearAlarm1();
 	DS3231_clock.clearAlarm2();
 
-	//DS3231_clock.enableOutput(false);
 	//DS3231_clock.setDateTime(__DATE__, __TIME__);
 	//analogReference(AR_DEFAULT);
 
@@ -344,6 +343,36 @@ void setup()
 	//myGLCD.print(String(volume_Power), RIGHT, 1);          // выводим в строке 1
 	DS3231_clock.setOutput(DS3231_1HZ);
 	DS3231_clock.enableOutput(true);
+
+	if (DS3231_clock.isOutput())
+	{
+		Serial.println("Oscilator is enabled");
+	}
+	else
+	{
+		Serial.println("Oscilator is disabled");
+	}
+
+	switch (DS3231_clock.getOutput())
+	{
+	case DS3231_1HZ:     Serial.println("SQW = 1Hz"); break;
+	case DS3231_4096HZ:  Serial.println("SQW = 4096Hz"); break;
+	case DS3231_8192HZ:  Serial.println("SQW = 8192Hz"); break;
+	case DS3231_32768HZ: Serial.println("SQW = 32768Hz"); break;
+	default: Serial.println("SQW = Unknown"); break;
+	}
+	DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
+	while (digitalRead(alarm_pin) != HIGH)
+	{
+
+	}
+
+	while (digitalRead(alarm_pin) == HIGH)
+	{
+
+	}
+
+
 	while (true)
 	{
 		dt = DS3231_clock.getDateTime();
@@ -357,16 +386,12 @@ void setup()
 		{
 			break;
 		}
-
 	}
 
 	attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
 //	attachInterrupt(alarm_pin, alarmFunction, RISING);     // ппрерывание вызывается только при смене значения на порту с HIGH на LOW
-	//attachInterrupt(alarm_pin, alarmFunction, RISING);
-	//attachInterrupt(alarm_pin, alarmFunction, FALLING);
-	//Timer6.setPeriod(TimePeriod);
-	//Timer6.attachInterrupt(firstHandler);                    // Every 3 sec.
 	PowerMillis = millis();
+
 }
 
 void loop(void) 
@@ -454,6 +479,8 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
 			detachInterrupt(alarm_pin);
+			pinMode(alarm_pin, INPUT);
+			digitalWrite(alarm_pin, HIGH);
 			DS3231_clock.clearAlarm1();
 			DS3231_clock.clearAlarm2();
 			alarm_count = 0;
@@ -461,11 +488,35 @@ void loop(void)
 			digitalWrite(synhro_pin, HIGH);
 			delayMicroseconds(100000);
 			digitalWrite(synhro_pin, LOW);
-			delayMicroseconds(400);
+		//	delayMicroseconds(400);
 			DS3231_clock.setDateTime(data_in[12]+2000, data_in[13], data_in[14], data_in[15], data_in[16], 00);
+			alarm_synhro = 0;
 			DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
-			dt = DS3231_clock.getDateTime();
-			Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s - l", dt));
+			while (digitalRead(alarm_pin) != HIGH)
+			{
+
+			}
+
+			while (digitalRead(alarm_pin) == HIGH)
+			{
+
+			}
+																			 //	dt = DS3231_clock.getDateTime();
+			while (true)
+			{
+				dt = DS3231_clock.getDateTime();
+				if (oldsec != dt.second)
+				{
+					myGLCD.print(DS3231_clock.dateFormat("H:i:s", dt), 0, 0);
+					myGLCD.update();
+					oldsec = dt.second;
+				}
+				if (dt.second == 10)
+				{
+					break;
+				}
+			}
+	////		Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s - l", dt));
 			attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
 		//	attachInterrupt(alarm_pin, alarmFunction, RISING);     // прерывание вызывается только при смене значения на порту с HIGH на LOW
 		}
