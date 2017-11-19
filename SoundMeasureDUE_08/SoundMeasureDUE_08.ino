@@ -134,6 +134,22 @@ volatile int count_ms     = 0;                                  // Временные мет
 bool wiev_Start_Menu      = false;                              // Разрешение старта меню после синхронизации таймера часов
 volatile bool start_enable = false;                             // Старт синхро импульса
 bool synhro_enable = false;                                     // Признак успешной синхронизации
+unsigned long StartSample = 0;
+int x_osc, y_osc;
+int dTime = 2;
+#define page_max  12
+int Page_count = 0;
+int scale_strob = 1;
+int page = 0;
+int xpos;
+#define new_info        0                         // Текущая информация
+#define old_info        1                         // Сохраненная информация
+int Sample_osc[240][page_max];
+int Synhro_osc[240][page_max][2];
+bool trig_sin = false;                            // Есть срабатывание триггера
+int page_trig = 0;
+int dgvh;
+
 
 
 
@@ -143,8 +159,8 @@ char  txt_Start_Menu[] = "HA""CTPO""\x87""K""\x86";                             
 
 char  txt_menu1_1[] = "\x86\x9C\xA1""ep.""\x9C""a""\x99""ep""\x9B\x9F\x9D";                             // "Измер.задержки"
 char  txt_menu1_2[] = "HA""CTPO""\x87""K""\x86";                                                        // "НАСТРОЙКИ"
-char  txt_menu1_3[] = "\x8D""AC""\x91"" C""\x86""HXPO.";                                                // "ЧАСЫ СИНХРО."
-char  txt_menu1_4[] = "";                                                                               // "РАБОТА с SD"
+char  txt_menu1_3[] = "TA""\x87""MEP C""\x86""HXPO.";                                                    // "ТАЙМЕР СИНХРО."
+char  txt_menu1_4[] = "KOHTPO""\x88\x92"" C""\x86""HXPO.";                                              // "КОНТРОЛЬ СИНХРО."
 char  txt_menu1_5[] = "B\x91XO\x82";                                                                    // "ВЫХОД"       
 
 char  txt_info11[]  = "ESC->PUSH Display";                                                              //
@@ -379,16 +395,16 @@ void Draw_Glav_Menu()
 	for (int x = 0; x<5; x++)
 	{
 		myGLCD.setColor(0, 0, 255);
-		myGLCD.fillRoundRect(10, 15 + (45 * x), 250, 50 + (45 * x));
+		myGLCD.fillRoundRect(20, 15 + (45 * x), 300, 50 + (45 * x));
 		myGLCD.setColor(255, 255, 255);
-		myGLCD.drawRoundRect(10, 15 + (45 * x), 250, 50 + (45 * x));
+		myGLCD.drawRoundRect(20, 15 + (45 * x), 300, 50 + (45 * x));
 	}
 
-	myGLCD.print(txt_menu1_1, 20, 25);        // 
-	myGLCD.print(txt_menu1_2, 55, 70);
-	myGLCD.print(txt_menu1_3, 45, 115);
-	myGLCD.print(txt_menu1_4, 45, 160);
-	myGLCD.print(txt_menu1_5, 90, 205);
+	myGLCD.print(txt_menu1_1, CENTER, 25);        // 
+	myGLCD.print(txt_menu1_2, CENTER, 70);
+	myGLCD.print(txt_menu1_3, CENTER, 115);
+	myGLCD.print(txt_menu1_4, CENTER, 160);
+	myGLCD.print(txt_menu1_5, CENTER, 205);
 	myGLCD.setColor(255, 255, 255);
 
 }
@@ -404,37 +420,37 @@ void Swich_Glav_Menu()
 			int	x = myTouch.getX();
 			int	y = myTouch.getY();
 
-			if ((x >= 10) && (x <= 250))       // 
+			if ((x >= 20) && (x <= 3000))       // 
 			{
 				if ((y >= 15) && (y <= 50))    // Button: 1   
 				{
-					waitForIt(10, 15, 250, 50);
+					waitForIt(20, 15, 300, 50);
 					myGLCD.clrScr();
 					menu_delay_measure();
 					Draw_Glav_Menu();
 				}
 				if ((y >= 60) && (y <= 100))   // Button: 2  
 				{
-					waitForIt(10, 60, 250, 100);
+					waitForIt(20, 60, 300, 100);
 				//	Draw_menu_tuning();
 				//	menu_tuning();
 					Draw_Glav_Menu();
 				}
 				if ((y >= 105) && (y <= 145))  // Button: 3  
 				{
-					waitForIt(10, 105, 250, 145);
+					waitForIt(20, 105, 300, 145);
 					synhro_DS3231_clock();
 					Draw_Glav_Menu();
 				}
 				if ((y >= 150) && (y <= 190))  // Button: 4  
 				{
-					waitForIt(10, 150, 250, 190);
-
+					waitForIt(20, 150, 300, 190);
+					wiev_synhro();
 					Draw_Glav_Menu();
 				}
 				if ((y >= 195) && (y <= 235))  // Button: 5 "EXIT" Выход
 				{
-					waitForIt(10, 195, 250, 235);
+					waitForIt(20, 195, 300, 235);
 					break;
 				}
 			}
@@ -636,13 +652,6 @@ void menu_synhro()                                                        // Мен
 		}
 	}
 }
-
-
-
-
-
-
-
 void waitForIt(int x1, int y1, int x2, int y2)
 {
 	myGLCD.setColor(255, 0, 0);
@@ -654,9 +663,6 @@ void waitForIt(int x1, int y1, int x2, int y2)
 	myGLCD.drawRoundRect(x1, y1, x2, y2);
 }
 //++++++++++++++++++++++++++ Конец меню прибора ++++++++++++++++++++++++
-
-
-
 void alarmFunction()
 {
 	DS3231_clock.clearAlarm1();
@@ -675,10 +681,33 @@ void alarmFunction()
 	}
 	alarm_synhro++;
 	myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s - ", dt), 5, 0);
-	myGLCD.printNumI(alarm_synhro, 300, 0);
-	myGLCD.setFont(BigFont);
+//	myGLCD.printNumI(alarm_synhro, 300, 0);
+//	myGLCD.setFont(BigFont);
+}
+void sevenHandler()                                         // Timer7 -  запись временных меток  в массив для вывода на экран
+{
+	count_ms += scale_strob;
+	Synhro_osc[xpos][page][new_info] = count_ms;                      // Записать временные метки в массив для вывода на экран
+	if (xpos>0) Synhro_osc[xpos - 1][page][new_info] = 4095;             // Записать временные метки в массив для вывода на экран
 }
 
+
+
+
+
+void DrawGrid1()
+{
+	myGLCD.setColor(0, 200, 0);
+	for (dgvh = 0; dgvh < 7; dgvh++)                          // Нарисовать сетку
+	{
+		myGLCD.drawLine(dgvh * 40, 0+20, dgvh * 40, 159+20);
+		if (dgvh < 5)
+		{
+			myGLCD.drawLine(0, (dgvh * 40)+20, 239, (dgvh * 40)+20);
+		}
+	}
+	myGLCD.setColor(255, 255, 255);                           // Белая
+}
 
 void synhro_DS3231_clock()
 {
@@ -765,7 +794,238 @@ void synhro_DS3231_clock()
 	}
 }
 
+void synhro_ware()                         // Сформировать начальный синхро импульс. Включить синхронизацию
+{
+	count_ms = 0;
+	myGLCD.setFont(BigFont);
+	start_enable = false;
 
+	if (digitalRead(synhro_pin) != LOW)
+	{
+		myGLCD.setColor(VGA_RED);
+		myGLCD.print("C""\x9D\xA2""xpo ""\xA2""e ""\xA3""o""\x99\x9F\xA0\xAE\xA7""e""\xA2", CENTER, 80);   // Синхро не подключен
+		delay(2000);
+	}
+	else
+	{
+		//StartSample = micros();                       // Записать время
+		//while (true)
+		//{
+		//	if (micros() - StartSample >= 7000000)
+		//	{
+		//		myGLCD.setColor(VGA_RED);
+		//		myGLCD.print("He""\xA4"" c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", CENTER, 80);   // "Нет синхронизации"
+		//		delay(2000);
+		//		break;
+		//	}
+		//	if (digitalRead(synhro_pin) == HIGH)
+		//	{
+				while (true)
+				{
+					wiev_synhro();
+					while (myTouch.dataAvailable()) {}
+					break;
+				}
+	/*			break;
+			}
+		}*/
+	}
+}
+
+void wiev_synhro()
+{
+	myGLCD.clrScr();
+	myGLCD.setBackColor(0, 0, 0);
+	count_ms = 0;
+	//myGLCD.setFont(BigFont);
+	//myGLCD.setColor(VGA_LIME);
+	//myGLCD.print("C""\x9D\xA2""xpo OK!", CENTER, 80);                                  // Синхро ОК!
+	start_enable = false;
+	int count_synhro = 0;
+	unsigned long TrigSynhro = 0;
+	long time_temp = 0;                                  // Для правильного отображения результатов измерения
+	dTime = 23;
+	scale_strob = 2;
+
+	for (page = 0; page < page_max; page++)              // Стереть старые данные отображения и временных меток
+	{
+		for (xpos = 0; xpos < 240; xpos++)               // Стереть старые данные отображения и временных меток
+		{
+			Synhro_osc[xpos][page][new_info] = 0;        // Стереть новые данные временных меток
+			//Synhro_osc[xpos][page][old_info] = 0;        // Стереть новые данные временных меток
+		}
+	}
+	myGLCD.setFont(SmallFont);
+	myGLCD.print("Start", 250, 10);                       //  
+	dt = DS3231_clock.getDateTime();
+	myGLCD.print("H:", 250, 25);                          //  
+	myGLCD.printNumI(dt.hour, 280, 25, 2);                      // Вывести на экран время час
+	myGLCD.print("M:", 250, 40);                          //  
+	myGLCD.printNumI(dt.minute, 280, 40, 2);                      // Вывести на экран время мин
+	myGLCD.print("S:", 250, 55);                          //  
+	myGLCD.printNumI(dt.second, 280, 55, 2);                      // Вывести на экран время сек
+
+	unsigned long Start_unixtime = dt.unixtime;
+	unsigned long Current_unixtime = 0;
+	DrawGrid1();
+	while (1)
+	{
+		bool synhro_Off = false;                                 // Признак синхронизации в исходное состояние   
+		StartSample = micros();
+		while (!start_enable)                                    // Ожидание времени начала синхроимпульса
+		{
+			if (micros() - StartSample > 7000000)                // Ожидаем синхроимпульс в течении 6 секунд
+			{
+				//synhro_Off = true;
+				myGLCD.setFont(BigFont);
+				myGLCD.setColor(VGA_YELLOW);
+				myGLCD.print("He""\xA4", 100, 30);                                         // Нет
+				myGLCD.print("c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", 20, 50);   // синхронизации
+
+				delay(1000);
+				break;                                                            // Завершить ожидание синхроимпульса
+			}
+
+	//		if(digitalRead(synhro_pin))
+
+
+
+
+			if (myTouch.dataAvailable())   break;                                 //Остановить вывода на экран
+		}
+    	if (start_enable)
+		{
+			if (digitalRead(synhro_pin))
+			{
+				myGLCD.setFont(BigFont);
+				myGLCD.setColor(VGA_YELLOW);
+				myGLCD.print("He""\xA4", 100, 30);                                         // Нет
+				myGLCD.print("c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", 20, 50);   // синхронизации
+				delay(1000);
+				break;                                                            // Завершить ожидание синхроимпульса
+			}
+
+
+			// Все нормально. Измеряем !!
+			StartSample = micros();
+			start_enable = false;                                                 // Время начала синхроимпульса пришло. Выставляем флаг старта в исходное для ожидания следующего синхро импульса
+			Timer7.start(scale_strob * 1000);                                     // Включить формирование  временных меток на экране
+			for (page = 0; page < page_max; page++)                               // Пишем несколько блоков памяти
+			{
+				for (xpos = 0; xpos < 240; xpos++)                                // Блоки по 240 байтов
+				{
+					Sample_osc[xpos][page] = 0;
+					Sample_osc[xpos][page] = digitalRead(synhro_pin);             // Получить данные synhro_pin и записать в массив
+					if ((Sample_osc[xpos][page] != LOW) && (trig_sin == false))   // Поиск превышения уровня порога
+					{
+						TrigSynhro = micros();                                    // Записать время срабатывания триггера порога
+						trig_sin = true;                                          // установить флаг срабатывания триггера порога
+						page_trig = page;                                         // Записываем номер блока в котором сработал триггер
+					}
+					delayMicroseconds(dTime);                                     // dTime временной интервал (задержка) развертки 
+				}
+				if (trig_sin == true) break;                                      // Завершить сканирование на блоке в котором сработал порог
+			}
+			Timer7.stop();
+			count_ms = 0;
+			count_synhro++;
+			myGLCD.setColor(0, 0, 0);
+			myGLCD.fillRoundRect(0, 20, 240, 196);                                 // Очистить область экрана для вывода временных меток. 
+			DrawGrid1();
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.setFont(SmallFont);
+		//	myGLCD.printNumI(set_timeSynhro, 10, 190);             // Вывести на экран время периода следования синхроимпульсов
+																   //myGLCD.printNumI(xpos_trig, 170, 190);               // Вывести на экран время точной подстройки периода следования синхроимпульсов(отключена функция)
+			myGLCD.printNumI(count_synhro, 250, 190);              // Вывести на экран счетчик синхроимпульсов
+			myGLCD.printNumI(page_trig, 250, 205);              // Вывести на экран счетчик синхроимпульсов
+			myGLCD.setFont(SmallFont);
+			myGLCD.print("Current", 250, 80);                      //  
+			dt = DS3231_clock.getDateTime();
+
+			myGLCD.print("H:", 250, 95);                           //  
+			myGLCD.printNumI(dt.hour, 280, 95, 2);                      // Вывести на экран время час
+			myGLCD.print("M:", 250, 110);                          //  
+			myGLCD.printNumI(dt.minute, 280, 110, 2);                     // Вывести на экран время мин
+			myGLCD.print("S:", 250, 125);                          //  
+			myGLCD.printNumI(dt.second, 280, 125, 2);                     // Вывести на экран время сек
+			myGLCD.print("Duration", 250, 145);                          //  
+			myGLCD.print("of time", 253, 160);
+
+			Current_unixtime = dt.unixtime;
+			myGLCD.printNumI((Current_unixtime - Start_unixtime) / 60, 250, 175);                        // Вывести на экран время сек
+			myGLCD.print("min", 295, 175);
+			myGLCD.setFont(BigFont);
+
+			for (int xpos = 0; xpos < 239; xpos++)                                     // вывод на экран
+			{
+				// Нарисовать линию  осциллограммы
+				if (xpos == 119)
+				{
+					myGLCD.setColor(VGA_YELLOW);
+					myGLCD.drawLine(xpos, 40+20, xpos, 160+20);
+					myGLCD.drawLine(xpos + 1, 40+20, xpos + 1, 160+20);
+					myGLCD.setColor(255, 255, 255);
+				}
+
+				if (Sample_osc[xpos][page_trig] == HIGH)
+				{
+					myGLCD.drawLine(xpos, 70+20, xpos, 160+20);
+					myGLCD.drawLine(xpos + 1, 70+20, xpos + 1, 160+20);
+					//Sample_osc[xpos][page] = 0;
+				}
+
+				if (Synhro_osc[xpos][page_trig][new_info] > 0)
+				{
+					myGLCD.setFont(SmallFont);
+					myGLCD.setColor(VGA_WHITE);
+					if (Synhro_osc[xpos][page_trig][new_info] == 4095)
+					{
+						myGLCD.drawLine(xpos, 120+20, xpos, 160+20);
+						//Synhro_osc[xpos][page_trig][new_info] = 0;
+					}
+					else
+					{
+						myGLCD.setColor(255, 255, 255);
+						if (xpos > 230)
+						{
+							myGLCD.printNumI(Synhro_osc[xpos][page_trig][new_info], xpos - 12, 165+20);
+						}
+						else
+						{
+							myGLCD.printNumI(Synhro_osc[xpos][page_trig][new_info], xpos, 165+20);
+
+						}
+					}
+				}
+			}
+
+			//for (page = 0; page < page_max; page++)                               // Пишем несколько блоков памяти
+			//{
+			//	for (xpos = 0; xpos < 240; xpos++)                                // Блоки по 240 байтов
+			//	{
+			//		Sample_osc[xpos][page] = 0;
+			//		Synhro_osc[xpos][page_trig][new_info] = 0;
+			//	}
+			//}
+		}
+		if (myTouch.dataAvailable())   break;                                    //Остановить вывода на экран
+		//{
+		//	delay(10);
+		//	myTouch.read();
+		//	x_osc = myTouch.getX();
+		//	y_osc = myTouch.getY();
+
+		//	if ((x_osc >= 1) && (x_osc <= 319))               // Выход из программы. Нажать на область экрана
+		//	{
+		//		if ((y_osc >= 1) && (y_osc <= 239))           // 
+		//		{
+		//			break;                                    //Остановить вывода на экран временных меток
+		//		}                                             //
+		//	}
+		//}
+	}
+	while (myTouch.dataAvailable()) {}
+}
 
 void radio_send_command()                                   // Синронизация модулей
 {
@@ -1172,7 +1432,13 @@ void setup()
 	//myTouch.setPrecision(PREC_HI);
 	myButtons.setTextFont(BigFont);
 	myButtons.setSymbolFont(Dingbats1_XL);
-	setup_radio();                                // Настройка радио канала
+	setup_radio();                                    // Настройка радио канала
+	Timer7.attachInterrupt(sevenHandler);             // Timer7 - запись временных меток  в массив для вывода на экран
+
+
+
+
+
 
 	DS3231_clock.begin();
 	// Disarm alarms and clear alarms for this example, because alarms is battery backed.
@@ -1222,16 +1488,8 @@ void setup()
 
 	myGLCD.setFont(SmallFont);
 	
-	while (digitalRead(alarm_pin) != HIGH)
-	{
-
-	}
-
-	while (digitalRead(alarm_pin) == HIGH)
-	{
-
-	}
-
+	while (digitalRead(alarm_pin) != HIGH){}
+	while (digitalRead(alarm_pin) == HIGH){}
 	DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
 	while (true)
 	{

@@ -246,15 +246,17 @@ void alarmFunction()
 {
 //	isAlarm = false;
 	DS3231_clock.clearAlarm1();
-//	detachInterrupt(alarm_pin);
 	dt = DS3231_clock.getDateTime();
 	myGLCD.print(DS3231_clock.dateFormat("H:i:s -", dt), 0, 0);
 	if (alarm_synhro > 4)
 	{
 		alarm_synhro = 0;
-		//delayMicroseconds(11800);
+		delayMicroseconds(16000);
+		delayMicroseconds(3000);
+		//delayMicroseconds(900);
+		//delayMicroseconds(6000);
 		digitalWrite(synhro_pin, HIGH);
-		delayMicroseconds(10000);
+		delayMicroseconds(50);
 		alarm_count++;
 		myGLCD.print(DS3231_clock.dateFormat("s", dt), 63, 0);
 		digitalWrite(synhro_pin, LOW);
@@ -262,8 +264,6 @@ void alarmFunction()
 	alarm_synhro++;
 	myGLCD.print(String(alarm_synhro), 78, 0);
 	myGLCD.update();
-//	isAlarm = true;
-//	attachInterrupt(alarm_pin, alarmFunction, FALLING);
 }
 
 
@@ -488,7 +488,6 @@ void loop(void)
 			digitalWrite(synhro_pin, HIGH);
 			delayMicroseconds(100000);
 			digitalWrite(synhro_pin, LOW);
-		//	delayMicroseconds(400);
 			DS3231_clock.setDateTime(data_in[12]+2000, data_in[13], data_in[14], data_in[15], data_in[16], 00);
 			alarm_synhro = 0;
 			DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
