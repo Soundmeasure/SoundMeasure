@@ -75,6 +75,9 @@ float volume_Power = 0;
 unsigned int loop_count = 0;
 unsigned int irq_ovf_count = 0;
 
+bool synhro_timer = false;
+
+
 
 //AH_AD9850(int CLK, int FQUP, int BitData, int RESET); 
 AH_AD9850 AD9850(25, 26, 27, 28);
@@ -84,7 +87,7 @@ unsigned long PowerMillis = 0;
 unsigned long StartSample = 0;
 unsigned int Power_Interval = 1000;
 unsigned long TimePeriod = 3000000;
-
+volatile bool start_synhro = false;                                        // Старт синхро импульса
 
 
 bool intterrupt_enable = false;
@@ -129,7 +132,7 @@ const long interval = 50;                           // interval at which to blin
 
 volatile unsigned long startMillis = 0;              //  
 volatile unsigned long startMillis1 = 0;
-volatile unsigned long synhro_count = 0;              //  
+volatile unsigned long synhro_count = 0;             //  
 unsigned long stopMillis           = 0;              //  
 volatile bool info_view = false;
 byte pipeNo;                                         // 
@@ -150,6 +153,94 @@ byte hi;                                            // Старший байт �
 byte low;                                           // Младший байт для преобразования числа
 
 int adr_time_period = 10;
+int adr_synhro_run  = 20;                           // Адрес хранения флага разрешения формирования зукового сигнала по синхроимпульсу
+
+
+//+++++++++++++++++++++++  Настройки EEPROM +++++++++++++++++++++++++++++++++++++
+unsigned long i2c_eeprom_ulong_read(int addr)
+{
+	byte raw[4];
+	for (byte i = 0; i < 4; i++) raw[i] = i2c_eeprom_read_byte(deviceaddress, addr + i);
+	unsigned long &num = (unsigned long&)raw;
+	return num;
+}
+// запись
+void i2c_eeprom_ulong_write(int addr, unsigned long num)
+{
+	byte raw[4];
+	(unsigned long&)raw = num;
+	for (byte i = 0; i < 4; i++) i2c_eeprom_write_byte(deviceaddress, addr + i, raw[i]);
+}
+
+void i2c_eeprom_write_byte(int deviceaddress, unsigned int eeaddress, byte data)
+{
+	int rdata = data;
+	Wire.beginTransmission(deviceaddress);
+	Wire.write((int)(eeaddress >> 8)); // MSB
+	Wire.write((int)(eeaddress & 0xFF)); // LSB
+	Wire.write(rdata);
+	Wire.endTransmission();
+	delay(10);
+}
+byte i2c_eeprom_read_byte(int deviceaddress, unsigned int eeaddress) {
+	byte rdata = 0xFF;
+	Wire.beginTransmission(deviceaddress);
+	Wire.write((int)(eeaddress >> 8)); // MSB
+	Wire.write((int)(eeaddress & 0xFF)); // LSB
+	Wire.endTransmission();
+	Wire.requestFrom(deviceaddress, 1);
+	if (Wire.available()) rdata = Wire.read();
+	return rdata;
+}
+void i2c_eeprom_read_buffer(int deviceaddress, unsigned int eeaddress, byte *buffer, int length)
+{
+
+	Wire.beginTransmission(deviceaddress);
+	Wire.write((int)(eeaddress >> 8)); // MSB
+	Wire.write((int)(eeaddress & 0xFF)); // LSB
+	Wire.endTransmission();
+	Wire.requestFrom(deviceaddress, length);
+	int c = 0;
+	for (c = 0; c < length; c++)
+		if (Wire.available()) buffer[c] = Wire.read();
+
+}
+void i2c_eeprom_write_page(int deviceaddress, unsigned int eeaddresspage, byte* data, byte length)
+{
+	Wire.beginTransmission(deviceaddress);
+	Wire.write((int)(eeaddresspage >> 8)); // MSB
+	Wire.write((int)(eeaddresspage & 0xFF)); // LSB
+	byte c;
+	for (c = 0; c < length; c++)
+		Wire.write(data[c]);
+	Wire.endTransmission();
+
+}
+void i2c_test()
+{
+	Serial.println("--------  EEPROM Test  ---------");
+	char somedata[] = "this data from the eeprom i2c"; // data to write
+	i2c_eeprom_write_page(deviceaddress, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM
+	delay(100); //add a small delay
+	Serial.println("Written Done");
+	delay(10);
+	Serial.print("Read EERPOM:");
+	byte b = i2c_eeprom_read_byte(deviceaddress, 0); // access the first address from the memory
+	char addr = 0; //first address
+
+	while (b != 0)
+	{
+		Serial.print((char)b); //print content to serial port
+		if (b != somedata[addr])
+		{
+			break;
+		}
+		addr++; //increase address
+		b = i2c_eeprom_read_byte(0x50, addr); //access an address from the memory
+	}
+	Serial.println();
+	Serial.println();
+}
 
 
 void firstHandler() 
@@ -248,18 +339,17 @@ void alarmFunction()
 	DS3231_clock.clearAlarm1();
 	dt = DS3231_clock.getDateTime();
 	myGLCD.print(DS3231_clock.dateFormat("H:i:s -", dt), 0, 0);
-	if (alarm_synhro > 4)
+	if (alarm_synhro > 1)
 	{
 		alarm_synhro = 0;
 		delayMicroseconds(16000);
-		delayMicroseconds(3000);
-		//delayMicroseconds(900);
-		//delayMicroseconds(6000);
+		delayMicroseconds(13500);
 		digitalWrite(synhro_pin, HIGH);
 		delayMicroseconds(50);
 		alarm_count++;
 		myGLCD.print(DS3231_clock.dateFormat("s", dt), 63, 0);
 		digitalWrite(synhro_pin, LOW);
+		start_synhro = true;                                    // Старт синхро импульса
 	}
 	alarm_synhro++;
 	myGLCD.print(String(alarm_synhro), 78, 0);
@@ -390,6 +480,8 @@ void setup()
 
 	attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
 //	attachInterrupt(alarm_pin, alarmFunction, RISING);     // ппрерывание вызывается только при смене значения на порту с HIGH на LOW
+	synhro_timer = i2c_eeprom_read_byte(deviceaddress, adr_synhro_run);
+	Serial.println(synhro_timer);
 	PowerMillis = millis();
 
 }
@@ -398,16 +490,25 @@ void loop(void)
 {
 
 	unsigned long currentMillis = millis();
-	if (sound_start)
+
+	if (start_synhro && synhro_timer)
 	{
-		if (millis() - startMillis >= interval)
-		{
-			Serial.println(currentMillis - startMillis);
-			//previousMillis = currentMillis;
-			AD9850.powerDown();                                 //set signal output to LOW
-			sound_start = false;
-		}
+		start_synhro = false;
+		delayMicroseconds(5000);
+		synhro_count++;
+		sound_run(time_sound, freq_sound);
 	}
+
+	//if (sound_start)
+	//{
+	//	if (millis() - startMillis >= interval)
+	//	{
+	//	//	Serial.println(currentMillis - startMillis);
+	//		//previousMillis = currentMillis;
+	//		AD9850.powerDown();                                 //set signal output to LOW
+	//		sound_start = false;
+	//	}
+	//}
 
 	if (millis() - PowerMillis >= Power_Interval)
 	{
@@ -441,7 +542,9 @@ void loop(void)
 			radio.writeAckPayload(pipeNo, &data_out, 2);           // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(130000);
 			synhro_count = 0;
-			Timer6.start(TimePeriod);
+			synhro_timer = true;
+			i2c_eeprom_write_byte(deviceaddress, adr_synhro_run, synhro_timer);
+			Serial.println(synhro_timer);
 		}
 		else if (data_in[2] == 3)                                  // Выполнить синхронизацию по проводу
 		{
@@ -456,8 +559,10 @@ void loop(void)
 		{
 			radio.writeAckPayload(pipeNo, &data_out, 2);        // Грузим сообщение 2 байта для автоотправки;
 			delayMicroseconds(1000);
-			Timer6.stop();                                      // Отключаем прерывание
-			intterrupt_enable = false;
+			synhro_timer = false;
+			i2c_eeprom_write_byte(deviceaddress, adr_synhro_run, synhro_timer);
+			Serial.println(synhro_timer);
+		//	intterrupt_enable = false;
 		}
 		else if (data_in[2] == 5)
 		{
