@@ -345,7 +345,7 @@ void alarmFunction()
 		delayMicroseconds(16000);
 		delayMicroseconds(13500);
 		digitalWrite(synhro_pin, HIGH);
-		delayMicroseconds(50);
+		delayMicroseconds(100);
 		alarm_count++;
 		myGLCD.print(DS3231_clock.dateFormat("s", dt), 63, 0);
 		digitalWrite(synhro_pin, LOW);
