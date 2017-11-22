@@ -215,7 +215,7 @@ void setClockRTC()
   {
     t_temp_date=1;
     t_temp_mon=1;
-    t_temp_year=2010;
+    t_temp_year=2017;
     t_temp_dow=5;
     t_temp_hour=0;
     t_temp_min=0;
@@ -589,6 +589,7 @@ void setClockRTC()
           res=1;
           myGLCD.setColor (255, 0, 0);
           myGLCD.drawRoundRect(165, 200, 319, 239);
+		  DS3231_clock.setDateTime(t_temp_year, t_temp_mon, t_temp_date, t_temp_hour, t_temp_min, t_temp_sec);
         }
         else if ((x>=0) && (x<=154))
         {
@@ -620,9 +621,6 @@ void setClockRTC()
 	}
    
   }
-  
-//  drawDisplay();
-//  printDate();
 }
 
 

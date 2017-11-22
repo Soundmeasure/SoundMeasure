@@ -338,18 +338,21 @@ void alarmFunction()
 //	isAlarm = false;
 	DS3231_clock.clearAlarm1();
 	dt = DS3231_clock.getDateTime();
-	myGLCD.print(DS3231_clock.dateFormat("H:i:s -", dt), 0, 0);
 	if (alarm_synhro > 1)
 	{
 		alarm_synhro = 0;
 		delayMicroseconds(16000);
-		delayMicroseconds(13500);
+		delayMicroseconds(15500);
 		digitalWrite(synhro_pin, HIGH);
 		delayMicroseconds(100);
+		digitalWrite(synhro_pin, LOW);
 		alarm_count++;
 		myGLCD.print(DS3231_clock.dateFormat("s", dt), 63, 0);
-		digitalWrite(synhro_pin, LOW);
 		start_synhro = true;                                    // Старт синхро импульса
+	}
+	else
+	{
+		myGLCD.print(DS3231_clock.dateFormat("H:i:s -", dt), 0, 0);
 	}
 	alarm_synhro++;
 	myGLCD.print(String(alarm_synhro), 78, 0);
