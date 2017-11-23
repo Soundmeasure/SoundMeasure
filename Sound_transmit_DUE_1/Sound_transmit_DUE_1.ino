@@ -342,7 +342,7 @@ void alarmFunction()
 	{
 		alarm_synhro = 0;
 		delayMicroseconds(16000);
-		delayMicroseconds(15500);
+		delayMicroseconds(15150);
 		digitalWrite(synhro_pin, HIGH);
 		delayMicroseconds(100);
 		digitalWrite(synhro_pin, LOW);
