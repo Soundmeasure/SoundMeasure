@@ -342,7 +342,8 @@ void alarmFunction()
 	{
 		alarm_synhro = 0;
 		delayMicroseconds(16000);
-		delayMicroseconds(14200);
+		//delayMicroseconds(14200);
+		//delayMicroseconds(10000);
 		digitalWrite(synhro_pin, HIGH);
 		delayMicroseconds(100);
 		digitalWrite(synhro_pin, LOW);
@@ -596,18 +597,18 @@ void loop(void)
 			digitalWrite(synhro_pin, HIGH);
 			delayMicroseconds(100000);
 			digitalWrite(synhro_pin, LOW);
-			DS3231_clock.setDateTime(data_in[12]+2000, data_in[13], data_in[14], data_in[15], data_in[16], 00);
+			DS3231_clock.setDateTime(data_in[12]+2000, data_in[13], data_in[14], data_in[15], data_in[16], 8);
 			alarm_synhro = 0;
 			DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
-			while (digitalRead(alarm_pin) != HIGH)
-			{
+			//while (digitalRead(alarm_pin) != HIGH)
+			//{
 
-			}
+			//}
 
-			while (digitalRead(alarm_pin) == HIGH)
-			{
+			//while (digitalRead(alarm_pin) == HIGH)
+			//{
 
-			}
+			//}
 																			 //	dt = DS3231_clock.getDateTime();
 			while (true)
 			{
@@ -623,7 +624,6 @@ void loop(void)
 					break;
 				}
 			}
-	////		Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s - l", dt));
 			attachInterrupt(alarm_pin, alarmFunction, FALLING);    // прерывание вызывается только при смене значения на порту с LOW на HIGH
 		//	attachInterrupt(alarm_pin, alarmFunction, RISING);     // прерывание вызывается только при смене значения на порту с HIGH на LOW
 		}
