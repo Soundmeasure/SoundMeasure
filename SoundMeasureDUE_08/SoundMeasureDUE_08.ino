@@ -63,7 +63,7 @@ int but1, but2, but3, but4, butX, pressed_button;
 // -------------------   Настройка часового таймера DS3231 -------------------
 
 int oldsec = 0;
-DS3231  DS3231_clock(SDA1, SCL1);
+//DS3231  DS3231_clock(SDA1, SCL1);
 
 Time   dt;
 //boolean isAlarm           = false;                               //
