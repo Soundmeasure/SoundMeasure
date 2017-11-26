@@ -199,15 +199,15 @@ void setClockRTC()
   // clock_read();
     //DS3131_clock.get_time(&hh,&mm,&ss);
     //DS3131_clock.get_date(&dow,&dd,&mon,&yyyy);
-	dt = DS3231_clock.getTime();
+//	dt = DS3231_clock.getTime();
 //	dt = DS3231_clock.getDate();
-    t_temp_date= dt.date;
-    t_temp_mon= dt.mon;
-    t_temp_year= dt.year;
-    t_temp_dow= dt.dow;
-    t_temp_hour= dt.hour;
-    t_temp_min= dt.min;
-    t_temp_sec= dt.sec;
+    //t_temp_date= dt.date;
+    //t_temp_mon= dt.mon;
+    //t_temp_year= dt.year;
+    //t_temp_dow= dt.dow;
+    //t_temp_hour= dt.hour;
+    //t_temp_min= dt.min;
+    //t_temp_sec= dt.sec;
 
 
 //  t_temp = DS3231_clock.getTime();
@@ -589,8 +589,8 @@ void setClockRTC()
           res=1;
           myGLCD.setColor (255, 0, 0);
           myGLCD.drawRoundRect(165, 200, 319, 239);
-		  DS3231_clock.setTime(t_temp_hour, t_temp_min, t_temp_sec);
-		  DS3231_clock.setDate(t_temp_year, t_temp_mon, t_temp_date);
+		  //DS3231_clock.setTime(t_temp_hour, t_temp_min, t_temp_sec);
+		  //DS3231_clock.setDate(t_temp_year, t_temp_mon, t_temp_date);
         }
         else if ((x>=0) && (x<=154))
         {
@@ -614,8 +614,8 @@ void setClockRTC()
 
 	  // Manual (YYYY, MM, DD, HH, II, SS
 	//	DS3231_clock.setDateTime(t_temp_year, t_temp_mon, t_temp_date,t_temp_hour, t_temp_min, t_temp_sec);
-		DS3231_clock.setTime(t_temp_hour, t_temp_min, t_temp_sec);
-		DS3231_clock.setDate(t_temp_year, t_temp_mon, t_temp_date);
+		//DS3231_clock.setTime(t_temp_hour, t_temp_min, t_temp_sec);
+		//DS3231_clock.setDate(t_temp_year, t_temp_mon, t_temp_date);
 	  //rtc_clock.set_time(t_temp_hour, t_temp_min,t_temp_sec);
    //   rtc_clock.set_date(t_temp_date, t_temp_mon, t_temp_year);
 

@@ -64,6 +64,7 @@ int but1, but2, but3, but4, butX, pressed_button;
 
 int oldsec = 0;
 DS3231  DS3231_clock(SDA1, SCL1);
+
 Time   dt;
 //boolean isAlarm           = false;                               //
 
@@ -421,14 +422,14 @@ void Start_Menu()                    //
 			myGLCD.clrScr();
 			myButtons.drawButtons();
 		}
-		dt = DS3231_clock.getTime();
+//		dt = DS3231_clock.getTime();
 
 		if (dt.sec != oldsec)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.setFont(SmallFont);
-			myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+		//	myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
 			myGLCD.setFont(BigFont);
 			oldsec = dt.sec;
 		}
@@ -504,7 +505,7 @@ void Swich_Glav_Menu()
 				}
 			}
 		}
-		dt = DS3231_clock.getTime();
+//		dt = DS3231_clock.getTime();
 		if (dt.sec != oldsec)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
@@ -735,7 +736,7 @@ void alarmFunction()
 {
 	alarm_enable = true;
 	//DS3231_clock.clearAlarm1();
-	dt = DS3231_clock.getTime();
+//	dt = DS3231_clock.getTime();
 	if (alarm_synhro >1)
 	{
 		alarm_synhro = 0;
@@ -1855,14 +1856,14 @@ void synhro_clock_run()
 	}
 	else
 	{
-		dt = DS3231_clock.getTime();                        // Получить текщее время
-		data_out[2] = 8;                                    // Записать команду № 8 (синхронизация часов)
-		data_out[12] = dt.year - 2000;                      // Записать год
-		data_out[13] = dt.mon;                              // Записать месяц
-		data_out[14] = dt.date;                              // Записать день
-		data_out[15] = dt.hour;                             // Записать час
-		data_out[16] = dt.min;                           // Записать минуту 
-		radio_send_command();                               // Отправить команду синхронизации часов
+//		dt = DS3231_clock.getTime();                        // Получить текщее время
+		//data_out[2] = 8;                                    // Записать команду № 8 (синхронизация часов)
+		//data_out[12] = dt.year - 2000;                      // Записать год
+		//data_out[13] = dt.mon;                              // Записать месяц
+		//data_out[14] = dt.date;                              // Записать день
+		//data_out[15] = dt.hour;                             // Записать час
+		//data_out[16] = dt.min;                           // Записать минуту 
+		//radio_send_command();                               // Отправить команду синхронизации часов
 
 		unsigned long StartMeasure = micros();               // Записать время
 
@@ -1881,8 +1882,8 @@ void synhro_clock_run()
 				while (digitalRead(synhro_pin)) {}                                           // Поиск окончания синхроимпульса
 				//do {} while (digitalRead(synhro_pin));                                     // Поиск окончания синхроимпульса
 
-				DS3231_clock.setTime(dt.hour, dt.min, 8);  // Записываем новое синхронизированное время
-				DS3231_clock.setDate(dt.year, dt.mon, dt.date);  // Записываем новое синхронизированное время
+				//DS3231_clock.setTime(dt.hour, dt.min, 8);  // Записываем новое синхронизированное время
+				//DS3231_clock.setDate(dt.year, dt.mon, dt.date);  // Записываем новое синхронизированное время
 				alarm_synhro = 0;                                                            // Сбрасываем счетчик синхроимпульсов
 			//	DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);                     // DS3231_EVERY_SECOND //Прерывание каждую секунду
 				myGLCD.setFont(BigFont);
@@ -1892,7 +1893,7 @@ void synhro_clock_run()
 				myGLCD.setFont(SmallFont);
 				while (true)                                                                 // Устанавливаем время нового старта синхронизации
 				{
-					dt = DS3231_clock.getTime();
+					//dt = DS3231_clock.getTime();
 					if (oldsec != dt.sec)
 					{
 						//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
@@ -2070,13 +2071,13 @@ void wiev_synhro()
 			myGLCD.setFont(SmallFont);
 			myGLCD.printNumI(count_synhro, 250, 200);                                // Вывести на экран счетчик синхроимпульсов
 			//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
-			dt = DS3231_clock.getTime();
-			myGLCD.print("H:", 250, 100);                                            //  
-			myGLCD.printNumI(dt.hour, 280, 100, 2);                                  // Вывести на экран время час
-			myGLCD.print("M:", 250, 115);                                            //  
-			myGLCD.printNumI(dt.min, 280, 115, 2);                                // Вывести на экран время мин
-			myGLCD.print("S:", 250, 130);                                            //  
-			myGLCD.printNumI(dt.sec, 280, 130, 2);                                // Вывести на экран время сек
+			//dt = DS3231_clock.getTime();
+			//myGLCD.print("H:", 250, 100);                                            //  
+			//myGLCD.printNumI(dt.hour, 280, 100, 2);                                  // Вывести на экран время час
+			//myGLCD.print("M:", 250, 115);                                            //  
+			//myGLCD.printNumI(dt.min, 280, 115, 2);                                // Вывести на экран время мин
+			//myGLCD.print("S:", 250, 130);                                            //  
+			//myGLCD.printNumI(dt.sec, 280, 130, 2);                                // Вывести на экран время сек
 			//Current_unixtime = dt.unixtime;
 			//myGLCD.printNumI((Current_unixtime - Start_unixtime) / 60, 250, 180);     // Вывести на экран время мин
 			myGLCD.setFont(BigFont);
@@ -2580,7 +2581,7 @@ void setup()
 	clean_mem();                                                     // Очистка памяти при первом включении прибора  
 	alarm_synhro = 0;
 
-	DS3231_clock.begin();
+//	DS3231_clock.begin();
 
 	myGLCD.print("HACTPO""\x87""KA", CENTER, 40);  // НАСТРОЙКА
 	myGLCD.print("C""\x86""HXPOH""\x86\x85""A""\x8C\x86\x86", CENTER, 60);  // СИНХРОНИЗАЦИИ
