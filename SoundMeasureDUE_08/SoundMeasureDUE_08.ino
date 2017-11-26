@@ -21,10 +21,10 @@
 #include <UTFT_Buttons.h>
 #include <DueTimer.h>
 #include "Wire.h"
-#include <DS3231.h>
 #include "nRF24L01.h"
 #include "RF24.h"
 #include "printf.h"
+#include <DS3231.h>
 
 
 extern uint8_t SmallFont[];
@@ -63,7 +63,7 @@ int but1, but2, but3, but4, butX, pressed_button;
 // -------------------   Настройка часового таймера DS3231 -------------------
 
 int oldsec = 0;
-//DS3231  DS3231_clock(SDA1, SCL1);
+DS3231  DS3231_clock(SDA1, SCL1);
 
 Time   dt;
 //boolean isAlarm           = false;                               //
@@ -424,15 +424,28 @@ void Start_Menu()                    //
 		}
 //		dt = DS3231_clock.getTime();
 
-		if (dt.sec != oldsec)
+		dt = DS3231_clock.getTime();
+		if (oldsec != dt.sec)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.setFont(SmallFont);
-		//	myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+			myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+			myGLCD.print(DS3231_clock.getTimeStr(), 100, 3);
 			myGLCD.setFont(BigFont);
 			oldsec = dt.sec;
 		}
+
+
+		//if (dt.sec != oldsec)
+		//{
+		//	myGLCD.setBackColor(0, 0, 0);                   //  
+		//	myGLCD.setColor(255, 255, 255);
+		//	myGLCD.setFont(SmallFont);
+		////	myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+		//	myGLCD.setFont(BigFont);
+		//	oldsec = dt.sec;
+		//}
 		delay(100);
 	}
 }
@@ -505,13 +518,15 @@ void Swich_Glav_Menu()
 				}
 			}
 		}
-//		dt = DS3231_clock.getTime();
-		if (dt.sec != oldsec)
+
+		dt = DS3231_clock.getTime();
+		if (oldsec != dt.sec)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.setFont(SmallFont);
-			//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
+			myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+			myGLCD.print(DS3231_clock.getTimeStr(), 100, 3);
 			myGLCD.setFont(BigFont);
 			oldsec = dt.sec;
 		}
@@ -736,7 +751,7 @@ void alarmFunction()
 {
 	alarm_enable = true;
 	//DS3231_clock.clearAlarm1();
-//	dt = DS3231_clock.getTime();
+	dt = DS3231_clock.getTime();
 	if (alarm_synhro >1)
 	{
 		alarm_synhro = 0;
@@ -1441,12 +1456,14 @@ void synhro_by_timer()
 				}
 			}
 		}
-		if (dt.sec != oldsec)
+		dt = DS3231_clock.getTime();
+		if (oldsec != dt.sec)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.setFont(SmallFont);
-			//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
+			myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+			myGLCD.print(DS3231_clock.getTimeStr(), 100, 3);
 			myGLCD.setFont(BigFont);
 			oldsec = dt.sec;
 		}
@@ -1893,12 +1910,28 @@ void synhro_clock_run()
 				myGLCD.setFont(SmallFont);
 				while (true)                                                                 // Устанавливаем время нового старта синхронизации
 				{
-					//dt = DS3231_clock.getTime();
+
+					dt = DS3231_clock.getTime();
 					if (oldsec != dt.sec)
 					{
-						//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
+						//myGLCD.setBackColor(0, 0, 0);                   //  
+						//myGLCD.setColor(255, 255, 255);
+						//myGLCD.setFont(SmallFont);
+						myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+						myGLCD.print(DS3231_clock.getTimeStr(), 100, 3);
+						//myGLCD.setFont(BigFont);
 						oldsec = dt.sec;
 					}
+
+
+
+
+					////dt = DS3231_clock.getTime();
+					//if (oldsec != dt.sec)
+					//{
+					//	//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
+					//	oldsec = dt.sec;
+					//}
 					if (dt.sec == 10)
 					{
 						break;
@@ -2131,13 +2164,15 @@ void wiev_synhro()
 			break;                                    //Остановить вывод на экран
 		}
 
-		if (dt.sec != oldsec)
+		dt = DS3231_clock.getTime();
+		if (oldsec != dt.sec)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
 			myGLCD.setColor(255, 255, 255);
 			myGLCD.setFont(SmallFont);
-			//myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
-			myGLCD.setFont(BigFont);
+			myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+			myGLCD.print(DS3231_clock.getTimeStr(), 100, 3);
+			//myGLCD.setFont(BigFont);
 			oldsec = dt.sec;
 		}
 	}
@@ -2581,7 +2616,7 @@ void setup()
 	clean_mem();                                                     // Очистка памяти при первом включении прибора  
 	alarm_synhro = 0;
 
-//	DS3231_clock.begin();
+	DS3231_clock.begin();
 
 	myGLCD.print("HACTPO""\x87""KA", CENTER, 40);  // НАСТРОЙКА
 	myGLCD.print("C""\x86""HXPOH""\x86\x85""A""\x8C\x86\x86", CENTER, 60);  // СИНХРОНИЗАЦИИ
@@ -2625,19 +2660,21 @@ void setup()
 	//	}
 
 	//	DS3231_clock.setAlarm1(0, 0, 0, 1, DS3231_EVERY_SECOND);         //DS3231_EVERY_SECOND //Каждую секунду
-	//	while (true)
-	//	{
-	//		dt = DS3231_clock.getDateTime();
-	//		if (oldsec != dt.second)
-	//		{
-	//			myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
-	//			oldsec = dt.second;
-	//		}
-	//		if (dt.second == 0 || dt.second == 10 || dt.second == 20 || dt.second == 30 || dt.second == 40 || dt.second == 50)
-	//		{
-	//			break;
-	//		}
-	//	}
+		while (true)
+		{
+			dt = DS3231_clock.getTime();
+			if (oldsec != dt.sec)
+			{
+				myGLCD.print(DS3231_clock.getDateStr(), 10, 3);
+				myGLCD.print(DS3231_clock.getTimeStr(), 100, 3);
+				oldsec = dt.sec;
+			}
+			if (dt.sec == 0 || dt.sec == 10 || dt.sec == 20 || dt.sec == 30 || dt.sec == 40 || dt.sec == 50)
+			{
+				break;
+			}
+		}
+
 	//	attachInterrupt(alarm_pin, alarmFunction, FALLING);      // прерывание вызывается только при смене значения на порту с LOW на HIGH
 	//	
 	attachInterrupt(kn_red, Start_main_up, FALLING);
