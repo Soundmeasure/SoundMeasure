@@ -27,6 +27,9 @@ void setup()
 {
 	Serial.begin(115200);
 
+
+	pinMode(sounder, OUTPUT);
+	digitalWrite(sounder, LOW);
 	// Initialize DS3231
 	Serial.println("Initialize DS3231");;
 	DS3231_clock.begin();
@@ -51,10 +54,7 @@ void setup()
 	//// Attach Interrput 0. In Arduino UNO connect DS3231 INT to Arduino Pin 2
 	//attachInterrupt(0, alarmFunction, FALLING);
 
-	//// Setup LED Pin
-	//pinMode(alarmLED, OUTPUT);
-	pinMode(sounder, OUTPUT);
-	digitalWrite(sounder, LOW);
+
 }
 
 void loop()
