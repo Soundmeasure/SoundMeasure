@@ -125,21 +125,21 @@ class DS3231
 		char* dateFormat(const char* dateFormat, RTCDateTime dt);
 	//	char* dateFormat(const char* dateFormat, RTCAlarmTime dt);
 
-		void setAlarm1(uint8_t dydw, uint8_t hour, uint8_t minute, uint8_t second, DS3231_alarm1_t mode, bool armed = true);
-		RTCAlarmTime getAlarm1(void);
-		DS3231_alarm1_t getAlarmType1(void);
-		bool isAlarm1(bool clear = true);
-		void armAlarm1(bool armed);
-		bool isArmed1(void);
-		void clearAlarm1(void);
+	//	void setAlarm1(uint8_t dydw, uint8_t hour, uint8_t minute, uint8_t second, DS3231_alarm1_t mode, bool armed = true);
+	//	RTCAlarmTime getAlarm1(void);
+//		DS3231_alarm1_t getAlarmType1(void);
+		//bool isAlarm1(bool clear = true);
+		//void armAlarm1(bool armed);
+		//bool isArmed1(void);
+		//void clearAlarm1(void);
 
-		void setAlarm2(uint8_t dydw, uint8_t hour, uint8_t minute, DS3231_alarm2_t mode, bool armed = true);
-		RTCAlarmTime getAlarm2(void);
-		DS3231_alarm2_t getAlarmType2(void);
-		bool isAlarm2(bool clear = true);
-		void armAlarm2(bool armed);
-		bool isArmed2(void);
-		void clearAlarm2(void);
+		//void setAlarm2(uint8_t dydw, uint8_t hour, uint8_t minute, DS3231_alarm2_t mode, bool armed = true);
+		//RTCAlarmTime getAlarm2(void);
+		//DS3231_alarm2_t getAlarmType2(void);
+		//bool isAlarm2(bool clear = true);
+		//void armAlarm2(bool armed);
+		//bool isArmed2(void);
+		//void clearAlarm2(void);
 
 
 

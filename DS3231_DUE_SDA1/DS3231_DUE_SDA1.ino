@@ -33,7 +33,7 @@ void setup()
 
 	//// Disarm alarms and clear alarms for this example, because alarms is battery backed.
 	//// Under normal conditions, the settings should be reset after power and restart microcontroller.
-	DS3231_clock.armAlarm1(false);
+//	DS3231_clock.armAlarm1(false);
 	//DS3231_clock.armAlarm2(false);
 	//DS3231_clock.clearAlarm1();
 	//DS3231_clock.clearAlarm2();

@@ -905,191 +905,191 @@ uint8_t DS3231::dow(uint16_t y, uint8_t m, uint8_t d)
 	return dow;
 }
 
-
-
-RTCAlarmTime DS3231::getAlarm1(void)
-{
-	uint8_t values[4];
-	RTCAlarmTime a;
-
-	Wire.beginTransmission(DS3231_ADDRESS);
-	Wire.write(DS3231_REG_ALARM_1);
-
-	Wire.endTransmission();
-
-	Wire.requestFrom(DS3231_ADDRESS, 4);
-
-	while (!Wire.available()) {};
-
-	for (int i = 3; i >= 0; i--)
-	{
-		values[i] = bcd2dec(Wire.read() & 0b01111111);
-	}
-
-	Wire.endTransmission();
-
-	a.day = values[0];
-	a.hour = values[1];
-	a.minute = values[2];
-	a.second = values[3];
-
-	return a;
-}
-
-DS3231_alarm1_t DS3231::getAlarmType1(void)
-{
-	uint8_t values[4];
-	uint8_t mode = 0;
-
-	Wire.beginTransmission(DS3231_ADDRESS);
-	Wire.write(DS3231_REG_ALARM_1);
-	Wire.endTransmission();
-
-	Wire.requestFrom(DS3231_ADDRESS, 4);
-
-	while (!Wire.available()) {};
-
-	for (int i = 3; i >= 0; i--)
-	{
-		values[i] = bcd2dec(Wire.read());
-	}
-
-	Wire.endTransmission();
-
-	mode |= ((values[3] & 0b01000000) >> 6);
-	mode |= ((values[2] & 0b01000000) >> 5);
-	mode |= ((values[1] & 0b01000000) >> 4);
-	mode |= ((values[0] & 0b01000000) >> 3);
-	mode |= ((values[0] & 0b00100000) >> 1);
-
-	return (DS3231_alarm1_t)mode;
-}
-
-void DS3231::setAlarm1(uint8_t dydw, uint8_t hour, uint8_t minute, uint8_t second, DS3231_alarm1_t mode, bool armed)
-{
-	second = dec2bcd(second);
-	minute = dec2bcd(minute);
-	hour = dec2bcd(hour);
-	dydw = dec2bcd(dydw);
-
-	switch (mode)
-	{
-	case DS3231_EVERY_SECOND:
-		second |= 0b10000000;
-		minute |= 0b10000000;
-		hour |= 0b10000000;
-		dydw |= 0b10000000;
-		break;
-
-	case DS3231_MATCH_S:
-		second &= 0b01111111;
-		minute |= 0b10000000;
-		hour |= 0b10000000;
-		dydw |= 0b10000000;
-		break;
-
-	case DS3231_MATCH_M_S:
-		second &= 0b01111111;
-		minute &= 0b01111111;
-		hour |= 0b10000000;
-		dydw |= 0b10000000;
-		break;
-
-	case DS3231_MATCH_H_M_S:
-		second &= 0b01111111;
-		minute &= 0b01111111;
-		hour &= 0b01111111;
-		dydw |= 0b10000000;
-		break;
-
-	case DS3231_MATCH_DT_H_M_S:
-		second &= 0b01111111;
-		minute &= 0b01111111;
-		hour &= 0b01111111;
-		dydw &= 0b01111111;
-		break;
-
-	case DS3231_MATCH_DY_H_M_S:
-		second &= 0b01111111;
-		minute &= 0b01111111;
-		hour &= 0b01111111;
-		dydw &= 0b01111111;
-		dydw |= 0b01000000;
-		break;
-	}
-
-
-
-
-
-
-	//Wire.beginTransmission(DS3231_ADDRESS);
-
-	//Wire.write(DS3231_REG_ALARM_1);
-	//Wire.write(second);
-	//Wire.write(minute);
-	//Wire.write(hour);
-	//Wire.write(dydw);
-
-	//Wire.endTransmission();
-
-	armAlarm1(armed);
-
-	clearAlarm1();
-}
-
-bool DS3231::isAlarm1(bool clear)
-{
-	uint8_t alarm;
-
-	alarm = _readRegister8(DS3231_REG_STATUS);
-	alarm &= 0b00000001;
-
-	if (alarm && clear)
-	{
-		clearAlarm1();
-	}
-
-	return alarm;
-}
-
-void DS3231::armAlarm1(bool armed)
-{
-	uint8_t value;
-	value = _readRegister8(DS3231_REG_CONTROL);
-
-	if (armed)
-	{
-		value |= 0b00000001;
-	}
-	else
-	{
-		value &= 0b11111110;
-	}
-
-	_writeRegister8(DS3231_REG_CONTROL, value);
-}
-
-bool DS3231::isArmed1(void)
-{
-	uint8_t value;
-	value = _readRegister8(DS3231_REG_CONTROL);
-	value &= 0b00000001;
-	return value;
-}
-
-void DS3231::clearAlarm1(void)
-{
-	uint8_t value;
-
-	value = _readRegister(DS3231_REG_STATUS);
-	//value = readRegister8(DS3231_REG_STATUS);
-	value &= 0b11111110;
-
-	//writeRegister8(DS3231_REG_STATUS, value);
-
-	_writeRegister(DS3231_REG_STATUS, value));
-}
+//
+//
+//RTCAlarmTime DS3231::getAlarm1(void)
+//{
+//	uint8_t values[4];
+//	RTCAlarmTime a;
+//
+//	Wire.beginTransmission(DS3231_ADDRESS);
+//	Wire.write(DS3231_REG_ALARM_1);
+//
+//	Wire.endTransmission();
+//
+//	Wire.requestFrom(DS3231_ADDRESS, 4);
+//
+//	while (!Wire.available()) {};
+//
+//	for (int i = 3; i >= 0; i--)
+//	{
+//		values[i] = bcd2dec(Wire.read() & 0b01111111);
+//	}
+//
+//	Wire.endTransmission();
+//
+//	a.day = values[0];
+//	a.hour = values[1];
+//	a.minute = values[2];
+//	a.second = values[3];
+//
+//	return a;
+//}
+//
+//DS3231_alarm1_t DS3231::getAlarmType1(void)
+//{
+//	uint8_t values[4];
+//	uint8_t mode = 0;
+//
+//	Wire.beginTransmission(DS3231_ADDRESS);
+//	Wire.write(DS3231_REG_ALARM_1);
+//	Wire.endTransmission();
+//
+//	Wire.requestFrom(DS3231_ADDRESS, 4);
+//
+//	while (!Wire.available()) {};
+//
+//	for (int i = 3; i >= 0; i--)
+//	{
+//		values[i] = bcd2dec(Wire.read());
+//	}
+//
+//	Wire.endTransmission();
+//
+//	mode |= ((values[3] & 0b01000000) >> 6);
+//	mode |= ((values[2] & 0b01000000) >> 5);
+//	mode |= ((values[1] & 0b01000000) >> 4);
+//	mode |= ((values[0] & 0b01000000) >> 3);
+//	mode |= ((values[0] & 0b00100000) >> 1);
+//
+//	return (DS3231_alarm1_t)mode;
+//}
+//
+//void DS3231::setAlarm1(uint8_t dydw, uint8_t hour, uint8_t minute, uint8_t second, DS3231_alarm1_t mode, bool armed)
+//{
+//	second = dec2bcd(second);
+//	minute = dec2bcd(minute);
+//	hour = dec2bcd(hour);
+//	dydw = dec2bcd(dydw);
+//
+//	switch (mode)
+//	{
+//	case DS3231_EVERY_SECOND:
+//		second |= 0b10000000;
+//		minute |= 0b10000000;
+//		hour |= 0b10000000;
+//		dydw |= 0b10000000;
+//		break;
+//
+//	case DS3231_MATCH_S:
+//		second &= 0b01111111;
+//		minute |= 0b10000000;
+//		hour |= 0b10000000;
+//		dydw |= 0b10000000;
+//		break;
+//
+//	case DS3231_MATCH_M_S:
+//		second &= 0b01111111;
+//		minute &= 0b01111111;
+//		hour |= 0b10000000;
+//		dydw |= 0b10000000;
+//		break;
+//
+//	case DS3231_MATCH_H_M_S:
+//		second &= 0b01111111;
+//		minute &= 0b01111111;
+//		hour &= 0b01111111;
+//		dydw |= 0b10000000;
+//		break;
+//
+//	case DS3231_MATCH_DT_H_M_S:
+//		second &= 0b01111111;
+//		minute &= 0b01111111;
+//		hour &= 0b01111111;
+//		dydw &= 0b01111111;
+//		break;
+//
+//	case DS3231_MATCH_DY_H_M_S:
+//		second &= 0b01111111;
+//		minute &= 0b01111111;
+//		hour &= 0b01111111;
+//		dydw &= 0b01111111;
+//		dydw |= 0b01000000;
+//		break;
+//	}
+//
+//
+//
+//
+//
+//
+//	//Wire.beginTransmission(DS3231_ADDRESS);
+//
+//	//Wire.write(DS3231_REG_ALARM_1);
+//	//Wire.write(second);
+//	//Wire.write(minute);
+//	//Wire.write(hour);
+//	//Wire.write(dydw);
+//
+//	//Wire.endTransmission();
+//
+//	armAlarm1(armed);
+//
+//	clearAlarm1();
+//}
+//
+//bool DS3231::isAlarm1(bool clear)
+//{
+//	uint8_t alarm;
+//
+//	alarm = _readRegister8(DS3231_REG_STATUS);
+//	alarm &= 0b00000001;
+//
+//	if (alarm && clear)
+//	{
+//		clearAlarm1();
+//	}
+//
+//	return alarm;
+//}
+//
+//void DS3231::armAlarm1(bool armed)
+//{
+//	uint8_t value;
+//	value = _readRegister8(DS3231_REG_CONTROL);
+//
+//	if (armed)
+//	{
+//		value |= 0b00000001;
+//	}
+//	else
+//	{
+//		value &= 0b11111110;
+//	}
+//
+//	_writeRegister8(DS3231_REG_CONTROL, value);
+//}
+//
+//bool DS3231::isArmed1(void)
+//{
+//	uint8_t value;
+//	value = _readRegister8(DS3231_REG_CONTROL);
+//	value &= 0b00000001;
+//	return value;
+//}
+//
+//void DS3231::clearAlarm1(void)
+//{
+//	uint8_t value;
+//
+//	value = _readRegister(DS3231_REG_STATUS);
+//	//value = readRegister8(DS3231_REG_STATUS);
+//	value &= 0b11111110;
+//
+//	//writeRegister8(DS3231_REG_STATUS, value);
+//
+//	_writeRegister(DS3231_REG_STATUS, value));
+//}
 
 /*
 RTCAlarmTime DS3231::getAlarm2(void)
@@ -1278,34 +1278,34 @@ bool DS3231::isAlarm2(bool clear)
 }
 */
 
-
-DS3231_alarm1_t DS3231::getAlarmType1(void)
-{
-	uint8_t values[4];
-	uint8_t mode = 0;
-
-	Wire.beginTransmission(DS3231_ADDRESS);
-
-	Wire.write(DS3231_REG_ALARM_1);
-
-	Wire.endTransmission();
-
-	Wire.requestFrom(DS3231_ADDRESS, 4);
-
-	while (!Wire.available()) {};
-
-	for (int i = 3; i >= 0; i--)
-	{
-		values[i] = bcd2dec(Wire.read());
-	}
-
-	Wire.endTransmission();
-
-	mode |= ((values[3] & 0b01000000) >> 6);
-	mode |= ((values[2] & 0b01000000) >> 5);
-	mode |= ((values[1] & 0b01000000) >> 4);
-	mode |= ((values[0] & 0b01000000) >> 3);
-	mode |= ((values[0] & 0b00100000) >> 1);
-
-	return (DS3231_alarm1_t)mode;
-}
+//
+//DS3231_alarm1_t DS3231::getAlarmType1(void)
+//{
+//	uint8_t values[4];
+//	uint8_t mode = 0;
+//
+//	Wire.beginTransmission(DS3231_ADDRESS);
+//
+//	Wire.write(DS3231_REG_ALARM_1);
+//
+//	Wire.endTransmission();
+//
+//	Wire.requestFrom(DS3231_ADDRESS, 4);
+//
+//	while (!Wire.available()) {};
+//
+//	for (int i = 3; i >= 0; i--)
+//	{
+//		values[i] = bcd2dec(Wire.read());
+//	}
+//
+//	Wire.endTransmission();
+//
+//	mode |= ((values[3] & 0b01000000) >> 6);
+//	mode |= ((values[2] & 0b01000000) >> 5);
+//	mode |= ((values[1] & 0b01000000) >> 4);
+//	mode |= ((values[0] & 0b01000000) >> 3);
+//	mode |= ((values[0] & 0b00100000) >> 1);
+//
+//	return (DS3231_alarm1_t)mode;
+//}
