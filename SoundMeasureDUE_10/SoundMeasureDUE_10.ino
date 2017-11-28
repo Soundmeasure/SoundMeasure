@@ -2613,7 +2613,7 @@ void setup()
 	}
 	// Enable output
 	DS3231_clock.setOutput(DS3231_1HZ);
-	DS3231_clock.enableOutput(true);
+	DS3231_clock.enableOutput(false);
 	// Check config
 	if (DS3231_clock.isOutput())
 	{
@@ -2648,7 +2648,7 @@ void setup()
 		}
 	}
 
-	attachInterrupt(alarm_pin, alarmFunction, FALLING);        // прерывание вызывается только при смене значения на порту с LOW на HIGH
+//	attachInterrupt(alarm_pin, alarmFunction, FALLING);        // прерывание вызывается только при смене значения на порту с LOW на HIGH
 	attachInterrupt(kn_red, Start_main_up, FALLING);
 	attachInterrupt(kn_blue, Start_main_down, FALLING);
 	Timer7.attachInterrupt(sevenHandler);                      // Timer7 - запись временных меток  в массив для вывода на экран
