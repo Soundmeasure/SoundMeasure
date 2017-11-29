@@ -462,7 +462,7 @@ void Swich_Glav_Menu()
 	Draw_Glav_Menu();
 	while (true)
 	{
-		delay(10);
+	//	delay(10);
 		if (myTouch.dataAvailable())
 		{
 			myTouch.read();
@@ -505,16 +505,16 @@ void Swich_Glav_Menu()
 		}
 
 
-		//dt = DS3231_clock.getDateTime();
-		//if (oldsec != dt.second)
-		//{
-		//	myGLCD.setBackColor(0, 0, 0);                   //  
-		//	myGLCD.setColor(255, 255, 255);
-		//	myGLCD.setFont(SmallFont);
-		//	myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
-		//	myGLCD.setFont(BigFont);
-		//	oldsec = dt.second;
-		//}
+		if(alarm_enable == false) dt = DS3231_clock.getDateTime();
+		if (oldsec != dt.second)
+		{
+			myGLCD.setBackColor(0, 0, 0);                   //  
+			myGLCD.setColor(255, 255, 255);
+			myGLCD.setFont(SmallFont);
+			myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
+			//myGLCD.setFont(BigFont);
+			oldsec = dt.second;
+		}
 		delay(100);
 	}
 }
@@ -736,14 +736,13 @@ void alarmFunction()
 {
 	alarm_enable = true;
 	DS3231_clock.clearAlarm1();
-	//dt = DS3231_clock.getDateTime();
+//	dt = DS3231_clock.getDateTime();
 	if (alarm_synhro >1)
 	{
+		StartSynhro = micros();                                            // Записать время
+		Timer7.start(scale_strob * 1000.0);                   // Включить временные метки на экране
 		alarm_synhro = 0;
 		start_synhro = true;
-		StartSynhro = micros();                                            // Записать время
-		//if (measure_enable) Timer7.start(scale_strob * 1000);              // Включить формирование  временных меток на экране
-
 	}
 	alarm_synhro++;
 	alarm_enable = false;
@@ -916,7 +915,6 @@ void synhro_by_main()
 			StartMeasure = micros();                              // Сохранить время получения синхроимпульса
 			Control_synhro = micros();                            // Сохранить время получения синхроимпульса
 			start_synhro = false;                                 // Время начала синхроимпульса пришло. Запретить повторное измерение.
-			Timer7.start(scale_strob * 1000.0);                   // Включить временные метки на экране
 			while (!trig_sin)                                                        // Ожидание времени начала синхроимпульса.  Сигнал формируется таймером Timer5
 			{
 				if (micros() - StartMeasure > 2000000)                                    // Ожидаем синхроимпульс в течении 2 секунд
@@ -999,14 +997,21 @@ void synhro_by_main()
 				if (Synhro_osc[xpos][line_info] == 4095)
 				{
 					myGLCD.drawLine(xpos, 80, xpos, 160);
+					Synhro_osc[xpos][line_info] = 0;
 
 				}
 				if (Synhro_osc[xpos][ms_info] > 0)
 				{
-					myGLCD.printNumI(Synhro_osc[xpos][ms_info] - (set_timeZero / 1000), xpos, 165);
-					//myGLCD.printNumI(Synhro_osc[xpos][ms_info] - scale_strob, xpos, 165);
+					int ms_view = Synhro_osc[xpos][ms_info] - (set_timeZero / 1000);
+					if (ms_view > 0)   myGLCD.printNumI(ms_view, xpos, 165);
+					Synhro_osc[xpos][ms_info] = 0;
 				}
 			}
+		}
+		if (oldsec != dt.second)
+		{
+			myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
+			oldsec = dt.second;
 		}
 	}
 	while (myTouch.dataAvailable()) {}                  // Выход из программы
@@ -1214,10 +1219,9 @@ void synhro_by_timer()
 			StartMeasure    = micros();                                                    // Сохранить время получения синхроимпульса
 			Control_synhro = micros();                                                     // Сохранить время получения синхроимпульса
 			start_synhro   = false;                                                        // Время начала синхроимпульса пришло. Запретить повторное измерение.
-			Timer7.start(scale_strob * 1000.0);                                            // Включить временные метки на экране
 			while (!trig_sin)                                                              // Ожидание времени начала синхроимпульса.  Сигнал формируется таймером Timer5
 			{
-				if (micros() - StartMeasure > 2000000)                                     // Ожидаем синхроимпульс в течении 2 секунд
+				if (micros() - StartMeasure > 200000)                                     // Ожидаем синхроимпульс в течении 2 секунд
 				{
 					break;                                                                 // Завершить ожидание синхроимпульса
 				}
@@ -1255,7 +1259,8 @@ void synhro_by_timer()
 
 			if (trig_sin)                                                                  // Сигнал зарегистрирован                              
 			{
-				float time_meas = ((EndMeasure - StartMeasure) - set_timeZero) / 1000.00;
+				float time_meas = ((EndMeasure - StartSynhro) - set_timeZero) / 1000.00;
+				//	float time_meas = ((EndMeasure - StartMeasure) - set_timeZero) / 1000.00;
 				if (time_meas < 0)  time_meas = 0.0;
 				myGLCD.printNumF(time_meas, 2, 5, 60);
 				myGLCD.print(" ms", 88, 60);
@@ -1296,13 +1301,21 @@ void synhro_by_timer()
 				if (Synhro_osc[xpos][line_info] == 4095)
 				{
 					myGLCD.drawLine(xpos, 80, xpos, 160);
+					Synhro_osc[xpos][line_info] = 0;
 
 				}
 				if (Synhro_osc[xpos][ms_info] > 0)
 				{
-					myGLCD.printNumI(Synhro_osc[xpos][ms_info] -(set_timeZero/1000), xpos, 165);
+					int ms_view = Synhro_osc[xpos][ms_info] - (set_timeZero / 1000);
+					if(ms_view > 0)   myGLCD.printNumI(ms_view, xpos, 165);
+					Synhro_osc[xpos][ms_info] = 0;
 				}
 			}
+		}
+		if (oldsec != dt.second)
+		{
+			myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
+			oldsec = dt.second;
 		}
 	}
 	while (myTouch.dataAvailable()) {}                  // Выход из программы
@@ -1630,8 +1643,6 @@ void chench_mode1(bool mod)  // Разрешение экрана
 void synhro_DS3231_clock()
 {
 	detachInterrupt(alarm_pin);
-	//DS3231_clock.clearAlarm1();
-	//DS3231_clock.clearAlarm2();
 	pinMode(alarm_pin, INPUT);
 	digitalWrite(alarm_pin, HIGH);
 	myGLCD.clrScr();
@@ -1671,6 +1682,7 @@ void synhro_DS3231_clock()
 void draw_synhro_clock_run()
 {
 	//myGLCD.clrScr();
+//	detachInterrupt(alarm_pin);
 	myGLCD.setBackColor(0, 0, 0);
 	myGLCD.setColor(255, 255, 255);
 	myGLCD.setFont(BigFont);
@@ -1926,7 +1938,7 @@ void wiev_synhro()
 
 			myGLCD.setFont(SmallFont);
 			myGLCD.printNumI(count_synhro, 250, 200);                                // Вывести на экран счетчик синхроимпульсов
-			dt = DS3231_clock.getDateTime();
+		//	dt = DS3231_clock.getDateTime();
 			myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
 			myGLCD.print("H:", 250, 100);                                            //  
 			myGLCD.printNumI(dt.hour, 280, 100, 2);                                  // Вывести на экран время час
@@ -1991,6 +2003,7 @@ void wiev_synhro()
 			measure_enable = false;
 			break;                                    //Остановить вывод на экран
 		}
+		if (alarm_enable == false) dt = DS3231_clock.getDateTime();
 	}
 	while (myTouch.dataAvailable()) {}               // Ждать когда экран будет освобожден от прикосновения
 	delay(400);
@@ -2450,8 +2463,8 @@ void setup()
 	{
 		DS3231_clock.setDateTime(__DATE__, __TIME__);
 		delay(200);
-		dt = DS3231_clock.getDateTime();
-		Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s", dt));
+	//	dt = DS3231_clock.getDateTime();
+	//	Serial.println(DS3231_clock.dateFormat("d-m-Y H:i:s", dt));
 	}
 	// Enable output
 	DS3231_clock.setOutput(DS3231_1HZ);
