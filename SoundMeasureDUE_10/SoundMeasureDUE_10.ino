@@ -421,7 +421,7 @@ void Start_Menu()                    //
 			myButtons.drawButtons();
 		}
 
-		dt = DS3231_clock.getDateTime();
+		//dt = DS3231_clock.getDateTime();
 		if (oldsec != dt.second)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
@@ -505,7 +505,7 @@ void Swich_Glav_Menu()
 		}
 
 
-		if(alarm_enable == false) dt = DS3231_clock.getDateTime();
+	//	if(alarm_enable == false) dt = DS3231_clock.getDateTime();
 		if (oldsec != dt.second)
 		{
 			myGLCD.setBackColor(0, 0, 0);                   //  
@@ -744,8 +744,10 @@ void alarmFunction()
 		alarm_synhro = 0;
 		start_synhro = true;
 	}
+
 	alarm_synhro++;
 	alarm_enable = false;
+	dt = DS3231_clock.getDateTime();
 }
 void sevenHandler()                                                        // Timer7 -  запись временных меток  в массив для вывода на экран
 {
@@ -1769,6 +1771,7 @@ void synhro_clock_run()
 					{
 						break;
 					}
+					delay(50);
 				}
 				if(!synhro_enable) attachInterrupt(alarm_pin, alarmFunction, FALLING);      // прерывание вызывается только при смене значения на порту с LOW на HIGH
 				unsigned long Start_unixtime = dt.unixtime;
@@ -1888,10 +1891,17 @@ void wiev_synhro()
 
 
 	measure_enable = true;
-
+	Control_Synhro = micros();
 	while (1)
 	{
-		
+		if (micros() - Control_Synhro > 3000000)                              // Ожидаем синхроимпульс в течении 3 секунд
+		{
+			myGLCD.setFont(BigFont);
+			myGLCD.print("He""\xA4"" c""\x9D\xA2""xpo""\x9D\xA1\xA3""y""\xA0\xAC""co""\x97", CENTER, 130); 
+			delay(2000);//  
+			myGLCD.setFont(SmallFont);
+			break;                                                            // Завершить ожидание синхроимпульса
+		}
     	if (start_synhro)                                                             // Синхроимпульс от прерывания обнаружен
 		{
 			Control_Synhro = micros();
@@ -1938,7 +1948,7 @@ void wiev_synhro()
 
 			myGLCD.setFont(SmallFont);
 			myGLCD.printNumI(count_synhro, 250, 200);                                // Вывести на экран счетчик синхроимпульсов
-		//	dt = DS3231_clock.getDateTime();
+	//		dt = DS3231_clock.getDateTime();
 			myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
 			myGLCD.print("H:", 250, 100);                                            //  
 			myGLCD.printNumI(dt.hour, 280, 100, 2);                                  // Вывести на экран время час
@@ -2003,7 +2013,7 @@ void wiev_synhro()
 			measure_enable = false;
 			break;                                    //Остановить вывод на экран
 		}
-		if (alarm_enable == false) dt = DS3231_clock.getDateTime();
+	//	if (alarm_enable == false) dt = DS3231_clock.getDateTime();
 	}
 	while (myTouch.dataAvailable()) {}               // Ждать когда экран будет освобожден от прикосновения
 	delay(400);
@@ -2427,6 +2437,7 @@ void setup()
 
 	Wire.begin();
 	setup_pin();
+	detachInterrupt(alarm_pin);
 	myGLCD.InitLCD();
 	myGLCD.clrScr();
 	myGLCD.setBackColor(0, 0, 0);                   // Синий фон кнопок
@@ -2501,6 +2512,7 @@ void setup()
 		{
 			break;
 		}
+		delay(20);
 	}
 
 	attachInterrupt(alarm_pin, alarmFunction, FALLING);        // прерывание вызывается только при смене значения на порту с LOW на HIGH

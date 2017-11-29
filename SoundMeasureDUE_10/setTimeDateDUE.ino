@@ -197,7 +197,7 @@ void setClockRTC()
   // Print current time and date
   myGLCD.setColor(255, 255, 255);
 
-  dt = DS3231_clock.getDateTime();
+//  dt = DS3231_clock.getDateTime();
     t_temp_date= dt.day;
     t_temp_mon= dt.month;
     t_temp_year= dt.year;
