@@ -2457,7 +2457,7 @@ void setup()
 	DS3231_clock.armAlarm2(false);
 	DS3231_clock.clearAlarm1();
 	DS3231_clock.clearAlarm2();
-
+	//DS3231_clock.setDateTime(__DATE__, __TIME__);
 	dt = DS3231_clock.getDateTime();
 	if (dt.year == 2000 || dt.year == 2165)
 	{
