@@ -742,7 +742,7 @@ void alarmFunction()
 		alarm_synhro = 0;
 		start_synhro = true;
 		StartSynhro = micros();                                            // Записать время
-		if (measure_enable) Timer7.start(scale_strob * 1000);              // Включить формирование  временных меток на экране
+		//if (measure_enable) Timer7.start(scale_strob * 1000);              // Включить формирование  временных меток на экране
 
 	}
 	alarm_synhro++;
@@ -889,138 +889,7 @@ void synhro_by_main()
 					break;                                      //
 				}                                               //
 			}                                                   //
-			/*
-			myGLCD.setBackColor(0, 0, 255);
-			myGLCD.setFont(SmallFont);
-			myGLCD.setColor(255, 255, 255);
 
-			if ((x_osc >= 245) && (x_osc <= 277))               // Боковые кнопки
-			{
-				myGLCD.setColor(255, 255, 255);
-				myGLCD.setFont(SmallFont);
-				if ((y_osc >= 20) && (y_osc <= 45))              // Первая  период
-				{
-					waitForIt(245, 20, 277, 45);
-					mode = i2c_eeprom_read_byte(deviceaddress, adr_mode);
-					mode--;
-					if (mode < 0) mode = 0;
-					i2c_eeprom_write_byte(deviceaddress, adr_mode, mode);
-					chench_mode(mode);
-					myGLCD.print("    ", 262, 3);
-					myGLCD.printNumI(dTime, x_dTime, 3);
-				}
-
-				if ((y_osc >= 80) && (y_osc <= 105))             // Вторая - триггер
-				{
-					waitForIt(245, 80, 277, 105);
-					tmode = i2c_eeprom_read_byte(deviceaddress, adr_t_trigger);
-					tmode--;
-					if (tmode < 0) tmode = 0;
-					i2c_eeprom_write_byte(deviceaddress, adr_t_trigger, tmode);
-					trigger_volume(tmode);
-				}
-			}
-
-			if ((x_osc >= 285) && (x_osc <= 317))              // Боковые кнопки
-			{
-				myGLCD.setColor(255, 255, 255);
-				myGLCD.setFont(SmallFont);
-				if ((y_osc >= 20) && (y_osc <= 45))             // Первая  период
-				{
-
-					waitForIt(285, 20, 317, 45);
-					mode = i2c_eeprom_read_byte(deviceaddress, adr_mode);
-					mode++;
-					if (mode > 7) mode = 7;
-					i2c_eeprom_write_byte(deviceaddress, adr_mode, mode);
-					chench_mode(mode);
-					myGLCD.print("    ", 262, 3);
-					myGLCD.printNumI(dTime, x_dTime, 3);
-				}
-
-				if ((y_osc >= 80) && (y_osc <= 105))            // Вторая - триггер
-				{
-					waitForIt(285, 80, 317, 105);
-					tmode = i2c_eeprom_read_byte(deviceaddress, adr_t_trigger);
-					tmode++;
-					if (tmode > 7) tmode = 7;
-					i2c_eeprom_write_byte(deviceaddress, adr_t_trigger, tmode);
-					trigger_volume(tmode);
-
-				}
-			}
-
-			if ((x_osc >= 245) && (x_osc <= 318))               // Боковые кнопки
-			{
-				if ((y_osc >= 125) && (y_osc <= 160))           // Четвертая разрешение
-				{
-					waitForIt(245, 125, 318, 160);
-					i2c_eeprom_ulong_write(adr_set_timeZero, EndMeasure - StartMeasure);  // Записать контрольное время при близком расположение блоков
-				}
-			}
-
-			if ((y_osc >= 200) && (y_osc <= 225))                 // Нижние кнопки переключения 
-			{
-				if ((x_osc >= 10) && (x_osc <= 42))               //  Кнопка №1
-				{
-					waitForIt(10, 200, 42, 225);
-					byte b = i2c_eeprom_read_byte(deviceaddress, adr_count1_kn);
-					b++;
-					if (b > 9) b = 9;
-					i2c_eeprom_write_byte(deviceaddress, adr_count1_kn, b);
-					set_volume(1, b);
-
-				}
-				if ((x_osc >= 52) && (x_osc <= 84))               //  Кнопка №2
-				{
-					waitForIt(52, 200, 84, 225);
-					byte b = i2c_eeprom_read_byte(deviceaddress, adr_count1_kn);
-					if (b > 0) b--;
-					if (b <= 0) b = 0;
-					i2c_eeprom_write_byte(deviceaddress, adr_count1_kn, b);
-					set_volume(1, b);
-				}
-				if ((x_osc >= 94) && (x_osc <= 126))               //  Кнопка №3
-				{
-					waitForIt(94, 200, 126, 225);
-					byte b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
-					b++;
-					if (b > 9) b = 9;
-					i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
-					set_volume(2, b);
-				}
-				if ((x_osc >= 136) && (x_osc <= 168))               //  Кнопка №4
-				{
-					waitForIt(136, 200, 168, 225);
-					byte b = i2c_eeprom_read_byte(deviceaddress, adr_count2_kn);
-					if (b > 0) b--;
-					if (b <= 0) b = 0;
-					i2c_eeprom_write_byte(deviceaddress, adr_count2_kn, b);
-					set_volume(2, b);
-
-				}
-				if ((x_osc >= 178) && (x_osc <= 210))               //  Кнопка №5   Увеличить громкость динамика
-				{
-					waitForIt(178, 200, 210, 225);
-					byte b = i2c_eeprom_read_byte(deviceaddress, adr_count3_kn);
-					b++;
-					if (b > 9) b = 9;
-					i2c_eeprom_write_byte(deviceaddress, adr_count3_kn, b);
-					set_volume(3, b);                               // Увеличить громкость динамика
-
-				}
-				if ((x_osc >= 220) && (x_osc <= 252))               //  Кнопка №6 Уменьшить громкость динамика
-				{
-					waitForIt(220, 200, 252, 225);
-					byte b = i2c_eeprom_read_byte(deviceaddress, adr_count3_kn);
-					if (b > 0) b--;
-					if (b <= 0) b = 0;
-					i2c_eeprom_write_byte(deviceaddress, adr_count3_kn, b);
-					set_volume(3, b);                               // Уменьшить громкость динамика
-
-				}
-			}
-			*/
 		}
 		if (kn == 2)
 		{
@@ -1044,9 +913,9 @@ void synhro_by_main()
 		}
 		if (start_synhro)                                         // Синхроимпульс получен
 		{
-			StartMeasure = micros();                           // Сохранить время получения синхроимпульса
+			StartMeasure = micros();                              // Сохранить время получения синхроимпульса
 			Control_synhro = micros();                            // Сохранить время получения синхроимпульса
-			start_synhro = false;                               // Время начала синхроимпульса пришло. Запретить повторное измерение.
+			start_synhro = false;                                 // Время начала синхроимпульса пришло. Запретить повторное измерение.
 			Timer7.start(scale_strob * 1000.0);                   // Включить временные метки на экране
 			while (!trig_sin)                                                        // Ожидание времени начала синхроимпульса.  Сигнал формируется таймером Timer5
 			{
@@ -1134,19 +1003,10 @@ void synhro_by_main()
 				}
 				if (Synhro_osc[xpos][ms_info] > 0)
 				{
-					myGLCD.printNumI(Synhro_osc[xpos][ms_info] - scale_strob, xpos, 165);
+					myGLCD.printNumI(Synhro_osc[xpos][ms_info] - (set_timeZero / 1000), xpos, 165);
+					//myGLCD.printNumI(Synhro_osc[xpos][ms_info] - scale_strob, xpos, 165);
 				}
 			}
-		}
-
-		if (oldsec != dt.second)
-		{
-			myGLCD.setBackColor(0, 0, 0);                   //  
-			myGLCD.setColor(255, 255, 255);
-			myGLCD.setFont(SmallFont);
-			myGLCD.print(DS3231_clock.dateFormat("d-m-Y H:i:s", dt), 10, 3);
-			myGLCD.setFont(BigFont);
-			oldsec = dt.second;
 		}
 	}
 	while (myTouch.dataAvailable()) {}                  // Выход из программы
@@ -1185,6 +1045,7 @@ void synhro_by_timer()
 	radio_send_command();                                         // Отправляем команду измерения задержки по синхроимпульсу   
 	DrawGrid1();                                                  // Нарисовать сетку
 	measure_enable = true;
+
 	while (1)
 	{
 		if (myTouch.dataAvailable())
@@ -1391,6 +1252,7 @@ void synhro_by_timer()
 			myGLCD.print("   ", 160, 20);                                                  // Очистить надпись "Нет"
 			myGLCD.print("      ", 140, 45);                                               // Очистить надпись "синхро"
 			DrawGrid1();
+
 			if (trig_sin)                                                                  // Сигнал зарегистрирован                              
 			{
 				float time_meas = ((EndMeasure - StartMeasure) - set_timeZero) / 1000.00;
@@ -1438,7 +1300,7 @@ void synhro_by_timer()
 				}
 				if (Synhro_osc[xpos][ms_info] > 0)
 				{
-					myGLCD.printNumI(Synhro_osc[xpos][ms_info] - scale_strob, xpos, 165);
+					myGLCD.printNumI(Synhro_osc[xpos][ms_info] -(set_timeZero/1000), xpos, 165);
 				}
 			}
 		}
