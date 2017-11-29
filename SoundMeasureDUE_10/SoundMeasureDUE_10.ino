@@ -1891,17 +1891,19 @@ void wiev_synhro()
 
 
 	measure_enable = true;
-	Control_Synhro = micros();
+	unsigned long Control_Synhro1 = micros();
 	while (1)
 	{
-		if (micros() - Control_Synhro > 3000000)                              // Ожидаем синхроимпульс в течении 3 секунд
+		if (micros() - Control_Synhro1 > 3000000)                              // Ожидаем синхроимпульс в течении 3 секунд
 		{
+			myGLCD.clrScr();
 			myGLCD.setFont(BigFont);
 			myGLCD.print("He""\xA4"" c""\x9D\xA2""xpo""\x9D\xA1\xA3""y""\xA0\xAC""co""\x97", CENTER, 130); 
 			delay(2000);//  
 			myGLCD.setFont(SmallFont);
 			break;                                                            // Завершить ожидание синхроимпульса
 		}
+
     	if (start_synhro)                                                             // Синхроимпульс от прерывания обнаружен
 		{
 			Control_Synhro = micros();
@@ -1909,6 +1911,8 @@ void wiev_synhro()
 			// Все нормально. Измеряем !! 
 			start_synhro = false;                                                     // Время начала синхроимпульса пришло. Выставляем флаг старта в исходное для ожидания следующего синхро импульса
 			trig_sin = false;                                                         // установить флаг срабатывания триггера порога
+			Control_Synhro1 = micros();
+			
 			while (!trig_sin)                                                         // Ожидание превышения порога, поиск синхроимпульса.  
 			{
 				if (micros() - Control_Synhro > 3000000)                              // Ожидаем синхроимпульс в течении 4 секунд
@@ -2013,7 +2017,6 @@ void wiev_synhro()
 			measure_enable = false;
 			break;                                    //Остановить вывод на экран
 		}
-	//	if (alarm_enable == false) dt = DS3231_clock.getDateTime();
 	}
 	while (myTouch.dataAvailable()) {}               // Ждать когда экран будет освобожден от прикосновения
 	delay(400);
@@ -2512,7 +2515,7 @@ void setup()
 		{
 			break;
 		}
-		delay(20);
+	//	delay(20);
 	}
 
 	attachInterrupt(alarm_pin, alarmFunction, FALLING);        // прерывание вызывается только при смене значения на порту с LOW на HIGH
