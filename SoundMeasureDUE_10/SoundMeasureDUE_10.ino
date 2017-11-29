@@ -1865,19 +1865,17 @@ void wiev_synhro()
 	myGLCD.print("ms:", 250, 70);                                                      //  
 	myGLCD.printNumF(ms_delayS,1, 280, 70);                                            // Вывести на экран время задержки ms
 
-	myGLCD.print("Current", 250, 85);                                        //  
+	myGLCD.print("Current", 250, 85);                                                  //  
 
-	myGLCD.print("Duration", 250, 150);                                      //  
+	myGLCD.print("Duration", 250, 150);                                                //  
 	myGLCD.print("of time", 259, 165);
 	myGLCD.print("Bpe""\xA1\xAF"" o""\xA4"" c""\xA4""ap""\xA4""a c""\x9D\xA2""xpo""\xA2\x9D\x9C""a""\xA6\x9D\x9D", 0, 180);  //"Время от старта синхронизации"
 	myGLCD.print("min", 295, 180);
-	myGLCD.print("C""\xA7""e""\xA4\xA7\x9D\x9F"" c""\x9D\xA2""xpo""\x9D\xA1\xA3""y""\xA0\xAC""co""\x97", 50, 200); //  "Счетчик синхроимпульсов"
+	myGLCD.print("C""\xA7""e""\xA4\xA7\x9D\x9F"" c""\x9D\xA2""xpo""\x9D\xA1\xA3""y""\xA0\xAC""co""\x97", 50, 200);           //  "Счетчик синхроимпульсов"
+	myGLCD.print("Te""\xA1\xA3""epa""\xA4""ypa ""\x9F\x97""ap""\xA6""a", 90, 215);                                           //  "Температура кварца"
 
 
 	measure_enable = true;
-
-
-
 
 	while (1)
 	{
@@ -1936,8 +1934,11 @@ void wiev_synhro()
 			myGLCD.print("S:", 250, 130);                                            //  
 			myGLCD.printNumI(dt.second, 280, 130, 2);                                // Вывести на экран время сек
 			Current_unixtime = dt.unixtime;
-			myGLCD.printNumI((Current_unixtime - Start_unixtime) / 60, 250, 180);     // Вывести на экран время мин
+			myGLCD.printNumI((Current_unixtime - Start_unixtime) / 60, 250, 180);    // Вывести на экран время мин
+			if(dt.second > 0 || dt.second<4) myGLCD.printNumI(DS3231_clock.readTemperature(), 250, 215);     // Вывести на экран счетчик синхроимпульсов
+
 			myGLCD.setFont(BigFont);
+
 
 			if (trig_sin)
 			{
@@ -1972,7 +1973,6 @@ void wiev_synhro()
 				myGLCD.setFont(SmallFont);
 				myGLCD.setColor(VGA_WHITE);
 
-
 				if (Synhro_osc[xpos][line_info] == 4095)
 				{
 					myGLCD.drawLine(xpos, 120, xpos, 160);
@@ -1984,7 +1984,7 @@ void wiev_synhro()
 				}
 			}
 		}
-		
+
 		if (myTouch.dataAvailable())
 		{
 			measure_enable = false;
