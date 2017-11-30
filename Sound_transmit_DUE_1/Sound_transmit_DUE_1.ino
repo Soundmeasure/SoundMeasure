@@ -98,7 +98,7 @@ bool intterrupt_enable = false;
 RF24 radio(10, 9);             // DUE
 		
 							   // Topology
-const uint64_t pipes[2] = { 0xABCDABCD71LL, 0x544d52687CLL };              // Radio pipe addresses for the 2 nodes to communicate.  Адреса радиоканалов для связи двух узлов.
+const uint64_t pipes[2] = { 0xABCDABCD81LL, 0x544d52688CLL };              // Radio pipe addresses for the 2 nodes to communicate.  Адреса радиоканалов для связи двух узлов.
 
 																		   // Role management: Set up role.  This sketch uses the same software for all the nodes
 																		   // in this system.  Doing so greatly simplifies testing.  
@@ -357,6 +357,7 @@ void alarmFunction()
 	}
 	alarm_synhro++;
 	myGLCD.print(String(alarm_synhro), 78, 0);
+
 	myGLCD.update();
 }
 
@@ -501,6 +502,7 @@ void loop(void)
 		delayMicroseconds(5000);
 		synhro_count++;
 		sound_run(time_sound, freq_sound);
+		info();
 	}
 
 	//if (sound_start)
